@@ -15,7 +15,7 @@ export function About() {
     >
       <div ref={ref} className="reveal mx-auto max-w-3xl px-6 text-center">
         {/* Decorative vertical line */}
-        <div className="mx-auto mb-8 h-12 w-0.5 bg-brand-orange" />
+        <div className="mx-auto mb-8 h-12 w-0.5 bg-brand-orange" aria-hidden="true" />
         <h2 className="text-2xl font-semibold text-brand-cream">
           About Revauri Design
         </h2>

@@ -43,7 +43,7 @@ export function Services() {
           {services.map((service, i) => (
             <div
               key={service.title}
-              className="stagger-child flex flex-row items-start gap-6 border-b border-brand-light-gray py-8 opacity-0 transition-all duration-300 last:border-b-0 hover:border-l-[3px] hover:border-l-brand-orange hover:pl-6"
+              className="stagger-child flex flex-col items-start gap-4 border-b border-brand-light-gray border-l-[3px] border-l-transparent py-8 pl-6 opacity-0 transition-[border-color] duration-300 last:border-b-0 hover:border-l-brand-orange sm:flex-row sm:gap-6"
               style={{ animationDelay: `${i * 150}ms` }}
             >
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand-orange/5">

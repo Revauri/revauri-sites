@@ -48,6 +48,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -106,5 +110,6 @@ body {
   .stagger-child {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
   }
 }

@@ -43,8 +43,8 @@ export function Services() {
           {services.map((service, i) => (
             <div
               key={service.title}
-              className="stagger-child rounded-2xl border border-brand-light-gray bg-brand-white p-8 opacity-0 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-orange/40 hover:shadow-lg"
-              style={{ animationDelay: `${i * 120}ms` }}
+              className="stagger-child rounded-2xl border border-brand-light-gray bg-brand-white p-6 opacity-0 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-orange/40 hover:shadow-lg sm:p-8"
+              style={{ animationDelay: `${i * 100}ms` }}
             >
               <service.icon
                 className="h-6 w-6 text-brand-orange"

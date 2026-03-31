@@ -5,7 +5,7 @@ export function Footer() {
         <p className="text-sm text-brand-mid-gray">
           &copy; 2026 Revauri LLC
         </p>
-        <p className="mt-1 text-sm text-brand-mid-gray">
+        <p className="mt-1 text-xs text-brand-mid-gray/70">
           Modern websites for businesses that are ready to grow
         </p>
       </div>

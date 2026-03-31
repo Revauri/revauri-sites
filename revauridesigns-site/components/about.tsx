@@ -9,7 +9,7 @@ export function About() {
     <section className="bg-brand-white py-20">
       <div
         ref={ref}
-        className="reveal mx-auto max-w-3xl px-6 lg:ml-[15%] lg:mr-[15%]"
+        className="reveal mx-auto max-w-3xl px-6 lg:max-w-2xl lg:mr-auto lg:ml-[12%]"
       >
         <div className="border-l-4 border-brand-orange pl-6">
           <h2 className="text-2xl font-semibold text-brand-dark">
