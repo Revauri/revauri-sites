@@ -179,19 +179,41 @@ export function StatsBar() {
         </div>
 
         {/* Technology logos */}
-        <div className="mt-10 flex items-center justify-center gap-8 opacity-40">
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-mid-gray">
-            Next.js
-          </span>
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-mid-gray">
-            Vercel
-          </span>
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-mid-gray">
-            Tailwind CSS
-          </span>
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-mid-gray">
-            shadcn/ui
-          </span>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+          {/* Vercel triangle */}
+          <div className="flex items-center gap-1.5 opacity-40 dark:opacity-30" aria-label="Vercel">
+            <svg className="h-4 w-4 text-brand-dark dark:text-brand-cream" viewBox="0 0 76 65" fill="currentColor">
+              <path d="M37.5274 0L75.0548 65H0L37.5274 0Z" />
+            </svg>
+            <span className="text-xs font-medium text-brand-dark dark:text-brand-cream">Vercel</span>
+          </div>
+
+          {/* Next.js */}
+          <div className="flex items-center gap-1.5 opacity-40 dark:opacity-30" aria-label="Next.js">
+            <svg className="h-5 w-5" viewBox="0 0 180 180" fill="none">
+              <circle cx="90" cy="90" r="90" className="fill-brand-dark dark:fill-brand-cream" />
+              <path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z" className="fill-brand-cream dark:fill-brand-dark" />
+              <rect x="115" y="54" width="12" height="72" className="fill-brand-cream dark:fill-brand-dark" />
+            </svg>
+            <span className="text-xs font-medium text-brand-dark dark:text-brand-cream">Next.js</span>
+          </div>
+
+          {/* Tailwind CSS */}
+          <div className="flex items-center gap-1.5 opacity-40 dark:opacity-30" aria-label="Tailwind CSS">
+            <svg className="h-4 w-5 text-brand-dark dark:text-brand-cream" viewBox="0 0 54 33" fill="currentColor">
+              <path fillRule="evenodd" clipRule="evenodd" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" />
+            </svg>
+            <span className="text-xs font-medium text-brand-dark dark:text-brand-cream">Tailwind</span>
+          </div>
+
+          {/* shadcn/ui */}
+          <div className="flex items-center gap-1.5 opacity-40 dark:opacity-30" aria-label="shadcn/ui">
+            <svg className="h-4 w-4" viewBox="0 0 256 256" fill="none">
+              <line x1="208" y1="128" x2="128" y2="208" className="stroke-brand-dark dark:stroke-brand-cream" strokeWidth="32" strokeLinecap="round" />
+              <line x1="192" y1="40" x2="40" y2="192" className="stroke-brand-dark/50 dark:stroke-brand-cream/50" strokeWidth="32" strokeLinecap="round" />
+            </svg>
+            <span className="text-xs font-medium text-brand-dark dark:text-brand-cream">shadcn/ui</span>
+          </div>
         </div>
       </section>
     </FadeInWhenVisible>

@@ -26,10 +26,18 @@ export const metadata: Metadata = {
 
 const themeScript = `
   (function() {
-    var theme = localStorage.getItem('theme');
-    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
+    var d = document.documentElement;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function apply() {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && mq.matches)) {
+        d.classList.add('dark');
+      } else {
+        d.classList.remove('dark');
+      }
     }
+    apply();
+    mq.addEventListener('change', apply);
   })();
 `;
 

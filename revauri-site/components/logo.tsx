@@ -1,16 +1,20 @@
 interface LogoProps {
-  variant?: "light" | "dark";
+  variant?: "light" | "dark" | "auto";
   suffix?: string;
   className?: string;
 }
 
 export function Logo({
-  variant = "light",
+  variant = "auto",
   suffix,
   className = "",
 }: LogoProps) {
   const textColor =
-    variant === "dark" ? "text-brand-cream" : "text-brand-dark";
+    variant === "dark"
+      ? "text-brand-cream"
+      : variant === "light"
+        ? "text-brand-dark"
+        : "text-brand-dark dark:text-brand-cream";
 
   return (
     <span
