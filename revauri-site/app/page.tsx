@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
-import { SocialProof } from "@/components/social-proof";
+import { StatsBar } from "@/components/stats-bar";
 import { HowItWorks } from "@/components/how-it-works";
 import { Portfolio } from "@/components/portfolio";
 import { Pricing } from "@/components/pricing";
@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <SocialProof />
+        <StatsBar />
         <HowItWorks />
         <Portfolio />
         <Pricing />

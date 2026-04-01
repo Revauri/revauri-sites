@@ -10,37 +10,25 @@ export default function Icon() {
         style={{
           width: 32,
           height: 32,
-          background: "#141413",
+          borderRadius: 8,
+          background: "#D97757",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <div
+        <span
           style={{
-            width: 20,
-            height: 20,
-            background: "#D97757",
-            transform: "rotate(45deg)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            fontSize: 19,
+            fontWeight: 700,
+            color: "#FFFFFF",
+            lineHeight: 1,
           }}
         >
-          <span
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              color: "#FFFFFF",
-              transform: "rotate(-45deg)",
-              lineHeight: 1,
-            }}
-          >
-            R
-          </span>
-        </div>
+          R
+        </span>
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

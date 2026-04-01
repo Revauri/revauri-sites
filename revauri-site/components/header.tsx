@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Logo } from "./logo";
 
 const navLinks = [
   { label: "How It Works", href: "#how-it-works" },
@@ -45,17 +47,14 @@ export function Header() {
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-brand-white/95 shadow-sm backdrop-blur-sm"
-            : "bg-brand-cream"
+            ? "bg-brand-white/95 shadow-[var(--shadow-md)] backdrop-blur-sm dark:bg-brand-dark/95"
+            : "bg-brand-cream dark:bg-brand-dark"
         }`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-0.5">
-            <span className="text-xl font-bold tracking-tight text-brand-dark">
-              Revauri
-            </span>
-            <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-brand-orange" />
+          <a href="#" className="flex items-center">
+            <Logo />
           </a>
 
           {/* Desktop Nav */}
@@ -64,14 +63,14 @@ export function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-brand-dark/70 transition-colors hover:text-brand-dark"
+                className="relative text-sm font-medium text-brand-dark/70 transition-colors hover:text-brand-dark after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-orange after:transition-all after:duration-300 hover:after:w-full dark:text-brand-cream/70 dark:hover:text-brand-cream"
               >
                 {link.label}
               </a>
             ))}
             <a
               href="#book"
-              className="rounded-lg bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-orange/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="rounded-lg bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
             >
               Book a Free Call
             </a>
@@ -79,7 +78,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 md:hidden dark:text-brand-cream"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -90,52 +89,71 @@ export function Header() {
       </header>
 
       {/* Mobile Overlay — rendered outside <header> to avoid sticky containment */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-[60] bg-brand-white md:hidden"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="flex items-center justify-between px-6 py-4">
-            <a
-              href="#"
-              className="flex items-center gap-0.5"
-              onClick={handleNavClick}
-            >
-              <span className="text-xl font-bold tracking-tight text-brand-dark">
-                Revauri
-              </span>
-              <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-brand-orange" />
-            </a>
-            <button
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <nav className="flex flex-col items-center gap-6 pt-16">
-            {navLinks.map((link) => (
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed inset-0 z-[60] bg-brand-white md:hidden dark:bg-brand-dark"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="flex items-center justify-between px-6 py-4">
               <a
-                key={link.href}
-                href={link.href}
+                href="#"
+                className="flex items-center"
                 onClick={handleNavClick}
-                className="text-lg font-medium text-brand-dark/70 transition-colors hover:text-brand-dark"
               >
-                {link.label}
+                <Logo />
               </a>
-            ))}
-            <a
-              href="#book"
-              onClick={handleNavClick}
-              className="mt-4 rounded-lg bg-brand-orange px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-orange/90"
+              <button
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 dark:text-brand-cream"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <motion.nav
+              className="flex flex-col items-center gap-6 pt-16"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.06 } },
+              }}
             >
-              Book a Free Call
-            </a>
-          </nav>
-        </div>
-      )}
+              {navLinks.map((link) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  onClick={handleNavClick}
+                  variants={{
+                    hidden: { opacity: 0, y: 15 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  className="text-lg font-medium text-brand-dark/70 transition-colors hover:text-brand-dark dark:text-brand-cream/70 dark:hover:text-brand-cream"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.a
+                href="#book"
+                onClick={handleNavClick}
+                variants={{
+                  hidden: { opacity: 0, y: 15 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                className="mt-4 rounded-lg bg-brand-orange px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-orange/90"
+              >
+                Book a Free Call
+              </motion.a>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -1,8 +1,37 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #FAF9F5;
   --foreground: #141413;
+
+  /* Surfaces */
+  --surface-subtle: rgba(232, 230, 220, 0.15);
+  --surface-elevated: rgba(232, 230, 220, 0.30);
+  --surface-accent: rgba(217, 119, 87, 0.05);
+
+  /* Elevation shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(20, 20, 19, 0.06);
+  --shadow-md: 0 1px 2px 0 rgba(20, 20, 19, 0.06), 0 10px 18px -12px rgba(20, 20, 19, 0.16);
+  --shadow-lg: 0 2px 4px 0 rgba(20, 20, 19, 0.08), 0 18px 36px -18px rgba(20, 20, 19, 0.22);
+  --shadow-xl: 0 3px 10px 0 rgba(20, 20, 19, 0.10), 0 26px 56px -28px rgba(20, 20, 19, 0.28);
+  --shadow-glow: 0 0 0 1px rgba(217, 119, 87, 0.20), 0 24px 64px -32px rgba(217, 119, 87, 0.45);
+}
+
+.dark {
+  --background: #141413;
+  --foreground: #FAF9F5;
+
+  --surface-subtle: rgba(40, 38, 35, 0.25);
+  --surface-elevated: rgba(40, 38, 35, 0.45);
+  --surface-accent: rgba(217, 119, 87, 0.08);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 1px 2px 0 rgba(0, 0, 0, 0.40), 0 14px 24px -14px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 2px 6px 0 rgba(0, 0, 0, 0.45), 0 24px 48px -24px rgba(0, 0, 0, 0.62);
+  --shadow-xl: 0 4px 14px 0 rgba(0, 0, 0, 0.55), 0 34px 70px -34px rgba(0, 0, 0, 0.72);
+  --shadow-glow: none;
 }
 
 @theme inline {
@@ -14,6 +43,9 @@
   --color-brand-light-gray: #E8E6DC;
   --color-brand-mid-gray: #B0AEA5;
   --color-brand-white: #FFFFFF;
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-accent: var(--surface-accent);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
@@ -21,6 +53,7 @@
   --animate-fade-in: fade-in 0.6s ease-out forwards;
   --animate-clip-reveal: clip-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-draw-line: draw-line 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
 }
 
 @keyframes rise-in {
@@ -63,6 +96,11 @@
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 87, 0.25); }
+  50% { box-shadow: 0 0 35px rgba(217, 119, 87, 0.45); }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -72,7 +110,7 @@ body {
   color: var(--foreground);
 }
 
-/* Scroll reveal animation system */
+/* Scroll reveal animation system (CSS fallback) */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
