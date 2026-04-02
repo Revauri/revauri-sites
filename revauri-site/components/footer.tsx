@@ -1,78 +1,135 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronUp } from "lucide-react";
 import { Logo } from "./logo";
 
+const YEAR = new Date().getFullYear();
+
 export function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="relative overflow-hidden border-t-2 border-t-brand-orange/20 bg-brand-dark py-12">
-      {/* Blur orb */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-0 h-40 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-orange/5 blur-3xl"
-        aria-hidden="true"
-      />
+    <footer className="border-t border-brand-light-gray dark:border-brand-mid-gray/20">
+      {/* Navigation Section */}
+      <div className="bg-brand-white pt-10 pb-8 dark:bg-brand-dark lg:pt-12 lg:pb-10">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
+            <div className="flex flex-col space-y-2.5">
+              <FooterGroupHeading>Services</FooterGroupHeading>
+              <ul className="flex flex-col space-y-2">
+                <FooterLink>
+                  <Link href="/pricing">Pricing</Link>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/#how-it-works">How It Works</Link>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/contact#book">Book a Call</Link>
+                </FooterLink>
+              </ul>
+            </div>
 
-      <div className="relative mx-auto max-w-6xl px-6">
-        {/* Top row: Logo + Back to top */}
-        <div className="flex items-center justify-between">
-          <Logo variant="dark" />
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-1.5 text-sm text-brand-mid-gray transition-colors hover:text-brand-cream"
-          >
-            Back to top
-            <ChevronUp className="h-4 w-4" />
-          </button>
+            <div className="flex flex-col space-y-2.5">
+              <FooterGroupHeading>Company</FooterGroupHeading>
+              <ul className="flex flex-col space-y-2">
+                <FooterLink>
+                  <Link href="/about">About</Link>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/faq">FAQ</Link>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/contact">Contact</Link>
+                </FooterLink>
+              </ul>
+            </div>
+
+            <div className="flex flex-col space-y-2.5">
+              <FooterGroupHeading>Legal</FooterGroupHeading>
+              <ul className="flex flex-col space-y-2">
+                <FooterLink>
+                  <Link href="/privacy">Privacy Policy</Link>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/terms">Terms of Service</Link>
+                </FooterLink>
+              </ul>
+            </div>
+
+            <div className="flex flex-col space-y-2.5">
+              <FooterGroupHeading>Get in Touch</FooterGroupHeading>
+              <ul className="flex flex-col space-y-2">
+                <FooterLink>
+                  <a href="mailto:joseph@revauri.com">joseph@revauri.com</a>
+                </FooterLink>
+                <FooterLink>
+                  <Link href="/contact">Send a message</Link>
+                </FooterLink>
+              </ul>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Tagline */}
-        <p className="mt-4 text-sm text-brand-mid-gray">
-          Modern websites for businesses that are ready to grow
-        </p>
+      {/* Separator */}
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
+      </div>
 
-        {/* Nav links */}
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-          {[
-            { label: "How It Works", href: "#how-it-works" },
-            { label: "Pricing", href: "#pricing" },
-            { label: "About", href: "#about" },
-            { label: "FAQ", href: "#faq" },
-          ].map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-brand-mid-gray transition-colors hover:text-brand-cream"
+      {/* Bottom Section */}
+      <div className="bg-brand-white py-6 dark:bg-brand-dark lg:py-8">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="flex items-center gap-1.5 text-sm text-brand-mid-gray transition-colors hover:text-brand-dark dark:hover:text-brand-cream"
             >
-              {link.label}
-            </a>
-          ))}
+              Back to top
+              <ChevronUp className="h-4 w-4" />
+            </button>
+          </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div className="mt-8 h-px bg-brand-mid-gray/20" />
+      {/* Separator */}
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
+      </div>
 
-        {/* Bottom row */}
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-brand-mid-gray">
-            &copy; 2026 Revauri LLC. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="mailto:joseph@revauri.com"
-              className="text-sm text-brand-mid-gray transition-colors hover:text-brand-cream"
-            >
-              joseph@revauri.com
-            </a>
-            <span className="text-brand-mid-gray/40">|</span>
-            <a
-              href="#"
-              className="text-sm text-brand-mid-gray transition-colors hover:text-brand-cream"
-            >
-              Privacy Policy
-            </a>
+      {/* Base Section */}
+      <div className="bg-brand-white pt-6 pb-8 dark:bg-brand-dark lg:pt-8 lg:pb-10">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col gap-4">
+            <Logo variant="auto" />
+            <p className="text-sm text-brand-mid-gray">
+              Modern websites for businesses that are ready to grow.
+            </p>
+            <p className="text-xs text-brand-mid-gray/70">
+              &copy; {YEAR} Revauri LLC. All Rights Reserved.
+            </p>
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterGroupHeading({ children }: React.PropsWithChildren) {
+  return (
+    <p className="text-xs font-semibold uppercase tracking-wider text-brand-orange">
+      {children}
+    </p>
+  );
+}
+
+function FooterLink({ children }: React.PropsWithChildren) {
+  return (
+    <li className="text-xs text-brand-dark/70 dark:text-brand-cream/70 [&>a]:transition-colors [&>a]:duration-200 [&>a]:hover:text-brand-orange">
+      {children}
+    </li>
   );
 }

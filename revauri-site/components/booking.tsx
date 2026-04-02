@@ -80,7 +80,7 @@ export function Booking() {
   }, []);
 
   return (
-    <section id="book" className="bg-brand-cream py-20 dark:bg-brand-dark lg:py-24">
+    <section id="book" className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
       <div className="relative mx-auto max-w-6xl px-6 text-center">
         <div className="mx-auto max-w-3xl">
           <FadeInWhenVisible>
@@ -94,14 +94,14 @@ export function Booking() {
             </div>
 
             <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Ready to see your{" "}
+              Book your{" "}
               <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                next website direction?
+                free strategy call
               </span>
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-              Book a free 15-minute strategy call. We&apos;ll walk through your
-              redesign sample and outline clear, practical next steps.
+              15 minutes. We&apos;ll walk through your redesign sample and
+              outline clear, practical next steps.
             </p>
           </FadeInWhenVisible>
 
