@@ -1,25 +1,412 @@
 "use client";
 
 import Link from "next/link";
-import { Check, Eye, ArrowRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { Check, Eye, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "./motion-wrappers";
+
+function BeforeAfterMockup() {
+  const prefersReducedMotion = useReducedMotion();
+  const [position, setPosition] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+
+  const updatePosition = (clientX: number) => {
+    const container = containerRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setPosition(pct);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (prefersReducedMotion) return;
+    isDragging.current = true;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    updatePosition(e.clientX);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    updatePosition(e.clientX);
+  };
+
+  const handlePointerUp = () => {
+    isDragging.current = false;
+  };
+
+  return (
+    <div className="relative rounded-2xl border border-brand-light-gray/40 bg-brand-white/50 p-1 shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/50">
+      {/* Mock browser chrome */}
+      <div className="rounded-t-xl bg-brand-cream/80 px-4 pt-3 pb-2 dark:bg-brand-dark/80">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-red-400/60" />
+            <div className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
+            <div className="h-2.5 w-2.5 rounded-full bg-green-400/60" />
+          </div>
+          <div className="mx-auto flex-1">
+            <div className="mx-auto max-w-[200px] rounded-md bg-brand-light-gray/40 px-3 py-1 text-center text-[10px] text-brand-mid-gray dark:bg-brand-mid-gray/20">
+              yourbusiness.com
+            </div>
+          </div>
+        </div>
+        {/* Before / After labels */}
+        <div className="mt-2 flex items-center justify-between">
+          <span className="rounded-full bg-gray-500/70 px-2.5 py-0.5 text-[9px] font-medium text-white">
+            Before
+          </span>
+          <span className="rounded-full bg-brand-orange/90 px-2.5 py-0.5 text-[9px] font-medium text-white">
+            After
+          </span>
+        </div>
+      </div>
+
+      {/* Before / After split content */}
+      <div
+        ref={containerRef}
+        className="relative overflow-hidden rounded-b-xl select-none"
+        style={{ height: 430, cursor: prefersReducedMotion ? "default" : "ew-resize" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
+        {/* ── BEFORE side (full width, underneath) ── */}
+        <div className="absolute inset-0 flex flex-col bg-[#dcdcdc] dark:bg-[#1c1c1b]">
+          {/* Garish teal announcement bar */}
+          <div className="bg-[#008B8B] px-3 py-0.5">
+            <p className="text-center font-mono text-[5px] font-bold uppercase text-white">*** SPECIAL OFFER THIS MONTH ONLY — CALL NOW!!! ***</p>
+          </div>
+          {/* Ugly cramped nav */}
+          <div className="border-b-4 border-gray-500 bg-[#c0c0c0] px-2 py-1.5 dark:bg-[#2a2a28]">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[8px] font-black uppercase tracking-tight text-gray-700 dark:text-gray-400" style={{ letterSpacing: "-0.02em" }}>ACME Corp.</span>
+              <span className="font-mono text-[5px] text-gray-600 dark:text-gray-500" style={{ letterSpacing: "0.05em" }}>HOME&nbsp;&nbsp;|&nbsp;&nbsp;ABOUT&nbsp;&nbsp;|&nbsp;&nbsp;SERVICES&nbsp;&nbsp;|&nbsp;&nbsp;CONTACT&nbsp;&nbsp;|&nbsp;&nbsp;FAQ&nbsp;&nbsp;|&nbsp;&nbsp;SITEMAP</span>
+            </div>
+          </div>
+          {/* Dated hero banner */}
+          <div className="bg-[#a8a8a8] px-3 py-2 dark:bg-[#333330]">
+            <p className="font-mono text-[9px] font-black uppercase leading-tight tracking-widest text-gray-700 dark:text-gray-300" style={{ letterSpacing: "0.12em" }}>WELCOME TO OUR BUSINESS!!</p>
+            <p className="mt-0.5 font-mono text-[5px] font-bold uppercase leading-tight tracking-wider text-gray-600 dark:text-gray-400">EST. 1998 — QUALITY YOU CAN TRUST</p>
+            <p className="mt-0.5 font-mono text-[5px] leading-tight text-gray-500 dark:text-gray-500">We provide quality services since 1998. Call us today for a free quote. We serve the tri-state area.</p>
+            <div className="mt-1 flex items-center gap-1.5">
+              {/* Broken image placeholder */}
+              <div className="flex h-8 w-8 flex-col items-center justify-center border-2 border-gray-500 bg-[#b8b8b8] dark:bg-[#2a2a28]">
+                <X className="h-2.5 w-2.5 text-gray-500" />
+                <span className="font-mono text-[4px] text-gray-400">img</span>
+              </div>
+              <div className="flex h-8 w-8 flex-col items-center justify-center border-2 border-gray-500 bg-[#b8b8b8] dark:bg-[#2a2a28]">
+                <X className="h-2.5 w-2.5 text-gray-500" />
+                <span className="font-mono text-[4px] text-gray-400">img</span>
+              </div>
+              <div className="ml-1 inline-block border-2 border-gray-600 bg-[#336699] px-2 py-1">
+                <span className="font-mono text-[6px] font-black uppercase tracking-wider text-white">CLICK HERE</span>
+              </div>
+            </div>
+          </div>
+          {/* Garish green "sale" bar */}
+          <div className="bg-[#228B22] px-3 py-0.5">
+            <p className="text-center font-mono text-[5px] font-bold text-yellow-300">&#9733; NEW WEBSITE COMING SOON &#9733;&nbsp;&nbsp;CHECK BACK LATER</p>
+          </div>
+          {/* Boxy content blocks */}
+          <div className="flex flex-1 flex-col gap-0 px-2 pt-1.5">
+            <div className="grid grid-cols-3 gap-0.5">
+              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+                <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Our Services</p>
+                <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-600 dark:text-gray-500">Lorem ipsum dolor sit amet consectetur adipiscing elit sed.</p>
+              </div>
+              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+                <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">About Us</p>
+                <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-600 dark:text-gray-500">In business for over 20 years serving all clients big and small.</p>
+              </div>
+              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+                <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Contact</p>
+                <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-600 dark:text-gray-500">Call (555) 012-3456 Mon–Fri 9–5pm EST. Leave msg.</p>
+              </div>
+            </div>
+            <div className="mt-0.5 border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523]">
+              <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Latest News &amp; Updates</p>
+              <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-500 dark:text-gray-500">Check back soon for updates and announcements from our team. Last updated March 2015.</p>
+              <p className="font-mono text-[4px] leading-tight text-gray-500/70 dark:text-gray-600">We are working on exciting new things. Please be patient. Thank you for your continued support.</p>
+              <p className="mt-0.5 font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">Click here to read more &gt;&gt;</p>
+            </div>
+            <div className="mt-0.5 grid grid-cols-2 gap-0.5">
+              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+                <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Testimonials</p>
+                <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-500 dark:text-gray-500">&quot;Great company!&quot; — Bob J.</p>
+                <p className="font-mono text-[4px] leading-tight text-gray-500/60 dark:text-gray-600">&quot;Would recommend.&quot; — Sue T.</p>
+                <p className="font-mono text-[4px] leading-tight text-gray-500/60 dark:text-gray-600">&quot;Good.&quot; — Anonymous</p>
+              </div>
+              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+                <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Directions</p>
+                <p className="mt-0.5 font-mono text-[4px] leading-tight text-gray-500 dark:text-gray-500">123 Main St, Suite 4B. Take exit 12 off I-90 turn left go 2mi then right on Oak.</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">View map &gt;&gt;</p>
+              </div>
+            </div>
+            <div className="mt-0.5 border-2 border-gray-500/60 bg-[#cccccc] p-1 dark:bg-[#252523]">
+              <p className="font-mono text-[5px] font-black uppercase text-gray-700 dark:text-gray-400">Important Links</p>
+              <div className="mt-0.5 flex flex-wrap gap-x-2">
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">Home</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">About</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">Services</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">FAQ</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">Privacy</p>
+                <p className="font-mono text-[4px] leading-tight text-blue-600 underline dark:text-blue-400">Sitemap</p>
+              </div>
+            </div>
+          </div>
+          {/* Footer */}
+          <div className="bg-gray-600 px-3 py-1 dark:bg-[#111110]">
+            <p className="font-mono text-[4px] text-gray-300 dark:text-gray-500">© 2015 ACME Corp. All Rights Reserved. | Privacy Policy | Terms | Sitemap | Accessibility | Disclaimer</p>
+            <p className="font-mono text-[4px] text-gray-400/60 dark:text-gray-600">Best viewed in Internet Explorer 8. 800x600 resolution recommended.</p>
+          </div>
+        </div>
+
+        {/* ── AFTER side (clips from left based on position) ── */}
+        <div
+          className="absolute inset-0"
+          style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+        >
+          {/* Base website layer */}
+          <div className="absolute inset-0 flex flex-col bg-brand-white dark:bg-[#1a1a19]">
+            {/* Clean modern nav */}
+            <div className="flex items-center justify-between border-b border-brand-light-gray/30 px-4 py-2 dark:border-brand-mid-gray/20">
+              <span className="text-[7px] font-bold text-brand-dark dark:text-brand-cream">Acme</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">Home</span>
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">About</span>
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">Services</span>
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">Portfolio</span>
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">Pricing</span>
+                <span className="text-[5px] text-brand-dark/50 dark:text-brand-cream/50">Contact</span>
+                <span className="rounded-full bg-brand-orange px-1.5 text-[5px] font-bold leading-[12px] text-white shadow-sm">Sign up</span>
+              </div>
+            </div>
+
+            {/* Hero section with subtle gradient bg */}
+            <div className="bg-gradient-to-br from-brand-cream/80 to-brand-orange/[0.04] px-4 py-3 dark:from-brand-dark dark:to-brand-orange/[0.03]">
+              <div className="flex items-start gap-2">
+                {/* Two hero image placeholders — left side */}
+                <div className="flex shrink-0 gap-1.5">
+                  <div className="h-16 w-[4.5rem] rounded-lg bg-gradient-to-br from-brand-orange/15 to-brand-orange/5 dark:from-brand-orange/10 dark:to-brand-orange/[0.02]">
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-0.5">
+                      <div className="h-3 w-3 rounded-full bg-brand-orange/20" />
+                      <div className="h-0.5 w-7 rounded bg-brand-orange/15" />
+                      <div className="h-0.5 w-5 rounded bg-brand-orange/10" />
+                    </div>
+                  </div>
+                  <div className="h-16 w-[4.5rem] rounded-lg bg-gradient-to-br from-brand-orange/10 to-brand-cream/50 dark:from-brand-orange/8 dark:to-brand-mid-gray/5">
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-0.5">
+                      <div className="h-3 w-3 rounded bg-brand-orange/15" />
+                      <div className="h-0.5 w-7 rounded bg-brand-orange/12" />
+                      <div className="h-0.5 w-5 rounded bg-brand-orange/8" />
+                    </div>
+                  </div>
+                </div>
+                {/* Text — right-aligned */}
+                <div className="flex-1 text-right">
+                  <p className="text-[10px] font-bold leading-tight text-brand-dark dark:text-brand-cream">Grow Your Business</p>
+                  <p className="text-[10px] font-bold leading-tight bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">Online, Faster.</p>
+                  <p className="mt-1 text-[5px] leading-relaxed text-brand-dark/50 dark:text-brand-cream/50">Custom websites that convert visitors into customers.</p>
+                  <div className="mt-1.5 flex items-center justify-end gap-1">
+                    <span className="inline-block rounded-sm bg-brand-orange px-1.5 text-[5px] font-semibold leading-[14px] text-white shadow-sm shadow-brand-orange/20">Get Started Free</span>
+                    <span className="inline-block rounded-sm border border-brand-orange/40 px-1.5 text-[5px] font-medium leading-[14px] text-brand-orange">See Our Work</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Feature cards with icons */}
+            <div className="grid grid-cols-3 gap-1.5 px-4 pt-2">
+              <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                <div className="flex h-3 w-3 items-center justify-center rounded-md bg-brand-orange/15">
+                  <svg className="h-1.5 w-1.5 text-brand-orange" viewBox="0 0 12 12" fill="currentColor"><path d="M6 1L7.5 4.5L11 5L8.5 7.5L9 11L6 9.5L3 11L3.5 7.5L1 5L4.5 4.5L6 1Z" /></svg>
+                </div>
+                <p className="mt-1 text-[5px] font-bold text-brand-dark dark:text-brand-cream">Lightning Fast</p>
+                <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Sub-second loads</p>
+              </div>
+              <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                <div className="flex h-3 w-3 items-center justify-center rounded-md bg-brand-orange/15">
+                  <svg className="h-1.5 w-1.5 text-brand-orange" viewBox="0 0 12 12" fill="currentColor"><rect x="3" y="1" width="6" height="10" rx="1" /></svg>
+                </div>
+                <p className="mt-1 text-[5px] font-bold text-brand-dark dark:text-brand-cream">Mobile-First</p>
+                <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Any screen, any device</p>
+              </div>
+              <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                <div className="flex h-3 w-3 items-center justify-center rounded-md bg-brand-orange/15">
+                  <svg className="h-1.5 w-1.5 text-brand-orange" viewBox="0 0 12 12" fill="currentColor"><circle cx="6" cy="5" r="3" /><path d="M2 10c0-2.2 1.8-4 4-4s4 1.8 4 4" /></svg>
+                </div>
+                <p className="mt-1 text-[5px] font-bold text-brand-dark dark:text-brand-cream">SEO Ready</p>
+                <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Rank on Google</p>
+              </div>
+            </div>
+
+            {/* Testimonial card with stars */}
+            <div className="mx-4 mt-2 rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 p-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
+              <div className="flex items-start gap-2">
+                <div className="shrink-0">
+                  <div className="h-4 w-4 rounded-full bg-brand-orange/25" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-0.5">
+                    <span className="text-[5px] text-amber-400">★★★★★</span>
+                  </div>
+                  <p className="mt-0.5 text-[5px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">&ldquo;Our new site brought in 3x more leads in the first month.&rdquo;</p>
+                  <p className="mt-0.5 text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Sarah K. · Business Owner</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats + Conversion Rate side by side */}
+            <div className="mx-4 mt-2 grid grid-cols-[1fr_auto] gap-1.5">
+              {/* Stats bar */}
+              <div className="grid grid-cols-4 gap-1 rounded-lg bg-brand-dark/[0.03] px-2 py-2.5 dark:bg-brand-cream/[0.03]">
+                <div className="text-center">
+                  <p className="text-[9px] font-bold text-brand-orange">100+</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Clients</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[9px] font-bold text-brand-orange">4.9★</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Rating</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[9px] font-bold text-brand-orange">98</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Speed</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[9px] font-bold text-brand-orange">24h</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Support</p>
+                </div>
+              </div>
+              {/* Conversion Rate card */}
+              <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/30 px-2 py-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10" style={{ width: 72 }}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[7px] font-bold text-emerald-500">↑ 47%</span>
+                  <span className="rounded-full bg-emerald-100 px-1 py-0.5 text-[3px] font-semibold text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">Live</span>
+                </div>
+                <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Conversions</p>
+                <svg className="mt-0.5 w-full" height="10" viewBox="0 0 64 10" fill="none">
+                  <polyline points="0,8 10,7 20,6 30,8 40,4 50,3 60,1 64,0" stroke="#10b981" strokeWidth="1" strokeLinecap="round" fill="none" />
+                  <polyline points="0,8 10,7 20,6 30,8 40,4 50,3 60,1 64,0 64,10 0,10" fill="#10b981" fillOpacity="0.06" stroke="none" />
+                </svg>
+              </div>
+            </div>
+
+            {/* CTA banner */}
+            <div className="mx-4 mt-2 rounded-lg bg-gradient-to-r from-brand-orange to-amber-500 px-3 py-2.5 text-center" style={{ boxShadow: "0 0 20px 4px rgba(217,119,87,0.2), 0 0 40px 8px rgba(217,119,87,0.08)" }}>
+              <p className="text-[7px] font-bold text-white">Ready to grow? Book a free strategy call.</p>
+              <span className="mt-1 inline-block rounded-sm bg-white/90 px-2.5 text-[5px] font-semibold leading-[14px] text-brand-orange">Schedule Now →</span>
+            </div>
+
+            {/* Trusted by logos */}
+            <div className="mt-2 mb-3 px-4">
+              <p className="text-center text-[4px] font-medium uppercase tracking-wider text-brand-dark/30 dark:text-brand-cream/30">Trusted by businesses nationwide</p>
+              <div className="mt-1 flex items-center justify-center gap-3">
+                <div className="h-1.5 w-8 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
+                <div className="h-1.5 w-6 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
+                <div className="h-1.5 w-10 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
+                <div className="h-1.5 w-7 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
+              </div>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* Mock footer */}
+            <div className="border-t border-brand-light-gray/30 bg-brand-dark/[0.03] px-4 py-2 dark:border-brand-mid-gray/20 dark:bg-brand-cream/[0.02]">
+              <div className="grid grid-cols-4 gap-2">
+                <div>
+                  <p className="text-[5px] font-bold text-brand-dark dark:text-brand-cream">Acme</p>
+                  <p className="mt-0.5 text-[4px] leading-relaxed text-brand-dark/30 dark:text-brand-cream/30">Modern websites for growing businesses.</p>
+                </div>
+                <div>
+                  <p className="text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/50">Company</p>
+                  <div className="mt-0.5 flex flex-col gap-px">
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">About</span>
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">Careers</span>
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">Blog</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/50">Support</p>
+                  <div className="mt-0.5 flex flex-col gap-px">
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">Contact</span>
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">FAQ</span>
+                    <span className="text-[3.5px] text-brand-dark/30 dark:text-brand-cream/30">Privacy</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/50">Connect</p>
+                  <div className="mt-0.5 flex gap-1">
+                    <div className="h-2 w-2 rounded-full bg-brand-dark/15 dark:bg-brand-cream/15" />
+                    <div className="h-2 w-2 rounded-full bg-brand-dark/15 dark:bg-brand-cream/15" />
+                    <div className="h-2 w-2 rounded-full bg-brand-dark/15 dark:bg-brand-cream/15" />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between border-t border-brand-light-gray/20 pt-1 dark:border-brand-mid-gray/10">
+                <p className="text-[3.5px] text-brand-dark/25 dark:text-brand-cream/25">© 2025 Acme Inc. All rights reserved.</p>
+                <div className="flex items-center gap-0.5 rounded-full bg-brand-orange/10 px-1.5 py-0.5">
+                  <svg width="7" height="7" viewBox="0 0 22 22">
+                    <circle cx="11" cy="11" r="8" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                    <circle cx="11" cy="11" r="8" fill="none" stroke="#D97757" strokeWidth="3" strokeLinecap="round" strokeDasharray="49.6" strokeDashoffset="1" transform="rotate(-90 11 11)" />
+                  </svg>
+                  <span className="text-[3.5px] font-bold text-brand-orange">98</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Glowing divider line (left edge of After panel) */}
+          <div
+            className="absolute bottom-0 left-0 top-0 w-px"
+            style={{
+              background: "linear-gradient(180deg, transparent, #D97757 30%, #D97757 70%, transparent)",
+              boxShadow: "0 0 12px rgba(217,119,87,0.4), 0 0 24px rgba(217,119,87,0.15)",
+            }}
+          />
+        </div>
+
+        {/* ── Draggable divider handle ── */}
+        {!prefersReducedMotion && (
+          <div
+            className="pointer-events-none absolute top-0 bottom-0 z-20 flex items-center justify-center"
+            style={{ left: `${position}%`, transform: "translateX(-50%)" }}
+          >
+            {/* Vertical glow line */}
+            <div
+              className="absolute top-0 bottom-0 w-0.5"
+              style={{
+                background: "linear-gradient(180deg, transparent, #D97757 20%, #D97757 80%, transparent)",
+                boxShadow: "0 0 12px rgba(217,119,87,0.4)",
+              }}
+            />
+            {/* Center grab handle */}
+            <div
+              className="relative z-10 flex h-9 w-9 cursor-ew-resize items-center justify-center rounded-full border-2 border-brand-orange bg-white shadow-xl transition-transform hover:scale-110 dark:bg-brand-dark"
+              style={{ boxShadow: "0 0 12px rgba(217,119,87,0.4), 0 4px 16px rgba(0,0,0,0.15)" }}
+            >
+              <ChevronLeft className="h-3 w-3 text-brand-orange" />
+              <ChevronRight className="h-3 w-3 text-brand-orange" />
+            </div>
+          </div>
+        )}
+
+      </div>
+
+      {/* Floating label */}
+      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-4 py-1.5 text-xs font-medium text-brand-orange shadow-lg dark:bg-brand-dark">
+        Your site, reimagined
+      </div>
+    </div>
+  );
+}
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-brand-cream py-20 dark:bg-brand-dark lg:py-28">
-      {/* Blur glow orbs */}
-      <div
-        className="pointer-events-none absolute -left-24 top-8 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl dark:bg-brand-orange/5"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -right-24 bottom-8 h-96 w-96 rounded-full bg-brand-orange/10 blur-3xl dark:bg-brand-orange/5"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute right-[10%] top-[20%] h-64 w-64 rounded-full bg-brand-orange/[0.03] blur-3xl"
-        aria-hidden="true"
-      />
+    <section className="hero-honeycomb relative overflow-hidden bg-brand-cream py-20 dark:bg-brand-dark lg:py-28">
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
@@ -34,10 +421,11 @@ export function Hero() {
             <FadeInWhenVisible delay={0.08}>
               <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl md:text-[3.3rem] xl:text-[3.75rem]">
                 <span className="block leading-[1.1]">
-                  Don&apos;t let an outdated site
+                  Don&apos;t let an{" "}
+                  <span className="whitespace-nowrap">outdated site</span>
                 </span>
                 <span className="block leading-[1.1] bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                  cost you customers.
+                  cost you customers
                 </span>
               </h1>
             </FadeInWhenVisible>
@@ -59,7 +447,7 @@ export function Hero() {
             <FadeInWhenVisible delay={0.22} margin="200px">
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
-                  href="/contact#book"
+                  href="/book"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
                 >
                   Book a Free Strategy Call
@@ -80,7 +468,7 @@ export function Hero() {
                 <svg className="h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
                 </svg>
-                Free sample &middot; No obligation &middot; Live in 7 days
+                Free sample &middot; No obligation &middot; Quality guaranteed
               </span>
             </FadeInWhenVisible>
 
@@ -106,55 +494,10 @@ export function Hero() {
             </FadeInWhenVisible>
           </div>
 
-          {/* Right Column — Visual element */}
+          {/* Right Column — Before/After Visual */}
           <FadeInWhenVisible delay={0.3} direction="right">
             <div className="mt-8 w-full min-w-0 lg:mt-0">
-              <div className="relative rounded-2xl border border-brand-light-gray/40 bg-brand-white/50 p-1 shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/50">
-                {/* Mock browser chrome */}
-                <div className="flex items-center gap-2 rounded-t-xl bg-brand-cream/80 px-4 py-3 dark:bg-brand-dark/80">
-                  <div className="flex gap-1.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-red-400/60" />
-                    <div className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
-                    <div className="h-2.5 w-2.5 rounded-full bg-green-400/60" />
-                  </div>
-                  <div className="mx-auto flex-1">
-                    <div className="mx-auto max-w-[200px] rounded-md bg-brand-light-gray/40 px-3 py-1 text-center text-[10px] text-brand-mid-gray dark:bg-brand-mid-gray/20">
-                      yourbusiness.com
-                    </div>
-                  </div>
-                </div>
-                {/* Mock site content */}
-                <div className="space-y-3 rounded-b-xl bg-brand-white p-6 dark:bg-[#1a1a19]">
-                  <div className="h-4 w-3/4 rounded bg-brand-orange/20" />
-                  <div className="h-3 w-full rounded bg-brand-light-gray/60 dark:bg-brand-mid-gray/20" />
-                  <div className="h-3 w-5/6 rounded bg-brand-light-gray/60 dark:bg-brand-mid-gray/20" />
-                  <div className="mt-4 grid grid-cols-3 gap-3">
-                    <div className="h-20 rounded-lg bg-brand-orange/10" />
-                    <div className="h-20 rounded-lg bg-brand-orange/8" />
-                    <div className="h-20 rounded-lg bg-brand-orange/6" />
-                  </div>
-                  <div className="mt-3 flex gap-3">
-                    <div className="h-8 w-28 rounded-lg bg-brand-orange/30" />
-                    <div className="h-8 w-24 rounded-lg bg-brand-light-gray/40 dark:bg-brand-mid-gray/20" />
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="space-y-2 rounded-xl border border-brand-light-gray/40 p-3 dark:border-brand-mid-gray/20">
-                      <div className="h-3 w-1/2 rounded bg-brand-orange/15" />
-                      <div className="h-2 w-full rounded bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
-                      <div className="h-2 w-3/4 rounded bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
-                    </div>
-                    <div className="space-y-2 rounded-xl border border-brand-light-gray/40 p-3 dark:border-brand-mid-gray/20">
-                      <div className="h-3 w-1/2 rounded bg-brand-orange/15" />
-                      <div className="h-2 w-full rounded bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
-                      <div className="h-2 w-3/4 rounded bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
-                    </div>
-                  </div>
-                </div>
-                {/* "Before → After" label */}
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-4 py-1.5 text-xs font-medium text-brand-orange shadow-lg dark:bg-brand-dark">
-                  Your site, reimagined
-                </div>
-              </div>
+              <BeforeAfterMockup />
             </div>
           </FadeInWhenVisible>
         </div>

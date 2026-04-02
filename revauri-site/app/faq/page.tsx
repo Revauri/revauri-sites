@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
-import { FadeInWhenVisible } from "@/components/motion-wrappers";
-import { FAQAccordion } from "./faq-accordion";
+import { FAQContent } from "./faq-content";
 
 export const metadata: Metadata = {
   title: "FAQ — Revauri",
@@ -18,7 +17,7 @@ const FAQ_DATA = [
       {
         question: "How long does it take?",
         answer:
-          "Launch Package: 10–14 business days. Growth Package: 7 business days. Timeline starts when your Project Brief is complete.",
+          "Launch Package: approximately 6 weeks. Growth Package: priority delivery in 4 weeks. Timeline starts when your Project Brief is complete.",
       },
       {
         question: "What's included in the free redesign sample?",
@@ -48,7 +47,7 @@ const FAQ_DATA = [
       {
         question: "Why is a retainer required?",
         answer:
-          "The retainer covers your managed hosting, unlimited minor updates, and ongoing support. You're paying for a living, maintained website — not a static file that gets handed off and forgotten.",
+          "The retainer is your Website Care Plan — it covers hosting, SSL, unlimited minor updates, and ongoing support. You're paying for a living, maintained website — not a static file that gets handed off and forgotten.",
       },
     ],
   },
@@ -74,6 +73,46 @@ const FAQ_DATA = [
         question: "Do you offer SEO services?",
         answer:
           "The Growth Package includes monthly SEO optimization. Both packages include technical SEO fundamentals — semantic HTML, meta tags, sitemaps, structured data, and fast load times.",
+      },
+    ],
+  },
+  {
+    category: "Getting Started",
+    items: [
+      {
+        question: "How do I get started?",
+        answer:
+          "It's simple — book a free 15-minute strategy call or send us a message through the contact page. We'll learn about your business, review your current site, and build you a free sample redesign with no obligation.",
+      },
+      {
+        question: "Do I need to prepare anything before our call?",
+        answer:
+          "Not at all. Just have your current website URL handy if you have one. We'll handle the rest — reviewing your site, identifying opportunities, and building your free sample.",
+      },
+      {
+        question: "What if I don't have a website yet?",
+        answer:
+          "No problem. We build sites from scratch too. We'll work with you to define your goals, target audience, and brand identity, then build something custom that fits.",
+      },
+    ],
+  },
+  {
+    category: "Support & Maintenance",
+    items: [
+      {
+        question: "What kind of updates are included in the care plan?",
+        answer:
+          "Unlimited minor updates — text changes, image swaps, adding new sections, updating business hours, adding team members, etc. Anything that takes under 30 minutes is included at no extra cost.",
+      },
+      {
+        question: "How do I request changes to my site?",
+        answer:
+          "Just send an email to joseph@revauri.com with what you need. Most updates go live within 24 hours. For larger changes, we'll scope it and give you a timeline.",
+      },
+      {
+        question: "What happens if my site goes down?",
+        answer:
+          "Our sites are deployed on Vercel's global edge network with 99.99% uptime. In the rare event of an issue, we monitor proactively and resolve incidents quickly. Your care plan includes priority support.",
       },
     ],
   },
@@ -108,62 +147,37 @@ export default function FAQPage() {
         subtitle="Everything you need to know about working with Revauri."
       />
 
-      <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-        {FAQ_DATA.map((category) => (
-          <div key={category.category} className="mb-12 last:mb-0">
-            <FadeInWhenVisible>
-              <h2 className="mb-6 text-lg font-semibold text-brand-orange">
-                {category.category}
-              </h2>
-            </FadeInWhenVisible>
-            <FAQAccordion items={category.items} />
-          </div>
-        ))}
-      </div>
+      <FAQContent data={FAQ_DATA} />
 
-      {/* CTA Section */}
+      {/* Still have questions? */}
       <section className="pb-20">
-        <div className="mx-auto max-w-2xl px-6 text-center">
-          <FadeInWhenVisible>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Ready to get started?
-            </h2>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.08}>
-            <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              See a free custom redesign of your site. No commitment, no
-              credit card.
-            </p>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.16}>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Link
-                href="/contact#book"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
-              >
-                Book a Free Call
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center justify-center rounded-lg border border-brand-orange/30 px-6 py-3 text-sm font-medium text-brand-orange transition-all duration-200 hover:bg-brand-orange/5"
-              >
-                View Pricing
-              </Link>
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="rounded-2xl border border-brand-light-gray/60 bg-brand-cream p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-brand-dark dark:text-brand-cream">
+                  Still have questions?
+                </h3>
+                <p className="mt-2 text-sm text-brand-dark/60 dark:text-brand-cream/60">
+                  We're here to help. Reach out and we'll get back to you within a few hours.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30"
+                >
+                  Contact Us <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="mailto:joseph@revauri.com"
+                  className="inline-flex items-center justify-center rounded-lg border border-brand-orange/30 px-6 py-3 text-sm font-medium text-brand-orange transition-all duration-200 hover:bg-brand-orange/5"
+                >
+                  joseph@revauri.com
+                </a>
+              </div>
             </div>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.24}>
-            <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-brand-mid-gray">
-              {["Free sample redesign", "No obligation", "Live in 7 days"].map(
-                (item) => (
-                  <span key={item} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-brand-orange" />
-                    {item}
-                  </span>
-                ),
-              )}
-            </div>
-          </FadeInWhenVisible>
+          </div>
         </div>
       </section>
     </div>

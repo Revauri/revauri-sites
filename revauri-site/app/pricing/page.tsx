@@ -7,7 +7,7 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "Pricing — Revauri",
   description:
-    "Simple, transparent pricing for modern website design. Launch Package from $2,500 or Growth Package from $4,500. Free sample redesign included.",
+    "Simple, transparent pricing for modern website design. Launch Package from $2,900 or Growth Package from $4,900. Free sample redesign included.",
 };
 
 const launchFeatures = [
@@ -15,21 +15,19 @@ const launchFeatures = [
   "Mobile-first, fast-loading design",
   "Content & copy rewrite",
   "Deployed & managed on our infrastructure",
-  "Delivered in 10–14 business days",
+  "Delivered in 6 weeks",
   "Unlimited minor updates included",
-  "1 new page per month",
   "Priority email support",
 ];
 
 const growthFeatures = [
-  "Everything in Launch, plus:",
   "Up to 10 inner pages",
   "AI chatbot integration",
   "Custom illustrations or animations",
   "Lead capture forms with email integration",
-  "Priority 7-day delivery",
+  "Priority delivery in 4 weeks",
   "Monthly SEO optimization",
-  "2 AI-drafted blog posts per month",
+  "2 blog posts per month",
   "Google Analytics reporting dashboard",
 ];
 
@@ -38,7 +36,7 @@ const CERTAINTY_ITEMS = [
   "Two rounds of revisions are included in every package. We work with you until it's right.",
   "Your retainer payment doesn't start until 30 days after your site goes live.",
   "Cancel the retainer anytime with 30-day notice. You keep the code, no penalties.",
-  "Every site includes managed hosting, SSL, and unlimited minor updates.",
+  "Every site includes your Website Care Plan — hosting, SSL, and unlimited minor updates.",
   "Need something specific? We offer individual add-ons for chatbots, analytics, and more.",
 ];
 
@@ -69,11 +67,11 @@ export default function PricingPage() {
             </h3>
             <div className="mt-4">
               <span className="text-4xl font-bold tracking-tight text-brand-dark dark:text-brand-cream">
-                $2,500
+                $2,900
               </span>
             </div>
             <p className="mt-1 text-sm text-brand-dark/50 dark:text-brand-cream/50">
-              upfront + $349/mo managed hosting
+              upfront + $390/mo Essential Website Care Plan
             </p>
             <div className="my-6 h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
             <ul className="flex flex-col gap-3">
@@ -88,7 +86,7 @@ export default function PricingPage() {
             </ul>
             <div className="mt-8">
               <Link
-                href="/contact#book"
+                href="/book"
                 className="inline-flex w-full justify-center rounded-lg border-2 border-brand-dark px-6 py-3 text-sm font-semibold text-brand-dark shadow-[var(--shadow-sm)] transition-all duration-300 hover:bg-brand-dark hover:text-white hover:shadow-[var(--shadow-md)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark dark:border-brand-cream dark:text-brand-cream dark:hover:bg-brand-cream dark:hover:text-brand-dark"
               >
                 Get Started
@@ -106,13 +104,16 @@ export default function PricingPage() {
             </h3>
             <div className="mt-4">
               <span className="text-4xl font-bold tracking-tight text-brand-dark dark:text-brand-cream">
-                $4,500
+                $4,900
               </span>
             </div>
             <p className="mt-1 text-sm text-brand-dark/50 dark:text-brand-cream/50">
-              upfront + $549/mo managed hosting
+              upfront + $590/mo Premium Website Care Plan
             </p>
             <div className="my-6 h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
+            <p className="mb-4 rounded-lg bg-brand-orange/10 px-4 py-2 text-sm font-semibold text-brand-orange">
+              Everything in Launch, plus:
+            </p>
             <ul className="flex flex-col gap-3">
               {growthFeatures.map((feature) => (
                 <li key={feature} className="flex items-start gap-3">
@@ -125,7 +126,7 @@ export default function PricingPage() {
             </ul>
             <div className="mt-8">
               <Link
-                href="/contact#book"
+                href="/book"
                 className="inline-flex w-full justify-center rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
               >
                 Get Started

@@ -18,7 +18,7 @@ export function Logo({
 
   return (
     <span
-      className={`relative inline-flex items-baseline text-xl font-semibold tracking-tight ${textColor} ${className}`}
+      className={`relative inline-flex w-fit items-baseline text-xl font-semibold tracking-tight ${textColor} ${className}`}
     >
       Revauri
       {/* Rising accent bar — overlays the i's tittle */}

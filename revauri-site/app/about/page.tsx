@@ -27,7 +27,7 @@ const VALUES = [
     icon: Code,
     title: "Modern Stack, Real Results",
     description:
-      "We build on Next.js, Tailwind, and Vercel — the same tools behind the world's fastest websites. Your site will load fast and rank well.",
+      "We build on Next.js, Tailwind, and Vercel — the same tools behind the world's fastest websites.",
   },
   {
     icon: Users,
@@ -164,7 +164,7 @@ export default function AboutPage() {
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
             <Link
-              href="/contact#book"
+              href="/book"
               className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
             >
               Book a Free Strategy Call

@@ -29,11 +29,11 @@ const STATS = [
       "Clients see an average 2.7x increase in qualified leads after launching with Revauri.",
   },
   {
-    value: 7,
-    suffix: " days",
-    label: "Average launch time",
+    value: 98,
+    suffix: "%",
+    label: "Client satisfaction",
     description:
-      "Most sites go live within 7–14 business days — fast without cutting corners.",
+      "Our clients rate their experience highly — from first call to final launch and beyond.",
   },
 ];
 

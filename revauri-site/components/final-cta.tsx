@@ -35,7 +35,7 @@ export function FinalCTA() {
             <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
               Ready to see your{" "}
               <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                next website?
+                new website?
               </span>
             </h2>
           </FadeInWhenVisible>
@@ -49,7 +49,7 @@ export function FinalCTA() {
 
           <FadeInWhenVisible delay={0.22}>
             <Link
-              href="/contact#book"
+              href="/book"
               className="inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
             >
               Book a Free Strategy Call
@@ -69,7 +69,7 @@ export function FinalCTA() {
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-light-gray bg-brand-white/70 px-3 py-1 dark:border-brand-mid-gray/20 dark:bg-brand-dark/70">
                 <Check className="h-3.5 w-3.5 text-brand-orange" />
-                Live in 7 days
+                Quality guaranteed
               </span>
             </div>
           </FadeInWhenVisible>

@@ -24,10 +24,13 @@ export function Footer() {
                   <Link href="/pricing">Pricing</Link>
                 </FooterLink>
                 <FooterLink>
+                  <Link href="/portfolio">Portfolio</Link>
+                </FooterLink>
+                <FooterLink>
                   <Link href="/#how-it-works">How It Works</Link>
                 </FooterLink>
                 <FooterLink>
-                  <Link href="/contact#book">Book a Call</Link>
+                  <Link href="/book">Book a Call</Link>
                 </FooterLink>
               </ul>
             </div>

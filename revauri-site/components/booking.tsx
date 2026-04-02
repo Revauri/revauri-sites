@@ -82,48 +82,16 @@ export function Booking() {
   return (
     <section id="book" className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
       <div className="relative mx-auto max-w-6xl px-6 text-center">
-        <div className="mx-auto max-w-3xl">
-          <FadeInWhenVisible>
+        <FadeInWhenVisible>
+          <div
+            className="mx-auto mt-6 max-w-[960px] rounded-2xl md:mt-7"
+            style={{
+              boxShadow:
+                "0 0 60px 10px rgba(217,119,87,0.12), 0 0 120px 30px rgba(217,119,87,0.06)",
+            }}
+          >
             <div
-              className="mx-auto mb-6 flex items-center justify-center gap-3"
-              aria-hidden="true"
-            >
-              <div className="h-px w-12 bg-brand-orange/20" />
-              <div className="h-1.5 w-1.5 rounded-full bg-brand-orange/45" />
-              <div className="h-px w-12 bg-brand-orange/20" />
-            </div>
-
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Book your{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                free strategy call
-              </span>
-            </h2>
-            <p className="mt-4 text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-              15 minutes. We&apos;ll walk through your redesign sample and
-              outline clear, practical next steps.
-            </p>
-          </FadeInWhenVisible>
-
-          <FadeInWhenVisible delay={0.08}>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm">
-              <span className="rounded-full border border-brand-orange/35 bg-brand-orange/12 px-4 py-1.5 font-medium text-brand-dark shadow-[var(--shadow-sm)] dark:text-brand-cream">
-                Free 15-min call
-              </span>
-              <span className="rounded-full border border-brand-orange/25 bg-brand-white px-4 py-1.5 font-medium text-brand-dark/80 shadow-[var(--shadow-sm)] dark:bg-brand-dark dark:text-brand-cream/80">
-                No obligation
-              </span>
-              <span className="rounded-full border border-brand-orange/25 bg-brand-white px-4 py-1.5 font-medium text-brand-dark/80 shadow-[var(--shadow-sm)] dark:bg-brand-dark dark:text-brand-cream/80">
-                Actionable next steps
-              </span>
-            </div>
-          </FadeInWhenVisible>
-        </div>
-
-        <FadeInWhenVisible delay={0.16}>
-          <div className="mx-auto mt-6 max-w-[960px] rounded-2xl border border-brand-light-gray/40 bg-brand-white p-1 shadow-[var(--shadow-lg)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] md:mt-7">
-            <div
-              className="relative min-h-[700px] rounded-xl overflow-hidden"
+              className="relative min-h-[700px] rounded-2xl overflow-hidden"
               style={{ minWidth: "320px" }}
             >
               {!isCalendlyLoaded && (
@@ -140,17 +108,6 @@ export function Booking() {
           </div>
         </FadeInWhenVisible>
 
-        <FadeInWhenVisible delay={0.2}>
-          <p className="mt-4 text-sm text-brand-mid-gray">
-            Prefer email? Reach us at{" "}
-            <a
-              href="mailto:joseph@revauri.com"
-              className="font-medium text-brand-orange transition-colors hover:text-brand-dark dark:hover:text-brand-cream"
-            >
-              joseph@revauri.com
-            </a>
-          </p>
-        </FadeInWhenVisible>
       </div>
     </section>
   );

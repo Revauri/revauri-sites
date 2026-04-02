@@ -13,12 +13,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Revauri — Modern Website Redesign for Small Business",
   description:
-    "We build fast, mobile-first websites for small businesses. See a free custom redesign of your site before you pay a dime. Launch in as little as 7 days.",
+    "We build fast, mobile-first websites for small businesses. See a free custom redesign of your site before you pay a dime. Start with a free custom redesign sample — no commitment required.",
   metadataBase: new URL("https://revauri.com"),
   openGraph: {
     title: "Revauri — Modern Website Redesign for Small Business",
     description:
-      "We build fast, mobile-first websites for small businesses. See a free custom redesign of your site before you pay a dime. Launch in as little as 7 days.",
+      "We build fast, mobile-first websites for small businesses. See a free custom redesign of your site before you pay a dime. Start with a free custom redesign sample — no commitment required.",
     url: "https://revauri.com",
     siteName: "Revauri",
     locale: "en_US",

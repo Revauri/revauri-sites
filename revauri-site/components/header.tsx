@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "./logo";
 
 const navLinks = [
+  { label: "Portfolio", href: "/portfolio" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
@@ -68,7 +69,7 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/contact#book"
+              href="/book"
               className="rounded-lg bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
             >
               Book a Free Call
@@ -148,7 +149,7 @@ export function Header() {
                 }}
               >
                 <Link
-                  href="/contact#book"
+                  href="/book"
                   onClick={() => setMenuOpen(false)}
                   className="mt-4 inline-block rounded-lg bg-brand-orange px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-orange/90"
                 >
