@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Check, Eye, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "./motion-wrappers";
+import BlendedDemoFrame from "./blended-demo-frame";
 
 function BeforeAfterMockup() {
   const prefersReducedMotion = useReducedMotion();
@@ -38,7 +39,8 @@ function BeforeAfterMockup() {
   };
 
   return (
-    <div className="relative rounded-2xl border border-brand-light-gray/40 bg-brand-white/50 p-1 shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/50">
+    <BlendedDemoFrame>
+    <div className="relative rounded-2xl border border-brand-light-gray/40 bg-brand-white/80 p-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/80">
       {/* Mock browser chrome */}
       <div className="rounded-t-xl bg-brand-cream/80 px-4 pt-3 pb-2 dark:bg-brand-dark/80">
         <div className="flex items-center gap-2">
@@ -401,6 +403,7 @@ function BeforeAfterMockup() {
         Your site, reimagined
       </div>
     </div>
+    </BlendedDemoFrame>
   );
 }
 

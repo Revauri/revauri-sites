@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Zap, Shield, Code, Users, Palette, BarChart3 } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
+import BlendedDemoFrame from "@/components/blended-demo-frame";
 
 export const metadata: Metadata = {
   title: "About — Revauri",
@@ -67,19 +68,15 @@ export default function AboutPage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[auto_1fr] lg:gap-16">
             <FadeInWhenVisible direction="left">
-              <div className="relative mx-auto lg:mx-0">
-                <div
-                  className="absolute -inset-4 rounded-2xl bg-brand-orange/10 blur-2xl"
-                  aria-hidden="true"
-                />
+              <BlendedDemoFrame className="mx-auto w-fit lg:mx-0">
                 <img
                   src="/joseph-headshot.jpg"
                   alt="Joseph Silvagnoli, founder of Revauri"
                   width={224}
                   height={224}
-                  className="relative h-56 w-56 rounded-2xl object-cover object-top ring-1 ring-brand-mid-gray/20 shadow-[var(--shadow-xl)]"
+                  className="h-56 w-56 rounded-2xl object-cover object-top"
                 />
-              </div>
+              </BlendedDemoFrame>
             </FadeInWhenVisible>
 
             <div>

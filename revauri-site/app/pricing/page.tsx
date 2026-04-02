@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
+import BlendedDemoFrame from "@/components/blended-demo-frame";
 
 export const metadata: Metadata = {
   title: "Pricing — Revauri",
@@ -61,7 +62,8 @@ export default function PricingPage() {
       <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
         <StaggerChildren className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Launch Package */}
-          <div className="flex flex-col rounded-2xl border border-brand-light-gray border-t-2 border-t-brand-light-gray bg-brand-white p-8 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+          <BlendedDemoFrame>
+          <div className="flex flex-col rounded-2xl border border-brand-light-gray border-t-2 border-t-brand-light-gray bg-brand-white p-8 transition-all duration-300 hover:-translate-y-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
             <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">
               Launch Package
             </h3>
@@ -93,10 +95,12 @@ export default function PricingPage() {
               </Link>
             </div>
           </div>
+          </BlendedDemoFrame>
 
           {/* Growth Package */}
-          <div className="relative flex flex-col rounded-2xl border-2 border-brand-orange bg-brand-white p-8 shadow-[var(--shadow-glow)] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-[#1a1a19]">
-            <div className="absolute -top-3.5 left-6 rounded-full bg-brand-orange px-4 py-1 text-xs font-bold tracking-wide text-white">
+          <BlendedDemoFrame className="pt-4">
+          <div className="relative flex flex-col rounded-2xl border-2 border-brand-orange bg-brand-white p-8 transition-all duration-300 hover:-translate-y-1 dark:bg-[#1a1a19]">
+            <div className="absolute -top-3.5 left-6 z-10 rounded-full bg-brand-orange px-4 py-1 text-xs font-bold tracking-wide text-white">
               Most Popular
             </div>
             <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">
@@ -133,6 +137,7 @@ export default function PricingPage() {
               </Link>
             </div>
           </div>
+          </BlendedDemoFrame>
         </StaggerChildren>
 
         {/* Certainty block */}
