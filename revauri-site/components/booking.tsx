@@ -22,6 +22,7 @@ declare global {
 export function Booking() {
   const embedRef = useRef<HTMLDivElement>(null);
   const [isCalendlyLoaded, setIsCalendlyLoaded] = useState(false);
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const onCalendlyMessage = (event: MessageEvent) => {
@@ -79,20 +80,45 @@ export function Booking() {
     };
   }, []);
 
+  useEffect(() => {
+    const embedElement = embedRef.current;
+    if (!embedElement || typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver((entries) => {
+      const nextHeight = entries[0]?.contentRect.height ?? 0;
+
+      if (nextHeight > 0) {
+        setMeasuredHeight((currentHeight) => {
+          const roundedHeight = Math.ceil(nextHeight);
+          return currentHeight === roundedHeight ? currentHeight : roundedHeight;
+        });
+      }
+    });
+
+    observer.observe(embedElement);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const fallbackHeight = 760;
+  const embedMinHeight = measuredHeight
+    ? `${Math.max(measuredHeight, fallbackHeight)}px`
+    : `${fallbackHeight}px`;
+
   return (
     <section id="book" className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
       <div className="relative mx-auto max-w-6xl px-6">
         <FadeInWhenVisible>
-          <div className="mx-auto mt-6 max-w-[1040px] md:mt-7">
+          <div className="mx-auto mt-6 w-full max-w-[980px] md:mt-8">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-12 top-12 h-48 rounded-full bg-brand-orange/10 blur-3xl"
+              className="pointer-events-none absolute inset-x-10 top-10 h-44 rounded-full bg-brand-orange/10 blur-3xl md:inset-x-16 md:h-48"
             />
             <div
-              className="relative overflow-hidden rounded-[2rem] border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-3 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:p-4"
+              className="relative overflow-hidden rounded-[1.85rem] border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-2.5 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:rounded-[2rem] sm:p-3.5"
             >
-              <div className="mb-3 flex items-center justify-between gap-3 rounded-[1.35rem] border border-brand-light-gray/50 bg-brand-white/80 px-4 py-3 dark:border-brand-mid-gray/20 dark:bg-brand-dark/80">
-                <div>
+              <div className="mb-2.5 flex items-center justify-between gap-3 rounded-[1.25rem] border border-brand-light-gray/50 bg-brand-white/85 px-4 py-3 dark:border-brand-mid-gray/20 dark:bg-brand-dark/85 sm:mb-3 sm:rounded-[1.35rem]">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
                     Pick a time that works for you
                   </p>
@@ -101,7 +127,7 @@ export function Booking() {
                   </p>
                 </div>
                 <div className="hidden rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-semibold text-brand-orange sm:inline-flex">
-                  Calendly
+                  Schedule Now
                 </div>
               </div>
               <div className="relative overflow-hidden rounded-[1.5rem] border border-brand-light-gray/45 bg-brand-white shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] dark:border-brand-mid-gray/20 dark:bg-[#111110]">
@@ -119,7 +145,11 @@ export function Booking() {
                     </div>
                   </div>
                 )}
-                <div ref={embedRef} className="w-full min-h-[700px]" />
+                <div
+                  ref={embedRef}
+                  className="w-full transition-[min-height] duration-300 ease-out"
+                  style={{ minHeight: isCalendlyLoaded ? embedMinHeight : `${fallbackHeight}px` }}
+                />
               </div>
             </div>
           </div>

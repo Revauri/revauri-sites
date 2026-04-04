@@ -1,102 +1,113 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Check, Eye, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "./motion-wrappers";
 import BlendedDemoFrame from "./blended-demo-frame";
 
+const DEFAULT_SLIDER_POSITION = 50;
+const SLIDER_KEYBOARD_STEP = 4;
+const SLIDER_TOUCH_PADDING = 0;
+
 function BeforeAfterMockup() {
   const prefersReducedMotion = useReducedMotion();
-  const [position, setPosition] = useState(50);
+  const instructionsId = useId();
+  const [position, setPosition] = useState(DEFAULT_SLIDER_POSITION);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const targetPositionRef = useRef(50);
-  const animationFrameRef = useRef<number | null>(null);
+  const handleRef = useRef<HTMLButtonElement>(null);
+  const activePointerIdRef = useRef<number | null>(null);
+  const positionRef = useRef(DEFAULT_SLIDER_POSITION);
 
-  const commitPosition = (nextPosition: number, immediate = false) => {
-    targetPositionRef.current = nextPosition;
-
-    if (immediate || prefersReducedMotion) {
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
-      setPosition(nextPosition);
-      return;
-    }
-
-    if (animationFrameRef.current !== null) return;
-
-    animationFrameRef.current = window.requestAnimationFrame(() => {
-      animationFrameRef.current = null;
-      setPosition(targetPositionRef.current);
-    });
+  const applyPosition = (nextPosition: number) => {
+    positionRef.current = nextPosition;
+    containerRef.current?.style.setProperty("--slider-position", `${nextPosition}%`);
+    handleRef.current?.setAttribute("aria-valuenow", `${Math.round(nextPosition)}`);
   };
 
-  const updatePosition = (clientX: number, immediate = false) => {
-    const container = containerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const pct = Math.max(8, Math.min(92, (x / rect.width) * 100));
-    commitPosition(pct, immediate || isDragging);
+  const commitPosition = (nextPosition: number) => {
+    applyPosition(nextPosition);
+    setPosition(nextPosition);
   };
 
-  const shouldStartDrag = (clientX: number, pointerType: string) => {
-    if (pointerType !== "touch") return true;
+  const getClampedPosition = (clientX: number) => {
     const container = containerRef.current;
-    if (!container) return false;
+    if (!container) return positionRef.current;
+
     const rect = container.getBoundingClientRect();
-    const handleX = rect.left + (position / 100) * rect.width;
-    return Math.abs(clientX - handleX) <= 56;
+    const edgePadding = Math.min(SLIDER_TOUCH_PADDING, rect.width / 2);
+    const minX = edgePadding;
+    const maxX = rect.width - edgePadding;
+    const x = Math.min(Math.max(clientX - rect.left, minX), maxX);
+
+    return (x / rect.width) * 100;
+  };
+
+  const updateFromClientX = (clientX: number) => {
+    applyPosition(getClampedPosition(clientX));
   };
 
   const stopDragging = () => {
+    activePointerIdRef.current = null;
     setIsDragging(false);
+    setPosition(positionRef.current);
   };
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLElement>) => {
-    if (prefersReducedMotion || !shouldStartDrag(e.clientX, e.pointerType)) return;
+  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (prefersReducedMotion) return;
+
+    activePointerIdRef.current = event.pointerId;
     setIsDragging(true);
-    updatePosition(e.clientX, true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+    updateFromClientX(event.clientX);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isDragging || activePointerIdRef.current !== event.pointerId) return;
+
+    event.preventDefault();
+    updateFromClientX(event.clientX);
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (activePointerIdRef.current !== event.pointerId) return;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+    stopDragging();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (prefersReducedMotion) return;
+
+    let nextPosition = positionRef.current;
+
+    switch (event.key) {
+      case "ArrowLeft":
+      case "ArrowDown":
+        nextPosition = Math.max(0, nextPosition - SLIDER_KEYBOARD_STEP);
+        break;
+      case "ArrowRight":
+      case "ArrowUp":
+        nextPosition = Math.min(100, nextPosition + SLIDER_KEYBOARD_STEP);
+        break;
+      case "Home":
+        nextPosition = 0;
+        break;
+      case "End":
+        nextPosition = 100;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    commitPosition(nextPosition);
   };
 
   useEffect(() => {
-    if (!isDragging) return;
-
-    const handlePointerMove = (event: PointerEvent) => {
-      event.preventDefault();
-      updatePosition(event.clientX);
-    };
-
-    const handlePointerUp = () => {
-      stopDragging();
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: false });
-    window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointercancel", handlePointerUp);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-      window.removeEventListener("pointercancel", handlePointerUp);
-    };
-  }, [isDragging]);
-
-  useEffect(() => {
-    return () => {
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, []);
-
-  const sliderStyles = {
-    "--slider-position": `${position}%`,
-  } as React.CSSProperties;
+    applyPosition(position);
+  }, [position]);
 
   return (
     <BlendedDemoFrame>
@@ -132,12 +143,16 @@ function BeforeAfterMockup() {
         ref={containerRef}
         className="relative h-[360px] overflow-hidden rounded-b-xl select-none sm:h-[430px]"
         style={{
-          ...sliderStyles,
-          cursor: prefersReducedMotion ? "default" : isDragging ? "grabbing" : "ew-resize",
-          touchAction: prefersReducedMotion ? "auto" : isDragging ? "none" : "pan-y",
-        }}
-        onPointerDown={handlePointerDown}
+          "--slider-position": `${position}%`,
+        } as React.CSSProperties}
       >
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            cursor: prefersReducedMotion ? "default" : isDragging ? "grabbing" : "ew-resize",
+            touchAction: prefersReducedMotion ? "auto" : "pan-y",
+          }}
+        />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-black/4 to-transparent dark:from-white/[0.03]" />
         {/* ── BEFORE side (full width, underneath) ── */}
         <div className="absolute inset-0 flex flex-col bg-[#dcdcdc] dark:bg-[#1c1c1b]">
@@ -519,7 +534,7 @@ function BeforeAfterMockup() {
             style={{
               left: "var(--slider-position)",
               transform: "translateX(-50%)",
-              transition: isDragging ? "none" : "left 180ms ease-out",
+              transition: isDragging ? "none" : "left 140ms ease-out",
             }}
           >
             {/* Vertical glow line */}
@@ -532,18 +547,33 @@ function BeforeAfterMockup() {
             />
             {/* Center grab handle */}
             <button
+              ref={handleRef}
               type="button"
               aria-label="Drag to compare before and after"
+              aria-describedby={instructionsId}
+              aria-orientation="horizontal"
+              aria-valuemax={100}
+              aria-valuemin={0}
+              aria-valuenow={Math.round(position)}
+              onKeyDown={handleKeyDown}
+              onPointerCancel={handlePointerUp}
               onPointerDown={handlePointerDown}
-              className="relative z-10 flex h-11 w-11 cursor-ew-resize items-center justify-center rounded-full border-2 border-brand-orange bg-white shadow-xl transition-transform hover:scale-110 active:scale-95 dark:bg-brand-dark sm:h-10 sm:w-10"
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              className="relative z-10 flex h-[2.125rem] w-[2.125rem] cursor-ew-resize touch-none items-center justify-center rounded-full border-2 border-brand-orange bg-white shadow-xl transition-transform hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange dark:bg-brand-dark sm:h-[2.05rem] sm:w-[2.05rem]"
+              role="slider"
               style={{ boxShadow: "0 0 12px rgba(217,119,87,0.4), 0 4px 16px rgba(0,0,0,0.15)" }}
               data-slider-handle
             >
-              <ChevronLeft className="h-3 w-3 text-brand-orange" />
-              <ChevronRight className="h-3 w-3 text-brand-orange" />
+              <ChevronLeft className="h-2.5 w-2.5 text-brand-orange" />
+              <ChevronRight className="h-2.5 w-2.5 text-brand-orange" />
             </button>
           </div>
         )}
+
+        <span id={instructionsId} className="sr-only">
+          Drag the handle or use the arrow keys to compare the before and after website designs.
+        </span>
 
       </div>
     </div>

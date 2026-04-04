@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, Zap, Shield, Code, Users, Palette, BarChart3 } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
-import BlendedDemoFrame from "@/components/blended-demo-frame";
 
 export const metadata: Metadata = {
   title: "About — Revauri",
@@ -66,20 +65,26 @@ export default function AboutPage() {
       {/* Founder Story */}
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[auto_1fr] lg:gap-16">
-            <FadeInWhenVisible direction="left">
-              <BlendedDemoFrame compact className="mx-auto w-fit lg:mx-0">
-                <img
-                  src="/joseph-headshot.jpg"
-                  alt="Joseph Silvagnoli, founder of Revauri"
-                  width={224}
-                  height={224}
-                  className="h-52 w-52 rounded-2xl object-cover object-top sm:h-56 sm:w-56"
+          <div className="grid grid-cols-1 items-center justify-items-center gap-12 lg:grid-cols-[auto_1fr] lg:justify-items-stretch lg:gap-16">
+            <FadeInWhenVisible direction="left" className="mx-auto w-fit lg:mx-0">
+              <div className="relative isolate mx-auto w-fit lg:mx-0">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-brand-orange/12 blur-2xl"
                 />
-              </BlendedDemoFrame>
+                <div className="relative rounded-[2rem] border border-brand-orange/15 bg-gradient-to-br from-brand-cream/15 via-transparent to-brand-orange/10 p-3 shadow-[0_24px_50px_-32px_rgba(217,119,87,0.42)] dark:from-brand-dark/50 dark:to-brand-orange/8">
+                  <img
+                    src="/joseph-headshot.jpg"
+                    alt="Joseph Silvagnoli, founder of Revauri"
+                    width={224}
+                    height={224}
+                    className="block h-52 w-52 rounded-[1.5rem] object-cover object-top ring-1 ring-white/10 sm:h-56 sm:w-56"
+                  />
+                </div>
+              </div>
             </FadeInWhenVisible>
 
-            <div>
+            <div className="w-full">
               <FadeInWhenVisible>
                 <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-cream sm:text-3xl">
                   Hi, I&apos;m Joseph.

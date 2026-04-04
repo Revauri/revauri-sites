@@ -25,7 +25,11 @@ function BlendedDemoFrame(
   const isCompact = props.compact ?? false;
 
   return (
-    <div className={`relative isolate w-full${props.className ? ` ${props.className}` : ""}`}>
+    <div
+      className={`relative isolate ${isCompact ? "inline-flex w-fit max-w-full" : "w-full"}${
+        props.className ? ` ${props.className}` : ""
+      }`}
+    >
       {/* 1 · OUTER GLOW — orange radial blur behind the entire frame */}
       <div
         aria-hidden="true"
@@ -55,10 +59,12 @@ function BlendedDemoFrame(
       {/* 3 · MAIN FRAME — gradient bg, ring border, and orange drop-shadow */}
       <div
         className={`relative z-10 bg-gradient-to-br from-brand-cream/70 via-brand-cream/35 to-transparent ring-1 ring-brand-orange/15 shadow-[0_20px_45px_-30px_rgba(217,119,87,0.45)] dark:from-brand-dark/70 dark:via-brand-dark/35 ${
-          isCompact ? "rounded-[1.45rem] p-2 sm:rounded-[1.7rem] sm:p-2.5" : "rounded-[1.7rem] p-2.5"
+          isCompact
+            ? "inline-flex w-fit max-w-full rounded-[1.4rem] p-1.5 sm:rounded-[1.65rem] sm:p-2"
+            : "rounded-[1.7rem] p-2.5"
         }`}
       >
-        <div className={isCompact ? "rounded-[1.15rem] sm:rounded-[1.35rem]" : "rounded-[1.35rem]"}>
+        <div className={isCompact ? "rounded-[1.1rem] sm:rounded-[1.3rem]" : "rounded-[1.35rem]"}>
           {props.children}
         </div>
       </div>
