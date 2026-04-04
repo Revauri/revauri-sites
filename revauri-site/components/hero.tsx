@@ -40,7 +40,8 @@ function BeforeAfterMockup() {
 
   return (
     <BlendedDemoFrame>
-    <div className="relative rounded-2xl border border-brand-light-gray/40 bg-brand-white/80 p-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/80">
+    <>
+    <div className="rounded-2xl border border-brand-light-gray/40 bg-brand-white/80 p-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/80">
       {/* Mock browser chrome */}
       <div className="rounded-t-xl bg-brand-cream/80 px-4 pt-3 pb-2 dark:bg-brand-dark/80">
         <div className="flex items-center gap-2">
@@ -191,21 +192,96 @@ function BeforeAfterMockup() {
             {/* Hero section with subtle gradient bg */}
             <div className="bg-gradient-to-br from-brand-cream/80 to-brand-orange/[0.04] px-4 py-3 dark:from-brand-dark dark:to-brand-orange/[0.03]">
               <div className="flex items-start gap-2">
-                {/* Two hero image placeholders — left side */}
+                {/* Hero image placeholders — left side */}
                 <div className="flex shrink-0 gap-1.5">
-                  <div className="h-16 w-[4.5rem] rounded-lg bg-gradient-to-br from-brand-orange/15 to-brand-orange/5 dark:from-brand-orange/10 dark:to-brand-orange/[0.02]">
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-0.5">
-                      <div className="h-3 w-3 rounded-full bg-brand-orange/20" />
-                      <div className="h-0.5 w-7 rounded bg-brand-orange/15" />
-                      <div className="h-0.5 w-5 rounded bg-brand-orange/10" />
-                    </div>
+                  {/* Hero thumb — landscape / photography */}
+                  <div className="relative h-16 w-[4.5rem] overflow-hidden rounded-lg border border-brand-orange/22 bg-gradient-to-br from-brand-cream via-brand-orange/[0.2] to-brand-orange/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_1px_2px_rgba(217,119,87,0.1)] dark:border-white/12 dark:from-[#34312e] dark:via-brand-orange/[0.22] dark:to-[#1f1e1c] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.2)]">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_35%_-10%,rgba(255,255,255,0.72)_0%,transparent_55%)] opacity-85 dark:opacity-55"
+                    />
+                    <svg
+                      className="relative h-full w-full p-1"
+                      viewBox="0 0 52 44"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <rect
+                        x="4"
+                        y="5"
+                        width="44"
+                        height="34"
+                        rx="3"
+                        className="fill-brand-orange/[0.11] stroke-brand-orange/30 dark:fill-white/[0.08] dark:stroke-white/16"
+                        strokeWidth="0.75"
+                      />
+                      <circle cx="38" cy="14" r="4" className="fill-brand-orange/45 dark:fill-brand-orange/55" />
+                      <path
+                        d="M8 32 L18 22 L26 28 L34 18 L44 26 V36 H8 Z"
+                        className="fill-brand-orange/28 dark:fill-brand-orange/38"
+                      />
+                    </svg>
                   </div>
-                  <div className="h-16 w-[4.5rem] rounded-lg bg-gradient-to-br from-brand-orange/10 to-brand-cream/50 dark:from-brand-orange/8 dark:to-brand-mid-gray/5">
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-0.5">
-                      <div className="h-3 w-3 rounded bg-brand-orange/15" />
-                      <div className="h-0.5 w-7 rounded bg-brand-orange/12" />
-                      <div className="h-0.5 w-5 rounded bg-brand-orange/8" />
-                    </div>
+                  {/* Hero thumb — product / UI frame */}
+                  <div className="relative h-16 w-[4.5rem] overflow-hidden rounded-lg border border-brand-orange/18 bg-gradient-to-br from-white via-brand-cream/95 to-brand-orange/[0.14] shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/10 dark:from-[#2e2c29] dark:via-brand-mid-gray/28 dark:to-[#1c1b1a] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.25)]">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_0%,rgba(217,119,87,0.2)_0%,transparent_50%)] dark:bg-[radial-gradient(ellipse_80%_50%_at_80%_0%,rgba(217,119,87,0.32)_0%,transparent_50%)]"
+                    />
+                    <svg
+                      className="relative h-full w-full p-1"
+                      viewBox="0 0 52 44"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <rect
+                        x="9"
+                        y="7"
+                        width="34"
+                        height="30"
+                        rx="3.5"
+                        className="fill-brand-orange/[0.1] stroke-brand-orange/26 dark:fill-white/[0.06] dark:stroke-white/18"
+                        strokeWidth="0.75"
+                      />
+                      <rect x="14" y="12" width="22" height="2.25" rx="1" className="fill-brand-orange/32 dark:fill-brand-orange/48" />
+                      <rect x="14" y="17" width="16" height="2" rx="1" className="fill-brand-orange/22 dark:fill-brand-orange/32" />
+                      <rect x="14" y="22" width="18" height="2" rx="1" className="fill-brand-orange/16 dark:fill-brand-orange/24" />
+                      <rect x="14" y="27" width="12" height="2" rx="1" className="fill-brand-orange/12 dark:fill-brand-orange/18" />
+                    </svg>
+                  </div>
+                  {/* Hero thumb — video / motion */}
+                  <div className="relative h-16 w-[4.5rem] overflow-hidden rounded-lg border border-brand-orange/20 bg-gradient-to-br from-brand-cream/95 via-brand-orange/[0.16] to-brand-orange/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#32302d] dark:via-brand-orange/[0.18] dark:to-[#1a1918] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_1px_2px_rgba(0,0,0,0.22)]">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.22)_0%,transparent_55%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.35)_0%,transparent_55%)]"
+                    />
+                    <svg
+                      className="relative h-full w-full p-1"
+                      viewBox="0 0 52 44"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <rect
+                        x="5"
+                        y="6"
+                        width="42"
+                        height="32"
+                        rx="3.5"
+                        className="fill-brand-orange/[0.09] stroke-brand-orange/28 dark:fill-white/[0.05] dark:stroke-white/15"
+                        strokeWidth="0.75"
+                      />
+                      <circle
+                        cx="26"
+                        cy="22"
+                        r="7"
+                        className="fill-brand-orange/25 stroke-brand-orange/35 dark:fill-brand-orange/30 dark:stroke-brand-orange/45"
+                        strokeWidth="0.75"
+                      />
+                      <path
+                        d="M24 18.5 L30.5 22 L24 25.5 V18.5Z"
+                        className="fill-brand-cream dark:fill-brand-cream/95"
+                      />
+                    </svg>
                   </div>
                 </div>
                 {/* Text — right-aligned */}
@@ -397,12 +473,13 @@ function BeforeAfterMockup() {
         )}
 
       </div>
-
-      {/* Floating label */}
-      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-4 py-1.5 text-xs font-medium text-brand-orange shadow-lg dark:bg-brand-dark">
-        Your site, reimagined
-      </div>
     </div>
+
+    {/* Outer frame top edge (half above / half inside) */}
+    <div className="absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-4 py-1.5 text-xs font-medium text-brand-orange shadow-lg dark:bg-brand-dark">
+      Your site, reimagined
+    </div>
+    </>
     </BlendedDemoFrame>
   );
 }
