@@ -9,7 +9,7 @@
  *  2. TOP HIGHLIGHT      — z-0, white radial gradient at top
  *  3. GLOSSY INSET       — z-1, inset top highlight (under main frame so floating UI stays visible)
  *  4. EDGE VIGNETTE      — (removed)
- *  5. MAIN FRAME         — z-10, gradient bg + ring + drop-shadow + children
+ *  5. MAIN FRAME         — z-10, solid surface bg + ring + drop-shadow + children
  *
  * Tweak guide:
  *  • Glow color/spread  → layer 1 rgba values & -inset-7 / blur-2xl
@@ -56,9 +56,9 @@ function BlendedDemoFrame(
         }`}
       />
 
-      {/* 3 · MAIN FRAME — gradient bg, ring border, and orange drop-shadow */}
+      {/* 3 · MAIN FRAME — solid bg (matches hero surface), ring border, orange drop-shadow */}
       <div
-        className={`relative z-10 bg-gradient-to-br from-brand-cream/70 via-brand-cream/35 to-transparent ring-1 ring-brand-orange/15 shadow-[0_20px_45px_-30px_rgba(217,119,87,0.45)] dark:from-brand-dark/70 dark:via-brand-dark/35 ${
+        className={`relative z-10 bg-brand-cream ring-1 ring-brand-orange/15 shadow-[0_20px_45px_-30px_rgba(217,119,87,0.45)] dark:bg-brand-dark ${
           isCompact
             ? "inline-flex w-fit max-w-full rounded-[1.4rem] p-1.5 sm:rounded-[1.65rem] sm:p-2"
             : "rounded-[1.7rem] p-2.5"

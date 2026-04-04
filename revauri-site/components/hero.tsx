@@ -792,14 +792,14 @@ export function Hero() {
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
                 >
                   Book a Free Strategy Call
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/pricing"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-orange/30 px-6 py-3 text-base font-medium text-brand-orange transition-all duration-200 hover:bg-brand-orange/5"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand-orange/30 bg-brand-cream px-6 py-3 text-base font-medium text-brand-orange transition-all duration-200 hover:bg-[color-mix(in_srgb,#D97757_6%,#FAF9F5_94%)] dark:bg-brand-dark dark:hover:bg-[color-mix(in_srgb,#D97757_10%,#141413_90%)]"
                 >
                   <Eye className="h-5 w-5" />
                   View Pricing
