@@ -102,8 +102,14 @@ function StepColumn({ step, index }: { step: (typeof steps)[number]; index: numb
   return (
     <div className="flex flex-col items-center text-center">
       <Illustration />
-      <div className="mt-6 mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-dark text-sm font-semibold text-brand-cream dark:bg-brand-cream dark:text-brand-dark">
-        {step.number}
+      <div className="relative mt-6 mx-auto grid h-14 w-14 shrink-0 place-items-center">
+        <span
+          className="pointer-events-none absolute inset-[-14px] rounded-full bg-brand-orange/30 blur-2xl dark:bg-brand-orange/22 dark:blur-xl"
+          aria-hidden
+        />
+        <div className="relative z-[1] flex h-full w-full items-center justify-center rounded-full bg-brand-dark text-sm font-semibold text-brand-cream shadow-[0_0_18px_10px_rgba(217,119,87,0.14),0_0_40px_22px_rgba(217,119,87,0.07)] dark:bg-brand-cream dark:text-brand-dark dark:shadow-[0_0_20px_10px_rgba(217,119,87,0.18),0_0_40px_22px_rgba(217,119,87,0.07)]">
+          {step.number}
+        </div>
       </div>
       <h3 className="mt-5 text-lg font-semibold text-brand-dark dark:text-brand-cream">
         {step.title}
