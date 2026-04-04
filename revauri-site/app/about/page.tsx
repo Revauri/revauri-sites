@@ -68,13 +68,13 @@ export default function AboutPage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[auto_1fr] lg:gap-16">
             <FadeInWhenVisible direction="left">
-              <BlendedDemoFrame className="mx-auto w-fit lg:mx-0">
+              <BlendedDemoFrame compact className="mx-auto w-fit lg:mx-0">
                 <img
                   src="/joseph-headshot.jpg"
                   alt="Joseph Silvagnoli, founder of Revauri"
                   width={224}
                   height={224}
-                  className="h-56 w-56 rounded-2xl object-cover object-top"
+                  className="h-52 w-52 rounded-2xl object-cover object-top sm:h-56 sm:w-56"
                 />
               </BlendedDemoFrame>
             </FadeInWhenVisible>

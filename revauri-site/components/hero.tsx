@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Eye, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "./motion-wrappers";
@@ -10,33 +10,93 @@ import BlendedDemoFrame from "./blended-demo-frame";
 function BeforeAfterMockup() {
   const prefersReducedMotion = useReducedMotion();
   const [position, setPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
+  const targetPositionRef = useRef(50);
+  const animationFrameRef = useRef<number | null>(null);
 
-  const updatePosition = (clientX: number) => {
+  const commitPosition = (nextPosition: number, immediate = false) => {
+    targetPositionRef.current = nextPosition;
+
+    if (immediate || prefersReducedMotion) {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      setPosition(nextPosition);
+      return;
+    }
+
+    if (animationFrameRef.current !== null) return;
+
+    animationFrameRef.current = window.requestAnimationFrame(() => {
+      animationFrameRef.current = null;
+      setPosition(targetPositionRef.current);
+    });
+  };
+
+  const updatePosition = (clientX: number, immediate = false) => {
     const container = containerRef.current;
     if (!container) return;
     const rect = container.getBoundingClientRect();
     const x = clientX - rect.left;
-    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setPosition(pct);
+    const pct = Math.max(8, Math.min(92, (x / rect.width) * 100));
+    commitPosition(pct, immediate || isDragging);
   };
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (prefersReducedMotion) return;
-    isDragging.current = true;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    updatePosition(e.clientX);
+  const shouldStartDrag = (clientX: number, pointerType: string) => {
+    if (pointerType !== "touch") return true;
+    const container = containerRef.current;
+    if (!container) return false;
+    const rect = container.getBoundingClientRect();
+    const handleX = rect.left + (position / 100) * rect.width;
+    return Math.abs(clientX - handleX) <= 56;
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging.current) return;
-    updatePosition(e.clientX);
+  const stopDragging = () => {
+    setIsDragging(false);
   };
 
-  const handlePointerUp = () => {
-    isDragging.current = false;
+  const handlePointerDown = (e: React.PointerEvent<HTMLElement>) => {
+    if (prefersReducedMotion || !shouldStartDrag(e.clientX, e.pointerType)) return;
+    setIsDragging(true);
+    updatePosition(e.clientX, true);
   };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      event.preventDefault();
+      updatePosition(event.clientX);
+    };
+
+    const handlePointerUp = () => {
+      stopDragging();
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: false });
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+    };
+  }, [isDragging]);
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
+
+  const sliderStyles = {
+    "--slider-position": `${position}%`,
+  } as React.CSSProperties;
 
   return (
     <BlendedDemoFrame>
@@ -70,13 +130,15 @@ function BeforeAfterMockup() {
       {/* Before / After split content */}
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-b-xl select-none"
-        style={{ height: 430, cursor: prefersReducedMotion ? "default" : "ew-resize" }}
+        className="relative h-[360px] overflow-hidden rounded-b-xl select-none sm:h-[430px]"
+        style={{
+          ...sliderStyles,
+          cursor: prefersReducedMotion ? "default" : isDragging ? "grabbing" : "ew-resize",
+          touchAction: prefersReducedMotion ? "auto" : isDragging ? "none" : "pan-y",
+        }}
         onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
       >
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-black/4 to-transparent dark:from-white/[0.03]" />
         {/* ── BEFORE side (full width, underneath) ── */}
         <div className="absolute inset-0 flex flex-col bg-[#dcdcdc] dark:bg-[#1c1c1b]">
           {/* Garish teal announcement bar */}
@@ -170,8 +232,11 @@ function BeforeAfterMockup() {
 
         {/* ── AFTER side (clips from left based on position) ── */}
         <div
-          className="absolute inset-0"
-          style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+          className="absolute inset-0 will-change-[clip-path]"
+          style={{
+            clipPath: "inset(0 0 0 var(--slider-position))",
+            transition: isDragging ? "none" : "clip-path 180ms ease-out",
+          }}
         >
           {/* Base website layer */}
           <div className="absolute inset-0 flex flex-col bg-brand-white dark:bg-[#1a1a19]">
@@ -450,8 +515,12 @@ function BeforeAfterMockup() {
         {/* ── Draggable divider handle ── */}
         {!prefersReducedMotion && (
           <div
-            className="pointer-events-none absolute top-0 bottom-0 z-20 flex items-center justify-center"
-            style={{ left: `${position}%`, transform: "translateX(-50%)" }}
+            className="absolute top-0 bottom-0 z-20 flex items-center justify-center"
+            style={{
+              left: "var(--slider-position)",
+              transform: "translateX(-50%)",
+              transition: isDragging ? "none" : "left 180ms ease-out",
+            }}
           >
             {/* Vertical glow line */}
             <div
@@ -462,23 +531,27 @@ function BeforeAfterMockup() {
               }}
             />
             {/* Center grab handle */}
-            <div
-              className="relative z-10 flex h-9 w-9 cursor-ew-resize items-center justify-center rounded-full border-2 border-brand-orange bg-white shadow-xl transition-transform hover:scale-110 dark:bg-brand-dark"
+            <button
+              type="button"
+              aria-label="Drag to compare before and after"
+              onPointerDown={handlePointerDown}
+              className="relative z-10 flex h-11 w-11 cursor-ew-resize items-center justify-center rounded-full border-2 border-brand-orange bg-white shadow-xl transition-transform hover:scale-110 active:scale-95 dark:bg-brand-dark sm:h-10 sm:w-10"
               style={{ boxShadow: "0 0 12px rgba(217,119,87,0.4), 0 4px 16px rgba(0,0,0,0.15)" }}
+              data-slider-handle
             >
               <ChevronLeft className="h-3 w-3 text-brand-orange" />
               <ChevronRight className="h-3 w-3 text-brand-orange" />
-            </div>
+            </button>
           </div>
         )}
 
       </div>
     </div>
 
-    {/* Outer frame top edge (half above / half inside) */}
-    <div className="absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-4 py-1.5 text-xs font-medium text-brand-orange shadow-lg dark:bg-brand-dark">
-      Your site, reimagined
-    </div>
+	    {/* Outer frame top edge (half above / half inside) */}
+	    <div className="absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-orange/30 bg-brand-white px-3 py-1 text-[11px] font-medium text-brand-orange shadow-lg dark:bg-brand-dark sm:px-4 sm:py-1.5 sm:text-xs">
+	      Your site, reimagined
+	    </div>
     </>
     </BlendedDemoFrame>
   );

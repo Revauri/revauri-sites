@@ -8,7 +8,17 @@ export const metadata: Metadata = {
     "Get in touch with Revauri. Book a free 15-minute strategy call or email us directly. We respond within a few hours.",
 };
 
-export default function ContactPage() {
+type ContactPageProps = {
+  searchParams?: Promise<{
+    sent?: string | string[];
+  }>;
+};
+
+export default async function ContactPage({ searchParams }: ContactPageProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const sentParam = resolvedSearchParams?.sent;
+  const isSubmitted = Array.isArray(sentParam) ? sentParam.includes("true") : sentParam === "true";
+
   return (
     <div>
       <PageHero
@@ -23,7 +33,7 @@ export default function ContactPage() {
         <p className="text-sm text-brand-mid-gray">We typically respond within a few hours.</p>
       </PageHero>
 
-      <ContactContent />
+      <ContactContent isSubmitted={isSubmitted} />
     </div>
   );
 }

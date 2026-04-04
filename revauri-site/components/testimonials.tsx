@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FadeInWhenVisible } from "./motion-wrappers";
 
@@ -143,29 +142,25 @@ const ARROW_CLASS =
 
 function TestimonialsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  // Track whether we're on desktop (lg breakpoint = 1024px)
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setIsDesktop(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+  const scrollToIndex = useCallback((index: number) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const card = container.children[index] as HTMLElement | undefined;
+    if (!card) return;
+    container.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
   }, []);
 
   const scrollByPage = useCallback((direction: "prev" | "next") => {
-    const container = scrollRef.current;
-    if (!container) return;
-    const amount = direction === "next" ? container.clientWidth : -container.clientWidth;
-    container.scrollBy({ left: amount, behavior: "smooth" });
-  }, []);
+    const nextIndex =
+      direction === "next"
+        ? Math.min(currentIndex + 1, TESTIMONIALS.length - 1)
+        : Math.max(currentIndex - 1, 0);
+    scrollToIndex(nextIndex);
+  }, [currentIndex, scrollToIndex]);
 
-  // Sync currentIndex from scroll position (for dots + arrow disable states)
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
@@ -193,35 +188,8 @@ function TestimonialsCarousel() {
     };
   }, []);
 
-  // Auto-advance on mobile/tablet only (not desktop)
-  useEffect(() => {
-    if (isDesktop || isPaused || prefersReducedMotion) return;
-    const id = setInterval(() => {
-      const container = scrollRef.current;
-      if (!container) return;
-      const atEnd =
-        container.scrollLeft + container.clientWidth >= container.scrollWidth - 4;
-      if (atEnd) {
-        container.scrollTo({ left: 0, behavior: "instant" });
-      } else {
-        container.scrollBy({ left: container.clientWidth, behavior: "smooth" });
-      }
-    }, 5000);
-    return () => clearInterval(id);
-  }, [isDesktop, isPaused, prefersReducedMotion]);
-
   const atStart = currentIndex === 0;
-  // For desktop (3 visible) we have pages 0,1,2; tablet (2 visible) pages 0,1,2,3; mobile pages 0-4
-  // We derive "at end" from the scroll position rather than index to handle all breakpoints
-  const atEnd = (() => {
-    const container = scrollRef.current;
-    if (!container) return currentIndex === TESTIMONIALS.length - 1;
-    return container.scrollLeft + container.clientWidth >= container.scrollWidth - 4;
-  })();
-
-  // Number of dot indicators: depends on visible cards per breakpoint
-  // We show dots only on mobile/tablet (hidden on lg). On mobile: 5 dots, on md: fewer pages.
-  // Simplest: always show 5 dots, hide on lg.
+  const atEnd = currentIndex === TESTIMONIALS.length - 1;
   const dots = TESTIMONIALS.map((_, i) => i);
 
   return (
@@ -236,10 +204,6 @@ function TestimonialsCarousel() {
           scrollbarWidth: "none",
           msOverflowStyle: "none",
         }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setIsPaused(false)}
       >
         {TESTIMONIALS.map((testimonial) => (
           <div
@@ -266,14 +230,7 @@ function TestimonialsCarousel() {
           {dots.map((i) => (
             <button
               key={i}
-              onClick={() => {
-                const container = scrollRef.current;
-                if (!container) return;
-                const card = container.children[i] as HTMLElement;
-                if (card) {
-                  container.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
-                }
-              }}
+              onClick={() => scrollToIndex(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === currentIndex
                   ? "w-6 bg-brand-orange"
