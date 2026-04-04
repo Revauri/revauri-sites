@@ -54,23 +54,32 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative text-sm font-medium transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-brand-orange after:transition-all after:duration-300 ${
-                  pathname === link.href
-                    ? "text-brand-dark after:w-full dark:text-brand-cream"
-                    : "text-brand-dark/70 after:w-0 hover:text-brand-dark hover:after:w-full dark:text-brand-cream/70 dark:hover:text-brand-cream"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav
+            className="hidden items-center gap-5 md:flex lg:gap-6"
+            aria-label="Main navigation"
+          >
+            <div className="flex items-center gap-6 lg:gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative py-1 text-[0.8125rem] font-medium uppercase tracking-wider transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:rounded-full after:bg-brand-orange after:transition-[width] after:duration-300 after:ease-out ${
+                    pathname === link.href
+                      ? "text-brand-dark after:w-full dark:text-brand-cream"
+                      : "text-brand-dark/65 after:w-0 hover:text-brand-dark hover:after:w-full dark:text-brand-cream/65 dark:hover:text-brand-cream"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <span
+              aria-hidden
+              className="h-5 w-px shrink-0 bg-brand-orange/45 dark:bg-brand-orange/50"
+            />
             <Link
               href="/book"
-              className="rounded-lg bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
+              className="rounded-xl bg-brand-orange px-5 py-[0.55rem] text-sm font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_14px_-2px_rgba(217,119,87,0.45)] transition-[box-shadow,filter] duration-300 hover:shadow-[0_2px_4px_rgba(0,0,0,0.06),0_8px_24px_-4px_rgba(217,119,87,0.55)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange active:brightness-[0.97]"
             >
               Book a Free Call
             </Link>
@@ -113,7 +122,8 @@ export function Header() {
               </button>
             </div>
             <motion.nav
-              className="flex flex-col items-center gap-6 pt-16"
+              className="flex flex-col items-center gap-5 pt-16"
+              aria-label="Main navigation"
               initial="hidden"
               animate="visible"
               variants={{
@@ -132,16 +142,25 @@ export function Header() {
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`text-lg font-medium transition-colors ${
+                    className={`relative pb-1 text-lg font-medium uppercase tracking-wider transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-brand-orange after:transition-[width] after:duration-300 after:ease-out ${
                       pathname === link.href
-                        ? "text-brand-orange"
-                        : "text-brand-dark/70 hover:text-brand-dark dark:text-brand-cream/70 dark:hover:text-brand-cream"
+                        ? "text-brand-dark after:w-10 dark:text-brand-cream"
+                        : "text-brand-dark/65 hover:text-brand-dark hover:after:w-10 dark:text-brand-cream/65 dark:hover:text-brand-cream"
                     }`}
                   >
                     {link.label}
                   </Link>
                 </motion.div>
               ))}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, scaleX: 0 },
+                  visible: { opacity: 1, scaleX: 1 },
+                }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="mt-2 h-px w-12 origin-center bg-brand-orange/45 dark:bg-brand-orange/50"
+                aria-hidden
+              />
               <motion.div
                 variants={{
                   hidden: { opacity: 0, y: 15 },
@@ -151,7 +170,7 @@ export function Header() {
                 <Link
                   href="/book"
                   onClick={() => setMenuOpen(false)}
-                  className="mt-4 inline-block rounded-lg bg-brand-orange px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-orange/90"
+                  className="mt-2 inline-block rounded-xl bg-brand-orange px-8 py-[0.6875rem] text-base font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_14px_-2px_rgba(217,119,87,0.45)] transition-[box-shadow,filter] duration-300 hover:shadow-[0_2px_4px_rgba(0,0,0,0.06),0_8px_24px_-4px_rgba(217,119,87,0.55)] active:brightness-[0.97]"
                 >
                   Book a Free Call
                 </Link>

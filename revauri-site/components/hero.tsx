@@ -512,7 +512,8 @@ export function Hero() {
 
             <FadeInWhenVisible delay={0.14}>
               <p className="max-w-2xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 lg:text-xl">
-                We build fast, conversion-focused websites for small businesses.
+                We build fast, conversion-focused websites for small to medium
+                sized businesses.
                 See a free custom redesign of your actual site before you spend
                 a dime.
               </p>
