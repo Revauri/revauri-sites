@@ -12,7 +12,7 @@ export interface PortfolioTestimonial {
   quote: string;
   author: string;
   title: string;
-  avatar: string;
+  avatar: string | null;
 }
 
 export interface PortfolioProject {
@@ -117,10 +117,9 @@ export const PROJECTS: readonly PortfolioProject[] = [
       "Consultation modal with backdrop blur and focus trapping",
       "Six SEO-optimized blog posts targeting local practice keywords",
     ],
-    // TODO: Replace placeholder quote with real testimonial from client before publishing.
-    //       Client (Alphonse Petracco) will supply quote text and headshot.
     testimonial: {
-      quote: "TODO: Pending from client.",
+      quote:
+        "I love it. This is exactly what we wanted and our message comes across perfectly. Simple and clean.",
       author: "Alphonse Petracco, Esq.",
       title: "Lead Attorney, Lion Law",
       avatar: "/portfolio/lion-law/testimonial-avatar.jpg",

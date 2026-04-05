@@ -266,7 +266,7 @@ export default async function PortfolioDetailPage(
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-3 border-t border-brand-light-gray/40 pt-5 dark:border-brand-mid-gray/20">
                   <div className="relative h-11 w-11 overflow-hidden rounded-full bg-brand-orange/15">
-                    {project.hasRealImages ? (
+                    {project.testimonial.avatar ? (
                       <Image
                         src={project.testimonial.avatar}
                         alt={project.testimonial.author}
