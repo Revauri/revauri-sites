@@ -104,7 +104,14 @@ export default async function PortfolioDetailPage(
         <div className="mx-auto max-w-5xl px-6">
           <FadeInWhenVisible>
             <BlendedDemoFrame>
-              <div className="relative aspect-[16/9] overflow-hidden rounded-[1.35rem] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
+              <div
+                className="relative overflow-hidden rounded-[1.35rem] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10"
+                style={
+                  project.hasRealImages
+                    ? { aspectRatio: `${project.heroImage.width} / ${project.heroImage.height}` }
+                    : { aspectRatio: "16 / 9" }
+                }
+              >
                 {project.hasRealImages ? (
                   <Image
                     src={project.heroImage.src}
@@ -226,7 +233,14 @@ export default async function PortfolioDetailPage(
               {project.gallery.map((image, i) => (
                 <FadeInWhenVisible key={i} delay={i * 0.05}>
                   <BlendedDemoFrame>
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-[1.35rem] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
+                    <div
+                      className="relative overflow-hidden rounded-[1.35rem] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10"
+                      style={
+                        project.hasRealImages
+                          ? { aspectRatio: `${image.width} / ${image.height}` }
+                          : { aspectRatio: "16 / 10" }
+                      }
+                    >
                       {project.hasRealImages ? (
                         <Image
                           src={image.src}
