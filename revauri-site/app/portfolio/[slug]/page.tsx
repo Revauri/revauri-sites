@@ -79,7 +79,7 @@ export default async function PortfolioDetailPage(
       {/* Section 2 — PageHero with custom children slot */}
       <PageHero
         badge={project.industry.toUpperCase()}
-        title={<>{project.name}</>}
+        title={project.name}
         subtitle={project.tagline}
       >
         <div className="flex items-center gap-3 pt-2">
