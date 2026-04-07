@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { Check, Eye, ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "./motion-wrappers";
@@ -9,7 +9,6 @@ import BlendedDemoFrame from "./blended-demo-frame";
 
 const DEFAULT_SLIDER_POSITION = 50;
 const SLIDER_KEYBOARD_STEP = 4;
-const SLIDER_TOUCH_PADDING = 0;
 
 function BeforeAfterMockup() {
   const prefersReducedMotion = useReducedMotion();
@@ -37,10 +36,7 @@ function BeforeAfterMockup() {
     if (!container) return positionRef.current;
 
     const rect = container.getBoundingClientRect();
-    const edgePadding = Math.min(SLIDER_TOUCH_PADDING, rect.width / 2);
-    const minX = edgePadding;
-    const maxX = rect.width - edgePadding;
-    const x = Math.min(Math.max(clientX - rect.left, minX), maxX);
+    const x = Math.min(Math.max(clientX - rect.left, 0), rect.width);
 
     return (x / rect.width) * 100;
   };
@@ -104,10 +100,6 @@ function BeforeAfterMockup() {
     event.preventDefault();
     commitPosition(nextPosition);
   };
-
-  useEffect(() => {
-    applyPosition(position);
-  }, [position]);
 
   return (
     <BlendedDemoFrame>
@@ -343,10 +335,10 @@ function BeforeAfterMockup() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[5px] text-amber-400">★★★★★</span>
-                      <p className="text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Sarah K.</p>
+                      <p className="text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Modern Design</p>
                     </div>
                     <p className="mt-0.5 text-[4.5px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">
-                      &ldquo;Our new site brought in 3x more leads in the first month.&rdquo;
+                      Built to convert visitors into customers.
                     </p>
                   </div>
                 </div>
@@ -355,18 +347,18 @@ function BeforeAfterMockup() {
               <div className="mx-3 mt-2 grid grid-cols-[1fr_auto] gap-1.5">
                 <div className="grid grid-cols-2 gap-1 rounded-xl bg-brand-dark/[0.03] px-2 py-2 dark:bg-brand-cream/[0.03]">
                   <div className="text-center">
-                    <p className="text-[8px] font-bold text-brand-orange">100+</p>
-                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Clients</p>
+                    <p className="text-[8px] font-bold text-brand-orange">99</p>
+                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Performance</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-[8px] font-bold text-brand-orange">4.9★</p>
-                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Rating</p>
+                    <p className="text-[8px] font-bold text-brand-orange">100%</p>
+                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Mobile-First</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 px-2 py-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
                   <div className="text-center">
                     <p className="text-[7px] font-bold text-brand-orange">24h</p>
-                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Support</p>
+                    <p className="text-[4px] text-brand-dark/40 dark:text-brand-cream/40">Uptime</p>
                   </div>
                 </div>
               </div>
@@ -560,8 +552,8 @@ function BeforeAfterMockup() {
                   <div className="flex items-center gap-0.5">
                     <span className="text-[5px] text-amber-400">★★★★★</span>
                   </div>
-                  <p className="mt-0.5 text-[5px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">&ldquo;Our new site brought in 3x more leads in the first month.&rdquo;</p>
-                  <p className="mt-0.5 text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Sarah K. · Business Owner</p>
+                  <p className="mt-0.5 text-[5px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">Built to convert visitors into customers.</p>
+                  <p className="mt-0.5 text-[4px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Modern Design</p>
                 </div>
               </div>
               </div>
@@ -571,20 +563,20 @@ function BeforeAfterMockup() {
               {/* Stats bar */}
               <div className="grid grid-cols-4 gap-1 rounded-lg bg-brand-dark/[0.03] px-2 py-2.5 dark:bg-brand-cream/[0.03]">
                 <div className="text-center">
-                  <p className="text-[9px] font-bold text-brand-orange">100+</p>
-                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Clients</p>
+                  <p className="text-[9px] font-bold text-brand-orange">99</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Performance</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[9px] font-bold text-brand-orange">4.9★</p>
-                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Rating</p>
+                  <p className="text-[9px] font-bold text-brand-orange">100%</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Mobile-First</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[9px] font-bold text-brand-orange">98</p>
-                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Speed</p>
+                  <p className="text-[9px] font-bold text-brand-orange">SEO</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Ready</p>
                 </div>
                 <div className="text-center">
                   <p className="text-[9px] font-bold text-brand-orange">24h</p>
-                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Support</p>
+                  <p className="text-[5px] text-brand-dark/40 dark:text-brand-cream/40">Uptime</p>
                 </div>
               </div>
               {/* Conversion Rate card */}
@@ -609,7 +601,7 @@ function BeforeAfterMockup() {
 
               {/* Trusted by logos */}
               <div className="mt-2 mb-3 px-4">
-              <p className="text-center text-[4px] font-medium uppercase tracking-wider text-brand-dark/30 dark:text-brand-cream/30">Trusted by businesses nationwide</p>
+              <p className="text-center text-[4px] font-medium uppercase tracking-wider text-brand-dark/30 dark:text-brand-cream/30">Built with modern infrastructure</p>
               <div className="mt-1 flex items-center justify-center gap-3">
                 <div className="h-1.5 w-8 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
                 <div className="h-1.5 w-6 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
@@ -757,28 +749,24 @@ export function Hero() {
           <div className="flex min-w-0 flex-col space-y-5">
             <FadeInWhenVisible>
               <span className="inline-flex w-fit items-center rounded-full bg-brand-orange/10 px-4 py-2 text-sm font-medium text-brand-orange">
-                Your website should work as hard as you do
+                Websites built to convert
               </span>
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.08}>
               <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl md:text-[3.3rem] xl:text-[3.75rem]">
                 <span className="block leading-[1.1]">
-                  Don&apos;t let an{" "}
-                  <span className="whitespace-nowrap">outdated site</span>
+                  Your website should be your{" "}
                 </span>
                 <span className="block leading-[1.1] bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                  cost you customers
+                  best closer
                 </span>
               </h1>
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.14}>
               <p className="max-w-2xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 lg:text-xl">
-                We build fast, conversion-focused websites for small to medium
-                sized businesses.
-                See a free custom redesign of your actual site before you spend
-                a dime.
+                We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.
               </p>
             </FadeInWhenVisible>
 
@@ -812,7 +800,7 @@ export function Hero() {
                 <svg className="h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
                 </svg>
-                Free sample &middot; No obligation &middot; Quality guaranteed
+                Free preview &middot; No obligation &middot; Quality guaranteed
               </span>
             </FadeInWhenVisible>
 
@@ -820,7 +808,7 @@ export function Hero() {
               <div className="grid gap-2 text-sm text-brand-dark/60 dark:text-brand-cream/60 sm:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-brand-orange" />
-                  Free homepage redesign before you commit
+                  Free homepage preview before you commit
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="h-4 w-4 shrink-0 text-brand-orange" />

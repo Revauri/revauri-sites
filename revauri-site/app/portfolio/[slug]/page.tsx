@@ -83,15 +83,6 @@ export default async function PortfolioDetailPage(
         subtitle={project.tagline}
       >
         <div className="flex items-center gap-3 pt-2">
-          <span
-            className={`rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${
-              project.tag === "Client Work"
-                ? "border-brand-orange/30 bg-brand-orange/10 text-brand-orange"
-                : "border-brand-mid-gray/40 bg-brand-white/90 text-brand-mid-gray dark:bg-brand-dark/90"
-            }`}
-          >
-            {project.tag}
-          </span>
           <span className="inline-flex items-center gap-1.5 text-xs text-brand-mid-gray">
             <Clock className="h-3 w-3" />
             {project.status}

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Revauri — Modern Website Redesign for Small Business";
+export const alt = "Revauri — Custom Websites for Businesses That Want to Stand Out";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -61,7 +61,7 @@ export default function OGImage() {
             fontWeight: 400,
           }}
         >
-          Modern websites for businesses that are ready to grow
+          Custom websites for founders and businesses that refuse to settle
         </p>
 
         {/* Accent line */}

@@ -20,7 +20,7 @@ const FAQ_DATA = [
           "Launch Package: approximately 6 weeks. Growth Package: priority delivery in 4 weeks. Timeline starts when your Project Brief is complete.",
       },
       {
-        question: "What's included in the free redesign sample?",
+        question: "What's included in the free redesign preview?",
         answer:
           "We build a complete homepage mockup using your real business info — your name, your colors, your content. It's a live, working preview you can click through on any device. No stock templates.",
       },
@@ -82,12 +82,12 @@ const FAQ_DATA = [
       {
         question: "How do I get started?",
         answer:
-          "It's simple — book a free 15-minute strategy call or send us a message through the contact page. We'll learn about your business, review your current site, and build you a free sample redesign with no obligation.",
+          "It's simple — book a free 15-minute strategy call or send us a message through the contact page. We'll learn about your business, review your current site, and build you a free preview redesign with no obligation.",
       },
       {
         question: "Do I need to prepare anything before our call?",
         answer:
-          "Not at all. Just have your current website URL handy if you have one. We'll handle the rest — reviewing your site, identifying opportunities, and building your free sample.",
+          "Not at all. Just have your current website URL handy if you have one. We'll handle the rest — reviewing your site, identifying opportunities, and building your free preview.",
       },
       {
         question: "What if I don't have a website yet?",

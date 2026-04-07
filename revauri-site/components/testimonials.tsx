@@ -24,7 +24,7 @@ const TESTIMONIALS = [
     stars: 5,
   },
   {
-    highlight: "The free sample sold me before the call even started.",
+    highlight: "The free preview sold me before the call even started.",
     content:
       "They rebuilt my homepage with my actual content and branding before I paid anything. I opened the preview link and immediately knew I wanted the full site. No other agency does that.",
     author: "James K.",
@@ -190,11 +190,9 @@ function TestimonialsCarousel() {
 
   const atStart = currentIndex === 0;
   const atEnd = currentIndex === TESTIMONIALS.length - 1;
-  const dots = TESTIMONIALS.map((_, i) => i);
 
   return (
     <div className="w-full">
-      {/* Scroll container */}
       <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto pb-1"
@@ -227,7 +225,7 @@ function TestimonialsCarousel() {
           <ChevronLeft className="h-4 w-4" />
         </button>
         <div className="flex gap-1.5">
-          {dots.map((i) => (
+          {TESTIMONIALS.map((_, i) => (
             <button
               key={i}
               onClick={() => scrollToIndex(i)}
@@ -273,9 +271,7 @@ export function Testimonials() {
             </div>
           </FadeInWhenVisible>
 
-          <div className="w-full">
-            <TestimonialsCarousel />
-          </div>
+          <TestimonialsCarousel />
         </div>
       </div>
     </section>

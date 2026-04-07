@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Zap, Shield, Code, Users, Palette, BarChart3 } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { GradientText, PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 
 export const metadata: Metadata = {
   title: "About — Revauri",
   description:
-    "Revauri was founded by Joseph Silvagnoli to help small businesses get websites that actually drive growth. Learn about our approach, values, and story.",
+    "Revauri was founded by Joseph Silvagnoli to build premium custom websites for businesses that want to stand out online and drive real growth. Learn about our approach, values, and story.",
 };
 
 const VALUES = [
@@ -21,7 +22,7 @@ const VALUES = [
     icon: Shield,
     title: "No Surprises",
     description:
-      "Transparent pricing. Clear timelines. A free sample before you commit. We never want you guessing what comes next.",
+      "Transparent pricing. Clear timelines. A free preview before you commit. We never want you guessing what comes next.",
   },
   {
     icon: Code,
@@ -73,7 +74,7 @@ export default function AboutPage() {
                   className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-brand-orange/12 blur-2xl"
                 />
                 <div className="relative rounded-[2rem] border border-brand-orange/15 bg-gradient-to-br from-brand-cream/15 via-transparent to-brand-orange/10 p-3 shadow-[0_24px_50px_-32px_rgba(217,119,87,0.42)] dark:from-brand-dark/50 dark:to-brand-orange/8">
-                  <img
+                  <Image
                     src="/joseph-headshot.jpg"
                     alt="Joseph Silvagnoli, founder of Revauri"
                     width={224}
@@ -93,10 +94,10 @@ export default function AboutPage() {
               <FadeInWhenVisible delay={0.08}>
                 <p className="mt-6 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
                   I started Revauri because I kept seeing the same thing: great
-                  businesses with websites that don&apos;t do them justice. Restaurants
-                  with broken mobile menus. Contractors with sites that look like they
-                  were built in 2008. Service businesses losing leads because their
-                  contact page doesn&apos;t work.
+                  businesses with websites that don&apos;t do them justice. Startups with
+                  cookie-cutter templates. Law firms with sites that look like they
+                  were built in 2008. Founders losing leads because their site
+                  doesn&apos;t match the quality of their work.
                 </p>
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.14}>
@@ -116,10 +117,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-6">
           <FadeInWhenVisible>
             <h2 className="text-center text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              What we{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                believe in
-              </span>
+              What we <GradientText>believe in</GradientText>
             </h2>
           </FadeInWhenVisible>
 
@@ -152,10 +150,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
             <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Let&apos;s build something{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                worth sharing
-              </span>
+              Let&apos;s build something <GradientText>worth sharing</GradientText>
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>

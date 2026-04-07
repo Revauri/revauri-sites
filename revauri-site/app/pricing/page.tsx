@@ -26,7 +26,7 @@ import BlendedDemoFrame from "@/components/blended-demo-frame";
 export const metadata: Metadata = {
   title: "Pricing — Revauri",
   description:
-    "Simple, transparent pricing for modern website design. Launch Package from $2,900 or Growth Package from $4,900. Free sample redesign included.",
+    "Simple, transparent pricing for modern website design. Launch Package from $2,900 or Growth Package from $4,900. Free preview redesign included.",
 };
 
 const launchFeatures = [
@@ -51,7 +51,7 @@ const growthFeatures = [
 ];
 
 const CERTAINTY_ITEMS = [
-  "Your free sample redesign is built before you commit. No surprises.",
+  "Your free preview redesign is built before you commit. No surprises.",
   "Two rounds of revisions are included in every package. We work with you until it's right.",
   "Your retainer payment doesn't start until 30 days after your site goes live.",
   "Cancel the retainer anytime with 30-day notice. You keep the code, no penalties.",
@@ -73,7 +73,7 @@ export default function PricingPage() {
       >
         <span className="flex items-center gap-2 text-sm text-brand-orange">
           <Check className="h-4 w-4" />
-          Free sample redesign before any commitment
+          Free preview redesign before any commitment
         </span>
       </PageHero>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Shield } from "lucide-react";
 import { FadeInWhenVisible } from "./motion-wrappers";
 
@@ -18,14 +19,20 @@ export function FinalCTA() {
           <FadeInWhenVisible>
             <blockquote className="mx-auto max-w-xl text-lg italic text-brand-dark/60 dark:text-brand-cream/60">
               <p>
-                &ldquo;Our leads tripled in the first month after launch.&rdquo;
+                &ldquo;I love it. This is exactly what we wanted and our message comes across perfectly. Simple and clean.&rdquo;
               </p>
               <footer className="mt-2 flex items-center justify-center gap-2 not-italic">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-orange/15 text-[10px] font-semibold text-brand-orange">
-                  DR
+                <div className="relative h-6 w-6 overflow-hidden rounded-full bg-brand-orange/15">
+                  <Image
+                    src="/portfolio/lion-law/testimonial-avatar.jpg"
+                    alt="Alphonse Petracco, Esq."
+                    width={48}
+                    height={48}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <span className="text-xs text-brand-mid-gray">
-                  David R., DR Plumbing
+                  Alphonse Petracco, Esq., Lion Law
                 </span>
               </footer>
             </blockquote>
@@ -65,7 +72,7 @@ export function FinalCTA() {
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-light-gray bg-brand-white/70 px-3 py-1 dark:border-brand-mid-gray/20 dark:bg-brand-dark/70">
                 <Check className="h-3.5 w-3.5 text-brand-orange" />
-                Free sample redesign
+                Free preview redesign
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-light-gray bg-brand-white/70 px-3 py-1 dark:border-brand-mid-gray/20 dark:bg-brand-dark/70">
                 <Check className="h-3.5 w-3.5 text-brand-orange" />

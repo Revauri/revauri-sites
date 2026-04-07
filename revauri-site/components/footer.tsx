@@ -13,7 +13,6 @@ export function Footer() {
 
   return (
     <footer className="border-t border-brand-light-gray dark:border-brand-mid-gray/20">
-      {/* Navigation Section */}
       <div className="bg-brand-white pt-10 pb-8 dark:bg-brand-dark lg:pt-12 lg:pb-10">
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
@@ -77,12 +76,10 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Separator */}
       <div className="mx-auto max-w-6xl px-6">
         <div className="h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
       </div>
 
-      {/* Bottom Section */}
       <div className="bg-brand-white py-6 dark:bg-brand-dark lg:py-8">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex items-center justify-between">
@@ -98,18 +95,16 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Separator */}
       <div className="mx-auto max-w-6xl px-6">
         <div className="h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
       </div>
 
-      {/* Base Section */}
       <div className="bg-brand-white pt-6 pb-8 dark:bg-brand-dark lg:pt-8 lg:pb-10">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col gap-4">
             <Logo variant="auto" />
             <p className="text-sm text-brand-mid-gray">
-              Modern websites for businesses that are ready to grow.
+              Custom websites for founders and businesses that refuse to settle.
             </p>
             <p className="text-xs text-brand-mid-gray/70">
               &copy; {YEAR} Revauri LLC. All Rights Reserved.

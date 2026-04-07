@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FadeInWhenVisible } from "./motion-wrappers";
 
 export function About() {
@@ -27,7 +28,7 @@ export function About() {
                 className="absolute -inset-4 rounded-2xl bg-brand-orange/10 blur-2xl"
                 aria-hidden="true"
               />
-              <img
+              <Image
                 src="/joseph-headshot.jpg"
                 alt="Joseph Silvagnoli, founder of Revauri"
                 width={224}
@@ -43,7 +44,7 @@ export function About() {
               <h2 className="text-2xl font-bold text-brand-cream sm:text-3xl">
                 Built by a founder who{" "}
                 <span className="bg-gradient-to-r from-brand-orange to-amber-400 bg-clip-text text-transparent">
-                  understands small business.
+                  builds for founders and specialists.
                 </span>
               </h2>
             </FadeInWhenVisible>

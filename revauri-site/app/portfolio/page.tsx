@@ -62,7 +62,7 @@ export default function PortfolioPage() {
                 key={project.slug}
                 href={`/portfolio/${project.slug}`}
                 className="group block focus-visible:outline-none"
-                aria-label={`View case study: ${project.name}`}
+                aria-label={`View project: ${project.name}`}
               >
                 <BlendedDemoFrame>
                   <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
@@ -79,20 +79,11 @@ export default function PortfolioPage() {
                       ) : (
                         <GridCardPlaceholder />
                       )}
-                      <span className="absolute left-4 top-4 rounded-full bg-brand-white/90 px-3 py-1 text-xs font-medium text-brand-dark/70 shadow-sm dark:bg-brand-dark/90 dark:text-brand-cream/70">
-                        {project.industry}
-                      </span>
-                      <span
-                        className={`absolute right-4 top-4 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${
-                          project.tag === "Client Work"
-                            ? "border-brand-orange/30 bg-brand-orange/10 text-brand-orange"
-                            : "border-brand-mid-gray/40 bg-brand-white/90 text-brand-mid-gray dark:bg-brand-dark/90"
-                        }`}
-                      >
-                        {project.tag}
-                      </span>
                     </div>
                     <div className="p-6">
+                      <span className="mb-2 inline-block rounded-full bg-brand-orange/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-orange">
+                        {project.industry}
+                      </span>
                       <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">
                         {project.name}
                       </h3>
@@ -100,7 +91,7 @@ export default function PortfolioPage() {
                         {project.shortDescription}
                       </p>
                       <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors group-hover:gap-2">
-                        View case study
+                        View project
                         <ArrowRight className="h-3.5 w-3.5" />
                       </span>
                     </div>

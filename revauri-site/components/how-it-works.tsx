@@ -5,7 +5,7 @@ import { FadeInWhenVisible, StaggerChildren } from "./motion-wrappers";
 const steps = [
   {
     number: "01",
-    title: "We Build You a Free Sample",
+    title: "We Build You a Free Preview",
     description:
       "Our team reviews your current website, identifies what's holding it back, and builds a custom homepage redesign using your actual business name and content. You'll receive a link to a live, working preview.",
   },
@@ -19,7 +19,7 @@ const steps = [
     number: "03",
     title: "You Approve, We Launch",
     description:
-      "If you love what you see, we'll expand the sample into a complete website — built, deployed, and managed for you. Launch Package sites are delivered in 6 weeks; Growth Package in just 4 weeks.",
+      "If you love what you see, we'll expand the preview into a complete website — built, deployed, and managed for you. Launch Package sites are delivered in 6 weeks; Growth Package in just 4 weeks.",
   },
 ];
 

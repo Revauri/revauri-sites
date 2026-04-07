@@ -42,7 +42,7 @@ export default function TermsPage() {
         </p>
         <ul>
           <li>Custom website design and development (built with modern frameworks)</li>
-          <li>Free homepage redesign samples for prospective clients</li>
+          <li>Free homepage redesign previews for prospective clients</li>
           <li>Professional copywriting and content creation</li>
           <li>Managed hosting on enterprise-grade infrastructure</li>
           <li>Ongoing website maintenance, updates, and support</li>
@@ -56,19 +56,19 @@ export default function TermsPage() {
           quality assurance.
         </p>
 
-        <h2>3. Free Sample Redesign</h2>
+        <h2>3. Free Preview Redesign</h2>
         <p>
-          We may create free homepage redesign samples for prospective clients
+          We may create free homepage redesign previews for prospective clients
           using publicly available information from their existing website.
-          Important terms regarding these samples:
+          Important terms regarding these previews:
         </p>
         <ul>
-          <li>Free samples remain the exclusive property of Revauri LLC until a paid engagement is executed</li>
-          <li>Samples are provided for evaluation purposes only and do not create a client relationship, obligation, or expectation of future work</li>
-          <li>Samples are generated with AI assistance and may not perfectly represent the final deliverable of a paid engagement</li>
-          <li>Samples may not be used, copied, reproduced, or deployed by the recipient without a signed Service Agreement</li>
-          <li>Revauri reserves the right to modify or remove any sample at any time</li>
-          <li>No warranty is made regarding the accuracy, completeness, or suitability of a free sample</li>
+          <li>Free previews remain the exclusive property of Revauri LLC until a paid engagement is executed</li>
+          <li>Previews are provided for evaluation purposes only and do not create a client relationship, obligation, or expectation of future work</li>
+          <li>Previews are generated with AI assistance and may not perfectly represent the final deliverable of a paid engagement</li>
+          <li>Previews may not be used, copied, reproduced, or deployed by the recipient without a signed Service Agreement</li>
+          <li>Revauri reserves the right to modify or remove any preview at any time</li>
+          <li>No warranty is made regarding the accuracy, completeness, or suitability of a free preview</li>
         </ul>
 
         <h2>4. Pricing and Payment</h2>
