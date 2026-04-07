@@ -39,22 +39,11 @@ export default function PortfolioPage() {
             Real <GradientText>Work</GradientText>
           </>
         }
-        subtitle="A mix of client work and products founder-built from scratch. Every project here was personally designed and built end-to-end."
+        subtitle="Founder-built from scratch. Every project here was personally designed and built end-to-end."
       />
 
-      <section className="py-10 lg:py-12">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <FadeInWhenVisible>
-            <p className="text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 sm:text-lg">
-              I build websites for clients, and I also build and run my own products.
-              Both are on this page so you can see how I think, what I ship, and what
-              the work actually looks like end-to-end.
-            </p>
-          </FadeInWhenVisible>
-        </div>
-      </section>
 
-      <section className="pb-16 lg:pb-20">
+      <section className="pt-10 pb-16 lg:pt-12 lg:pb-20">
         <div className="mx-auto max-w-5xl px-6">
           <StaggerChildren className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {getAllProjects().map((project) => (
@@ -65,7 +54,7 @@ export default function PortfolioPage() {
                 aria-label={`View project: ${project.name}`}
               >
                 <BlendedDemoFrame>
-                  <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+                  <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
                     <div className="relative aspect-[16/9] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
                       {project.hasRealImages ? (
                         <Image
@@ -90,9 +79,9 @@ export default function PortfolioPage() {
                       <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
                         {project.shortDescription}
                       </p>
-                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors group-hover:gap-2">
-                        View project
-                        <ArrowRight className="h-3.5 w-3.5" />
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange">
+                        <span className="group-hover:bg-gradient-to-r group-hover:from-brand-orange group-hover:to-amber-500 group-hover:bg-clip-text group-hover:text-transparent">View project</span>
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                       </span>
                     </div>
                   </article>

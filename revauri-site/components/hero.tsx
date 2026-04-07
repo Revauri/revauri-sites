@@ -749,24 +749,27 @@ export function Hero() {
           <div className="flex min-w-0 flex-col space-y-5">
             <FadeInWhenVisible>
               <span className="inline-flex w-fit items-center rounded-full bg-brand-orange/10 px-4 py-2 text-sm font-medium text-brand-orange">
-                Websites built to convert
+                Look better. Convert more. Grow faster.
               </span>
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.08}>
               <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl md:text-[3.3rem] xl:text-[3.75rem]">
                 <span className="block leading-[1.1]">
-                  Your website should be your{" "}
+                  The website
+                </span>
+                <span className="block leading-[1.1]">
+                  your business
                 </span>
                 <span className="block leading-[1.1] bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                  best closer
+                  actually deserves
                 </span>
               </h1>
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.14}>
               <p className="max-w-2xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 lg:text-xl">
-                We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.
+                We design and build custom, conversion-focused websites for businesses that want to stand out online or need an upgrade. Get a free preview of your site redesign before you spend a dime.
               </p>
             </FadeInWhenVisible>
 

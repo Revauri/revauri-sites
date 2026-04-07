@@ -41,7 +41,7 @@ export const PROJECTS: readonly PortfolioProject[] = [
     industry: "Fintech / SaaS",
     tag: "Founder Project",
     shortDescription:
-      "A founder-built, non-custodial crypto payment platform for businesses. Merchants create payment links, customers pay in any of 82+ cryptocurrencies, and funds go straight to the merchant's wallet — Cryptrac never holds a cent.",
+      "A non-custodial crypto payment platform for businesses. Merchants create payment links, customers pay in any of 82+ cryptocurrencies, and funds go straight to the merchant's wallet — Cryptrac never holds a cent.",
     liveUrl: "https://www.cryptrac.com",
     status: "Live",
     hasRealImages: true,
@@ -132,7 +132,7 @@ export const PROJECTS: readonly PortfolioProject[] = [
     industry: "AI / Healthcare Technology",
     tag: "Founder Project",
     shortDescription:
-      "A founder-built AI voice companion for seniors. Daily outbound phone calls from a friendly AI voice, family dashboard for loved ones, and a safety system that surfaces early signs of cognitive or health changes. No app required for the senior.",
+      "An AI voice companion for seniors. Daily outbound phone calls from a friendly AI voice, family dashboard for loved ones, and a safety system that surfaces early signs of cognitive or health changes. No app required for the senior.",
     liveUrl: "https://ultaura.com",
     status: "Live",
     hasRealImages: true,

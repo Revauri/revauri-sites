@@ -22,7 +22,7 @@ export function SupportChannels() {
             {/* Call */}
             <Link
               href="/book"
-              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-all duration-300 hover:border-brand-orange/30 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
             >
               <div className="shrink-0 rounded-xl bg-brand-orange/10 p-2.5 transition-colors duration-200 group-hover:bg-brand-orange">
                 <Phone className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
@@ -43,7 +43,7 @@ export function SupportChannels() {
             {/* Email */}
             <a
               href="mailto:joseph@revauri.com"
-              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-all duration-300 hover:border-brand-orange/30 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
             >
               <div className="shrink-0 rounded-xl bg-brand-orange/10 p-2.5 transition-colors duration-200 group-hover:bg-brand-orange">
                 <Mail className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
@@ -64,7 +64,7 @@ export function SupportChannels() {
             {/* FAQ */}
             <Link
               href="/faq"
-              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-all duration-300 hover:border-brand-orange/30 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+              className="group flex h-full w-full min-h-[96px] items-center gap-4 rounded-2xl border border-brand-light-gray/60 bg-brand-cream px-6 py-5 shadow-[var(--shadow-md)] transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
             >
               <div className="shrink-0 rounded-xl bg-brand-orange/10 p-2.5 transition-colors duration-200 group-hover:bg-brand-orange">
                 <BookOpen className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />

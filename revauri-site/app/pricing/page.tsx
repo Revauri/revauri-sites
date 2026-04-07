@@ -53,8 +53,8 @@ const growthFeatures = [
 const CERTAINTY_ITEMS = [
   "Your free preview redesign is built before you commit. No surprises.",
   "Two rounds of revisions are included in every package. We work with you until it's right.",
-  "Your retainer payment doesn't start until 30 days after your site goes live.",
-  "Cancel the retainer anytime with 30-day notice. You keep the code, no penalties.",
+  "Your monthly retainer payment doesn't start until 30 days after your site goes live.",
+  "Cancel the monthly retainer anytime with 30-day notice. You keep the code, no penalties.",
   "Every site includes your Website Care Plan — hosting, SSL, and unlimited minor updates.",
   "Need something specific? We offer individual add-ons for chatbots, analytics, and more.",
 ];
@@ -69,19 +69,34 @@ export default function PricingPage() {
             Simple, <GradientText>Transparent</GradientText> Pricing
           </>
         }
-        subtitle="No hidden fees. No long-term contracts. See your redesign before you pay."
-      >
-        <span className="flex items-center gap-2 text-sm text-brand-orange">
-          <Check className="h-4 w-4" />
-          Free preview redesign before any commitment
-        </span>
-      </PageHero>
+        subtitle="No hidden fees. No long-term contracts. No surprises."
+      />
+
 
       <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
+        {/* Certainty block */}
+        <FadeInWhenVisible>
+          <section className="mb-16 rounded-2xl bg-brand-cream p-8 dark:bg-[#1a1a19]">
+            <h2 className="mb-6 text-center text-xl font-semibold text-brand-dark dark:text-brand-cream">
+              No surprises. Here&apos;s exactly what to expect.
+            </h2>
+            <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
+              {CERTAINTY_ITEMS.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
+                  <span className="text-sm text-brand-dark/80 dark:text-brand-cream/80">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </FadeInWhenVisible>
+
         <StaggerChildren className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
           {/* Launch Package */}
           <BlendedDemoFrame className="pt-4">
-            <div className="flex flex-col rounded-2xl border border-brand-light-gray bg-brand-white p-8 transition-all duration-300 hover:-translate-y-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+            <div className="flex flex-col rounded-2xl border border-brand-light-gray bg-brand-white p-8 transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
               <p className="text-xs font-medium uppercase tracking-wider text-brand-mid-gray">
                 For businesses ready to upgrade
               </p>
@@ -121,8 +136,8 @@ export default function PricingPage() {
 
           {/* Growth Package */}
           <BlendedDemoFrame className="pt-4">
-            <div className="relative flex flex-col rounded-2xl border-2 border-brand-orange bg-brand-white p-8 transition-all duration-300 hover:-translate-y-1 dark:bg-[#1a1a19]">
-              <div className="absolute -top-3.5 left-6 z-10 rounded-full bg-brand-orange px-4 py-1 text-xs font-bold tracking-wide text-white">
+            <div className="relative flex flex-col rounded-2xl border-2 border-brand-orange bg-brand-white p-8 dark:bg-[#1a1a19]">
+              <div className="absolute -top-3.5 left-6 z-10 rounded-full bg-brand-orange px-4 py-1 text-xs font-bold tracking-wide text-white shadow-[0_0_12px_3px_rgba(217,119,87,0.45)]">
                 Most Popular
               </div>
               <p className="text-xs font-medium uppercase tracking-wider text-brand-orange">
@@ -168,24 +183,6 @@ export default function PricingPage() {
           </BlendedDemoFrame>
         </StaggerChildren>
 
-        {/* Certainty block */}
-        <FadeInWhenVisible delay={0.2}>
-          <section className="mt-16 rounded-2xl bg-brand-cream p-8 dark:bg-[#1a1a19]">
-            <h2 className="mb-6 text-center text-xl font-semibold text-brand-dark dark:text-brand-cream">
-              No surprises. Here&apos;s exactly what to expect.
-            </h2>
-            <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
-              {CERTAINTY_ITEMS.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
-                  <span className="text-sm text-brand-dark/80 dark:text-brand-cream/80">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </FadeInWhenVisible>
       </div>
     </div>
   );

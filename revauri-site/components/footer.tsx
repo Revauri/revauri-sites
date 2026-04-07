@@ -104,7 +104,7 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <Logo variant="auto" />
             <p className="text-sm text-brand-mid-gray">
-              Custom websites for founders and businesses that refuse to settle.
+              Websites built to win business, not just look good.
             </p>
             <p className="text-xs text-brand-mid-gray/70">
               &copy; {YEAR} Revauri LLC. All Rights Reserved.

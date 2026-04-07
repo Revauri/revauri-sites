@@ -21,7 +21,7 @@ export function Portfolio() {
             </span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-brand-dark/60 dark:text-brand-cream/60">
-            Real projects. Real results. From fintech SaaS to AI products to premium law firms.
+            Real projects. Real results. Different businesses. Same standard.
           </p>
         </FadeInWhenVisible>
 
@@ -34,14 +34,14 @@ export function Portfolio() {
               aria-label={`View project: ${project.name}`}
             >
               <BlendedDemoFrame>
-                <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:-translate-y-1 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+                <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
                   <div className="relative aspect-[16/9] overflow-hidden bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
                     <Image
                       src={project.heroImage.src}
                       alt={project.heroImage.alt}
                       width={project.heroImage.width}
                       height={project.heroImage.height}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover"
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                   </div>
@@ -56,8 +56,8 @@ export function Portfolio() {
                     <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
                       {project.shortDescription}
                     </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange transition-colors group-hover:text-brand-orange/80">
-                      View project
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange">
+                      <span className="group-hover:bg-gradient-to-r group-hover:from-brand-orange group-hover:to-amber-500 group-hover:bg-clip-text group-hover:text-transparent">View project</span>
                       <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </span>
                   </div>
@@ -67,17 +67,6 @@ export function Portfolio() {
           ))}
         </StaggerChildren>
 
-        <FadeInWhenVisible delay={0.2}>
-          <div className="mt-10 text-center">
-            <Link
-              href="/portfolio"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-orange transition-colors hover:text-brand-orange/80"
-            >
-              View all projects
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </FadeInWhenVisible>
       </div>
     </section>
   );
