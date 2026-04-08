@@ -106,7 +106,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       name="name"
                       required
                       placeholder="Your name"
-                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     />
                   </div>
 
@@ -120,7 +120,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       name="email"
                       required
                       placeholder="you@company.com"
-                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     />
                   </div>
 
@@ -133,7 +133,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       id="phone"
                       name="phone"
                       placeholder="(555) 123-4567"
-                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     />
                   </div>
 
@@ -147,7 +147,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                         id="company"
                         name="company"
                         placeholder="Your business name"
-                        className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                        className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                       />
                     </div>
                     <div>
@@ -159,7 +159,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                         id="website"
                         name="website"
                         placeholder="https://yourbusiness.com"
-                        className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                        className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                       />
                     </div>
                   </div>
@@ -172,7 +172,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       id="referral"
                       name="referral"
                       defaultValue=""
-                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     >
                       <option value="" disabled className="text-brand-mid-gray">Select an option</option>
                       <option value="Google">Google</option>
@@ -193,7 +193,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       required
                       rows={4}
                       placeholder="Tell us about your project or what you're looking for..."
-                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
+                      className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     />
                   </div>
 
