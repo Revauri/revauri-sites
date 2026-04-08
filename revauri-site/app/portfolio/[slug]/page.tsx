@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ExternalLink, Clock, Target, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Target, Check } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import BlendedDemoFrame from "@/components/blended-demo-frame";
+import GallerySection from "@/components/gallery-section";
 import { getAllProjects, getProjectBySlug } from "@/lib/portfolio-data";
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
@@ -29,21 +30,6 @@ export async function generateMetadata(
   };
 }
 
-function DetailHeroPlaceholder() {
-  return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-8">
-      <div className="w-full max-w-[320px] space-y-3">
-        <div className="h-3 w-3/4 rounded bg-brand-mid-gray/20" />
-        <div className="h-3 w-full rounded bg-brand-mid-gray/15" />
-        <div className="h-3 w-5/6 rounded bg-brand-mid-gray/15" />
-        <div className="mt-4 flex gap-2">
-          <div className="h-8 w-24 rounded bg-brand-orange/20" />
-          <div className="h-8 w-20 rounded bg-brand-mid-gray/15" />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function TestimonialAvatarMonogram({ name }: { name: string }) {
   const initials = name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
@@ -90,57 +76,13 @@ export default async function PortfolioDetailPage(
         </div>
       </PageHero>
 
-      {/* Section 3 — Hero screenshot + live site affordance */}
-      <section className="py-12 lg:py-16">
-        <div className="mx-auto max-w-5xl px-6">
-          <FadeInWhenVisible>
-            <BlendedDemoFrame>
-              <div
-                className="relative overflow-hidden rounded-[1.35rem] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10"
-                style={
-                  project.hasRealImages
-                    ? { aspectRatio: `${project.heroImage.width} / ${project.heroImage.height}` }
-                    : { aspectRatio: "16 / 9" }
-                }
-              >
-                {project.hasRealImages ? (
-                  <Image
-                    src={project.heroImage.src}
-                    alt={project.heroImage.alt}
-                    width={project.heroImage.width}
-                    height={project.heroImage.height}
-                    className="h-full w-full object-cover"
-                    sizes="(min-width: 1024px) 960px, 100vw"
-                    priority
-                  />
-                ) : (
-                  <DetailHeroPlaceholder />
-                )}
-              </div>
-            </BlendedDemoFrame>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.12}>
-            <div className="mt-8 flex justify-center">
-              {project.liveUrl ? (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-brand-orange/25 px-6 py-3 text-sm font-semibold text-brand-orange transition-colors hover:bg-brand-orange/5"
-                >
-                  View live site
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              ) : (
-                <span className="inline-flex items-center gap-2 rounded-full border border-brand-mid-gray/40 bg-brand-white/60 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-brand-mid-gray dark:bg-brand-dark/60">
-                  <Clock className="h-3.5 w-3.5" />
-                  Launching soon
-                </span>
-              )}
-            </div>
-          </FadeInWhenVisible>
-        </div>
-      </section>
+      {/* Section 3 — Hero screenshot + thumbnail strip + live site affordance */}
+      <GallerySection
+        heroImage={project.heroImage}
+        images={project.gallery}
+        hasRealImages={project.hasRealImages}
+        liveUrl={project.liveUrl}
+      />
 
       {/* Section 4 — "The project" narrative */}
       <section className="py-12 lg:py-16">
@@ -242,7 +184,13 @@ export default async function PortfolioDetailPage(
                           sizes="(min-width: 1024px) 960px, 100vw"
                         />
                       ) : (
-                        <DetailHeroPlaceholder />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-8">
+                          <div className="w-full max-w-[320px] space-y-3">
+                            <div className="h-3 w-3/4 rounded bg-brand-mid-gray/20" />
+                            <div className="h-3 w-full rounded bg-brand-mid-gray/15" />
+                            <div className="h-3 w-5/6 rounded bg-brand-mid-gray/15" />
+                          </div>
+                        </div>
                       )}
                     </div>
                   </BlendedDemoFrame>
