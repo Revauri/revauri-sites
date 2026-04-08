@@ -25,14 +25,17 @@ export function Booking() {
   const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
 
   useEffect(() => {
+    let safetyTimer: ReturnType<typeof setTimeout>;
+
     const onCalendlyMessage = (event: MessageEvent) => {
       if (
         typeof event.data === "object" &&
         event.data !== null &&
         "event" in event.data &&
         typeof event.data.event === "string" &&
-        event.data.event.startsWith("calendly.")
+        event.data.event === "calendly.event_type_viewed"
       ) {
+        clearTimeout(safetyTimer);
         setIsCalendlyLoaded(true);
       }
     };
@@ -46,36 +49,27 @@ export function Booking() {
         parentElement: embedRef.current,
         resize: true,
       });
-      window.setTimeout(() => setIsCalendlyLoaded(true), 1800);
+      // Safety fallback — only if the Calendly message never fires
+      safetyTimer = setTimeout(() => setIsCalendlyLoaded(true), 8000);
     };
 
     window.addEventListener("message", onCalendlyMessage);
 
-    if (window.Calendly?.initInlineWidget) {
-      initializeEmbed();
-      return () => window.removeEventListener("message", onCalendlyMessage);
-    }
+    // Poll briefly for the script loaded by next/script on the page
+    const waitForCalendly = setInterval(() => {
+      if (window.Calendly?.initInlineWidget) {
+        clearInterval(waitForCalendly);
+        initializeEmbed();
+      }
+    }, 100);
 
-    const existingScript = document.querySelector(
-      'script[src*="assets.calendly.com/assets/external/widget.js"]',
-    ) as HTMLScriptElement | null;
-
-    if (existingScript) {
-      existingScript.addEventListener("load", initializeEmbed);
-      initializeEmbed();
-      return () => {
-        window.removeEventListener("message", onCalendlyMessage);
-        existingScript.removeEventListener("load", initializeEmbed);
-      };
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.async = true;
-    script.onload = initializeEmbed;
-    document.body.appendChild(script);
+    // Stop polling after 10s
+    const pollTimeout = setTimeout(() => clearInterval(waitForCalendly), 10000);
 
     return () => {
+      clearInterval(waitForCalendly);
+      clearTimeout(pollTimeout);
+      clearTimeout(safetyTimer);
       window.removeEventListener("message", onCalendlyMessage);
     };
   }, []);

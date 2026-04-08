@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Check } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { Booking } from "@/components/booking";
@@ -12,6 +13,14 @@ export const metadata: Metadata = {
 export default function BookPage() {
   return (
     <div>
+      <link rel="dns-prefetch" href="https://assets.calendly.com" />
+      <link rel="preconnect" href="https://assets.calendly.com" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://calendly.com" />
+      <link rel="preconnect" href="https://calendly.com" crossOrigin="anonymous" />
+      <Script
+        src="https://assets.calendly.com/assets/external/widget.js"
+        strategy="afterInteractive"
+      />
       <PageHero
         badge="BOOK A CALL"
         title={
