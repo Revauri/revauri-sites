@@ -180,7 +180,7 @@ export default function GallerySection({ heroImage, images, hasRealImages, liveU
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg border border-brand-orange/25 px-6 py-3 text-sm font-semibold text-brand-orange transition-colors hover:bg-brand-orange/5"
                 >
-                  View live site
+                  View {new URL(liveUrl).hostname.replace(/^www\./, "")}
                   <ExternalLink className="h-4 w-4" />
                 </a>
               ) : (

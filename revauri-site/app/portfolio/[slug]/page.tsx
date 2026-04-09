@@ -112,9 +112,9 @@ export default async function PortfolioDetailPage(
             {project.approach.map((item, i) => (
               <div
                 key={i}
-                className="group rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+                className="group flex h-full flex-col rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
               >
-                <div className="mb-4 inline-flex rounded-xl bg-brand-orange/10 p-3 transition-colors duration-200 group-hover:bg-brand-orange">
+                <div className="mb-4 inline-flex self-start rounded-xl bg-brand-orange/10 p-3 transition-colors duration-200 group-hover:bg-brand-orange">
                   <Target className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
                 </div>
                 <p className="text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
