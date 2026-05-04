@@ -89,21 +89,22 @@ export default function TermsPage() {
           Each project includes two (2) rounds of design revisions. A &quot;round of
           revisions&quot; is a single set of written feedback covering all desired
           changes. Additional revisions beyond the included two rounds are billed
-          at $75 per hour. Minor text and content updates are included in your
-          monthly retainer at no extra charge.
+          at our standard hourly rate, communicated at the time of request. Minor
+          text and content updates are included in your monthly retainer at no
+          extra charge.
         </p>
 
         <h2>6. Project Timeline and Delivery</h2>
         <p>
-          Delivery timelines depend on the selected package (typically 4 to 6
-          weeks from the completion of the Project Brief). Delays caused by the
+          Delivery timelines are scoped per project (typically 4 to 6 weeks
+          from the completion of the Project Brief). Delays caused by the
           client &mdash; including failure to provide assets, delayed feedback, or
           unresponsiveness for more than 5 business days &mdash; may extend the
           delivery timeline. If a client is unresponsive or fails to provide
           required materials for more than thirty (30) consecutive calendar days
           during the build phase, Revauri may treat the project as abandoned. Upon
           project abandonment, the upfront fee is non-refundable and a reactivation
-          fee of $500 applies if the client wishes to resume.
+          fee may apply if the client wishes to resume.
         </p>
 
         <h2>7. Intellectual Property</h2>

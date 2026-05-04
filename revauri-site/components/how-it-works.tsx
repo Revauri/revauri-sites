@@ -19,7 +19,7 @@ const steps = [
     number: "03",
     title: "You Approve, We Launch",
     description:
-      "If you love what you see, we'll expand the preview into a complete website — built, deployed, and managed for you. Launch Package sites are delivered in 6 weeks; Growth Package in just 4 weeks.",
+      "If you love what you see, we'll expand the preview into a complete website — built, deployed, and managed for you. Most projects ship in 4 to 6 weeks, sometimes sooner depending on complexity or job size.",
   },
 ];
 

@@ -17,7 +17,7 @@ const FAQ_DATA = [
       {
         question: "How long does it take?",
         answer:
-          "Launch Package: approximately 6 weeks. Growth Package: priority delivery in 4 weeks. Timeline starts when your Project Brief is complete.",
+          "Most projects ship in 4 to 6 weeks, sometimes sooner depending on complexity or job size. Timeline starts when your Project Brief is complete.",
       },
       {
         question: "What's included in the free redesign preview?",
@@ -72,7 +72,7 @@ const FAQ_DATA = [
       {
         question: "Do you offer SEO services?",
         answer:
-          "The Growth Package includes monthly SEO optimization. Both packages include technical SEO fundamentals — semantic HTML, meta tags, sitemaps, structured data, and fast load times.",
+          "Every project includes technical SEO fundamentals — semantic HTML, meta tags, sitemaps, structured data, and fast load times. Ongoing monthly SEO optimization is available as part of your Care Plan, scoped per project.",
       },
     ],
   },
