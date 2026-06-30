@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,15 +10,21 @@ const inter = Inter({
   display: "swap",
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Revauri Designs — Custom Website Redesigns for Growth",
+  title: "Revauri Designs — Fast, Modern Websites for US Businesses",
   description:
-    "Custom website redesigns that turn visitors into customers. Built for speed, clarity, and results. Web design studio serving businesses across the United States.",
+    "Custom website design and development for small and medium businesses. Built on Next.js, Tailwind, and Vercel. Mobile-first, performance-ready, built to last.",
   metadataBase: new URL("https://revauridesigns.com"),
   openGraph: {
-    title: "Revauri Designs — Custom Website Redesigns for Growth",
+    title: "Revauri Designs — Fast, Modern Websites for US Businesses",
     description:
-      "Custom website redesigns that turn visitors into customers. Built for speed, clarity, and results.",
+      "Custom website design and development for small and medium businesses. Built on Next.js, Tailwind, and Vercel.",
     url: "https://revauridesigns.com",
     siteName: "Revauri Designs",
     locale: "en_US",
@@ -24,34 +32,18 @@ export const metadata: Metadata = {
   },
 };
 
-const themeScript = `
-  (function() {
-    var d = document.documentElement;
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    function apply() {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && mq.matches)) {
-        d.classList.add('dark');
-      } else {
-        d.classList.remove('dark');
-      }
-    }
-    apply();
-    mq.addEventListener('change', apply);
-  })();
-`;
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
-      <body>{children}</body>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

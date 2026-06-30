@@ -43,6 +43,31 @@ const themeScript = `
   })();
 `;
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": ["ProfessionalService", "Organization"],
+  name: "Revauri",
+  legalName: "Revauri LLC",
+  url: "https://revauri.com",
+  email: "joseph@revauri.com",
+  description:
+    "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
+  areaServed: "US",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "725 Joralemon Street, Unit 127",
+    addressLocality: "Belleville",
+    addressRegion: "NJ",
+    postalCode: "07109",
+    addressCountry: "US",
+  },
+  founder: {
+    "@type": "Person",
+    name: "Joseph Silvagnoli",
+  },
+  logo: "https://revauri.com/logo.svg",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -57,6 +82,10 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
       </head>
       <body>
         <Header />

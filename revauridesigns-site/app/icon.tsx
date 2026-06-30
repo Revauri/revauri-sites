@@ -10,23 +10,21 @@ export default function Icon() {
         style={{
           width: 32,
           height: 32,
-          borderRadius: 8,
-          background: "#D97757",
+          background: "#0f172a",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <span
+        {/* Diamond shape in teal */}
+        <div
           style={{
-            fontSize: 19,
-            fontWeight: 700,
-            color: "#FFFFFF",
-            lineHeight: 1,
+            width: 18,
+            height: 18,
+            background: "#2dd4bf",
+            transform: "rotate(45deg)",
           }}
-        >
-          R
-        </span>
+        />
       </div>
     ),
     { ...size },

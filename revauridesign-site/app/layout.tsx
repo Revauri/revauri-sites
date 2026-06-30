@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,15 +10,22 @@ const inter = Inter({
   display: "swap",
 });
 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  axes: ["SOFT", "WONK"],
+});
+
 export const metadata: Metadata = {
-  title: "Revauri Design — Modern Web Design for Small Business",
+  title: "Revauri Design — Craft Websites for Small Business",
   description:
-    "We design fast, mobile-first websites that help small businesses look as professional online as they are in person. Boutique web design studio based in the US.",
+    "A small web design studio that sweats the details. We build fast, handcrafted websites for US small and medium businesses — on Next.js, Tailwind, and Vercel.",
   metadataBase: new URL("https://revauridesign.com"),
   openGraph: {
-    title: "Revauri Design — Modern Web Design for Small Business",
+    title: "Revauri Design — Craft Websites for Small Business",
     description:
-      "We design fast, mobile-first websites that help small businesses look as professional online as they are in person.",
+      "A small web design studio that sweats the details. We build fast, handcrafted websites for US small and medium businesses.",
     url: "https://revauridesign.com",
     siteName: "Revauri Design",
     locale: "en_US",
@@ -24,22 +33,25 @@ export const metadata: Metadata = {
   },
 };
 
-const themeScript = `
-  (function() {
-    var d = document.documentElement;
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
-    function apply() {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && mq.matches)) {
-        d.classList.add('dark');
-      } else {
-        d.classList.remove('dark');
-      }
-    }
-    apply();
-    mq.addEventListener('change', apply);
-  })();
-`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Revauri Design",
+  legalName: "Revauri LLC",
+  url: "https://revauridesign.com",
+  description:
+    "A small web design studio building fast, handcrafted websites for US small and medium businesses.",
+  areaServed: "US",
+  email: "david.mercer@revauridesign.com",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "725 Joralemon Street, Unit 127",
+    addressLocality: "Belleville",
+    addressRegion: "NJ",
+    postalCode: "07109",
+    addressCountry: "US",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -47,11 +59,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${fraunces.variable} antialiased`}
+    >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
-      <body>{children}</body>
+      <body className="bg-brand-cream text-brand-dark">
+        <SiteHeader />
+        <main>{children}</main>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
