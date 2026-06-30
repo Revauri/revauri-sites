@@ -2,19 +2,27 @@
 
 import { useState } from "react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ChatMessageBubble } from "./chat-message-bubble";
 import { QuickReplies } from "./quick-replies";
+import { captureLeadInputSchema, submitLead } from "@/lib/chat/tools";
 
 const PANEL_CARD_CLASS =
   "rounded-2xl border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]";
 
 export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [draft, setDraft] = useState("");
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, addToolResult } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    async onToolCall({ toolCall }) {
+      if (toolCall.toolName !== "capture_lead") return;
+      const input = captureLeadInputSchema.parse(toolCall.input);
+      const output = await submitLead(input);
+      addToolResult({ tool: "capture_lead", toolCallId: toolCall.toolCallId, output });
+    },
   });
 
   const isStreaming = status === "submitted" || status === "streaming";
