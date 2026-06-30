@@ -93,7 +93,7 @@ export default function ContactPage() {
             {/* Right: contact form */}
             <div>
               <form
-                action="https://formsubmit.co/david.mercer@revauridesign.com"
+                action="https://formsubmit.co/7c791bf58f1d28ca74e802ffc3598211"
                 method="POST"
                 className="space-y-5"
               >
