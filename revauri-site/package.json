@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/react": "^4.0.10",
+    "ai": "^7.0.9",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
