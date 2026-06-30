@@ -8,18 +8,30 @@ export const captureLeadInputSchema = z.object({
   projectDetails: z.string(),
 });
 
-// FormSubmit.co sits behind a Cloudflare bot challenge that blocks server-to-server
-// requests (no real browser/JS), so this must run client-side, not as a tool `execute`.
-// See components/chat/chat-panel.tsx's onToolCall handler, which calls this directly.
-export async function submitLead(input: z.infer<typeof captureLeadInputSchema>) {
+// FormSubmit.co blocks both server-side fetches (Cloudflare bot challenge) and
+// cross-origin browser fetches (no CORS allow-origin for AJAX mode) for this account.
+// A real <form> POST is subject to neither restriction — it's the same mechanism
+// app/contact/contact-content.tsx already uses successfully in production — so this
+// submits via a hidden iframe-targeted form instead of fetch. There is no readable
+// response (cross-origin), so this is fire-and-forget, matching the /contact form's
+// existing reliability profile.
+export function submitLead(input: z.infer<typeof captureLeadInputSchema>): Promise<{ success: boolean }> {
   const { name, email, company, projectDetails } = input;
-  const res = await fetch("https://formsubmit.co/joseph@revauri.com", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-    },
-    body: new URLSearchParams({
+
+  return new Promise((resolve) => {
+    const iframeName = `lead-capture-${Date.now()}`;
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://formsubmit.co/joseph@revauri.com";
+    form.target = iframeName;
+    form.style.display = "none";
+
+    const fields: Record<string, string> = {
       name,
       email,
       company: company ?? "",
@@ -27,10 +39,24 @@ export async function submitLead(input: z.infer<typeof captureLeadInputSchema>) 
       _subject: "New chatbot lead from revauri.com",
       _template: "table",
       _captcha: "false",
-    }),
-  });
+    };
+    for (const [key, value] of Object.entries(fields)) {
+      const field = document.createElement("input");
+      field.type = "hidden";
+      field.name = key;
+      field.value = value;
+      form.appendChild(field);
+    }
 
-  return { success: res.ok };
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(() => {
+      form.remove();
+      iframe.remove();
+      resolve({ success: true });
+    }, 2000);
+  });
 }
 
 // No `execute` — this makes it a client-side tool. The model emits a tool call,
