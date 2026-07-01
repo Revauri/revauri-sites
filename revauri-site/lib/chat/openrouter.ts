@@ -10,4 +10,4 @@ export const openrouter = createOpenAI({
 });
 
 // Hardcoded — do not make this env-configurable, the slug is fixed/verified.
-export const CHAT_MODEL = "openai/gpt-4o";
+export const CHAT_MODEL = "anthropic/claude-sonnet-5";
