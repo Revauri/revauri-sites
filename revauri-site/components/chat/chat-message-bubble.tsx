@@ -1,4 +1,57 @@
+import type { ReactNode } from "react";
 import type { UIMessage } from "ai";
+
+const LINK_CLASS =
+  "text-brand-orange underline underline-offset-2 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
+
+// Matches, in priority order: markdown links `[label](url)`, bare http(s) URLs,
+// and bare email addresses. No markdown library — the model only ever produces
+// these three patterns, so a single regex pass is enough.
+const INLINE_PATTERN =
+  /\[([^\]]+)\]\((\/[^\s)]+|https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s]+)|([\w.+-]+@[\w-]+\.[\w.-]+)/g;
+
+function renderInlineContent(text: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+  let match: RegExpExecArray | null;
+
+  INLINE_PATTERN.lastIndex = 0;
+  while ((match = INLINE_PATTERN.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+
+    const [full, mdLabel, mdUrl, bareUrl, email] = match;
+    if (mdLabel && mdUrl) {
+      nodes.push(
+        <a key={key++} href={mdUrl} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+          {mdLabel}
+        </a>,
+      );
+    } else if (bareUrl) {
+      nodes.push(
+        <a key={key++} href={bareUrl} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+          {bareUrl}
+        </a>,
+      );
+    } else if (email) {
+      nodes.push(
+        <a key={key++} href={`mailto:${email}`} className={LINK_CLASS}>
+          {email}
+        </a>,
+      );
+    }
+
+    lastIndex = match.index + full.length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+}
 
 function getMessageText(message: UIMessage) {
   return message.parts
@@ -7,10 +60,7 @@ function getMessageText(message: UIMessage) {
     .join("");
 }
 
-export function ChatMessageBubble({ message }: { message: UIMessage }) {
-  const isUser = message.role === "user";
-  const text = getMessageText(message);
-
+export function BubbleShell({ isUser, children }: { isUser: boolean; children: ReactNode }) {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
@@ -20,8 +70,19 @@ export function ChatMessageBubble({ message }: { message: UIMessage }) {
             : "bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
         }`}
       >
-        {text}
+        {children}
       </div>
     </div>
   );
+}
+
+export function ChatMessageBubble({ message }: { message: UIMessage }) {
+  const isUser = message.role === "user";
+  const text = getMessageText(message);
+
+  return <BubbleShell isUser={isUser}>{renderInlineContent(text)}</BubbleShell>;
+}
+
+export function ChatGreetingBubble() {
+  return <BubbleShell isUser={false}>Hi, I&apos;m the Revauri AI assistant. How can I help you?</BubbleShell>;
 }
