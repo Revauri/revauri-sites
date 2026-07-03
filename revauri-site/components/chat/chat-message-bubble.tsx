@@ -6,14 +6,14 @@ const LINK_CLASS =
   "text-brand-orange underline underline-offset-2 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
 
 // Matches, in priority order: markdown links `[label](url)`, bare http(s) URLs,
-// bare site-relative paths (e.g. "/book" typed without markdown formatting),
-// and bare email addresses. No markdown library — the model only ever produces
-// these patterns, so a single regex pass is enough. The bare-path branch
-// requires a lowercase letter right after the slash and excludes matches
-// preceded by a word character, "/", or "." so it doesn't fire inside things
-// like "24/7", "and/or", or a full URL's own path segment.
+// bare site-relative paths (e.g. "/book" or "/Book/" typed without markdown
+// formatting, any letter case, with or without a trailing slash), and bare
+// email addresses. No markdown library — the model only ever produces these
+// patterns, so a single regex pass is enough. The bare-path branch excludes
+// matches preceded by a word character, "/", or "." so it doesn't fire inside
+// things like "24/7", "and/or", or a full URL's own path segment.
 const INLINE_PATTERN =
-  /\[([^\]]+)\]\((\/[^\s)]+|https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s]+)|(?<![\w/.])(\/[a-z][a-z0-9-]*(?:\/[a-z0-9-]+)*)|([\w.+-]+@[\w-]+\.[\w.-]+)/g;
+  /\[([^\]]+)\]\((\/[^\s)]+|https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s]+)|(?<![\w/.])(\/[A-Za-z][A-Za-z0-9-]*(?:\/[A-Za-z0-9-]+)*\/?)|([\w.+-]+@[\w-]+\.[\w.-]+)/g;
 
 function renderInlineContent(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
@@ -43,7 +43,7 @@ function renderInlineContent(text: string): ReactNode[] {
     } else if (barePath) {
       nodes.push(
         <a key={key++} href={barePath} className={LINK_CLASS}>
-          {barePath.slice(1).replace(/[-_]/g, " ")}
+          {barePath.replace(/^\/|\/$/g, "").replace(/[-_]/g, " ")}
         </a>,
       );
     } else if (email) {
@@ -75,25 +75,13 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`relative max-w-[85%] whitespace-pre-wrap rounded-[14px] px-[13px] py-[10px] text-xs leading-relaxed ${
+        className={`max-w-[85%] whitespace-pre-wrap rounded-[16px] px-[13px] py-[10px] text-xs leading-relaxed ${
           isUser
             ? "bg-brand-dark font-medium text-brand-cream dark:bg-brand-cream dark:text-brand-dark"
             : "bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
         }`}
       >
         {children}
-        {/* Tail: a small rotated square in the bubble's own color. The half
-            that overlaps the bubble blends in invisibly (same color); only
-            the half poking past the edge reads as a tail. No masking or
-            page-background color matching required. */}
-        <span
-          aria-hidden="true"
-          className={`absolute bottom-0 h-3 w-3 rotate-45 rounded-[2px] ${
-            isUser
-              ? "-right-[10px] bg-brand-dark dark:bg-brand-cream"
-              : "-left-[10px] bg-brand-cream dark:bg-brand-light-gray/10"
-          }`}
-        />
       </div>
     </div>
   );
