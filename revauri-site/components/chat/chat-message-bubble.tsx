@@ -71,25 +71,29 @@ function getMessageText(message: UIMessage) {
     .join("");
 }
 
-// iMessage-style tail: two overlapping pseudo-elements — `before` is the
-// colored tip, `after` is a page-colored cutout that curves its outer edge.
-// Proportions adapted from the widely-used iOS bubble technique
-// (https://samuelkraft.com/blog/ios-chat-bubbles-css), scaled down to match
-// our smaller bubble radius.
-const TAIL_CLASS =
-  "before:absolute before:bottom-0 before:h-3 before:w-3 before:content-[''] after:absolute after:bottom-0 after:h-3 after:w-[15px] after:content-['']";
-
 export function BubbleShell({ isUser, children }: { isUser: boolean; children: ReactNode }) {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`relative max-w-[85%] whitespace-pre-wrap rounded-[14px] px-[13px] py-[10px] text-xs leading-relaxed ${TAIL_CLASS} ${
+        className={`relative max-w-[85%] whitespace-pre-wrap rounded-[14px] px-[13px] py-[10px] text-xs leading-relaxed ${
           isUser
-            ? "bg-brand-dark font-medium text-brand-cream before:-right-[5px] before:rounded-bl-[9px] before:bg-brand-dark after:-right-[11px] after:rounded-bl-[6px] after:bg-brand-white dark:bg-brand-cream dark:text-brand-dark dark:before:bg-brand-cream dark:after:bg-[#1a1a19]"
-            : "bg-brand-cream text-brand-dark before:-left-[5px] before:rounded-br-[9px] before:bg-brand-cream after:-left-[11px] after:rounded-br-[6px] after:bg-brand-white dark:bg-brand-light-gray/10 dark:text-brand-cream dark:before:bg-brand-light-gray/10 dark:after:bg-[#1a1a19]"
+            ? "bg-brand-dark font-medium text-brand-cream dark:bg-brand-cream dark:text-brand-dark"
+            : "bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
         }`}
       >
         {children}
+        {/* Tail: a small rotated square in the bubble's own color. The half
+            that overlaps the bubble blends in invisibly (same color); only
+            the half poking past the edge reads as a tail. No masking or
+            page-background color matching required. */}
+        <span
+          aria-hidden="true"
+          className={`absolute bottom-0 h-3 w-3 rotate-45 rounded-[2px] ${
+            isUser
+              ? "-right-[10px] bg-brand-dark dark:bg-brand-cream"
+              : "-left-[10px] bg-brand-cream dark:bg-brand-light-gray/10"
+          }`}
+        />
       </div>
     </div>
   );
