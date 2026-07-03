@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { UIMessage } from "ai";
+import { HighlightCard, type HighlightCardProps } from "@/components/chat/highlight-card";
 
 const LINK_CLASS =
   "text-brand-orange underline underline-offset-2 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
@@ -64,10 +65,10 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+        className={`max-w-[85%] whitespace-pre-wrap px-4 py-2.5 text-sm leading-relaxed ${
           isUser
-            ? "bg-brand-orange/10 text-brand-dark dark:bg-brand-orange/20 dark:text-brand-cream"
-            : "bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
+            ? "rounded-[16px_4px_16px_16px] bg-brand-dark font-medium text-brand-cream dark:bg-brand-cream dark:text-brand-dark"
+            : "rounded-[4px_16px_16px_16px] bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
         }`}
       >
         {children}
@@ -79,10 +80,15 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
 export function ChatMessageBubble({ message }: { message: UIMessage }) {
   const isUser = message.role === "user";
   const text = getMessageText(message);
+  const highlightPart = message.parts.find(
+    (p): p is (typeof message.parts)[number] & { output: HighlightCardProps } =>
+      p.type === "tool-get_project_highlight" && "state" in p && p.state === "output-available",
+  );
 
-  return <BubbleShell isUser={isUser}>{renderInlineContent(text)}</BubbleShell>;
-}
-
-export function ChatGreetingBubble() {
-  return <BubbleShell isUser={false}>Hi, I&apos;m the Revauri AI assistant. How can I help you?</BubbleShell>;
+  return (
+    <BubbleShell isUser={isUser}>
+      {renderInlineContent(text)}
+      {highlightPart && <HighlightCard {...highlightPart.output} />}
+    </BubbleShell>
+  );
 }

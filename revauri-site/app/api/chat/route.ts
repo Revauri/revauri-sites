@@ -9,7 +9,7 @@ import {
 import { CHAT_MODEL, openrouter } from "@/lib/chat/openrouter";
 import { SYSTEM_PROMPT } from "@/lib/chat/system-prompt";
 import { checkRateLimit } from "@/lib/chat/rate-limit";
-import { captureLead } from "@/lib/chat/tools";
+import { captureLead, getProjectHighlight } from "@/lib/chat/tools";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     model: openrouter(CHAT_MODEL),
     system: SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
-    tools: { capture_lead: captureLead },
+    tools: { capture_lead: captureLead, get_project_highlight: getProjectHighlight },
     stopWhen: stepCountIs(4),
     maxOutputTokens: 500,
   });

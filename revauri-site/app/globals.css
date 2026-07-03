@@ -54,6 +54,7 @@
   --animate-clip-reveal: clip-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-draw-line: draw-line 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-dot-wave: dot-wave 1.2s ease-in-out infinite;
 }
 
 @keyframes rise-in {
@@ -99,6 +100,11 @@
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 87, 0.25); }
   50% { box-shadow: 0 0 35px rgba(217, 119, 87, 0.45); }
+}
+
+@keyframes dot-wave {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-4px); opacity: 1; }
 }
 
 /* Honeycomb pattern for hero section */
