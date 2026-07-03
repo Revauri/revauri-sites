@@ -1,12 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChatLauncherButton } from "./chat-launcher-button";
 import { ChatPanel } from "./chat-panel";
 
+const OPEN_STORAGE_KEY = "revauri-chat-open";
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      setIsOpen(sessionStorage.getItem(OPEN_STORAGE_KEY) === "1");
+    } catch {
+      // ignore storage errors (private browsing, quota, etc.)
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      sessionStorage.setItem(OPEN_STORAGE_KEY, isOpen ? "1" : "0");
+    } catch {
+      // ignore storage errors (private browsing, quota, etc.)
+    }
+  }, [isOpen, hydrated]);
 
   return (
     <>
