@@ -62,7 +62,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className={`flex h-full w-full flex-col overflow-hidden sm:h-[664px] sm:w-[408px] ${PANEL_CARD_CLASS}`}
+      className={`flex h-full w-full flex-col overflow-hidden sm:h-[664px] sm:max-h-[calc(100dvh-3rem)] sm:w-[408px] ${PANEL_CARD_CLASS}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-5 pt-5 pb-4 dark:border-brand-mid-gray/20">
@@ -116,7 +116,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
           onSubmit={handleSubmit}
           className="border-t border-brand-light-gray/60 px-[18px] pt-[14px] pb-2 dark:border-brand-mid-gray/20"
         >
-          <div className="flex items-end gap-2 rounded-full bg-brand-light-gray/40 px-4 py-2 dark:bg-brand-light-gray/10">
+          <div className="flex items-center gap-2 rounded-full bg-brand-light-gray/40 px-4 py-2 dark:bg-brand-light-gray/10">
             <textarea
               ref={textareaRef}
               value={draft}
