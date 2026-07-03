@@ -8,15 +8,15 @@ export type HighlightCardProps = {
 
 export function HighlightCard({ eyebrow, figure, caption, ctaLabel, ctaHref }: HighlightCardProps) {
   return (
-    <div className="flex flex-col gap-1.5 rounded-xl border border-brand-orange/30 bg-brand-white p-4 dark:bg-brand-dark/40">
-      <span className="text-xs font-semibold uppercase tracking-wide text-brand-orange">
+    <div className="flex flex-col gap-1 rounded-lg border border-brand-orange/30 bg-brand-white p-3 dark:bg-brand-dark/40">
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-orange">
         {eyebrow}
       </span>
-      <span className="text-xl font-bold text-brand-dark dark:text-brand-cream">{figure}</span>
-      <p className="text-[12.5px] text-brand-mid-gray">{caption}</p>
+      <span className="text-lg font-bold text-brand-dark dark:text-brand-cream">{figure}</span>
+      <p className="text-[11px] text-brand-mid-gray">{caption}</p>
       <a
         href={ctaHref}
-        className="mt-1 inline-block w-fit rounded-full bg-brand-dark px-4 py-2 text-xs font-semibold text-white dark:bg-brand-cream dark:text-brand-dark"
+        className="mt-1 inline-block w-fit rounded-full bg-brand-dark px-3 py-1.5 text-xs font-semibold text-white dark:bg-brand-cream dark:text-brand-dark"
       >
         {ctaLabel}
       </a>
