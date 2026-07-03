@@ -65,7 +65,7 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] whitespace-pre-wrap px-3 py-2 text-[13px] leading-relaxed ${
+        className={`max-w-[85%] whitespace-pre-wrap px-3.5 py-2.5 text-sm leading-relaxed ${
           isUser
             ? "rounded-[16px_4px_16px_16px] bg-brand-dark font-medium text-brand-cream dark:bg-brand-cream dark:text-brand-dark"
             : "rounded-[4px_16px_16px_16px] bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
