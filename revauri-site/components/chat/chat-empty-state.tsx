@@ -27,20 +27,20 @@ export function ChatEmptyState({
         </p>
       </BubbleShell>
       {mode === "initial" && (
-        <div className="mt-3 flex w-full flex-col gap-2">
+        <div className="mt-3.5 flex w-full flex-col gap-2">
           {STARTER_ROWS.map(({ label, icon: Icon }) => (
             <button
               key={label}
               onClick={() => onSelect(label)}
-              className="group flex items-center justify-between gap-2 rounded-xl bg-brand-light-gray/40 px-3.5 py-3 text-left transition-colors hover:bg-brand-orange/10 dark:bg-brand-mid-gray/10 dark:hover:bg-brand-orange/15"
+              className="group flex items-center justify-between gap-2 rounded-xl bg-brand-light-gray/40 px-4 py-3.5 text-left transition-colors hover:bg-brand-orange/10 dark:bg-brand-mid-gray/10 dark:hover:bg-brand-orange/15"
             >
               <div className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-brand-orange" />
-                <span className="text-[13px] font-medium text-brand-dark dark:text-brand-cream">
+                <Icon className="h-[18px] w-[18px] text-brand-orange" />
+                <span className="text-sm font-medium text-brand-dark dark:text-brand-cream">
                   {label}
                 </span>
               </div>
-              <ChevronRight className="h-4 w-4 text-brand-mid-gray transition-colors group-hover:text-brand-dark dark:group-hover:text-brand-cream" />
+              <ChevronRight className="h-[18px] w-[18px] text-brand-mid-gray transition-colors group-hover:text-brand-dark dark:group-hover:text-brand-cream" />
             </button>
           ))}
         </div>

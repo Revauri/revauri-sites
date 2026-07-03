@@ -19,7 +19,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 24 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 sm:inset-auto sm:bottom-6 sm:right-6"
+            className="fixed inset-0 z-[70] sm:inset-auto sm:bottom-6 sm:right-6"
           >
             <ChatPanel onClose={() => setIsOpen(false)} />
           </motion.div>
