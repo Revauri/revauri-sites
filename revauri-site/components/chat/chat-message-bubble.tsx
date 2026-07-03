@@ -77,7 +77,7 @@ function getMessageText(message: UIMessage) {
 // (https://samuelkraft.com/blog/ios-chat-bubbles-css), scaled down to match
 // our smaller bubble radius.
 const TAIL_CLASS =
-  "before:absolute before:bottom-0 before:h-4 before:w-[13px] before:content-[''] after:absolute after:bottom-0 after:h-4 after:w-[18px] after:content-['']";
+  "before:absolute before:bottom-0 before:h-3 before:w-3 before:content-[''] after:absolute after:bottom-0 after:h-3 after:w-[15px] after:content-['']";
 
 export function BubbleShell({ isUser, children }: { isUser: boolean; children: ReactNode }) {
   return (
@@ -85,8 +85,8 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
       <div
         className={`relative max-w-[85%] whitespace-pre-wrap rounded-[14px] px-[13px] py-[10px] text-xs leading-relaxed ${TAIL_CLASS} ${
           isUser
-            ? "bg-brand-dark font-medium text-brand-cream before:-right-[5px] before:rounded-bl-[10px_9px] before:bg-brand-dark after:-right-[18px] after:rounded-bl-[7px] after:bg-brand-white dark:bg-brand-cream dark:text-brand-dark dark:before:bg-brand-cream dark:after:bg-[#1a1a19]"
-            : "bg-brand-cream text-brand-dark before:-left-[5px] before:rounded-br-[10px_9px] before:bg-brand-cream after:-left-[18px] after:rounded-br-[7px] after:bg-brand-white dark:bg-brand-light-gray/10 dark:text-brand-cream dark:before:bg-brand-light-gray/10 dark:after:bg-[#1a1a19]"
+            ? "bg-brand-dark font-medium text-brand-cream before:-right-[5px] before:rounded-bl-[9px] before:bg-brand-dark after:-right-[11px] after:rounded-bl-[6px] after:bg-brand-white dark:bg-brand-cream dark:text-brand-dark dark:before:bg-brand-cream dark:after:bg-[#1a1a19]"
+            : "bg-brand-cream text-brand-dark before:-left-[5px] before:rounded-br-[9px] before:bg-brand-cream after:-left-[11px] after:rounded-br-[6px] after:bg-brand-white dark:bg-brand-light-gray/10 dark:text-brand-cream dark:before:bg-brand-light-gray/10 dark:after:bg-[#1a1a19]"
         }`}
       >
         {children}
