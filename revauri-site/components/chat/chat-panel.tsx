@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
-import { ArrowUp, RotateCcw, X } from "lucide-react";
+import { ArrowDown, ArrowUp, RotateCcw, Square, X } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { ChatMessageBubble } from "./chat-message-bubble";
+import { BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
 import { ChatEmptyState } from "@/components/chat/chat-empty-state";
 import { captureLeadInputSchema, submitLead } from "@/lib/chat/tools";
 
@@ -30,7 +30,10 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { messages, sendMessage, setMessages, status, stop, addToolResult } = useChat({
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pinnedRef = useRef(true); // whether the view is stuck to the newest message
+  const [showJump, setShowJump] = useState(false);
+  const { messages, sendMessage, setMessages, status, stop, addToolResult, error, regenerate } = useChat({
     messages: initialMessages,
     transport: new DefaultChatTransport({ api: "/api/chat" }),
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
@@ -51,6 +54,41 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   }, [messages]);
 
   const isStreaming = status === "submitted" || status === "streaming";
+  // The transport surfaces non-2xx bodies as the error message, so the route's
+  // 429 body ({"error":"Too many requests"}) is detectable here.
+  const isRateLimited = error?.message.includes("Too many requests") ?? false;
+
+  function scrollToBottom(behavior: ScrollBehavior = "smooth") {
+    const el = scrollRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior });
+  }
+
+  // Land at the latest message when the panel (re)opens.
+  useEffect(() => {
+    scrollToBottom("instant");
+  }, []);
+
+  // Follow new content while pinned to the bottom; otherwise offer a jump pill.
+  useEffect(() => {
+    if (pinnedRef.current) scrollToBottom();
+    else setShowJump(true);
+  }, [messages, status, error]);
+
+  function handleScroll() {
+    const el = scrollRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+    pinnedRef.current = atBottom;
+    if (atBottom) setShowJump(false);
+  }
+
+  // Abort any in-flight stream when the panel unmounts (e.g. closed mid-reply).
+  // stop() is a no-op when the chat is idle.
+  useEffect(() => {
+    return () => {
+      void stop();
+    };
+  }, [stop]);
 
   function handleSend(text: string) {
     if (!text.trim()) return;
@@ -58,6 +96,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   }
 
   function submitDraft() {
+    if (isStreaming) return; // no sends mid-stream; the button is a stop control
     handleSend(draft);
     setDraft("");
     if (textareaRef.current) textareaRef.current.style.height = "auto";
@@ -112,23 +151,67 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 space-y-3.5 overflow-y-auto px-[18px] py-[18px]">
-        {messages.map((message) => (
-          <ChatMessageBubble key={message.id} message={message} />
-        ))}
+      <div className="relative flex-1 overflow-hidden">
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="h-full space-y-3.5 overflow-y-auto px-[18px] py-[18px]"
+        >
+          {messages.map((message) => (
+            <ChatMessageBubble key={message.id} message={message} />
+          ))}
 
-        {messages.length === 0 && (
-          <ChatEmptyState mode={wasReset ? "reset" : "initial"} onSelect={handleSend} />
-        )}
+          {messages.length === 0 && (
+            <ChatEmptyState mode={wasReset ? "reset" : "initial"} onSelect={handleSend} />
+          )}
 
-        {isStreaming && (
-          <div className="flex justify-start">
-            <div className="flex items-center gap-1 rounded-2xl bg-brand-cream px-4 py-3 dark:bg-brand-light-gray/10">
-              <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0s]" />
-              <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.15s]" />
-              <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.3s]" />
+          {isStreaming && (
+            <div className="flex justify-start">
+              <div className="flex items-center gap-1 rounded-2xl bg-brand-cream px-4 py-3 dark:bg-brand-light-gray/10">
+                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0s]" />
+                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.15s]" />
+                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.3s]" />
+              </div>
             </div>
-          </div>
+          )}
+
+          {error && !isStreaming && (
+            <BubbleShell isUser={false}>
+              {isRateLimited ? (
+                <span>
+                  {"You're sending messages quickly — give it a few seconds and try again."}
+                </span>
+              ) : (
+                <>
+                  <span>
+                    {"Something went wrong on my end — try again, or email joseph@revauri.com."}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => regenerate()}
+                    className="mt-2 block rounded-full bg-brand-orange px-3.5 py-1.5 text-xs font-semibold text-white transition-all hover:brightness-[1.04] active:scale-[0.95] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                  >
+                    Retry
+                  </button>
+                </>
+              )}
+            </BubbleShell>
+          )}
+        </div>
+
+        {showJump && (
+          <button
+            type="button"
+            onClick={() => {
+              pinnedRef.current = true;
+              setShowJump(false);
+              scrollToBottom();
+            }}
+            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-dark px-3.5 py-1.5 text-xs font-semibold text-brand-cream shadow-md transition-all hover:brightness-110 active:scale-[0.95] dark:bg-brand-cream dark:text-brand-dark"
+          >
+            <ArrowDown className="h-3.5 w-3.5" />
+            Jump to latest
+          </button>
         )}
       </div>
 
@@ -152,12 +235,24 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
             style={{ maxHeight: TEXTAREA_MAX_HEIGHT }}
             className="flex-1 resize-none overflow-y-auto bg-transparent text-sm text-brand-dark placeholder:text-brand-mid-gray focus:outline-none dark:text-brand-cream"
           />
-          <button
-            type="submit"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-          >
-            <ArrowUp className="h-4 w-4" />
-          </button>
+          {isStreaming ? (
+            <button
+              type="button"
+              onClick={() => stop()}
+              aria-label="Stop generating"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+            >
+              <Square className="h-3.5 w-3.5 fill-current" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              aria-label="Send message"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+            >
+              <ArrowUp className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </form>
     </div>

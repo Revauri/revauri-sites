@@ -95,9 +95,14 @@ export function ChatMessageBubble({ message }: { message: UIMessage }) {
       p.type === "tool-get_project_highlight" && "state" in p && p.state === "output-available",
   );
 
+  // Tool-only turns (e.g. a bare capture_lead call) have nothing to show —
+  // rendering the shell anyway would produce an empty bubble.
+  if (!text && !highlightPart) return null;
+
   return (
     <BubbleShell isUser={isUser}>
-      {renderInlineContent(text)}
+      {/* Linkify assistant replies only — user-typed text stays plain. */}
+      {isUser ? text : renderInlineContent(text)}
       {highlightPart && <HighlightCard {...highlightPart.output} />}
     </BubbleShell>
   );
