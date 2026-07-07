@@ -8,55 +8,26 @@ export const captureLeadInputSchema = z.object({
   projectDetails: z.string(),
 });
 
-// FormSubmit.co blocks both server-side fetches (Cloudflare bot challenge) and
-// cross-origin browser fetches (no CORS allow-origin for AJAX mode) for this account.
-// A real <form> POST is subject to neither restriction — it's the same mechanism
-// app/contact/contact-content.tsx already uses successfully in production — so this
-// submits via a hidden iframe-targeted form instead of fetch. There is no readable
-// response (cross-origin), so this is fire-and-forget, matching the /contact form's
-// existing reliability profile.
-export function submitLead(input: z.infer<typeof captureLeadInputSchema>): Promise<{ success: boolean }> {
-  const { name, email, company, projectDetails } = input;
-
-  return new Promise((resolve) => {
-    const iframeName = `lead-capture-${Date.now()}`;
-    const iframe = document.createElement("iframe");
-    iframe.name = iframeName;
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "https://formsubmit.co/joseph@revauri.com";
-    form.target = iframeName;
-    form.style.display = "none";
-
-    const fields: Record<string, string> = {
-      name,
-      email,
-      company: company ?? "",
-      message: `[Submitted via chatbot]\n\n${projectDetails}`,
-      _subject: "New chatbot lead from revauri.com",
-      _template: "table",
-      _captcha: "false",
-    };
-    for (const [key, value] of Object.entries(fields)) {
-      const field = document.createElement("input");
-      field.type = "hidden";
-      field.name = key;
-      field.value = value;
-      form.appendChild(field);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(() => {
-      form.remove();
-      iframe.remove();
-      resolve({ success: true });
-    }, 2000);
-  });
+// Runs in the browser: posts the lead to our own /api/lead route, which
+// delivers it server-side and returns a real { success } — so the tool result
+// fed back to the model reflects whether delivery actually happened (see
+// app/api/lead/route.ts). Replaces the old fire-and-forget iframe form hack
+// that always claimed success.
+export async function submitLead(
+  input: z.infer<typeof captureLeadInputSchema>,
+): Promise<{ success: boolean }> {
+  try {
+    const res = await fetch("/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (!res.ok) return { success: false };
+    const data = (await res.json()) as { success?: boolean };
+    return { success: data.success === true };
+  } catch {
+    return { success: false };
+  }
 }
 
 // No `execute` — this makes it a client-side tool. The model emits a tool call,
