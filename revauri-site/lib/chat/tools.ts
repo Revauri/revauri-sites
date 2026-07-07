@@ -1,5 +1,7 @@
 import { tool } from "ai";
 import { z } from "zod";
+import { getBookingSlots } from "@/lib/chat/calendly";
+import { getProjectBySlug } from "@/lib/portfolio-data";
 
 export const captureLeadInputSchema = z.object({
   name: z.string(),
@@ -89,4 +91,54 @@ export const getProjectHighlight = tool({
     "visitor asks about cost, budget, or pricing.",
   inputSchema: getProjectHighlightInputSchema,
   execute: async ({ topic }) => PROJECT_HIGHLIGHTS[topic],
+});
+
+// Server-side tool: fetches live availability from Calendly and renders an
+// inline booking card. Degrades to a fallback "Book a call" card on any
+// failure (see lib/chat/calendly.ts) — the model never sees an error.
+export const offerBooking = tool({
+  description:
+    "Show an inline booking card with real available times for the free 15-minute strategy call. " +
+    "Call this when the visitor wants to book, asks about the call, or shows strong buying intent " +
+    "(asking how to start, pricing, process, or timeline for their own project).",
+  inputSchema: z.object({}),
+  execute: async () => getBookingSlots(),
+});
+
+export const showPortfolioInputSchema = z.object({
+  slugs: z
+    .array(z.enum(["ultaura", "lion-law", "cryptrac"]))
+    .min(1)
+    .max(2)
+    .describe("The one or two most relevant projects to show."),
+});
+
+// Server-side tool: renders rich portfolio cards from the real PROJECTS data
+// (lib/portfolio-data.ts) — nothing invented.
+export const showPortfolio = tool({
+  description:
+    "Show rich visual cards for Revauri portfolio projects. Call this instead of describing " +
+    "projects in text whenever the visitor asks about past work, examples, or a specific project. " +
+    "Pick the 1-2 most relevant: ultaura (AI / healthcare tech), lion-law (legal / professional " +
+    "services), cryptrac (fintech / SaaS).",
+  inputSchema: showPortfolioInputSchema,
+  execute: async ({ slugs }) => ({
+    projects: slugs.flatMap((slug) => {
+      const project = getProjectBySlug(slug);
+      if (!project) return [];
+      return [
+        {
+          slug: project.slug,
+          name: project.name,
+          tagline: project.tagline,
+          industry: project.industry,
+          imageSrc: project.heroImage.src,
+          imageAlt: project.heroImage.alt,
+          imageWidth: project.heroImage.width,
+          imageHeight: project.heroImage.height,
+          href: `/portfolio/${project.slug}`,
+        },
+      ];
+    }),
+  }),
 });

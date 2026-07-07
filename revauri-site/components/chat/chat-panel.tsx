@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
 import { ArrowDown, ArrowUp, RotateCcw, Square, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
 import { ChatEmptyState } from "@/components/chat/chat-empty-state";
-import { captureLeadInputSchema, submitLead } from "@/lib/chat/tools";
+import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
 
 const PANEL_CARD_CLASS =
   "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px]";
@@ -33,17 +34,37 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true); // whether the view is stuck to the newest message
   const [showJump, setShowJump] = useState(false);
-  const { messages, sendMessage, setMessages, status, stop, addToolResult, error, regenerate } = useChat({
+  const pathname = usePathname();
+  // The panel stays mounted across client navigations, so the transport reads
+  // the pathname from a ref at send time — each request carries the page the
+  // visitor is actually on (see prepareSendMessagesRequest below).
+  const pathnameRef = useRef(pathname);
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
+  const [transport] = useState(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        prepareSendMessagesRequest: ({ id, messages, body, trigger, messageId }) => ({
+          body: { ...body, id, messages, trigger, messageId, pathname: pathnameRef.current },
+        }),
+      }),
+  );
+  const { messages, sendMessage, setMessages, status, stop, addToolOutput, error, regenerate } = useChat({
     messages: initialMessages,
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    async onToolCall({ toolCall }) {
-      if (toolCall.toolName !== "capture_lead") return;
-      const input = captureLeadInputSchema.parse(toolCall.input);
-      const output = await submitLead(input);
-      addToolResult({ tool: "capture_lead", toolCallId: toolCall.toolCallId, output });
-    },
   });
+
+  // Resolves a pending capture_lead confirmation card with the real /api/lead
+  // result; sendAutomaticallyWhen then triggers Rev's follow-up. Works for
+  // cards restored from sessionStorage too, as long as they sit on the last
+  // message (the SDK only attaches outputs there — earlier pending cards
+  // render as expired).
+  function handleLeadResolve(toolCallId: string, output: LeadToolOutput) {
+    addToolOutput({ tool: "capture_lead", toolCallId, output });
+  }
 
   useEffect(() => {
     try {
@@ -157,12 +178,21 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
           onScroll={handleScroll}
           className="h-full space-y-3.5 overflow-y-auto px-[18px] py-[18px]"
         >
-          {messages.map((message) => (
-            <ChatMessageBubble key={message.id} message={message} />
+          {messages.map((message, index) => (
+            <ChatMessageBubble
+              key={message.id}
+              message={message}
+              isLastMessage={index === messages.length - 1}
+              onLeadResolve={handleLeadResolve}
+            />
           ))}
 
           {messages.length === 0 && (
-            <ChatEmptyState mode={wasReset ? "reset" : "initial"} onSelect={handleSend} />
+            <ChatEmptyState
+              mode={wasReset ? "reset" : "initial"}
+              pathname={pathname}
+              onSelect={handleSend}
+            />
           )}
 
           {isStreaming && (

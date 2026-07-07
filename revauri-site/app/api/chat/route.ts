@@ -9,9 +9,10 @@ import {
 import { z } from "zod";
 import { CHAT_MODEL, openrouter } from "@/lib/chat/openrouter";
 import { SYSTEM_PROMPT } from "@/lib/chat/system-prompt";
+import { getPageContext } from "@/lib/chat/page-context";
 import { checkRateLimit } from "@/lib/chat/rate-limit";
 import { isSameOrigin } from "@/lib/chat/same-origin";
-import { captureLead, getProjectHighlight } from "@/lib/chat/tools";
+import { captureLead, getProjectHighlight, offerBooking, showPortfolio } from "@/lib/chat/tools";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -32,7 +33,12 @@ const partSchema = z.union([
   z.looseObject({ type: z.literal("step-start") }),
   z
     .looseObject({
-      type: z.enum(["tool-capture_lead", "tool-get_project_highlight"]),
+      type: z.enum([
+        "tool-capture_lead",
+        "tool-get_project_highlight",
+        "tool-offer_booking",
+        "tool-show_portfolio",
+      ]),
       output: z.unknown().optional(),
     })
     .refine((part) => JSON.stringify(part.output ?? null).length <= MAX_TOOL_OUTPUT_CHARS, {
@@ -47,6 +53,8 @@ const bodySchema = z.looseObject({
       parts: z.array(partSchema),
     }),
   ),
+  // Current page path, sent by the client for page-aware answers.
+  pathname: z.string().max(200).optional(),
 });
 
 function jsonError(error: string, status: number) {
@@ -96,11 +104,24 @@ export async function POST(req: Request) {
     return createUIMessageStreamResponse({ stream });
   }
 
+  const pageContext = parsed.data.pathname ? getPageContext(parsed.data.pathname) : undefined;
+  const system = pageContext
+    ? `${SYSTEM_PROMPT}\n\nVISITOR CONTEXT: the visitor is currently on ${pageContext}. Tailor your answers accordingly; do not announce that you can see their page.`
+    : SYSTEM_PROMPT;
+
   const result = streamText({
     model: openrouter(CHAT_MODEL),
-    system: SYSTEM_PROMPT,
-    messages: await convertToModelMessages(messages),
-    tools: { capture_lead: captureLead, get_project_highlight: getProjectHighlight },
+    system,
+    // ignoreIncompleteToolCalls: a capture_lead confirmation card can still be
+    // pending (input-available, no output) when the visitor types a new
+    // message — drop those parts instead of sending a dangling tool call.
+    messages: await convertToModelMessages(messages, { ignoreIncompleteToolCalls: true }),
+    tools: {
+      capture_lead: captureLead,
+      get_project_highlight: getProjectHighlight,
+      offer_booking: offerBooking,
+      show_portfolio: showPortfolio,
+    },
     stopWhen: stepCountIs(4),
     maxOutputTokens: 700,
   });

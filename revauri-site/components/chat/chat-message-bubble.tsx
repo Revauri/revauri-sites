@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
 import type { UIMessage } from "ai";
 import { HighlightCard, type HighlightCardProps } from "@/components/chat/highlight-card";
+import { BookingCard, type BookingCardProps } from "@/components/chat/booking-card";
+import { PortfolioCard, type PortfolioCardData } from "@/components/chat/portfolio-card";
+import {
+  LeadConfirmationCard,
+  LeadResolvedCard,
+  type LeadProposedInput,
+  type LeadToolOutput,
+} from "@/components/chat/lead-confirmation-card";
 
 const LINK_CLASS =
   "text-brand-orange underline underline-offset-2 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
@@ -87,23 +95,94 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   );
 }
 
-export function ChatMessageBubble({ message }: { message: UIMessage }) {
+type ToolPart = Extract<UIMessage["parts"][number], { type: `tool-${string}` }>;
+
+export function ChatMessageBubble({
+  message,
+  isLastMessage = false,
+  onLeadResolve,
+}: {
+  message: UIMessage;
+  isLastMessage?: boolean;
+  // Resolves a pending capture_lead tool call (wired to addToolOutput). The
+  // SDK only attaches tool outputs to the last message, so pending cards on
+  // earlier messages render in an expired state instead.
+  onLeadResolve?: (toolCallId: string, output: LeadToolOutput) => void;
+}) {
   const isUser = message.role === "user";
   const text = getMessageText(message);
   const highlightPart = message.parts.find(
     (p): p is (typeof message.parts)[number] & { output: HighlightCardProps } =>
       p.type === "tool-get_project_highlight" && "state" in p && p.state === "output-available",
   );
+  const bookingPart = message.parts.find(
+    (p): p is ToolPart => p.type === "tool-offer_booking" && "state" in p,
+  );
+  const portfolioPart = message.parts.find(
+    (p): p is ToolPart & { output: { projects: PortfolioCardData[] } } =>
+      p.type === "tool-show_portfolio" && "state" in p && p.state === "output-available",
+  );
+  const leadPart = message.parts.find(
+    (p): p is ToolPart => p.type === "tool-capture_lead" && "state" in p,
+  );
 
-  // Tool-only turns (e.g. a bare capture_lead call) have nothing to show —
-  // rendering the shell anyway would produce an empty bubble.
-  if (!text && !highlightPart) return null;
-
-  return (
+  const bubble = (text || highlightPart) && (
     <BubbleShell isUser={isUser}>
       {/* Linkify assistant replies only — user-typed text stays plain. */}
       {isUser ? text : renderInlineContent(text)}
       {highlightPart && <HighlightCard {...highlightPart.output} />}
     </BubbleShell>
+  );
+
+  const cards: ReactNode[] = [];
+
+  if (bookingPart) {
+    if (bookingPart.state === "output-available") {
+      cards.push(<BookingCard key="booking" {...(bookingPart.output as BookingCardProps)} />);
+    } else if (bookingPart.state !== "output-error") {
+      // Live availability is being fetched server-side — show a skeleton.
+      cards.push(
+        <div
+          key="booking-skeleton"
+          className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
+        />,
+      );
+    }
+  }
+
+  if (portfolioPart) {
+    for (const project of portfolioPart.output.projects) {
+      cards.push(<PortfolioCard key={project.slug} project={project} />);
+    }
+  }
+
+  if (leadPart) {
+    if (leadPart.state === "input-available") {
+      cards.push(
+        <LeadConfirmationCard
+          key={leadPart.toolCallId}
+          proposed={(leadPart.input ?? {}) as LeadProposedInput}
+          expired={!isLastMessage || !onLeadResolve}
+          onResolve={(output) => onLeadResolve?.(leadPart.toolCallId, output)}
+        />,
+      );
+    } else if (leadPart.state === "output-available") {
+      cards.push(
+        <LeadResolvedCard key={leadPart.toolCallId} output={leadPart.output as LeadToolOutput} />,
+      );
+    } else if (leadPart.state === "output-error") {
+      cards.push(<LeadResolvedCard key={leadPart.toolCallId} output={{ success: false }} />);
+    }
+  }
+
+  // Tool-only turns with nothing renderable (e.g. a still-streaming tool
+  // input) would otherwise produce an empty bubble.
+  if (!bubble && cards.length === 0) return null;
+
+  return (
+    <div className="space-y-2.5">
+      {bubble}
+      {cards}
+    </div>
   );
 }
