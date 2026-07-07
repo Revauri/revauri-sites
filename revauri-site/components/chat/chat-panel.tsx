@@ -26,11 +26,32 @@ function loadStoredMessages(): UIMessage[] | undefined {
   }
 }
 
+// Mirrors what ChatMessageBubble renders, so the typing dots disappear the
+// moment the reply shows anything — first text token or a card/skeleton.
+function hasVisibleContent(message: UIMessage) {
+  return message.parts.some((part) => {
+    if (part.type === "text") return part.text.length > 0;
+    if (!("state" in part)) return false;
+    switch (part.type) {
+      case "tool-offer_booking":
+        return part.state !== "output-error"; // skeleton renders before output
+      case "tool-capture_lead":
+        return part.state !== "input-streaming";
+      case "tool-get_project_highlight":
+      case "tool-show_portfolio":
+        return part.state === "output-available";
+      default:
+        return false;
+    }
+  });
+}
+
 export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true); // whether the view is stuck to the newest message
   const [showJump, setShowJump] = useState(false);
@@ -75,6 +96,11 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   }, [messages]);
 
   const isStreaming = status === "submitted" || status === "streaming";
+  const lastMessage = messages[messages.length - 1];
+  const showTypingDots =
+    status === "submitted" ||
+    (status === "streaming" &&
+      !(lastMessage?.role === "assistant" && hasVisibleContent(lastMessage)));
   // The transport surfaces non-2xx bodies as the error message, so the route's
   // 429 body ({"error":"Too many requests"}) is detectable here.
   const isRateLimited = error?.message.includes("Too many requests") ?? false;
@@ -84,10 +110,31 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     if (el) el.scrollTo({ top: el.scrollHeight, behavior });
   }
 
-  // Land at the latest message when the panel (re)opens.
+  // Land at the latest message and move focus into the panel when it opens.
   useEffect(() => {
     scrollToBottom("instant");
+    textareaRef.current?.focus({ preventScroll: true });
   }, []);
+
+  // On small screens the panel is fullscreen (fixed inset-0), so keep Tab and
+  // Shift+Tab cycling inside it. Desktop keeps normal tab order — the page
+  // behind the floating panel stays interactive there.
+  function handlePanelKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.key !== "Tab" || window.matchMedia("(min-width: 640px)").matches) return;
+    const focusables = panelRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea, input, [tabindex]:not([tabindex="-1"])',
+    );
+    if (!focusables?.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 
   // Follow new content while pinned to the bottom; otherwise offer a jump pill.
   useEffect(() => {
@@ -148,11 +195,18 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
+      ref={panelRef}
+      onKeyDown={handlePanelKeyDown}
       className={`flex h-full w-full flex-col overflow-hidden sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[18px] pb-3.5 dark:border-brand-mid-gray/20">
-        <Logo />
+        <div>
+          <Logo />
+          <p className="mt-0.5 text-[10px] leading-tight text-brand-mid-gray">
+            Rev · AI assistant — replies are automated.
+          </p>
+        </div>
         <div className="flex items-center gap-1">
           <button
             onClick={handleReset}
@@ -176,6 +230,9 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
+          role="log"
+          aria-live="polite"
+          aria-label="Conversation with Rev"
           className="h-full space-y-3.5 overflow-y-auto px-[18px] py-[18px]"
         >
           {messages.map((message, index) => (
@@ -195,12 +252,13 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
             />
           )}
 
-          {isStreaming && (
+          {showTypingDots && (
             <div className="flex justify-start">
               <div className="flex items-center gap-1 rounded-2xl bg-brand-cream px-4 py-3 dark:bg-brand-light-gray/10">
-                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0s]" />
-                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.15s]" />
-                <span className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.3s]" />
+                <span className="sr-only">Rev is typing…</span>
+                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0s]" />
+                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.15s]" />
+                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.3s]" />
               </div>
             </div>
           )}
@@ -261,9 +319,11 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
             }}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
+            aria-label="Message Rev"
             rows={1}
             style={{ maxHeight: TEXTAREA_MAX_HEIGHT }}
-            className="flex-1 resize-none overflow-y-auto bg-transparent text-sm text-brand-dark placeholder:text-brand-mid-gray focus:outline-none dark:text-brand-cream"
+            // text-base at mobile widths — anything under 16px makes iOS zoom on focus
+            className="flex-1 resize-none overflow-y-auto bg-transparent text-base text-brand-dark placeholder:text-brand-mid-gray focus:outline-none sm:text-sm dark:text-brand-cream"
           />
           {isStreaming ? (
             <button
@@ -278,7 +338,8 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
             <button
               type="submit"
               aria-label="Send message"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              disabled={!draft.trim()}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
             >
               <ArrowUp className="h-4 w-4" />
             </button>

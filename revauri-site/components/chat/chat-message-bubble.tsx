@@ -1,5 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { UIMessage } from "ai";
+import { motion, useReducedMotion } from "framer-motion";
 import { HighlightCard, type HighlightCardProps } from "@/components/chat/highlight-card";
 import { BookingCard, type BookingCardProps } from "@/components/chat/booking-card";
 import { PortfolioCard, type PortfolioCardData } from "@/components/chat/portfolio-card";
@@ -109,6 +112,7 @@ export function ChatMessageBubble({
   // earlier messages render in an expired state instead.
   onLeadResolve?: (toolCallId: string, output: LeadToolOutput) => void;
 }) {
+  const reducedMotion = useReducedMotion();
   const isUser = message.role === "user";
   const text = getMessageText(message);
   const highlightPart = message.parts.find(
@@ -180,9 +184,15 @@ export function ChatMessageBubble({
   if (!bubble && cards.length === 0) return null;
 
   return (
-    <div className="space-y-2.5">
+    // Subtle fade + rise on entry, matching the panel's easing (chat-widget.tsx).
+    <motion.div
+      initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      className="space-y-2.5"
+    >
       {bubble}
       {cards}
-    </div>
+    </motion.div>
   );
 }
