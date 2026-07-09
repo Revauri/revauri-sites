@@ -8,7 +8,9 @@
 const API_BASE = "https://api.calendly.com";
 // The event type embedded on /book (see components/booking.tsx).
 const EVENT_SCHEDULING_URL = "https://calendly.com/joseph-revauri/website-strategy-call";
-const FETCH_TIMEOUT_MS = 5_000;
+// Calendly can take a few seconds under load; 8s still fits inside the route's
+// 30s budget with room for the model call.
+const FETCH_TIMEOUT_MS = 8_000;
 const AVAILABILITY_CACHE_MS = 60_000;
 const MAX_SLOTS = 4;
 
@@ -29,8 +31,20 @@ async function calendlyGet(path: string, token: string): Promise<unknown> {
     headers: { Authorization: `Bearer ${token}` },
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
-  if (!res.ok) throw new Error(`Calendly responded ${res.status} for ${path}`);
+  if (!res.ok) {
+    // The body pinpoints why (bad token, wrong param, etc.); cap it so a
+    // surprise HTML error page can't flood the logs.
+    const body = (await res.text().catch(() => "")).slice(0, 300);
+    throw new Error(`Calendly responded ${res.status} for ${path}: ${body}`);
+  }
   return res.json();
+}
+
+// Trailing-slash- and case-insensitive compare, so a cosmetic difference in
+// how Calendly reports the scheduling URL can't break the match.
+function schedulingUrlsEqual(a: string | undefined, b: string): boolean {
+  if (typeof a !== "string") return false;
+  return a.replace(/\/+$/, "").toLowerCase() === b.replace(/\/+$/, "").toLowerCase();
 }
 
 async function resolveEventTypeUri(token: string): Promise<string> {
@@ -40,15 +54,26 @@ async function resolveEventTypeUri(token: string): Promise<string> {
   const userUri = me.resource?.uri;
   if (!userUri) throw new Error("Calendly /users/me returned no user URI");
 
+  // count=100 (the API max) so the match can't be lost to pagination on
+  // accounts with more than the default 20 event types.
   const eventTypes = (await calendlyGet(
-    `/event_types?user=${encodeURIComponent(userUri)}`,
+    `/event_types?user=${encodeURIComponent(userUri)}&count=100`,
     token,
   )) as { collection?: Array<{ uri?: string; scheduling_url?: string }> };
 
-  const match = eventTypes.collection?.find(
-    (et) => et.scheduling_url === EVENT_SCHEDULING_URL,
+  const match = eventTypes.collection?.find((et) =>
+    schedulingUrlsEqual(et.scheduling_url, EVENT_SCHEDULING_URL),
   );
-  if (!match?.uri) throw new Error("Strategy-call event type not found on Calendly account");
+  if (!match?.uri) {
+    // Scheduling URLs are public; logging them shows at a glance whether the
+    // token belongs to the wrong account or the event slug changed.
+    throw new Error(
+      `Strategy-call event type not found on Calendly account. Expected ${EVENT_SCHEDULING_URL}, ` +
+        `account has: ${(eventTypes.collection ?? [])
+          .map((et) => et.scheduling_url)
+          .join(", ") || "(no event types)"}`,
+    );
+  }
 
   cachedEventTypeUri = match.uri;
   return match.uri;
@@ -83,7 +108,10 @@ function pickSpreadSlots(slots: BookingSlot[]): BookingSlot[] {
 
 export async function getBookingSlots(): Promise<BookingSlotsResult> {
   const token = process.env.CALENDLY_TOKEN;
-  if (!token) return { fallback: true };
+  if (!token) {
+    console.error("[calendly] CALENDLY_TOKEN is not set on this deployment — using fallback card");
+    return { fallback: true };
+  }
 
   const now = Date.now();
   if (cachedAvailability && now - cachedAvailability.fetchedAt < AVAILABILITY_CACHE_MS) {
@@ -117,9 +145,18 @@ export async function getBookingSlots(): Promise<BookingSlotsResult> {
 
     const slots = pickSpreadSlots(available);
     cachedAvailability = { slots, fetchedAt: now };
-    return slots.length > 0 ? { slots } : { fallback: true };
-  } catch {
-    // Missing/bad token, timeout, or an API change — degrade to the /book link.
+    if (slots.length === 0) {
+      console.error(
+        `[calendly] API reachable but no available slots in the next 7 days ` +
+          `(${data.collection?.length ?? 0} raw entries) — using fallback card`,
+      );
+      return { fallback: true };
+    }
+    return { slots };
+  } catch (err) {
+    // Bad token, timeout, missing event type, or an API change — degrade to
+    // the /book link, but leave the reason in the function logs.
+    console.error("[calendly] failed to fetch booking slots — using fallback card", err);
     return { fallback: true };
   }
 }

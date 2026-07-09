@@ -19,7 +19,10 @@ export const maxDuration = 30;
 
 const MAX_MESSAGES = 30;
 const MAX_BODY_CHARS = 100_000; // ~100 KB
-const MAX_TEXT_PART_CHARS = 2_000;
+// Must accept anything we ourselves stream: at 700 output tokens an assistant
+// reply can exceed 2,000 chars, and the client round-trips it verbatim — a
+// tighter cap would 400 every request after one long reply.
+const MAX_TEXT_PART_CHARS = 4_000;
 const MAX_TOOL_OUTPUT_CHARS = 4_000;
 const CONTINUE_BY_EMAIL_MESSAGE =
   "We've covered a lot here — let's continue this conversation by email so we don't lose any details. Reach out to joseph@revauri.com and we'll pick up right where we left off.";
@@ -30,6 +33,10 @@ const CONTINUE_BY_EMAIL_MESSAGE =
 // cryptographic anti-forgery.
 const partSchema = z.union([
   z.looseObject({ type: z.literal("text"), text: z.string().max(MAX_TEXT_PART_CHARS) }),
+  // Reasoning parts can appear in histories saved while a reasoning-capable
+  // model streamed them; accept them here (the provider adapter drops them on
+  // the way to the model) so those conversations don't 400 forever.
+  z.looseObject({ type: z.literal("reasoning"), text: z.string().max(MAX_TEXT_PART_CHARS) }),
   z.looseObject({ type: z.literal("step-start") }),
   z
     .looseObject({
@@ -87,6 +94,8 @@ export async function POST(req: Request) {
 
   const parsed = bodySchema.safeParse(body);
   if (!parsed.success) {
+    // Issues carry paths and expected shapes, not message content.
+    console.error("[chat] validation failed", JSON.stringify(parsed.error.issues));
     return jsonError("Invalid request", 400);
   }
 
@@ -110,7 +119,12 @@ export async function POST(req: Request) {
     : SYSTEM_PROMPT;
 
   const result = streamText({
-    model: openrouter(CHAT_MODEL),
+    // .chat() pins the OpenAI-compatible chat-completions endpoint. The bare
+    // provider default is OpenAI's Responses API, which serializes prior
+    // assistant turns as item_reference stubs pointing at OpenAI-hosted state —
+    // OpenRouter is stateless, so every request after the first tool call
+    // failed. Fresh conversations worked, which is why this slipped through.
+    model: openrouter.chat(CHAT_MODEL),
     system,
     // ignoreIncompleteToolCalls: a capture_lead confirmation card can still be
     // pending (input-available, no output) when the visitor types a new
@@ -126,5 +140,12 @@ export async function POST(req: Request) {
     maxOutputTokens: 700,
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse({
+    // Keep the client-facing message generic, but leave the real provider
+    // error (model errors, upstream 4xx/5xx) in the function logs.
+    onError: (error) => {
+      console.error("[chat] stream error", error);
+      return "An error occurred.";
+    },
+  });
 }
