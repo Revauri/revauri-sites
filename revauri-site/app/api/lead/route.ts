@@ -15,8 +15,12 @@ const leadSchema = z.object({
 });
 
 // Delivers chatbot leads to joseph@revauri.com via Web3Forms (free tier, JSON
-// API built for server-side calls) and returns a real { success } — unlike the
-// old fire-and-forget iframe hack this replaced. FormSubmit is not usable here:
+// API) and returns a real { success } — unlike the old fire-and-forget iframe
+// hack this replaced. Caveat per Web3Forms' troubleshooting docs: their API is
+// meant to be called from the browser, and server-side calls (like this Vercel
+// function) can be rejected unless the account is on a paid plan with the
+// server IP safelisted — if that happens, the "[lead] Web3Forms responded"
+// log below will show the rejection. FormSubmit is not usable here:
 // its Cloudflare bot challenge blocks server-side fetches for this account
 // (previously documented in lib/chat/tools.ts), and its AJAX mode has no CORS
 // allow-origin for browser calls either. Without WEB3FORMS_KEY set, the route
@@ -51,7 +55,9 @@ export async function POST(req: Request) {
 
   const accessKey = process.env.WEB3FORMS_KEY;
   if (!accessKey) {
-    console.error("WEB3FORMS_KEY is not set — chatbot lead could not be delivered");
+    console.error(
+      "[lead] WEB3FORMS_KEY is not set on this deployment — chatbot lead could not be delivered",
+    );
     return Response.json({ success: false });
   }
 
@@ -71,10 +77,19 @@ export async function POST(req: Request) {
       }),
       signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
     });
-    const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
-    return Response.json({ success: res.ok && data?.success === true });
-  } catch {
+    const data = (await res.json().catch(() => null)) as
+      | { success?: boolean; message?: string }
+      | null;
+    const success = res.ok && data?.success === true;
+    if (!success) {
+      console.error(
+        `[lead] Web3Forms responded ${res.status}: ${JSON.stringify(data).slice(0, 300)}`,
+      );
+    }
+    return Response.json({ success });
+  } catch (err) {
     // Network failure or timeout — report honestly so Rev never claims success.
+    console.error("[lead] Web3Forms request failed (network error or timeout)", err);
     return Response.json({ success: false });
   }
 }

@@ -24,6 +24,41 @@ export type LeadProposedInput = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Rev is told to leave unknown capture_lead fields empty, but models still
+// sometimes fill them with placeholder junk ("[pending]", "unknown", "TBD").
+// Treat those as blank so the visitor sees empty labeled fields instead of
+// fake text to delete. Genuinely provided values pass through untouched.
+const PLACEHOLDER_PATTERN = new RegExp(
+  "^(?:" +
+    [
+      "[\\[<{(].*[\\]>})]", // bracketed: [pending], <your name>, (unknown)
+      "pending",
+      "unknown",
+      "tbd",
+      "n\\/?a",
+      "none",
+      "null",
+      "undefined",
+      "not (?:provided|specified|given|available|known)(?: yet)?",
+      "x{2,}",
+      "-+",
+      "\\.+",
+      "\\?+",
+      "your (?:full )?name",
+      "your e-?mail(?: address)?",
+      "your company(?: name)?",
+      "(?:name|email|user|your\\.?email)@(?:example|company|email|domain)\\.[a-z]+",
+      "you@company\\.com",
+    ].join("|") +
+    ")$",
+  "i",
+);
+
+function sanitizeProposed(value: string | undefined): string {
+  const trimmed = value?.trim() ?? "";
+  return PLACEHOLDER_PATTERN.test(trimmed) ? "" : trimmed;
+}
+
 const CARD_CLASS =
   "flex flex-col gap-2 rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] p-3 dark:border-brand-orange/30 dark:bg-brand-orange/10";
 
@@ -33,7 +68,7 @@ const FIELD_CLASS =
 const LABEL_CLASS = "text-[10px] font-semibold uppercase tracking-wide text-brand-mid-gray";
 
 // Editable "confirm your details" card shown for a pending capture_lead tool
-// call. Nothing is sent until the visitor clicks "Send to Joseph" — the POST
+// call. Nothing is sent until the visitor clicks "Send inquiry" — the POST
 // goes to /api/lead and the real { success } result (plus the edited fields)
 // is fed back to the model via addToolOutput.
 export function LeadConfirmationCard({
@@ -47,10 +82,12 @@ export function LeadConfirmationCard({
   expired?: boolean;
   onResolve?: (output: LeadToolOutput) => void;
 }) {
-  const [name, setName] = useState(proposed.name ?? "");
-  const [email, setEmail] = useState(proposed.email ?? "");
-  const [company, setCompany] = useState(proposed.company ?? "");
-  const [projectDetails, setProjectDetails] = useState(proposed.projectDetails ?? "");
+  const [name, setName] = useState(() => sanitizeProposed(proposed.name));
+  const [email, setEmail] = useState(() => sanitizeProposed(proposed.email));
+  const [company, setCompany] = useState(() => sanitizeProposed(proposed.company));
+  const [projectDetails, setProjectDetails] = useState(() =>
+    sanitizeProposed(proposed.projectDetails),
+  );
   const [pending, setPending] = useState(false);
 
   const emailValid = EMAIL_PATTERN.test(email.trim());
@@ -135,7 +172,7 @@ export function LeadConfirmationCard({
             className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-3.5 py-2 text-xs font-semibold text-white transition-all hover:brightness-[1.04] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
           >
             {pending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-            {pending ? "Sending..." : "Send to Joseph"}
+            {pending ? "Sending..." : "Send inquiry"}
           </button>
           <button
             type="button"
@@ -159,13 +196,13 @@ export function LeadResolvedCard({ output }: { output: LeadToolOutput }) {
       {output.success ? (
         <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-dark dark:text-brand-cream">
           <Check className="h-3.5 w-3.5 text-brand-orange" />
-          Sent to Joseph
+          Inquiry sent
           {output.email && (
             <span className="font-normal text-brand-mid-gray">· {output.email}</span>
           )}
         </div>
       ) : (
-        <p className="text-xs text-brand-mid-gray">Not sent</p>
+        <p className="text-xs text-brand-mid-gray">Inquiry not sent</p>
       )}
     </div>
   );

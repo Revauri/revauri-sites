@@ -3,11 +3,20 @@ import { z } from "zod";
 import { getBookingSlots } from "@/lib/chat/calendly";
 import { getProjectBySlug } from "@/lib/portfolio-data";
 
+// All fields optional so the model is never forced to invent values it doesn't
+// have — unknown fields stay empty and the visitor completes them on the
+// confirmation card before anything is sent (see lead-confirmation-card.tsx).
 export const captureLeadInputSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  company: z.string().optional(),
-  projectDetails: z.string(),
+  name: z.string().optional().describe("The visitor's name. Leave empty if not yet provided."),
+  email: z.string().optional().describe("The visitor's email. Leave empty if not yet provided."),
+  company: z
+    .string()
+    .optional()
+    .describe("The visitor's company or business. Leave empty if not yet provided."),
+  projectDetails: z
+    .string()
+    .optional()
+    .describe("What the visitor is looking for, in their words. Leave empty if not yet provided."),
 });
 
 // Runs in the browser: posts the lead to our own /api/lead route, which
@@ -38,8 +47,10 @@ export async function submitLead(
 export const captureLead = tool({
   description:
     "Submit a qualified lead's contact info and project details to Revauri. " +
-    "Call this only once per conversation, and only after confirming with the visitor " +
-    "that you have their name, email, and enough project details to pass along.",
+    "Call this only once per conversation, once you know enough for a useful lead. " +
+    "Fill in only what the visitor actually provided and leave unknown fields empty — " +
+    "never invent placeholder values; the visitor reviews and completes the details " +
+    "on a confirmation card before anything is sent.",
   inputSchema: captureLeadInputSchema,
 });
 
