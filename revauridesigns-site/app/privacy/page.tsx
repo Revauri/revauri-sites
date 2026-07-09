@@ -90,7 +90,7 @@ export default function PrivacyPage() {
               <strong className="text-[#f8fafc]">Google Analytics</strong> — Website analytics (with IP anonymization enabled)
             </li>
             <li>
-              <strong className="text-[#f8fafc]">FormSubmit</strong> — Contact form processing
+              <strong className="text-[#f8fafc]">Web3Forms</strong> — Contact form processing
             </li>
           </ul>
           <p>

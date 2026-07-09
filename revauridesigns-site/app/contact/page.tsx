@@ -80,13 +80,13 @@ export default function ContactPage() {
                 Send a message
               </p>
               <form
-                action="https://formsubmit.co/e8937ece2f274b03e17ee90df2c0bda1"
+                action="https://api.web3forms.com/submit"
                 method="POST"
                 className="flex flex-col gap-5"
               >
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_subject" value="New inquiry from revauridesigns.com" />
-                <input type="hidden" name="_next" value="https://revauridesigns.com/contact" />
+                <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
+                <input type="hidden" name="subject" value="New inquiry from revauridesigns.com" />
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 
                 <div>
                   <label

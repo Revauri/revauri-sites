@@ -84,16 +84,15 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
               </div>
             ) : (
               <form
-                action="https://formsubmit.co/joseph@revauri.com"
+                action="https://api.web3forms.com/submit"
                 method="POST"
                 className={FORM_CARD_CLASS}
               >
-                {/* FormSubmit config */}
-                <input type="hidden" name="_next" value="https://revauri.com/contact?sent=true" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_subject" value="New message from revauri.com" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="text" name="_honey" style={{ display: "none" }} tabIndex={-1} />
+                {/* Web3Forms config */}
+                <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
+                <input type="hidden" name="redirect" value="https://revauri.com/contact?sent=true" />
+                <input type="hidden" name="subject" value="New message from revauri.com" />
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 
                 <div className="space-y-5">
                   <div>

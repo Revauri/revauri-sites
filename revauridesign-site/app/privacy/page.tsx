@@ -95,7 +95,7 @@ export default function PrivacyPage() {
             <strong>Vercel</strong> &mdash; Website hosting and performance infrastructure
           </li>
           <li>
-            <strong>FormSubmit</strong> &mdash; Contact form submissions (no account required)
+            <strong>Web3Forms</strong> &mdash; Contact form submissions (no account required)
           </li>
           <li>
             <strong>Google Analytics</strong> &mdash; Website analytics (with IP anonymization enabled, if used)

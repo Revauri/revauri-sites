@@ -93,15 +93,14 @@ export default function ContactPage() {
             {/* Right: contact form */}
             <div>
               <form
-                action="https://formsubmit.co/7c791bf58f1d28ca74e802ffc3598211"
+                action="https://api.web3forms.com/submit"
                 method="POST"
                 className="space-y-5"
               >
-                {/* FormSubmit config */}
-                <input type="hidden" name="_subject" value="New project inquiry — Revauri Design" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="text" name="_honey" className="hidden" />
+                {/* Web3Forms config */}
+                <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
+                <input type="hidden" name="subject" value="New project inquiry — Revauri Design" />
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-brand-dark">
