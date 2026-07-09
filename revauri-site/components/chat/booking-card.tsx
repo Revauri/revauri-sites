@@ -40,7 +40,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
           FREE STRATEGY CALL
         </span>
         <p className="text-xs text-brand-mid-gray">
-          15 minutes with Joseph — pick any time that works for you.
+          15 minutes with the Revauri team — pick any time that works for you.
         </p>
         <a
           href="/book"
@@ -57,7 +57,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
       <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-orange">
         FREE STRATEGY CALL
       </span>
-      <p className="text-xs text-brand-mid-gray">15 minutes with Joseph — grab a time:</p>
+      <p className="text-xs text-brand-mid-gray">15 minutes with the Revauri team — grab a time:</p>
       <div className="mt-0.5 flex flex-col gap-1.5">
         {labeled.map((slot) => (
           <a

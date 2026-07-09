@@ -4,7 +4,7 @@ import { getProjectBySlug } from "@/lib/portfolio-data";
 // VISITOR CONTEXT so Rev can tailor answers to where the visitor actually is.
 const STATIC_PAGE_CONTEXT: Record<string, string> = {
   "/": "the main landing page — services overview",
-  "/about": "the About page — Revauri's story and how Joseph works",
+  "/about": "the About page — Revauri's story and how the team works",
   "/book": "the booking page with the Calendly scheduler — they're one step from booking",
   "/contact": "the contact page with the message form",
   "/faq": "the FAQ page",
