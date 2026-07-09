@@ -68,8 +68,8 @@ const FIELD_CLASS =
 const LABEL_CLASS = "text-[10px] font-semibold uppercase tracking-wide text-brand-mid-gray";
 
 // Editable "confirm your details" card shown for a pending capture_lead tool
-// call. Nothing is sent until the visitor clicks "Send inquiry" — the POST
-// goes to /api/lead and the real { success } result (plus the edited fields)
+// call. Nothing is sent until the visitor clicks "Send inquiry" — submitLead
+// posts to Web3Forms and the real { success } result (plus the edited fields)
 // is fed back to the model via addToolOutput.
 export function LeadConfirmationCard({
   proposed,

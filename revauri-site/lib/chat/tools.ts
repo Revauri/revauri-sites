@@ -19,24 +19,40 @@ export const captureLeadInputSchema = z.object({
     .describe("What the visitor is looking for, in their words. Leave empty if not yet provided."),
 });
 
-// Runs in the browser: posts the lead to our own /api/lead route, which
-// delivers it server-side and returns a real { success } — so the tool result
-// fed back to the model reflects whether delivery actually happened (see
-// app/api/lead/route.ts). Replaces the old fire-and-forget iframe form hack
-// that always claimed success.
+// Web3Forms access keys are public-safe by design — they only route mail to
+// the address the key was created for, so hardcoding it here (like the contact
+// forms do) is the supported pattern and needs no env var.
+const WEB3FORMS_ACCESS_KEY = "84431b19-9bc8-45f0-a60a-eb6d683a0008";
+
+const SUBMIT_TIMEOUT_MS = 8_000;
+
+// Runs in the browser: posts the lead straight to Web3Forms' JSON API (their
+// docs' supported pattern — browser calls work on the free tier, server-side
+// calls don't) and returns the real { success } from the response — so the
+// tool result fed back to the model reflects whether delivery actually
+// happened. Replaces the old fire-and-forget iframe form hack that always
+// claimed success.
 export async function submitLead(
   input: z.infer<typeof captureLeadInputSchema>,
 ): Promise<{ success: boolean }> {
   try {
-    const res = await fetch("/api/lead", {
+    const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: "New chatbot inquiry — revauri.com",
+        name: input.name ?? "",
+        email: input.email ?? "",
+        company: input.company ?? "",
+        message: `[Submitted via chatbot]\n\n${input.projectDetails ?? ""}`,
+      }),
+      signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
     });
-    if (!res.ok) return { success: false };
-    const data = (await res.json()) as { success?: boolean };
-    return { success: data.success === true };
+    const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
+    return { success: res.ok && data?.success === true };
   } catch {
+    // Network failure or timeout — report honestly so Rev never claims success.
     return { success: false };
   }
 }

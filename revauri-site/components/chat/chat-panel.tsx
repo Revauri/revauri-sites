@@ -78,8 +78,8 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
 
-  // Resolves a pending capture_lead confirmation card with the real /api/lead
-  // result; sendAutomaticallyWhen then triggers Rev's follow-up. Works for
+  // Resolves a pending capture_lead confirmation card with the real Web3Forms
+  // delivery result; sendAutomaticallyWhen then triggers Rev's follow-up. Works for
   // cards restored from sessionStorage too, as long as they sit on the last
   // message (the SDK only attaches outputs there — earlier pending cards
   // render as expired).
