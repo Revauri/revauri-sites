@@ -1,62 +1,60 @@
 import { tool } from "ai";
 import { z } from "zod";
+import { getBookingSlots } from "@/lib/chat/calendly";
+import { getProjectBySlug } from "@/lib/portfolio-data";
 
+// All fields optional so the model is never forced to invent values it doesn't
+// have — unknown fields stay empty and the visitor completes them on the
+// confirmation card before anything is sent (see lead-confirmation-card.tsx).
 export const captureLeadInputSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  company: z.string().optional(),
-  projectDetails: z.string(),
+  name: z.string().optional().describe("The visitor's name. Leave empty if not yet provided."),
+  email: z.string().optional().describe("The visitor's email. Leave empty if not yet provided."),
+  company: z
+    .string()
+    .optional()
+    .describe("The visitor's company or business. Leave empty if not yet provided."),
+  projectDetails: z
+    .string()
+    .optional()
+    .describe("What the visitor is looking for, in their words. Leave empty if not yet provided."),
 });
 
-// FormSubmit.co blocks both server-side fetches (Cloudflare bot challenge) and
-// cross-origin browser fetches (no CORS allow-origin for AJAX mode) for this account.
-// A real <form> POST is subject to neither restriction — it's the same mechanism
-// app/contact/contact-content.tsx already uses successfully in production — so this
-// submits via a hidden iframe-targeted form instead of fetch. There is no readable
-// response (cross-origin), so this is fire-and-forget, matching the /contact form's
-// existing reliability profile.
-export function submitLead(input: z.infer<typeof captureLeadInputSchema>): Promise<{ success: boolean }> {
-  const { name, email, company, projectDetails } = input;
+// Web3Forms access keys are public-safe by design — they only route mail to
+// the address the key was created for, so hardcoding it here (like the contact
+// forms do) is the supported pattern and needs no env var.
+const WEB3FORMS_ACCESS_KEY = "84431b19-9bc8-45f0-a60a-eb6d683a0008";
 
-  return new Promise((resolve) => {
-    const iframeName = `lead-capture-${Date.now()}`;
-    const iframe = document.createElement("iframe");
-    iframe.name = iframeName;
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
+const SUBMIT_TIMEOUT_MS = 8_000;
 
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "https://formsubmit.co/joseph@revauri.com";
-    form.target = iframeName;
-    form.style.display = "none";
-
-    const fields: Record<string, string> = {
-      name,
-      email,
-      company: company ?? "",
-      message: `[Submitted via chatbot]\n\n${projectDetails}`,
-      _subject: "New chatbot lead from revauri.com",
-      _template: "table",
-      _captcha: "false",
-    };
-    for (const [key, value] of Object.entries(fields)) {
-      const field = document.createElement("input");
-      field.type = "hidden";
-      field.name = key;
-      field.value = value;
-      form.appendChild(field);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-
-    setTimeout(() => {
-      form.remove();
-      iframe.remove();
-      resolve({ success: true });
-    }, 2000);
-  });
+// Runs in the browser: posts the lead straight to Web3Forms' JSON API (their
+// docs' supported pattern — browser calls work on the free tier, server-side
+// calls don't) and returns the real { success } from the response — so the
+// tool result fed back to the model reflects whether delivery actually
+// happened. Replaces the old fire-and-forget iframe form hack that always
+// claimed success.
+export async function submitLead(
+  input: z.infer<typeof captureLeadInputSchema>,
+): Promise<{ success: boolean }> {
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: "New chatbot inquiry — revauri.com",
+        name: input.name ?? "",
+        email: input.email ?? "",
+        company: input.company ?? "",
+        message: `[Submitted via chatbot]\n\n${input.projectDetails ?? ""}`,
+      }),
+      signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
+    });
+    const data = (await res.json().catch(() => null)) as { success?: boolean } | null;
+    return { success: res.ok && data?.success === true };
+  } catch {
+    // Network failure or timeout — report honestly so Rev never claims success.
+    return { success: false };
+  }
 }
 
 // No `execute` — this makes it a client-side tool. The model emits a tool call,
@@ -65,8 +63,10 @@ export function submitLead(input: z.infer<typeof captureLeadInputSchema>): Promi
 export const captureLead = tool({
   description:
     "Submit a qualified lead's contact info and project details to Revauri. " +
-    "Call this only once per conversation, and only after confirming with the visitor " +
-    "that you have their name, email, and enough project details to pass along.",
+    "Call this only once per conversation, once you know enough for a useful lead. " +
+    "Fill in only what the visitor actually provided and leave unknown fields empty — " +
+    "never invent placeholder values; the visitor reviews and completes the details " +
+    "on a confirmation card before anything is sent.",
   inputSchema: captureLeadInputSchema,
 });
 
@@ -118,4 +118,54 @@ export const getProjectHighlight = tool({
     "visitor asks about cost, budget, or pricing.",
   inputSchema: getProjectHighlightInputSchema,
   execute: async ({ topic }) => PROJECT_HIGHLIGHTS[topic],
+});
+
+// Server-side tool: fetches live availability from Calendly and renders an
+// inline booking card. Degrades to a fallback "Book a call" card on any
+// failure (see lib/chat/calendly.ts) — the model never sees an error.
+export const offerBooking = tool({
+  description:
+    "Show an inline booking card with real available times for the free 15-minute strategy call. " +
+    "Call this when the visitor wants to book, asks about the call, or shows strong buying intent " +
+    "(asking how to start, pricing, process, or timeline for their own project).",
+  inputSchema: z.object({}),
+  execute: async () => getBookingSlots(),
+});
+
+export const showPortfolioInputSchema = z.object({
+  slugs: z
+    .array(z.enum(["ultaura", "lion-law", "cryptrac"]))
+    .min(1)
+    .max(2)
+    .describe("The one or two most relevant projects to show."),
+});
+
+// Server-side tool: renders rich portfolio cards from the real PROJECTS data
+// (lib/portfolio-data.ts) — nothing invented.
+export const showPortfolio = tool({
+  description:
+    "Show rich visual cards for Revauri portfolio projects. Call this instead of describing " +
+    "projects in text whenever the visitor asks about past work, examples, or a specific project. " +
+    "Pick the 1-2 most relevant: ultaura (AI / healthcare tech), lion-law (legal / professional " +
+    "services), cryptrac (fintech / SaaS).",
+  inputSchema: showPortfolioInputSchema,
+  execute: async ({ slugs }) => ({
+    projects: slugs.flatMap((slug) => {
+      const project = getProjectBySlug(slug);
+      if (!project) return [];
+      return [
+        {
+          slug: project.slug,
+          name: project.name,
+          tagline: project.tagline,
+          industry: project.industry,
+          imageSrc: project.heroImage.src,
+          imageAlt: project.heroImage.alt,
+          imageWidth: project.heroImage.width,
+          imageHeight: project.heroImage.height,
+          href: `/portfolio/${project.slug}`,
+        },
+      ];
+    }),
+  }),
 });

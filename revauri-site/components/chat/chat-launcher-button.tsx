@@ -1,11 +1,16 @@
+import type { Ref } from "react";
 import { MessageCircle, X } from "lucide-react";
 
 export function ChatLauncherButton({
   isOpen,
   onClick,
+  onPrefetch,
+  ref,
 }: {
   isOpen: boolean;
   onClick: () => void;
+  onPrefetch?: () => void;
+  ref?: Ref<HTMLButtonElement>;
 }) {
   return (
     <div className="group fixed bottom-5 right-5 z-[70] flex items-center gap-2">
@@ -13,10 +18,13 @@ export function ChatLauncherButton({
         Chat with us
       </span>
       <button
+        ref={ref}
         className={`flex h-14 w-14 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
           isOpen ? "" : "animate-pulse-glow"
         }`}
         onClick={onClick}
+        onMouseEnter={onPrefetch}
+        onFocus={onPrefetch}
         aria-expanded={isOpen}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
