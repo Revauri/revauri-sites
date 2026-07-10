@@ -114,8 +114,10 @@ const PROJECT_HIGHLIGHTS: Record<
 export const getProjectHighlight = tool({
   description:
     "Show a visual highlight card for a concrete, non-dollar project fact (free discovery call, " +
-    "typical timeline, or included revisions). Call this instead of stating any price when a " +
-    "visitor asks about cost, budget, or pricing.",
+    "typical timeline, or included revisions). A secondary visual for timeline or revisions " +
+    'questions — NOT a substitute for the sanctioned "$2,000 starting point" line, which you may ' +
+    "still state in text per the pricing rules. For pricing intent, offer_booking remains the " +
+    "preferred card.",
   inputSchema: getProjectHighlightInputSchema,
   execute: async ({ topic }) => PROJECT_HIGHLIGHTS[topic],
 });
@@ -125,7 +127,8 @@ export const getProjectHighlight = tool({
 // failure (see lib/chat/calendly.ts) — the model never sees an error.
 export const offerBooking = tool({
   description:
-    "Show an inline booking card with real available times for the free 15-minute strategy call. " +
+    "Show an inline booking card for the free 15-minute strategy call, with real available times " +
+    "when we can fetch them. " +
     "Call this when the visitor wants to book, asks about the call, or shows strong buying intent " +
     "(asking how to start, pricing, process, or timeline for their own project).",
   inputSchema: z.object({}),

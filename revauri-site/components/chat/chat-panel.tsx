@@ -72,10 +72,16 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         }),
       }),
   );
+  // True while handleSend is resolving a pending confirmation card as
+  // "dismissed": it keeps sendAutomaticallyWhen from firing its own request
+  // for that tool output, so the dismissal and the typed message travel in
+  // the single request sendMessage makes right after.
+  const suppressAutoSendRef = useRef(false);
   const { messages, sendMessage, setMessages, status, stop, addToolOutput, error, regenerate } = useChat({
     messages: initialMessages,
     transport,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    sendAutomaticallyWhen: (options) =>
+      !suppressAutoSendRef.current && lastAssistantMessageIsCompleteWithToolCalls(options),
   });
 
   // Resolves a pending capture_lead confirmation card with the real Web3Forms
@@ -158,8 +164,34 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     };
   }, [stop]);
 
-  function handleSend(text: string) {
+  async function handleSend(text: string) {
     if (!text.trim()) return;
+    // A typed reply while a "confirm your details" card is still pending
+    // resolves the card as dismissed first, so the tool call completes (the
+    // server drops dangling tool calls entirely) and the model knows nothing
+    // was sent. The suppress ref makes the SDK's auto-send check — evaluated
+    // while addToolOutput applies the output — return false, so no request
+    // fires here; the dismissal rides along with the typed message below.
+    const last = messages[messages.length - 1];
+    const pendingLead =
+      last?.role === "assistant"
+        ? last.parts.find(
+            (part): part is Extract<(typeof last.parts)[number], { type: `tool-${string}` }> =>
+              part.type === "tool-capture_lead" && "state" in part && part.state === "input-available",
+          )
+        : undefined;
+    if (pendingLead) {
+      suppressAutoSendRef.current = true;
+      try {
+        await addToolOutput({
+          tool: "capture_lead",
+          toolCallId: pendingLead.toolCallId,
+          output: { status: "dismissed", success: false } satisfies LeadToolOutput,
+        });
+      } finally {
+        suppressAutoSendRef.current = false;
+      }
+    }
     sendMessage({ text });
   }
 
@@ -175,7 +207,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
 
   function submitDraft() {
     if (isStreaming) return; // no sends mid-stream; the button is a stop control
-    handleSend(draft);
+    void handleSend(draft);
     setDraft("");
     // The DOM value clears on the next render; drop the inline height now so
     // the field snaps back to a single line (rows={1}).
