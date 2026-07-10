@@ -6,7 +6,13 @@ import { submitLead } from "@/lib/chat/tools";
 
 // The capture_lead tool result: the real delivery outcome plus the (possibly
 // edited) fields, so Rev confirms the details the visitor actually sent.
+// `status` states the outcome unambiguously for the model — "sent" means the
+// inquiry was actually delivered and the card has collapsed to a read-only
+// summary (it can no longer be edited or re-sent); the system prompt keys its
+// post-resolution rules off this field. `success`/`cancelled` are kept
+// alongside for the UI and for older messages restored from sessionStorage.
 export type LeadToolOutput = {
+  status?: "sent" | "cancelled" | "failed";
   success: boolean;
   cancelled?: boolean;
   name?: string;
@@ -104,7 +110,7 @@ export function LeadConfirmationCard({
       projectDetails: projectDetails.trim(),
     };
     const { success } = await submitLead(fields);
-    onResolve?.({ success, ...fields });
+    onResolve?.({ status: success ? "sent" : "failed", success, ...fields });
   }
 
   return (
@@ -176,7 +182,7 @@ export function LeadConfirmationCard({
           </button>
           <button
             type="button"
-            onClick={() => onResolve?.({ success: false, cancelled: true })}
+            onClick={() => onResolve?.({ status: "cancelled", success: false, cancelled: true })}
             disabled={pending}
             className="rounded-full px-3 py-2 text-xs font-medium text-brand-mid-gray transition-colors hover:text-brand-dark disabled:opacity-50 dark:hover:text-brand-cream"
           >

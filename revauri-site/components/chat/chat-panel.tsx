@@ -204,7 +204,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         <div>
           <Logo />
           <p className="mt-0.5 text-[10px] leading-tight text-brand-mid-gray">
-            Rev · AI assistant — replies are automated.
+            Rev · AI assistant
           </p>
         </div>
         <div className="flex items-center gap-1">

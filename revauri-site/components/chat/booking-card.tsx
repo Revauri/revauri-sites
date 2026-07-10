@@ -74,7 +74,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
       </div>
       <a
         href="/book"
-        className="mt-0.5 w-fit text-[11px] font-medium text-brand-mid-gray underline underline-offset-2 hover:text-brand-orange"
+        className="mt-0.5 w-fit text-xs font-medium text-brand-mid-gray underline underline-offset-2 hover:text-brand-orange"
       >
         See all times →
       </a>
