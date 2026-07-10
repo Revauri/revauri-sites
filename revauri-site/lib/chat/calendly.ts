@@ -79,8 +79,20 @@ async function resolveEventTypeUri(token: string): Promise<string> {
   return match.uri;
 }
 
+// In-place Fisher-Yates shuffle. Math.random is fine here — this only varies
+// which available times the card shows, nothing security-sensitive.
+function shuffle<T>(items: T[]): T[] {
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
 // Picks up to MAX_SLOTS slots, preferring spread across different days:
-// first slot of each distinct day, then second slots, and so on.
+// one random slot from each distinct day, then a second random slot per day
+// if there aren't enough days, and so on. Randomizing within each day keeps
+// the card from always showing the earliest (often least convenient) times.
 function pickSpreadSlots(slots: BookingSlot[]): BookingSlot[] {
   const byDay = new Map<string, BookingSlot[]>();
   for (const slot of slots) {
@@ -89,6 +101,7 @@ function pickSpreadSlots(slots: BookingSlot[]): BookingSlot[] {
     daySlots.push(slot);
     byDay.set(day, daySlots);
   }
+  for (const daySlots of byDay.values()) shuffle(daySlots);
 
   const picked: BookingSlot[] = [];
   for (let round = 0; picked.length < MAX_SLOTS; round++) {
