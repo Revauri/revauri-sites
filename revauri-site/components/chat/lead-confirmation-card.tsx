@@ -8,11 +8,13 @@ import { submitLead } from "@/lib/chat/tools";
 // edited) fields, so Rev confirms the details the visitor actually sent.
 // `status` states the outcome unambiguously for the model — "sent" means the
 // inquiry was actually delivered and the card has collapsed to a read-only
-// summary (it can no longer be edited or re-sent); the system prompt keys its
-// post-resolution rules off this field. `success`/`cancelled` are kept
-// alongside for the UI and for older messages restored from sessionStorage.
+// summary (it can no longer be edited or re-sent); "dismissed" means the
+// visitor typed a reply instead of using the card, so nothing was sent (see
+// handleSend in chat-panel.tsx); the system prompt keys its post-resolution
+// rules off this field. `success`/`cancelled` are kept alongside for the UI
+// and for older messages restored from sessionStorage.
 export type LeadToolOutput = {
-  status?: "sent" | "cancelled" | "failed";
+  status?: "sent" | "cancelled" | "failed" | "dismissed";
   success: boolean;
   cancelled?: boolean;
   name?: string;
@@ -167,7 +169,7 @@ export function LeadConfirmationCard({
       </label>
       {expired ? (
         <p className="text-[11px] text-brand-mid-gray">
-          This session expired — ask Rev to send your details again.
+          This card is no longer active — ask Rev to send your details again.
         </p>
       ) : (
         <div className="mt-0.5 flex items-center gap-2">

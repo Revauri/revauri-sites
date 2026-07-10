@@ -13,7 +13,7 @@ import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
 const PANEL_CARD_CLASS =
   "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px]";
 
-const TEXTAREA_MAX_HEIGHT = 96; // ~4 lines, keeps the panel's fixed height usable
+const TEXTAREA_MAX_HEIGHT = 120; // ~5 lines incl. padding; beyond this it scrolls internally
 const MESSAGES_STORAGE_KEY = "revauri-chat-messages";
 
 function loadStoredMessages(): UIMessage[] | undefined {
@@ -72,10 +72,16 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         }),
       }),
   );
+  // True while handleSend is resolving a pending confirmation card as
+  // "dismissed": it keeps sendAutomaticallyWhen from firing its own request
+  // for that tool output, so the dismissal and the typed message travel in
+  // the single request sendMessage makes right after.
+  const suppressAutoSendRef = useRef(false);
   const { messages, sendMessage, setMessages, status, stop, addToolOutput, error, regenerate } = useChat({
     messages: initialMessages,
     transport,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    sendAutomaticallyWhen: (options) =>
+      !suppressAutoSendRef.current && lastAssistantMessageIsCompleteWithToolCalls(options),
   });
 
   // Resolves a pending capture_lead confirmation card with the real Web3Forms
@@ -158,15 +164,53 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     };
   }, [stop]);
 
-  function handleSend(text: string) {
+  async function handleSend(text: string) {
     if (!text.trim()) return;
+    // A typed reply while a "confirm your details" card is still pending
+    // resolves the card as dismissed first, so the tool call completes (the
+    // server drops dangling tool calls entirely) and the model knows nothing
+    // was sent. The suppress ref makes the SDK's auto-send check — evaluated
+    // while addToolOutput applies the output — return false, so no request
+    // fires here; the dismissal rides along with the typed message below.
+    const last = messages[messages.length - 1];
+    const pendingLead =
+      last?.role === "assistant"
+        ? last.parts.find(
+            (part): part is Extract<(typeof last.parts)[number], { type: `tool-${string}` }> =>
+              part.type === "tool-capture_lead" && "state" in part && part.state === "input-available",
+          )
+        : undefined;
+    if (pendingLead) {
+      suppressAutoSendRef.current = true;
+      try {
+        await addToolOutput({
+          tool: "capture_lead",
+          toolCallId: pendingLead.toolCallId,
+          output: { status: "dismissed", success: false } satisfies LeadToolOutput,
+        });
+      } finally {
+        suppressAutoSendRef.current = false;
+      }
+    }
     sendMessage({ text });
+  }
+
+  // Auto-grow: measure the content, clamp at TEXTAREA_MAX_HEIGHT, and let the
+  // textarea's own overflow-y-auto take over past the cap so text always stays
+  // inside the field's border.
+  function resizeTextarea() {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    if (el.value) el.style.height = `${Math.min(el.scrollHeight, TEXTAREA_MAX_HEIGHT)}px`;
   }
 
   function submitDraft() {
     if (isStreaming) return; // no sends mid-stream; the button is a stop control
-    handleSend(draft);
+    void handleSend(draft);
     setDraft("");
+    // The DOM value clears on the next render; drop the inline height now so
+    // the field snaps back to a single line (rows={1}).
     if (textareaRef.current) textareaRef.current.style.height = "auto";
   }
 
@@ -308,22 +352,28 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         onSubmit={handleSubmit}
         className="border-t border-brand-light-gray/60 px-4 py-3.5 dark:border-brand-mid-gray/20"
       >
-        <div className="flex items-center gap-2 rounded-full border border-transparent bg-brand-light-gray/40 px-3.5 py-1.5 transition-colors focus-within:border-brand-orange dark:bg-brand-light-gray/10">
+        {/* rounded-[22px] (not rounded-full) so the corner curve stays constant as the
+            field grows — a fully-round radius on a multi-line field sweeps inward past
+            the side padding and text appears outside the border. items-end keeps the
+            send button anchored to the bottom row while the field grows beside it. */}
+        <div className="flex items-end gap-2 rounded-[22px] border border-transparent bg-brand-light-gray/40 px-3.5 py-1.5 transition-colors focus-within:border-brand-orange dark:bg-brand-light-gray/10">
           <textarea
             ref={textareaRef}
             value={draft}
             onChange={(e) => {
               setDraft(e.target.value);
-              e.target.style.height = "auto";
-              e.target.style.height = `${Math.min(e.target.scrollHeight, TEXTAREA_MAX_HEIGHT)}px`;
+              resizeTextarea();
             }}
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             aria-label="Message Rev"
             rows={1}
             style={{ maxHeight: TEXTAREA_MAX_HEIGHT }}
+            // py-1/sm:py-1.5 makes the single-line field exactly the send button's 32px
+            // height at both line heights (same alignment as before) and insets scrolled
+            // text from the pill edges.
             // text-base at mobile widths — anything under 16px makes iOS zoom on focus
-            className="flex-1 resize-none overflow-y-auto bg-transparent text-base text-brand-dark placeholder:text-brand-mid-gray focus:outline-none sm:text-sm dark:text-brand-cream"
+            className="min-w-0 flex-1 resize-none overflow-y-auto bg-transparent py-1 text-base text-brand-dark placeholder:text-brand-mid-gray focus:outline-none sm:py-1.5 sm:text-sm dark:text-brand-cream"
           />
           {isStreaming ? (
             <button

@@ -76,10 +76,13 @@ function renderInlineContent(text: string): ReactNode[] {
 }
 
 function getMessageText(message: UIMessage) {
+  // Blank line between text parts (the bubble is whitespace-pre-wrap) — a
+  // reply split around a tool call would otherwise run its sentences together.
   return message.parts
     .filter((part) => part.type === "text")
     .map((part) => part.text)
-    .join("");
+    .filter((text) => text.length > 0)
+    .join("\n\n");
 }
 
 export function BubbleShell({ isUser, children }: { isUser: boolean; children: ReactNode }) {
@@ -115,52 +118,65 @@ export function ChatMessageBubble({
   const reducedMotion = useReducedMotion();
   const isUser = message.role === "user";
   const text = getMessageText(message);
-  const highlightPart = message.parts.find(
-    (p): p is (typeof message.parts)[number] & { output: HighlightCardProps } =>
+  // A message can carry several calls to the same tool — render every one,
+  // keyed by toolCallId, not just the first.
+  const highlightParts = message.parts.filter(
+    (p): p is ToolPart & { output: HighlightCardProps } =>
       p.type === "tool-get_project_highlight" && "state" in p && p.state === "output-available",
   );
-  const bookingPart = message.parts.find(
+  const bookingParts = message.parts.filter(
     (p): p is ToolPart => p.type === "tool-offer_booking" && "state" in p,
   );
-  const portfolioPart = message.parts.find(
+  const portfolioParts = message.parts.filter(
     (p): p is ToolPart & { output: { projects: PortfolioCardData[] } } =>
       p.type === "tool-show_portfolio" && "state" in p && p.state === "output-available",
   );
-  const leadPart = message.parts.find(
+  const leadParts = message.parts.filter(
     (p): p is ToolPart => p.type === "tool-capture_lead" && "state" in p,
   );
 
-  const bubble = (text || highlightPart) && (
+  const bubble = (text || highlightParts.length > 0) && (
     <BubbleShell isUser={isUser}>
       {/* Linkify assistant replies only — user-typed text stays plain. */}
       {isUser ? text : renderInlineContent(text)}
-      {highlightPart && <HighlightCard {...highlightPart.output} />}
+      {highlightParts.map((part) => (
+        <HighlightCard key={part.toolCallId} {...part.output} />
+      ))}
     </BubbleShell>
   );
 
   const cards: ReactNode[] = [];
 
-  if (bookingPart) {
+  for (const bookingPart of bookingParts) {
     if (bookingPart.state === "output-available") {
-      cards.push(<BookingCard key="booking" {...(bookingPart.output as BookingCardProps)} />);
-    } else if (bookingPart.state !== "output-error") {
-      // Live availability is being fetched server-side — show a skeleton.
       cards.push(
-        <div
-          key="booking-skeleton"
-          className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
-        />,
+        <BookingCard key={bookingPart.toolCallId} {...(bookingPart.output as BookingCardProps)} />,
       );
+    } else if (bookingPart.state !== "output-error") {
+      if (isLastMessage) {
+        // Live availability is being fetched server-side — show a skeleton.
+        cards.push(
+          <div
+            key={bookingPart.toolCallId}
+            className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
+          />,
+        );
+      } else {
+        // An earlier message can never receive its output (e.g. a session
+        // restored mid-fetch) — degrade to the plain "Book a call" card
+        // instead of pulsing forever.
+        cards.push(<BookingCard key={bookingPart.toolCallId} fallback />);
+      }
     }
   }
 
-  if (portfolioPart) {
+  for (const portfolioPart of portfolioParts) {
     for (const project of portfolioPart.output.projects) {
-      cards.push(<PortfolioCard key={project.slug} project={project} />);
+      cards.push(<PortfolioCard key={`${portfolioPart.toolCallId}-${project.slug}`} project={project} />);
     }
   }
 
-  if (leadPart) {
+  for (const leadPart of leadParts) {
     if (leadPart.state === "input-available") {
       cards.push(
         <LeadConfirmationCard

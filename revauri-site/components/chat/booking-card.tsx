@@ -29,7 +29,12 @@ function formatSlotLabel(startTime: string): string | null {
 }
 
 export function BookingCard({ slots, fallback }: BookingCardProps) {
+  // Future times only: a card restored from an earlier session can carry
+  // slots that have since passed — those must not be clickable, and a card
+  // whose slots are all stale degrades to the /book fallback below.
+  const now = Date.now();
   const labeled = (slots ?? [])
+    .filter((slot) => new Date(slot.startTime).getTime() > now)
     .map((slot) => ({ ...slot, label: formatSlotLabel(slot.startTime) }))
     .filter((slot): slot is BookingSlot & { label: string } => slot.label !== null);
 
