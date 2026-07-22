@@ -15,12 +15,15 @@ export const metadata: Metadata = {
   title: "Revauri — Custom Websites for Businesses That Want to Stand Out",
   description:
     "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
-  metadataBase: new URL("https://revauri.com"),
+  metadataBase: new URL("https://www.revauri.com"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Revauri — Custom Websites for Businesses That Want to Stand Out",
     description:
       "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
-    url: "https://revauri.com",
+    url: "https://www.revauri.com",
     siteName: "Revauri",
     locale: "en_US",
     type: "website",
@@ -46,27 +49,26 @@ const themeScript = `
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": ["ProfessionalService", "Organization"],
+  "@type": "Organization",
   name: "Revauri",
   legalName: "Revauri LLC",
-  url: "https://revauri.com",
+  url: "https://www.revauri.com",
   email: "joseph@revauri.com",
   description:
     "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
   areaServed: "US",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "725 Joralemon Street, Unit 127",
-    addressLocality: "Belleville",
-    addressRegion: "NJ",
-    postalCode: "07109",
-    addressCountry: "US",
-  },
   founder: {
     "@type": "Person",
     name: "Joseph Silvagnoli",
   },
-  logo: "https://revauri.com/logo.svg",
+  logo: "https://www.revauri.com/logo.svg",
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Revauri",
+  url: "https://www.revauri.com",
 };
 
 export default function RootLayout({
@@ -86,6 +88,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
       <body>

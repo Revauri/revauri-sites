@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   title: "Pricing — Revauri",
   description:
     "Custom website quotes for your business. Free preview redesign included. Schedule a discovery call to get your quote.",
+  alternates: { canonical: "/pricing" },
 };
 
 const CERTAINTY_ITEMS = [

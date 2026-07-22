@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "About — Revauri",
   description:
     "Revauri was founded by Joseph Silvagnoli to build premium custom websites for businesses that want to stand out online and drive real growth. Learn about our approach, values, and story.",
+  alternates: { canonical: "/about" },
 };
 
 const VALUES = [

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Contact — Revauri",
   description:
     "Get in touch with Revauri. Book a free 15-minute strategy call or email us directly. We respond within a few hours.",
+  alternates: { canonical: "/contact" },
 };
 
 type ContactPageProps = {

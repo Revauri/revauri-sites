@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy — Revauri",
   description:
     "Revauri's privacy policy. Learn how we collect, use, and protect your information.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

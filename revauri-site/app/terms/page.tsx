@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service — Revauri",
   description:
     "Terms of Service for Revauri's website design and development services.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

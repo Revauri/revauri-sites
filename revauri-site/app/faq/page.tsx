@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "FAQ — Revauri",
   description:
     "Answers to common questions about Revauri's web design services — timelines, pricing, process, technology, and more.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQ_DATA = [

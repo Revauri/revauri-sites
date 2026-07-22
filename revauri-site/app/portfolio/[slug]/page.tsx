@@ -22,9 +22,13 @@ export async function generateMetadata(
   return {
     title: `${project.name} — Revauri Portfolio`,
     description: project.tagline,
+    alternates: {
+      canonical: `/portfolio/${project.slug}`,
+    },
     openGraph: {
       title: `${project.name} — Revauri Portfolio`,
       description: project.tagline,
+      url: `/portfolio/${project.slug}`,
       type: "article",
     },
   };

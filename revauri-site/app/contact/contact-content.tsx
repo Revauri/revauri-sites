@@ -90,7 +90,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
               >
                 {/* Web3Forms config */}
                 <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
-                <input type="hidden" name="redirect" value="https://revauri.com/contact?sent=true" />
+                <input type="hidden" name="redirect" value="https://www.revauri.com/contact?sent=true" />
                 <input type="hidden" name="subject" value="New message from revauri.com" />
                 <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 

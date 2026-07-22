@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Book a Call — Revauri",
   description:
     "Book a free 15-minute strategy call with Revauri. We'll walk through a custom redesign of your site and outline practical next steps.",
+  alternates: { canonical: "/book" },
 };
 
 export default function BookPage() {

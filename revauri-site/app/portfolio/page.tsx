@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Portfolio — Revauri",
   description:
     "Real work from Revauri — a mix of client projects and products founder-built from scratch.",
+  alternates: { canonical: "/portfolio" },
 };
 
 function GridCardPlaceholder() {
