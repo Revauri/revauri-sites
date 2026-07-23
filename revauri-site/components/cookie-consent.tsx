@@ -7,6 +7,7 @@ import {
   deleteGaCookies,
   getStoredConsent,
   initGa,
+  notifyCookieBannerVisibilityChanged,
   onCookiePreferencesRequested,
   storeConsent,
   type ConsentValue,
@@ -34,6 +35,11 @@ export function CookieConsent() {
   useEffect(() => {
     if (bannerOpen) acceptButtonRef.current?.focus();
   }, [bannerOpen]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    notifyCookieBannerVisibilityChanged(bannerOpen);
+  }, [bannerOpen, hydrated]);
 
   if (!hydrated) return null;
 

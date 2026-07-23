@@ -4,7 +4,10 @@ import {
   getGaCookieNames,
   getStoredConsent,
   initGa,
+  isCookieBannerVisible,
   markOnce,
+  notifyCookieBannerVisibilityChanged,
+  onCookieBannerVisibilityChanged,
   parseCalendlyScheduledEvent,
   resetContactFormLeadDedup,
   storeConsent,
@@ -61,6 +64,39 @@ test("initGa queues commands in the arguments format required by gtag.js", () =>
     assert.deepEqual(Array.from(globalThis.window.dataLayer[0]).slice(0, 1), ["js"]);
     assert.deepEqual(Array.from(globalThis.window.dataLayer[1]), ["config", "G-NZTSMCQCRB"]);
   } finally {
+    if (originalWindow === undefined) delete globalThis.window;
+    else globalThis.window = originalWindow;
+  }
+});
+
+test("cookie banner visibility state notifies subscribers and supports unsubscribe", () => {
+  const originalWindow = globalThis.window;
+  const events = new EventTarget();
+  globalThis.window = {
+    addEventListener: events.addEventListener.bind(events),
+    removeEventListener: events.removeEventListener.bind(events),
+    dispatchEvent: events.dispatchEvent.bind(events),
+  };
+
+  let notifications = 0;
+  const unsubscribe = onCookieBannerVisibilityChanged(() => {
+    notifications += 1;
+  });
+
+  try {
+    notifyCookieBannerVisibilityChanged(true);
+    assert.equal(isCookieBannerVisible(), true);
+    assert.equal(notifications, 1);
+
+    notifyCookieBannerVisibilityChanged(false);
+    assert.equal(isCookieBannerVisible(), false);
+    assert.equal(notifications, 2);
+
+    unsubscribe();
+    notifyCookieBannerVisibilityChanged(true);
+    assert.equal(notifications, 2);
+  } finally {
+    notifyCookieBannerVisibilityChanged(false);
     if (originalWindow === undefined) delete globalThis.window;
     else globalThis.window = originalWindow;
   }

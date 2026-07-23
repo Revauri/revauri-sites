@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChatLauncherButton } from "./chat-launcher-button";
+import { isCookieBannerVisible, onCookieBannerVisibilityChanged } from "@/lib/analytics";
 
 // Loaded on demand so visitors who never open the chat don't download the
 // panel + AI SDK code. The panel's entrance animation masks the brief load.
@@ -21,8 +22,14 @@ const OPEN_STORAGE_KEY = "revauri-chat-open";
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    setCookieBannerOpen(isCookieBannerVisible());
+    return onCookieBannerVisibilityChanged(() => setCookieBannerOpen(isCookieBannerVisible()));
+  }, []);
 
   useEffect(() => {
     try {
@@ -66,6 +73,7 @@ export function ChatWidget() {
           isOpen={isOpen}
           onClick={() => setIsOpen(!isOpen)}
           onPrefetch={prefetchChatPanel}
+          cookieBannerOpen={cookieBannerOpen}
         />
       )}
 
@@ -76,7 +84,9 @@ export function ChatWidget() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 24 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[70] sm:inset-auto sm:bottom-6 sm:right-6"
+            className={`fixed inset-0 z-[70] sm:inset-auto sm:bottom-6 sm:right-6 ${
+              cookieBannerOpen ? "lg:bottom-32" : ""
+            }`}
           >
             <ChatPanel onClose={() => setIsOpen(false)} />
           </motion.div>

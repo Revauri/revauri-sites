@@ -8,6 +8,7 @@ export const GA_MEASUREMENT_ID = "G-NZTSMCQCRB";
 const CONSENT_STORAGE_KEY = "revauri_analytics_consent";
 const CONSENT_CHANGE_EVENT = "revauri:analytics-consent-changed";
 const OPEN_PREFERENCES_EVENT = "revauri:open-cookie-preferences";
+const BANNER_VISIBILITY_EVENT = "revauri:cookie-banner-visibility-changed";
 
 export type ConsentValue = "granted" | "denied";
 
@@ -47,6 +48,29 @@ export function requestCookiePreferences(): void {
 export function onCookiePreferencesRequested(handler: () => void): () => void {
   window.addEventListener(OPEN_PREFERENCES_EVENT, handler);
   return () => window.removeEventListener(OPEN_PREFERENCES_EVENT, handler);
+}
+
+// In-memory source of truth for whether the cookie banner is currently
+// visible, so subscribers (e.g. ChatWidget) can read the current value on
+// mount in addition to reacting to the change event below.
+let cookieBannerVisible = false;
+
+export function isCookieBannerVisible(): boolean {
+  return cookieBannerVisible;
+}
+
+// Lets ChatWidget avoid overlapping the cookie banner on desktop without
+// polling or a shared parent — same event pattern as the consent/preferences
+// events above.
+export function notifyCookieBannerVisibilityChanged(open: boolean): void {
+  cookieBannerVisible = open;
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(BANNER_VISIBILITY_EVENT));
+}
+
+export function onCookieBannerVisibilityChanged(handler: () => void): () => void {
+  window.addEventListener(BANNER_VISIBILITY_EVENT, handler);
+  return () => window.removeEventListener(BANNER_VISIBILITY_EVENT, handler);
 }
 
 // Pure parser so cookie-clearing logic is unit-testable without a real

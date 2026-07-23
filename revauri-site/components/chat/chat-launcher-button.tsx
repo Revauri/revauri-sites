@@ -5,15 +5,21 @@ export function ChatLauncherButton({
   isOpen,
   onClick,
   onPrefetch,
+  cookieBannerOpen,
   ref,
 }: {
   isOpen: boolean;
   onClick: () => void;
   onPrefetch?: () => void;
+  cookieBannerOpen: boolean;
   ref?: Ref<HTMLButtonElement>;
 }) {
   return (
-    <div className="group fixed bottom-5 right-5 z-[70] flex items-center gap-2">
+    <div
+      className={`group fixed bottom-5 right-5 z-[70] flex items-center gap-2 transition-[bottom] duration-300 ${
+        cookieBannerOpen ? "lg:bottom-32" : ""
+      }`}
+    >
       <span className="pointer-events-none translate-x-2 whitespace-nowrap rounded-full bg-brand-dark px-4 py-2 text-sm font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 dark:bg-brand-cream dark:text-brand-dark">
         Chat with us
       </span>
