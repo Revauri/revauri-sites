@@ -227,7 +227,7 @@ export default function PrivacyPage() {
         <p>
           We use Google Analytics 4 (GA4), provided by Google, to understand how visitors use our site. GA4 is
           consent-gated: no Google Analytics cookie is set, and no request is made to Google, until you click
-          &quot;Accept analytics&quot; in the cookie banner or preferences panel. If you decline, or if you haven&apos;t
+          &quot;Accept&quot; in the cookie banner or preferences panel. If you decline, or if you haven&apos;t
           made a choice yet, no analytics data is collected. When enabled, GA4 automatically measures page views,
           scroll depth, and clicks on links to other websites (Google&apos;s &quot;Enhanced Measurement&quot;
           features), plus, only after a successful contact-form submission or a completed call booking, a
