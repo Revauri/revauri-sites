@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChevronUp } from "lucide-react";
 import { Logo } from "./logo";
+import { requestCookiePreferences } from "@/lib/analytics";
 
 const YEAR = new Date().getFullYear();
 
@@ -83,6 +84,13 @@ export function Footer() {
       <div className="bg-brand-white py-6 dark:bg-brand-dark lg:py-8">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={requestCookiePreferences}
+              className="text-sm text-brand-mid-gray transition-colors hover:text-brand-dark dark:hover:text-brand-cream"
+            >
+              Cookie preferences
+            </button>
             <button
               type="button"
               onClick={scrollToTop}

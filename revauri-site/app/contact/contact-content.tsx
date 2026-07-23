@@ -1,8 +1,14 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Mail, BookOpen, RotateCcw } from "lucide-react";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
+import {
+  onConsentChanged,
+  resetContactFormLeadDedup,
+  trackContactFormLead,
+} from "@/lib/analytics";
 
 type ContactContentProps = {
   isSubmitted?: boolean;
@@ -12,6 +18,19 @@ const FORM_CARD_CLASS =
   "rounded-2xl border border-brand-light-gray/60 bg-brand-white p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]";
 
 export function ContactContent({ isSubmitted = false }: ContactContentProps) {
+  // Tracks the confirmed success view as a lead exactly once. If the
+  // visitor hasn't granted analytics consent yet, trackContactFormLead()
+  // no-ops; re-running it on every consent change catches the case where
+  // they accept while still on this success page (but never if declined).
+  useEffect(() => {
+    if (!isSubmitted) {
+      resetContactFormLeadDedup();
+      return;
+    }
+    trackContactFormLead();
+    return onConsentChanged(() => trackContactFormLead());
+  }, [isSubmitted]);
+
   return (
     <>
       {/* Contact Form */}

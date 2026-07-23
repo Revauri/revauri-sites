@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             Privacy <GradientText>Policy</GradientText>
           </>
         }
-        subtitle="Last updated: April 3, 2026"
+        subtitle="Last updated: July 22, 2026"
       />
 
       <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-16 dark:prose-invert lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">
@@ -47,9 +47,18 @@ export default function PrivacyPage() {
 
         <h3>Information Collected Automatically</h3>
         <ul>
-          <li>Usage data: pages visited, time on site, referral source, interactions</li>
-          <li>Device and browser information (type, operating system, screen resolution)</li>
-          <li>IP address (used for analytics and security; anonymized where possible)</li>
+          <li>
+            Usage data collected only if you accept analytics cookies: pages viewed, scroll depth, and
+            clicks on links to other websites
+          </li>
+          <li>
+            Device and browser information collected only if you accept analytics cookies (type, operating system,
+            screen resolution)
+          </li>
+          <li>
+            IP address (used transiently by our hosting provider for routing and security; Google
+            Analytics does not log or store your individual IP address)
+          </li>
           <li>Cookies and similar technologies (see Cookies section below)</li>
         </ul>
 
@@ -110,7 +119,8 @@ export default function PrivacyPage() {
             <strong>Calendly</strong> &mdash; Appointment scheduling
           </li>
           <li>
-            <strong>Google Analytics</strong> &mdash; Website analytics (with IP anonymization enabled)
+            <strong>Google Analytics 4 (GA4)</strong>, provided by Google &mdash; website analytics, but only after
+            you accept analytics cookies (see Cookies section below)
           </li>
         </ul>
         <p>
@@ -197,8 +207,8 @@ export default function PrivacyPage() {
             indefinitely to prevent re-contact
           </li>
           <li>
-            <strong>Analytics data</strong>: Retained according to our Google Analytics settings (currently 14
-            months)
+            <strong>Analytics data</strong>: Google Analytics (GA4) event data is retained for 14 months, after
+            which it is automatically deleted
           </li>
           <li>
             <strong>Payment records</strong>: Retained as required by tax and financial regulations
@@ -211,9 +221,24 @@ export default function PrivacyPage() {
 
         <h2>11. Cookies</h2>
         <p>
-          We use essential cookies to maintain site functionality and security. We may also use analytics cookies
-          (via Google Analytics) to understand how visitors use our site and improve the experience. You can control
-          cookie preferences through your browser settings. Disabling cookies may affect some site functionality.
+          We use essential cookies to maintain basic site functionality and security. These are not optional and do
+          not require consent.
+        </p>
+        <p>
+          We use Google Analytics 4 (GA4), provided by Google, to understand how visitors use our site. GA4 is
+          consent-gated: no Google Analytics cookie is set, and no request is made to Google, until you click
+          &quot;Accept analytics&quot; in the cookie banner or preferences panel. If you decline, or if you haven&apos;t
+          made a choice yet, no analytics data is collected. When enabled, GA4 automatically measures page views,
+          scroll depth, and clicks on links to other websites (Google&apos;s &quot;Enhanced Measurement&quot;
+          features), plus, only after a successful contact-form submission or a completed call booking, a
+          non-identifying &quot;lead generated&quot; event that records which of those two sources it came from and
+          nothing else. Google Analytics does not store your individual IP address, and GA4 data is retained for 14
+          months (see Data Retention above).
+        </p>
+        <p>
+          You can accept, decline, or change your cookie choice at any time using the &quot;Cookie preferences&quot;
+          link in the footer of every page. Declining or withdrawing consent stops all future analytics collection
+          and deletes any Google Analytics cookies already stored in your browser.
         </p>
 
         <h2>12. Security</h2>

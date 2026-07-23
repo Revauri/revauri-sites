@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FadeInWhenVisible } from "./motion-wrappers";
+import { parseCalendlyScheduledEvent, trackCalendlyLead } from "@/lib/analytics";
 
 const CALENDLY_URL =
   "https://calendly.com/joseph-revauri/website-strategy-call";
@@ -37,7 +38,11 @@ export function Booking() {
       ) {
         clearTimeout(safetyTimer);
         setIsCalendlyLoaded(true);
+        return;
       }
+
+      const scheduled = parseCalendlyScheduledEvent(event.origin, event.data);
+      if (scheduled) trackCalendlyLead(scheduled.eventUri);
     };
 
     const initializeEmbed = () => {
