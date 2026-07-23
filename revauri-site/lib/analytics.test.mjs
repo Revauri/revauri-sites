@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   getGaCookieNames,
   getStoredConsent,
+  initGa,
   markOnce,
   parseCalendlyScheduledEvent,
   resetContactFormLeadDedup,
@@ -41,6 +42,28 @@ test("storeConsent persists granted/denied and getStoredConsent reads it back", 
   assert.equal(getStoredConsent(storage), "granted");
   storeConsent("denied", storage);
   assert.equal(getStoredConsent(storage), "denied");
+});
+
+test("initGa queues commands in the arguments format required by gtag.js", () => {
+  const originalWindow = globalThis.window;
+  globalThis.window = {
+    dataLayer: [],
+    dispatchEvent() {},
+  };
+
+  try {
+    initGa();
+
+    assert.equal(globalThis.window.dataLayer.length, 2);
+    assert.equal(Array.isArray(globalThis.window.dataLayer[0]), false);
+    assert.equal(Array.isArray(globalThis.window.dataLayer[1]), false);
+    assert.equal(Object.prototype.toString.call(globalThis.window.dataLayer[0]), "[object Arguments]");
+    assert.deepEqual(Array.from(globalThis.window.dataLayer[0]).slice(0, 1), ["js"]);
+    assert.deepEqual(Array.from(globalThis.window.dataLayer[1]), ["config", "G-NZTSMCQCRB"]);
+  } finally {
+    if (originalWindow === undefined) delete globalThis.window;
+    else globalThis.window = originalWindow;
+  }
 });
 
 test("markOnce fires the first time and is deduplicated afterward", () => {
