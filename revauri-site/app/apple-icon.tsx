@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-// Same rising-bar monogram at Apple touch size (extra padding for iOS mask)
+// Same clean monogram at Apple touch size
 export default function AppleIcon() {
   return new ImageResponse(
     (
@@ -16,32 +16,20 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
         }}
       >
         <span
           style={{
-            fontSize: 100,
+            fontSize: 104,
             fontWeight: 700,
             color: "#FFFFFF",
             lineHeight: 1,
-            letterSpacing: "-2px",
+            marginTop: 4,
+            letterSpacing: "-0.02em",
           }}
         >
           R
         </span>
-        <div
-          style={{
-            position: "absolute",
-            top: 32,
-            right: 30,
-            width: 42,
-            height: 14,
-            borderRadius: 7,
-            background: "#FAF9F5",
-            transform: "rotate(-35deg)",
-          }}
-        />
       </div>
     ),
     { ...size },

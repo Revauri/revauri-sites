@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-// Orange tile monogram with rising accent bar (matches wordmark signature)
+// Clean brand monogram — orange tile, white R
 export default function Icon() {
   return new ImageResponse(
     (
@@ -16,36 +16,21 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
         }}
       >
         <span
           style={{
-            fontSize: 17,
+            fontSize: 18,
             fontWeight: 700,
             color: "#FFFFFF",
             lineHeight: 1,
-            letterSpacing: "-0.5px",
-            // Slight left bias so the rising bar has room on the right
-            marginRight: 2,
+            // Optical center: letterforms sit slightly high without this
             marginTop: 1,
+            letterSpacing: "-0.02em",
           }}
         >
           R
         </span>
-        {/* Rising accent bar — deliberately chunky for 16–32px tabs */}
-        <div
-          style={{
-            position: "absolute",
-            top: 6,
-            right: 4,
-            width: 9,
-            height: 3.5,
-            borderRadius: 2,
-            background: "#FAF9F5",
-            transform: "rotate(-35deg)",
-          }}
-        />
       </div>
     ),
     { ...size },
