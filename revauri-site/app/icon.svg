@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Rising accent bar from the Revauri wordmark (logo.svg), centered for favicon -->
+  <rect
+    x="5"
+    y="12.5"
+    width="22"
+    height="7"
+    rx="3.5"
+    fill="#D97757"
+    transform="rotate(-35 16 16)"
+  />
+</svg>
