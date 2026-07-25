@@ -1,17 +1,17 @@
 import { ImageResponse } from "next/og";
 
-export const size = { width: 32, height: 32 };
+export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-// Orange tile monogram with rising accent bar (matches wordmark signature)
-export default function Icon() {
+// Same rising-bar monogram at Apple touch size (extra padding for iOS mask)
+export default function AppleIcon() {
   return new ImageResponse(
     (
       <div
         style={{
-          width: 32,
-          height: 32,
-          borderRadius: 8,
+          width: 180,
+          height: 180,
+          borderRadius: 40,
           background: "#D97757",
           display: "flex",
           alignItems: "center",
@@ -21,27 +21,23 @@ export default function Icon() {
       >
         <span
           style={{
-            fontSize: 17,
+            fontSize: 100,
             fontWeight: 700,
             color: "#FFFFFF",
             lineHeight: 1,
-            letterSpacing: "-0.5px",
-            // Slight left bias so the rising bar has room on the right
-            marginRight: 2,
-            marginTop: 1,
+            letterSpacing: "-2px",
           }}
         >
           R
         </span>
-        {/* Rising accent bar — deliberately chunky for 16–32px tabs */}
         <div
           style={{
             position: "absolute",
-            top: 6,
-            right: 4,
-            width: 9,
-            height: 3.5,
-            borderRadius: 2,
+            top: 32,
+            right: 30,
+            width: 42,
+            height: 14,
+            borderRadius: 7,
             background: "#FAF9F5",
             transform: "rotate(-35deg)",
           }}
