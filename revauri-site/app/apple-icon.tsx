@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-// Same clean monogram at Apple touch size
+// Orange R — solid orange fill for iOS home screen (transparent looks broken on home screens)
 export default function AppleIcon() {
   return new ImageResponse(
     (

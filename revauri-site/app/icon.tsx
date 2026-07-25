@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-// Clean brand monogram — orange tile, white R
+// Orange R on transparent background
 export default function Icon() {
   return new ImageResponse(
     (
@@ -11,20 +11,18 @@ export default function Icon() {
         style={{
           width: 32,
           height: 32,
-          borderRadius: 8,
-          background: "#D97757",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          background: "transparent",
         }}
       >
         <span
           style={{
-            fontSize: 18,
+            fontSize: 26,
             fontWeight: 700,
-            color: "#FFFFFF",
+            color: "#D97757",
             lineHeight: 1,
-            // Optical center: letterforms sit slightly high without this
             marginTop: 1,
             letterSpacing: "-0.02em",
           }}
