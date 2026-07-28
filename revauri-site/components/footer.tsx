@@ -42,6 +42,9 @@ export function Footer() {
                   <Link href="/about">About</Link>
                 </FooterLink>
                 <FooterLink>
+                  <Link href="/blog">Blog</Link>
+                </FooterLink>
+                <FooterLink>
                   <Link href="/faq">FAQ</Link>
                 </FooterLink>
                 <FooterLink>
