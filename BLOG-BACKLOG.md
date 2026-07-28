@@ -143,7 +143,7 @@ Reference, so the next one differs from all three:
 
 - **Post 1** — wide overhead flat-lay, paper proposals of increasing thickness, diffused light.
 - **Post 2** — three-quarter view slightly above, folders in an oak desk tray, one terracotta tilted forward.
-- **Post 3** — low angle at object height, ceramic cubes with one rounded terracotta form, directional side light and long shadows.
+- **Post 3** — low angle at object height, a tight block of small cream cubes beside one much larger terracotta cube, directional side light and long shadows.
 
 ### Framing — the rule that actually matters
 
@@ -152,6 +152,12 @@ Reference, so the next one differs from all three:
 This is the mistake that cost two regenerations. A tight macro crop looks striking on its own, but the card crops it *again*, and a subject that already ran off all four edges becomes an unreadable band of texture with no context — it reads as an odd accidental crop rather than a photograph of something. Compose for the crop, not for the full-bleed source.
 
 Prompt it explicitly: the subject should occupy roughly the middle 60% of the frame, with clear surface visible around it and nothing cropped at the edges.
+
+### Differentiate by colour and scale, not by odd shape
+
+When one object needs to stand out from a group, change its **colour, size, or position** — keep it in the same geometric family as everything else.
+
+A first attempt at post 3 put a rounded organic terracotta form among cream cubes. It read as an egg or a blob rather than a deliberate contrast, and looked unsettling. Same palette, same lighting, same framing — the composition still failed, because the odd shape drew attention as a mistake instead of as emphasis. Replacing it with a larger cube of the same geometry fixed it and carried the meaning better.
 
 **Aspect ratio:** match the slot the post will actually occupy.
 
