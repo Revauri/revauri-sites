@@ -65,7 +65,9 @@ The only vertical family with both a winnable SERP **and** portfolio proof (Lion
 
 ## Rejected verticals
 
-All four were rejected on **cost/design-cost queries specifically**. A separate research pass on non-pricing angles (compliance, page speed, platform migration, data portability) was run — see its findings before assuming these are permanently closed.
+All four were first rejected on cost/design-cost queries. A second pass then tested **non-pricing angles** — accessibility compliance, page speed, platform migration, vendor lock-in, "why isn't my site getting leads" — to check whether the specialists had only camped on the money keywords.
+
+**They hadn't. All four stay rejected.** See "Why non-pricing angles don't help" below before revisiting any of them.
 
 | Vertical | Why rejected | What would change it |
 |---|---|---|
@@ -76,6 +78,33 @@ All four were rejected on **cost/design-cost queries specifically**. A separate 
 | **Crypto / fintech** | **Intent mismatch**, not competition. Everyone searching "crypto website cost" wants to build an exchange or payment product, not buy a marketing site — SERP is dev shops quoting infrastructure builds (galaxyweblinks, merehead, hashcodex, suffescom, innowise, coinsclone). Ranking would attract non-buyers. | A fundamentally different framing. Cryptrac backs fintech technically, but the query space doesn't contain Revauri's buyer. |
 
 **Do not write for a vertical with no portfolio proof.** The content won't rank without credibility, and publishing it would be overclaiming. The path into any rejected vertical is landing one client there first — even discounted — then writing.
+
+---
+
+## Why non-pricing angles don't help
+
+Worth reading before anyone proposes "let's just approach medical from a different angle." That was tested. It doesn't work, and the reason is structural rather than incidental.
+
+**Specialist lock is not a pricing-keyword artifact. Every angle has spawned its own vendor category.** Moving off cost queries doesn't find thin ground — it walks into a different, often *more* crowded specialist SERP, because each angle has attracted its own dedicated industry.
+
+| Angle tested | What actually ranks | Verdict |
+|---|---|---|
+| ADA/WCAG compliance for dental & medical | An entire accessibility-remediation industry: growth99, intrepy, practis, fullmedia, beaccessible, edreamz, wcagsafe, dentalscapes, plus trade press and ADA-defense law firms. 7+ dedicated vendors. | **More saturated than the pricing SERP.** Real urgency (HHS WCAG 2.1 AA deadlines, $4k–$50k settlements) is exactly why vendors piled in. |
+| "Why isn't my dentist website getting patients" | Dental-marketing agencies wall to wall: patientnews, dentx, pmaxdentalmarketing, cspmarketingsolutions, geeksforgrowth, firegang, clicksondemand. | Reject. Same pattern, different roster. |
+| HIPAA-compliant intake forms | HIPAA form SaaS products (Phreesia, HIPAAtizer, FormDoctor, HIPAA Vault, Updox). | Reject — and note the intent mismatch: this traffic wants a form product, not a web studio. Fine as a supporting credibility mention on a page you already own; useless as a wedge. |
+| Core Web Vitals for contractors | A speed-specialist niche already exists: sitecare (CWV case study), pushleads (dedicated CWV-for-contractors article). | Reject. Narrower niche, still occupied. |
+| Financial-advisor platform migration / "AdvisorWebsites alternative" | No distinct migration SERP. Collapses into general advisor-website listicles owned by the same ecosystem (FMG Suite, Nitrogen/Orion). | Reject. |
+| Insurance compliance & disclosure requirements | Compliance consultants and regulators (Ritter, v-comply, NY DFS). | Reject — audience wants a compliance consultant, not a build. |
+| "Do I own my website" / data portability, CPA-specific | No vertical SERP at all. Dissolves into generic hosting content and Wikipedia. | Not targetable. |
+| "Assisted living website not generating leads" | Senior-care lead-gen firms: dolead, heyflow, avetamarketing, elevyr, seniorcaregrowth. | Reject. Confirms the original verdict. |
+
+### The one real finding — and it's not a blog post
+
+**Vendor lock-in in home-services platforms is a genuine, confirmed pain point with no SERP to win.** Independent sources (hvacknowitall, hookagency, nopio) corroborate it: content you don't fully own, sites that disappear when you leave the platform, rebuilds that cost more than building properly would have.
+
+But it never appears as a standalone ranking page — only as a subsection inside general buying guides from deep-content agencies. So it is **a messaging asset, not a content wedge.**
+
+Use it where it actually works: cold email, discovery calls, and the pricing conversation. It validates something Revauri already does and under-sells — **clients keep the code, and the Care Plan is cancellable with 30 days' notice.** Most subscription incumbents in these verticals structurally cannot say that. That's a positioning advantage that exists today and needs no new content to deploy.
 
 ---
 
