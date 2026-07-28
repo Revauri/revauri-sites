@@ -120,6 +120,29 @@ Derived from what made page one beatable in the first place: competitors publish
 - **Every post needs internal links** — the relevant case study plus `/pricing` — and one CTA to `/book`.
 - **Skip the throat-clearing.** No "in today's digital landscape." Open with something the target reader would keep reading past.
 
+## Post images
+
+Generated with `microsoft/mai-image-2.5-pro` via OpenRouter. Two practical notes on the API: its output modality is `["image"]` only, so a request asking for `["image","text"]` 404s with "no endpoints found"; and it wasn't listed in the `/models` response even though it works, so a direct call is the real test of availability.
+
+**Hold constant** — this is what makes the blog read as one publication:
+
+- Palette: cream and bone white, pale oak, warm neutrals, with terracotta `#D97757` as the *only* saturated colour in the frame.
+- Lighting: soft, warm, diffused window light. Gentle natural shadows, never harsh.
+- Treatment: editorial magazine photography. Understated and premium, never glossy corporate stock.
+- Absolutely no text, letters, numbers, logos, or handwriting anywhere in the image. AI renders text badly, and the card overlays its own title regardless.
+- No people, no hands, no faces. No gavels, no scales of justice, no legal props.
+
+**Vary every time** — the first two posts were nearly identical because only the subject changed while angle, scale, and arrangement stayed fixed. In the card grid they scanned as the same picture, which defeats the point of having images at all:
+
+- **Angle** — overhead flat-lay, eye level, three-quarter, low angle.
+- **Scale and crop** — wide establishing shot versus tight macro detail.
+- **Subject** — the object should carry the specific post's idea, not just be "paper on a desk" again.
+- **Depth of field** — everything sharp versus one element isolated against soft falloff.
+
+Reference, so the next one differs from both: post 1 is a wide overhead flat-lay of four proposals of increasing thickness. Post 2 is a tight eye-level shot of upright folders, one terracotta among white, shallow focus.
+
+**Technical:** keep the source **square**. The featured card crops toward 1.16 and the grid cards to 16:9; a 16:9 source got its outer subjects clipped by the featured crop and lost the composition entirely. Square survives both. Export JPEG at quality 90 around 1400×1400 — `next/image` re-encodes to WebP/AVIF on delivery, so a large PNG is wasted bytes. Write a genuinely descriptive `imageAlt`; it's the accessible description, not a keyword slot.
+
 ## Measuring whether this is working
 
 Watch **impressions in Search Console**, not clicks or sessions, for the first 90 days. Impressions rising means Google is starting to trust the pages; clicks lag well behind.

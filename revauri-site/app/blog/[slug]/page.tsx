@@ -3,13 +3,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
 import { AuthorByline } from "@/components/blog/author-byline";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { ReadingProgress } from "@/components/blog/reading-progress";
+import { TableOfContents } from "@/components/blog/table-of-contents";
 import { formatDate } from "@/components/blog/post-card";
 import { getAllPosts, getPostBySlug, getRelatedPosts, AUTHOR } from "@/lib/blog";
+import { extractToc } from "@/lib/toc";
 import { mdxComponents } from "@/mdx-components";
 
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
@@ -55,6 +59,7 @@ export default async function BlogPostPage(
   if (!post) notFound();
 
   const relatedPosts = getRelatedPosts(slug, 3);
+  const headings = extractToc(post.content);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -97,6 +102,7 @@ export default async function BlogPostPage(
 
   return (
     <div>
+      <ReadingProgress targetId="post-body" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -139,16 +145,21 @@ export default async function BlogPostPage(
 
       {/* Section 3 — MDX body */}
       <section className="py-12 lg:py-16">
-        <div className="mx-auto max-w-3xl px-6">
-          <FadeInWhenVisible>
-            <div className="prose dark:prose-invert max-w-none">
-              <MDXRemote
-                source={post.content}
-                components={mdxComponents}
-                options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-              />
-            </div>
-          </FadeInWhenVisible>
+        <div className="mx-auto max-w-3xl px-6 lg:grid lg:max-w-[calc(48rem+260px+3rem)] lg:grid-cols-[minmax(0,48rem)_260px] lg:gap-12">
+          <div className="lg:col-start-2 lg:row-start-1 lg:h-full">
+            <TableOfContents headings={headings} />
+          </div>
+          <div className="lg:col-start-1 lg:row-start-1">
+            <FadeInWhenVisible>
+              <div id="post-body" className="prose blog-article dark:prose-invert max-w-none">
+                <MDXRemote
+                  source={post.content}
+                  components={mdxComponents}
+                  options={{ mdxOptions: { remarkPlugins: [remarkGfm], rehypePlugins: [rehypeSlug] } }}
+                />
+              </div>
+            </FadeInWhenVisible>
+          </div>
         </div>
       </section>
 
