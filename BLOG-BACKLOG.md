@@ -139,9 +139,24 @@ Generated with `microsoft/mai-image-2.5-pro` via OpenRouter. Two practical notes
 - **Subject** — the object should carry the specific post's idea, not just be "paper on a desk" again.
 - **Depth of field** — everything sharp versus one element isolated against soft falloff.
 
-Reference, so the next one differs from both: post 1 is a wide overhead flat-lay of four proposals of increasing thickness. Post 2 is a tight eye-level shot of upright folders, one terracotta among white, shallow focus.
+Reference, so the next one differs from both: post 1 is a wide overhead flat-lay of four proposals of increasing thickness. Post 2 is a three-quarter view of folders in an oak desk tray, one terracotta tilted forward.
 
-**Technical:** keep the source **square**. The featured card crops toward 1.16 and the grid cards to 16:9; a 16:9 source got its outer subjects clipped by the featured crop and lost the composition entirely. Square survives both. Export JPEG at quality 90 around 1400×1400 — `next/image` re-encodes to WebP/AVIF on delivery, so a large PNG is wasted bytes. Write a genuinely descriptive `imageAlt`; it's the accessible description, not a keyword slot.
+### Framing — the rule that actually matters
+
+**Always ask for the whole subject inside the frame with generous margins on all four sides.** Nothing should touch or run off an edge.
+
+This is the mistake that cost two regenerations. A tight macro crop looks striking on its own, but the card crops it *again*, and a subject that already ran off all four edges becomes an unreadable band of texture with no context — it reads as an odd accidental crop rather than a photograph of something. Compose for the crop, not for the full-bleed source.
+
+Prompt it explicitly: the subject should occupy roughly the middle 60% of the frame, with clear surface visible around it and nothing cropped at the edges.
+
+**Aspect ratio:** match the slot the post will actually occupy.
+
+- **Featured post** → square source. The featured card crops toward 1.16; a 16:9 source loses its outer subject matter to that crop.
+- **Non-featured post** → 16:9 source, framed deliberately. Grid cards are 16:9, so this renders exactly as composed. If the post is later promoted to featured, re-check it.
+
+Either way, if the framing rule above is respected, both crops survive.
+
+**Export:** JPEG quality 90, roughly 1400px on the long edge. `next/image` re-encodes to WebP/AVIF on delivery, so a multi-megabyte PNG is wasted bytes. Write a genuinely descriptive `imageAlt` — it's the accessible description, not a keyword slot.
 
 ## Measuring whether this is working
 
