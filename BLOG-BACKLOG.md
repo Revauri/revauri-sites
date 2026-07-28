@@ -33,11 +33,11 @@ The only vertical family with both a winnable SERP **and** portfolio proof (Lion
    - Ranking was dangilroy, themodernfirm, lawquill, growlaw, topnotchdezigns, amiwebagency — all small boutique/solo shops. The most winnable SERP found in any round.
    - Decision-stage. Leads on the ownership question, which subscription-model competitors can't answer cleanly. Includes an honest "when not to hire a small studio" section.
 
-### Next up, in priority order
+3. **Is a Custom Website Worth It for a Small Personal Injury Law Firm?** — `revauri-site/content/blog/is-a-custom-website-worth-it-for-a-small-law-firm.mdx`
+   - Ranking was paperstreet, oyova, clio (x2), legalpeel. Clio has real content-marketing strength — the closest thing to authority in this niche, but not Forbes tier.
+   - Answers "why not just use a template." Willing to say a template is genuinely right for early firms, which is what makes the rest credible. Adds the migration-cost angle the competing posts omit.
 
-3. **Is a Custom Website Worth It for a Small Personal Injury Law Firm?**
-   - Ranking: paperstreet, oyova, clio (x2), legalpeel. Clio has genuine content-marketing strength — the closest thing to real authority in this niche, but not Forbes tier.
-   - Answers "why not just use Wix or a template."
+### Next up, in priority order
 
 4. **How Long Does It Take to Build a Personal Injury Law Firm Website**
    - Only the generic "law firm website" version was checked (jdsupra, casefox, onthemap, thatagency, arraydigital — all niche legal shops). The PI-specific phrasing looks like open ground but is **inferred, not verified**. Check the SERP before writing.
@@ -139,7 +139,11 @@ Generated with `microsoft/mai-image-2.5-pro` via OpenRouter. Two practical notes
 - **Subject** — the object should carry the specific post's idea, not just be "paper on a desk" again.
 - **Depth of field** — everything sharp versus one element isolated against soft falloff.
 
-Reference, so the next one differs from both: post 1 is a wide overhead flat-lay of four proposals of increasing thickness. Post 2 is a three-quarter view of folders in an oak desk tray, one terracotta tilted forward.
+Reference, so the next one differs from all three:
+
+- **Post 1** — wide overhead flat-lay, paper proposals of increasing thickness, diffused light.
+- **Post 2** — three-quarter view slightly above, folders in an oak desk tray, one terracotta tilted forward.
+- **Post 3** — low angle at object height, ceramic cubes with one rounded terracotta form, directional side light and long shadows.
 
 ### Framing — the rule that actually matters
 
@@ -157,6 +161,12 @@ Prompt it explicitly: the subject should occupy roughly the middle 60% of the fr
 Either way, if the framing rule above is respected, both crops survive.
 
 **Export:** JPEG quality 90, roughly 1400px on the long edge. `next/image` re-encodes to WebP/AVIF on delivery, so a multi-megabyte PNG is wasted bytes. Write a genuinely descriptive `imageAlt` — it's the accessible description, not a keyword slot.
+
+## Cadence
+
+Target is one post roughly every 10 days (~36/year), decided 2026-07-28 after publishing the first three. **Consistency matters more than frequency here** — a cadence that holds beats a weekly target abandoned in month two.
+
+Work down the "Next up" list in order, and re-verify the SERP for anything marked not-verified before committing to it.
 
 ## Measuring whether this is working
 
