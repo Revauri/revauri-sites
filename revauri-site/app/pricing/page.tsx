@@ -123,6 +123,18 @@ export default function PricingPage() {
               You&apos;ll get a clear quote afterward, based on the actual scope
               instead of a generic package.
             </p>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+              Curious why quotes for what looks like the same website can vary so
+              wildly?{" "}
+              <Link
+                href="/blog/law-firm-website-cost"
+                className="font-medium text-brand-orange hover:underline"
+              >
+                Here&apos;s why the price tracks overhead and process, not build
+                quality
+              </Link>{" "}
+              — using a law firm as the worked example.
+            </p>
           </section>
         </FadeInWhenVisible>
 
