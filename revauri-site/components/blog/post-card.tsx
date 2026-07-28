@@ -4,10 +4,13 @@ import { ArrowRight, Clock } from "lucide-react";
 import type { PostMeta } from "@/lib/blog";
 
 export function formatDate(iso: string): string {
+  // Date-only frontmatter ("2026-07-27") parses as UTC midnight, so formatting
+  // in local time renders the previous day anywhere behind UTC. Pin to UTC.
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
