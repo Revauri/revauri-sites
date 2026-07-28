@@ -29,11 +29,11 @@ The only vertical family with both a winnable SERP **and** portfolio proof (Lion
    - Page one was all small legal-marketing boutiques: paperstreet, jurisgrowth, flamingoagency, thomasdigital, goconstellation, getciville, webyking, magnifylab, wearetg, splashcreative. No high-authority generalists.
    - Angle: price tracks overhead and process, not build quality. Differentiator is a real case study where competitors give generic ranges with no client proof.
 
-### Next up, in priority order
+2. **How to Choose a Web Designer for a Personal Injury Law Firm** — `revauri-site/content/blog/how-to-choose-a-law-firm-web-designer.mdx`
+   - Ranking was dangilroy, themodernfirm, lawquill, growlaw, topnotchdezigns, amiwebagency — all small boutique/solo shops. The most winnable SERP found in any round.
+   - Decision-stage. Leads on the ownership question, which subscription-model competitors can't answer cleanly. Includes an honest "when not to hire a small studio" section.
 
-2. **How to Choose a Web Designer for a Personal Injury Law Firm**
-   - Ranking: dangilroy, themodernfirm, lawquill, growlaw, topnotchdezigns, amiwebagency — all small boutique/solo shops. **The most winnable SERP found in any round.**
-   - Decision-stage. Pre-empts "why you and not the agency that just cold-emailed me."
+### Next up, in priority order
 
 3. **Is a Custom Website Worth It for a Small Personal Injury Law Firm?**
    - Ranking: paperstreet, oyova, clio (x2), legalpeel. Clio has genuine content-marketing strength — the closest thing to real authority in this niche, but not Forbes tier.
