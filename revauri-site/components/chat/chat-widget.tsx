@@ -47,6 +47,10 @@ export function ChatWidget() {
   const [hydrated, setHydrated] = useState(false);
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  // Only pin to visualViewport while the composer is focused. Tracking the
+  // viewport through the keyboard *dismiss* animation makes the panel grow
+  // slowly back to fullscreen after blur — feels laggy on iOS.
+  const [composerFocused, setComposerFocused] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -145,34 +149,61 @@ export function ChatWidget() {
     };
   }, []);
 
-  // Pin the fullscreen panel to the visual viewport so the iOS soft keyboard
-  // doesn't cover the composer (layout viewport often stays full-height).
+  function clearViewportPin() {
+    const node = outerRef.current;
+    if (!node) return;
+    node.style.top = "";
+    node.style.left = "";
+    node.style.right = "";
+    node.style.bottom = "";
+    node.style.height = "";
+  }
+
+  function handleComposerFocusChange(focused: boolean) {
+    // Snap to CSS fullscreen in the blur event itself — waiting for a React
+    // effect (or visualViewport's dismiss animation) is what felt laggy.
+    if (!focused) clearViewportPin();
+    setComposerFocused(focused);
+  }
+
+  // While the mobile composer is focused, pin the panel to the visual
+  // viewport so the soft keyboard doesn't cover the input. On blur we clear
+  // via handleComposerFocusChange — this effect only runs the pin listeners.
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !composerFocused || window.matchMedia(SM_MQ).matches) {
+      clearViewportPin();
+      return;
+    }
+
     const vv = window.visualViewport;
     if (!vv) return;
 
-    function clearInlineBox(el: HTMLElement) {
-      el.style.top = "";
-      el.style.left = "";
-      el.style.right = "";
-      el.style.bottom = "";
-      el.style.height = "";
-    }
+    let prevHeight = vv.height;
 
     function sync() {
-      const el = outerRef.current;
+      const node = outerRef.current;
       const viewport = window.visualViewport;
-      if (!el || !viewport) return;
+      if (!node || !viewport) return;
       if (window.matchMedia(SM_MQ).matches) {
-        clearInlineBox(el);
+        clearViewportPin();
         return;
       }
-      el.style.top = `${viewport.offsetTop}px`;
-      el.style.left = "0px";
-      el.style.right = "0px";
-      el.style.bottom = "auto";
-      el.style.height = `${viewport.height}px`;
+
+      const nextHeight = viewport.height;
+      // Keyboard closing (height growing) or essentially closed — snap to
+      // fullscreen instead of slowly tracking the dismiss animation.
+      if (nextHeight >= window.innerHeight * 0.9 || nextHeight > prevHeight + 12) {
+        prevHeight = nextHeight;
+        clearViewportPin();
+        return;
+      }
+      prevHeight = nextHeight;
+
+      node.style.top = `${viewport.offsetTop}px`;
+      node.style.left = "0px";
+      node.style.right = "0px";
+      node.style.bottom = "auto";
+      node.style.height = `${nextHeight}px`;
     }
 
     vv.addEventListener("resize", sync);
@@ -183,9 +214,17 @@ export function ChatWidget() {
       vv.removeEventListener("resize", sync);
       vv.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
-      const el = outerRef.current;
-      if (el) clearInlineBox(el);
+      clearViewportPin();
     };
+  }, [isOpen, composerFocused]);
+
+  // Reset composer-focus state whenever the panel closes so a reopen doesn't
+  // inherit a stale "keyboard open" pin.
+  useEffect(() => {
+    if (!isOpen) {
+      setComposerFocused(false);
+      clearViewportPin();
+    }
   }, [isOpen]);
 
   // Mobile: fade + slight rise (sheet-like). Desktop: slide in from the right.
@@ -230,7 +269,10 @@ export function ChatWidget() {
               cookieBannerOpen ? "lg:bottom-32" : ""
             }`}
           >
-            <ChatPanel onClose={() => setIsOpen(false)} />
+            <ChatPanel
+              onClose={() => setIsOpen(false)}
+              onComposerFocusChange={handleComposerFocusChange}
+            />
           </motion.div>
         )}
       </AnimatePresence>

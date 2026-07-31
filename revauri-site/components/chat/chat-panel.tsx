@@ -46,7 +46,14 @@ function hasVisibleContent(message: UIMessage) {
   });
 }
 
-export function ChatPanel({ onClose }: { onClose: () => void }) {
+export function ChatPanel({
+  onClose,
+  onComposerFocusChange,
+}: {
+  onClose: () => void;
+  /** Mobile keyboard pin: parent shrinks to visualViewport only while focused. */
+  onComposerFocusChange?: (focused: boolean) => void;
+}) {
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
@@ -387,6 +394,10 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
               resizeTextarea();
             }}
             onKeyDown={handleKeyDown}
+            onFocus={() => onComposerFocusChange?.(true)}
+            // Snap the outer shell back to fullscreen immediately on blur —
+            // waiting for visualViewport to finish animating feels laggy.
+            onBlur={() => onComposerFocusChange?.(false)}
             placeholder="Type a message..."
             aria-label="Message Rev"
             rows={1}
