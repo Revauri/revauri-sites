@@ -43,12 +43,9 @@ function ChatPanelShell() {
   );
 }
 
-function clearViewportBox(node: HTMLElement) {
-  node.style.top = "";
-  node.style.left = "";
-  node.style.right = "";
-  node.style.bottom = "";
-  node.style.height = "";
+function clearKeyboardPadding(node: HTMLElement) {
+  node.style.paddingTop = "";
+  node.style.paddingBottom = "";
 }
 
 export function ChatWidget() {
@@ -60,6 +57,7 @@ export function ChatWidget() {
   const wasOpenRef = useRef(false);
   const outerRef = useRef<HTMLDivElement>(null);
   const pathWhenOpenedRef = useRef<string | null>(null);
+  const bodyLockScrollYRef = useRef(0);
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
 
@@ -128,18 +126,52 @@ export function ChatWidget() {
     if (pathname !== pathWhenOpenedRef.current) setIsOpen(false);
   }, [pathname, isOpen]);
 
-  // Lock body scroll while the mobile fullscreen panel is open.
+  // Hard body lock on mobile: position:fixed freezes the page under the
+  // panel so iOS keyboard dismiss can't scroll the document into view.
   useEffect(() => {
     if (!isOpen) return;
     const mq = window.matchMedia(SM_MQ);
-    function apply() {
-      document.body.style.overflow = mq.matches ? "" : "hidden";
+    const body = document.body;
+    const html = document.documentElement;
+
+    function lock() {
+      if (mq.matches) {
+        body.style.overflow = "";
+        body.style.position = "";
+        body.style.top = "";
+        body.style.left = "";
+        body.style.right = "";
+        body.style.width = "";
+        html.style.overflow = "";
+        return;
+      }
+      bodyLockScrollYRef.current = window.scrollY;
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.top = `-${bodyLockScrollYRef.current}px`;
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
     }
-    apply();
-    mq.addEventListener("change", apply);
+
+    function unlock() {
+      const y = bodyLockScrollYRef.current;
+      html.style.overflow = "";
+      body.style.overflow = "";
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      window.scrollTo(0, y);
+    }
+
+    lock();
+    mq.addEventListener("change", lock);
     return () => {
-      mq.removeEventListener("change", apply);
-      document.body.style.overflow = "";
+      mq.removeEventListener("change", lock);
+      unlock();
     };
   }, [isOpen]);
 
@@ -174,39 +206,35 @@ export function ChatWidget() {
     };
   }, []);
 
-  // Mobile keyboard (standard pattern): keep the shell matched 1:1 to the
-  // visual viewport with no CSS transitions. No blur/focus special cases —
-  // the panel resizes with the keyboard the way native chat apps do.
-  // Desktop leaves the floating card alone. Browsers that honor
-  // interactive-widget=resizes-content still benefit from this on iOS.
+  // Keyboard avoidance without moving the shell:
+  // The overlay stays fixed inset-0 with an opaque fill for the whole layout
+  // viewport — that is what prevents the site from flashing through when iOS
+  // animates the keyboard. We only pad the shell so the chat UI sits in the
+  // visual viewport; we never change top/height of the overlay itself.
   useEffect(() => {
     if (!isOpen) return;
     const node = outerRef.current;
-    const vv = window.visualViewport;
     if (!node) return;
 
     function sync() {
       if (!node) return;
       if (window.matchMedia(SM_MQ).matches) {
-        clearViewportBox(node);
+        clearKeyboardPadding(node);
         return;
       }
+      const vv = window.visualViewport;
       if (!vv) {
-        // No visualViewport API — rely on inset-0 + dvh.
-        clearViewportBox(node);
+        clearKeyboardPadding(node);
         return;
       }
-      node.style.top = `${vv.offsetTop}px`;
-      node.style.left = "0px";
-      node.style.right = "0px";
-      node.style.bottom = "auto";
-      node.style.height = `${vv.height}px`;
+      const top = Math.max(0, Math.round(vv.offsetTop));
+      const bottom = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+      node.style.paddingTop = top > 0 ? `${top}px` : "";
+      node.style.paddingBottom = bottom > 0 ? `${bottom}px` : "";
     }
 
-    if (!vv) {
-      sync();
-      return;
-    }
+    const vv = window.visualViewport;
+    if (!vv) return;
 
     vv.addEventListener("resize", sync);
     vv.addEventListener("scroll", sync);
@@ -216,11 +244,13 @@ export function ChatWidget() {
       vv.removeEventListener("resize", sync);
       vv.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
-      clearViewportBox(node);
+      clearKeyboardPadding(node);
     };
   }, [isOpen]);
 
   // Mobile: fade + slight rise (sheet-like). Desktop: slide in from the right.
+  // Opacity-only motion would also work; keep a small rise for polish. Never
+  // animate height/top — those fight the keyboard.
   const motionInitial = reducedMotion
     ? { opacity: 0 }
     : isDesktop
@@ -257,12 +287,16 @@ export function ChatWidget() {
             animate={{ opacity: 1, x: 0, y: 0 }}
             exit={motionExit}
             transition={motionTransition}
-            // z-[90] sits above the cookie banner (z-80) so open chat is never blocked.
-            className={`fixed inset-0 z-[90] h-dvh sm:inset-auto sm:bottom-6 sm:right-6 sm:h-auto ${
+            // z-[90] above cookie banner (z-80). Mobile: opaque full-bleed
+            // shell that never leaves inset-0 — page content cannot show through
+            // during keyboard transitions. Desktop: transparent around the card.
+            className={`fixed inset-0 z-[90] flex flex-col overflow-hidden overscroll-none bg-brand-white dark:bg-[#1a1a19] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:overflow-visible sm:bg-transparent ${
               cookieBannerOpen ? "lg:bottom-32" : ""
             }`}
           >
-            <ChatPanel onClose={() => setIsOpen(false)} />
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col sm:block sm:flex-none">
+              <ChatPanel onClose={() => setIsOpen(false)} />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
