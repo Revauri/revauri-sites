@@ -50,6 +50,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
+  const [isMobileModal, setIsMobileModal] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -116,10 +117,27 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     if (el) el.scrollTo({ top: el.scrollHeight, behavior });
   }
 
-  // Land at the latest message and move focus into the panel when it opens.
+  // Fullscreen on mobile acts as a modal; desktop floating card does not
+  // (page behind stays interactive — see handlePanelKeyDown).
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobileModal(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Land at the latest message when the panel opens. Autofocus the textarea
+  // only on desktop — on mobile it would pop the soft keyboard mid-open and
+  // fight the entrance animation / visual viewport.
   useEffect(() => {
     scrollToBottom("instant");
-    textareaRef.current?.focus({ preventScroll: true });
+    const desktop = window.matchMedia("(min-width: 640px)").matches;
+    if (desktop) {
+      textareaRef.current?.focus({ preventScroll: true });
+    } else {
+      panelRef.current?.focus({ preventScroll: true });
+    }
   }, []);
 
   // On small screens the panel is fullscreen (fixed inset-0), so keep Tab and
@@ -240,28 +258,32 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   return (
     <div
       ref={panelRef}
+      role={isMobileModal ? "dialog" : undefined}
+      aria-modal={isMobileModal ? true : undefined}
+      aria-label="Chat with Rev"
+      tabIndex={-1}
       onKeyDown={handlePanelKeyDown}
-      className={`flex h-full w-full flex-col overflow-hidden sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
+      className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[18px] pb-3.5 dark:border-brand-mid-gray/20">
+      {/* Header — top safe-area on mobile fullscreen so status bar / notch clear */}
+      <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[max(1.125rem,env(safe-area-inset-top))] pb-3.5 sm:pt-[18px] dark:border-brand-mid-gray/20">
         <div>
           <Logo />
           <p className="mt-0.5 text-[10px] leading-tight text-brand-mid-gray">
             Rev · AI assistant
           </p>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 sm:gap-1">
           <button
             onClick={handleReset}
-            className="flex h-[28px] w-[28px] items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 dark:text-brand-cream"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 sm:h-[28px] sm:w-[28px] dark:text-brand-cream"
             aria-label="Reset conversation"
           >
             <RotateCcw className="h-[18px] w-[18px]" />
           </button>
           <button
             onClick={onClose}
-            className="flex h-[28px] w-[28px] items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 dark:text-brand-cream"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 sm:h-[28px] sm:w-[28px] dark:text-brand-cream"
             aria-label="Close chat"
           >
             <X className="h-[18px] w-[18px]" />
@@ -277,7 +299,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
           role="log"
           aria-live="polite"
           aria-label="Conversation with Rev"
-          className="h-full space-y-3.5 overflow-y-auto px-[18px] py-[18px]"
+          className="h-full space-y-3.5 overflow-y-auto overscroll-y-contain px-[18px] py-[18px] [-webkit-overflow-scrolling:touch]"
         >
           {messages.map((message, index) => (
             <ChatMessageBubble
@@ -347,10 +369,10 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         )}
       </div>
 
-      {/* Input */}
+      {/* Input — bottom safe-area on mobile fullscreen for home indicator */}
       <form
         onSubmit={handleSubmit}
-        className="border-t border-brand-light-gray/60 px-4 py-3.5 dark:border-brand-mid-gray/20"
+        className="border-t border-brand-light-gray/60 px-4 pt-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] sm:pb-3.5 dark:border-brand-mid-gray/20"
       >
         {/* rounded-[22px] (not rounded-full) so the corner curve stays constant as the
             field grows — a fully-round radius on a multi-line field sweeps inward past

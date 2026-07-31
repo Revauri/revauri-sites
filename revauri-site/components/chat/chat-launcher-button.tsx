@@ -14,11 +14,15 @@ export function ChatLauncherButton({
   cookieBannerOpen: boolean;
   ref?: Ref<HTMLButtonElement>;
 }) {
+  // Safe-area clears the home indicator; cookie-open offsets clear the banner
+  // at every breakpoint (previously only lg, so mobile FAB sat under the card).
+  const bottomClass = cookieBannerOpen
+    ? "bottom-52 sm:bottom-36 lg:bottom-32"
+    : "bottom-[max(1.25rem,env(safe-area-inset-bottom))]";
+
   return (
     <div
-      className={`group fixed bottom-5 right-5 z-[70] flex items-center gap-2 transition-[bottom] duration-300 ${
-        cookieBannerOpen ? "lg:bottom-32" : ""
-      }`}
+      className={`group fixed right-5 z-[70] flex items-center gap-2 transition-[bottom] duration-300 ${bottomClass}`}
     >
       <span className="pointer-events-none translate-x-2 whitespace-nowrap rounded-full bg-brand-dark px-4 py-2 text-sm font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 dark:bg-brand-cream dark:text-brand-dark">
         Chat with us
@@ -31,6 +35,8 @@ export function ChatLauncherButton({
         onClick={onClick}
         onMouseEnter={onPrefetch}
         onFocus={onPrefetch}
+        // Touch devices never fire mouseenter; start loading on first press.
+        onPointerDown={onPrefetch}
         aria-expanded={isOpen}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
