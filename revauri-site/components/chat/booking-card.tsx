@@ -48,7 +48,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
           15 minutes with the Revauri team — pick any time that works for you.
         </p>
         <a
-          href="/book"
+          href="/book#scheduler"
           className="mt-1 inline-block w-fit rounded-full bg-brand-dark px-3.5 py-2 text-xs font-semibold text-white dark:bg-brand-cream dark:text-brand-dark"
         >
           Book a call
@@ -78,7 +78,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
         ))}
       </div>
       <a
-        href="/book"
+        href="/book#scheduler"
         className="mt-0.5 w-fit text-xs font-medium text-brand-mid-gray underline underline-offset-2 hover:text-brand-orange"
       >
         See all times →

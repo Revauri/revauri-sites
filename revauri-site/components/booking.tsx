@@ -8,6 +8,10 @@ const CALENDLY_URL =
   "https://calendly.com/joseph-revauri/website-strategy-call";
 const CALENDLY_EMBED_URL = `${CALENDLY_URL}?hide_landing_page_details=1&hide_gdpr_banner=1&hide_event_type_details=1&background_color=ffffff&text_color=141413&primary_color=d97757`;
 
+// Initial shell only — once Calendly reports a height we follow it exactly
+// (no floor). A high min-height was leaving empty space under the widget on mobile.
+const FALLBACK_MIN_HEIGHT_PX = 620;
+
 declare global {
   interface Window {
     Calendly?: {
@@ -23,22 +27,34 @@ declare global {
 export function Booking() {
   const embedRef = useRef<HTMLDivElement>(null);
   const [isCalendlyLoaded, setIsCalendlyLoaded] = useState(false);
-  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const [embedHeight, setEmbedHeight] = useState<number | null>(null);
 
   useEffect(() => {
     let safetyTimer: ReturnType<typeof setTimeout>;
 
     const onCalendlyMessage = (event: MessageEvent) => {
-      if (
-        typeof event.data === "object" &&
-        event.data !== null &&
-        "event" in event.data &&
-        typeof event.data.event === "string" &&
-        event.data.event === "calendly.event_type_viewed"
-      ) {
+      if (event.origin !== "https://calendly.com") return;
+      if (typeof event.data !== "object" || event.data === null || !("event" in event.data)) {
+        return;
+      }
+      const message = event.data as { event?: string; payload?: { height?: number } };
+
+      if (message.event === "calendly.event_type_viewed") {
         clearTimeout(safetyTimer);
         setIsCalendlyLoaded(true);
-        return;
+      }
+
+      // Calendly posts page height as the visitor moves through steps.
+      if (
+        typeof message.payload?.height === "number" &&
+        message.payload.height > 0 &&
+        (message.event === "calendly.page_height" ||
+          message.event === "calendly.event_type_viewed" ||
+          // Some embed builds only send height on generic resize-style events
+          message.event?.includes("height") ||
+          message.event?.includes("page_height"))
+      ) {
+        setEmbedHeight(Math.ceil(message.payload.height));
       }
 
       const scheduled = parseCalendlyScheduledEvent(event.origin, event.data);
@@ -48,6 +64,7 @@ export function Booking() {
     const initializeEmbed = () => {
       if (!embedRef.current || !window.Calendly?.initInlineWidget) return;
       setIsCalendlyLoaded(false);
+      setEmbedHeight(null);
       embedRef.current.innerHTML = "";
       window.Calendly.initInlineWidget({
         url: CALENDLY_EMBED_URL,
@@ -79,43 +96,70 @@ export function Booking() {
     };
   }, []);
 
+  // Follow the widget/iframe size Calendly injects (resize: true updates this).
+  // Observe the iframe when present so we don't invent extra min-height.
   useEffect(() => {
     const embedElement = embedRef.current;
     if (!embedElement || typeof ResizeObserver === "undefined") return;
 
-    const observer = new ResizeObserver((entries) => {
-      const nextHeight = entries[0]?.contentRect.height ?? 0;
-
-      if (nextHeight > 0) {
-        setMeasuredHeight((currentHeight) => {
-          const roundedHeight = Math.ceil(nextHeight);
-          return currentHeight === roundedHeight ? currentHeight : roundedHeight;
+    const readHeight = () => {
+      const iframe = embedElement.querySelector("iframe");
+      const raw =
+        iframe?.getBoundingClientRect().height ||
+        embedElement.getBoundingClientRect().height ||
+        0;
+      if (raw > 0) {
+        setEmbedHeight((current) => {
+          const next = Math.ceil(raw);
+          return current === next ? current : next;
         });
       }
-    });
+    };
 
+    const observer = new ResizeObserver(() => readHeight());
     observer.observe(embedElement);
 
-    return () => observer.disconnect();
+    // Iframe may mount after init — watch child list too.
+    const mutation = new MutationObserver(() => {
+      const iframe = embedElement.querySelector("iframe");
+      if (iframe) {
+        observer.observe(iframe);
+        readHeight();
+      }
+    });
+    mutation.observe(embedElement, { childList: true, subtree: true });
+
+    readHeight();
+
+    return () => {
+      observer.disconnect();
+      mutation.disconnect();
+    };
   }, []);
 
-  const fallbackHeight = 760;
-  const embedMinHeight = measuredHeight
-    ? `${Math.max(measuredHeight, fallbackHeight)}px`
-    : `${fallbackHeight}px`;
+  // Scroll to the scheduler when arriving via /book#scheduler (chat deep link).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash !== "#scheduler") return;
+    // Wait a frame so layout is ready after client navigation.
+    const id = window.requestAnimationFrame(() => {
+      document.getElementById("scheduler")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, []);
+
+  const shellHeight = embedHeight ?? FALLBACK_MIN_HEIGHT_PX;
 
   return (
     <section id="book" className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
       <div className="relative mx-auto max-w-6xl px-6">
         <FadeInWhenVisible>
-          <div className="mx-auto mt-6 w-full max-w-[980px] md:mt-8">
+          <div id="scheduler" className="mx-auto mt-6 w-full max-w-[980px] scroll-mt-24 md:mt-8">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-10 top-10 h-44 rounded-full bg-brand-orange/10 blur-3xl md:inset-x-16 md:h-48"
             />
-            <div
-              className="relative overflow-hidden rounded-[1.85rem] border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-2.5 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:rounded-[2rem] sm:p-3.5"
-            >
+            <div className="relative overflow-hidden rounded-[1.85rem] border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-2.5 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:rounded-[2rem] sm:p-3.5">
               <div className="mb-2.5 flex items-center justify-between gap-3 rounded-[1.25rem] border border-brand-light-gray/50 bg-brand-white/85 px-4 py-3 dark:border-brand-mid-gray/20 dark:bg-brand-dark/85 sm:mb-3 sm:rounded-[1.35rem]">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
@@ -146,8 +190,8 @@ export function Booking() {
                 )}
                 <div
                   ref={embedRef}
-                  className="w-full transition-[min-height] duration-300 ease-out"
-                  style={{ minHeight: isCalendlyLoaded ? embedMinHeight : `${fallbackHeight}px` }}
+                  className="calendly-embed w-full [&_iframe]:block [&_iframe]:w-full"
+                  style={{ height: shellHeight, minHeight: shellHeight }}
                 />
               </div>
             </div>

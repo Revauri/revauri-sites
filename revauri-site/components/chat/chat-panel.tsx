@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
@@ -46,14 +46,7 @@ function hasVisibleContent(message: UIMessage) {
   });
 }
 
-export function ChatPanel({
-  onClose,
-  onComposerFocusChange,
-}: {
-  onClose: () => void;
-  /** Mobile keyboard pin: parent shrinks to visualViewport only while focused. */
-  onComposerFocusChange?: (focused: boolean) => void;
-}) {
+export function ChatPanel({ onClose }: { onClose: () => void }) {
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
@@ -146,6 +139,23 @@ export function ChatPanel({
       panelRef.current?.focus({ preventScroll: true });
     }
   }, []);
+
+  // Internal links (booking, portfolio, etc.) navigate under the layout-level
+  // chat shell — close immediately so the destination is visible. External /
+  // new-tab links (Calendly slot deep links) leave the panel open.
+  function handlePanelClickCapture(e: MouseEvent<HTMLDivElement>) {
+    const anchor = (e.target as Element | null)?.closest?.("a");
+    if (!anchor) return;
+    if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+    const href = anchor.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) {
+      return;
+    }
+    const isInternal =
+      href.startsWith("/") ||
+      (typeof window !== "undefined" && href.startsWith(window.location.origin));
+    if (isInternal) onClose();
+  }
 
   // On small screens the panel is fullscreen (fixed inset-0), so keep Tab and
   // Shift+Tab cycling inside it. Desktop keeps normal tab order — the page
@@ -269,6 +279,7 @@ export function ChatPanel({
       aria-modal={isMobileModal ? true : undefined}
       aria-label="Chat with Rev"
       tabIndex={-1}
+      onClickCapture={handlePanelClickCapture}
       onKeyDown={handlePanelKeyDown}
       className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
     >
@@ -394,10 +405,6 @@ export function ChatPanel({
               resizeTextarea();
             }}
             onKeyDown={handleKeyDown}
-            onFocus={() => onComposerFocusChange?.(true)}
-            // Snap the outer shell back to fullscreen immediately on blur —
-            // waiting for visualViewport to finish animating feels laggy.
-            onBlur={() => onComposerFocusChange?.(false)}
             placeholder="Type a message..."
             aria-label="Message Rev"
             rows={1}

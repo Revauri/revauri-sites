@@ -12,10 +12,13 @@ const inter = Inter({
   display: "swap",
 });
 
-// viewport-fit=cover so env(safe-area-inset-*) works for the chat FAB/panel
-// and other fixed UI on notched devices.
+// viewport-fit=cover so env(safe-area-inset-*) works for the chat FAB/panel.
+// interactiveWidget resizes-content: when the soft keyboard opens, shrink the
+// layout viewport so fullscreen UI (chat) reflows with it — standard mobile
+// chat pattern on supporting browsers; iOS still uses visualViewport in JS.
 export const viewport: Viewport = {
   viewportFit: "cover",
+  interactiveWidget: "resizes-content",
 };
 
 export const metadata: Metadata = {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChatLauncherButton } from "./chat-launcher-button";
 import { isCookieBannerVisible, onCookieBannerVisibilityChanged } from "@/lib/analytics";
@@ -42,19 +43,24 @@ function ChatPanelShell() {
   );
 }
 
+function clearViewportBox(node: HTMLElement) {
+  node.style.top = "";
+  node.style.left = "";
+  node.style.right = "";
+  node.style.bottom = "";
+  node.style.height = "";
+}
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  // Only pin to visualViewport while the composer is focused. On blur we
-  // ease back to fullscreen instead of tracking the keyboard dismiss or snapping.
-  const [composerFocused, setComposerFocused] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
   const outerRef = useRef<HTMLDivElement>(null);
-  const expandCleanupRef = useRef<(() => void) | null>(null);
-  const composerFocusedRef = useRef(false);
+  const pathWhenOpenedRef = useRef<string | null>(null);
+  const pathname = usePathname();
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -104,6 +110,24 @@ export function ChatWidget() {
     wasOpenRef.current = isOpen;
   }, [isOpen]);
 
+  // Capture the route only at the moment the panel opens (not on later
+  // navigations). Close when the visitor leaves that route so destinations
+  // like /book aren't hidden behind the fullscreen mobile panel.
+  useEffect(() => {
+    if (!isOpen) {
+      pathWhenOpenedRef.current = null;
+      return;
+    }
+    if (pathWhenOpenedRef.current === null) {
+      pathWhenOpenedRef.current = pathname;
+    }
+  }, [isOpen, pathname]);
+
+  useEffect(() => {
+    if (!isOpen || pathWhenOpenedRef.current === null) return;
+    if (pathname !== pathWhenOpenedRef.current) setIsOpen(false);
+  }, [pathname, isOpen]);
+
   // Lock body scroll while the mobile fullscreen panel is open.
   useEffect(() => {
     if (!isOpen) return;
@@ -150,148 +174,38 @@ export function ChatWidget() {
     };
   }, []);
 
-  function cancelExpandAnimation() {
-    expandCleanupRef.current?.();
-    expandCleanupRef.current = null;
-  }
-
-  function clearViewportPin() {
-    cancelExpandAnimation();
-    const node = outerRef.current;
-    if (!node) return;
-    node.style.transition = "";
-    node.style.top = "";
-    node.style.left = "";
-    node.style.right = "";
-    node.style.bottom = "";
-    node.style.height = "";
-  }
-
-  /** Ease the keyboard-sized box back to layout fullscreen (avoids snap flash). */
-  function animateExpandToFullscreen() {
-    cancelExpandAnimation();
-    const node = outerRef.current;
-    if (!node || window.matchMedia(SM_MQ).matches) {
-      clearViewportPin();
-      return;
-    }
-
-    const prefersReduced =
-      reducedMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const fromTop = node.style.top ? parseFloat(node.style.top) : 0;
-    const fromHeight = node.style.height ? parseFloat(node.style.height) : 0;
-    // Already on CSS inset-0 (or never pinned) — nothing to animate.
-    if (!fromHeight) {
-      clearViewportPin();
-      return;
-    }
-
-    const toTop = 0;
-    const toHeight = Math.max(
-      window.innerHeight,
-      document.documentElement.clientHeight,
-    );
-
-    if (prefersReduced || fromHeight >= toHeight * 0.96) {
-      clearViewportPin();
-      return;
-    }
-
-    // Lock the current keyboard box, then transition to fullscreen.
-    node.style.transition = "none";
-    node.style.top = `${fromTop}px`;
-    node.style.left = "0px";
-    node.style.right = "0px";
-    node.style.bottom = "auto";
-    node.style.height = `${fromHeight}px`;
-    void node.offsetHeight;
-
-    const durationMs = 300;
-    node.style.transition = `height ${durationMs}ms cubic-bezier(0.16, 1, 0.3, 1), top ${durationMs}ms cubic-bezier(0.16, 1, 0.3, 1)`;
-    node.style.top = `${toTop}px`;
-    node.style.height = `${toHeight}px`;
-
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      node.removeEventListener("transitionend", onEnd);
-      window.clearTimeout(timeoutId);
-      expandCleanupRef.current = null;
-      // Hand off to CSS inset-0 only if the composer didn't refocus mid-ease.
-      if (!composerFocusedRef.current) {
-        node.style.transition = "";
-        node.style.top = "";
-        node.style.left = "";
-        node.style.right = "";
-        node.style.bottom = "";
-        node.style.height = "";
-      }
-    };
-
-    const onEnd = (e: TransitionEvent) => {
-      if (e.target !== node) return;
-      if (e.propertyName !== "height" && e.propertyName !== "top") return;
-      finish();
-    };
-
-    node.addEventListener("transitionend", onEnd);
-    const timeoutId = window.setTimeout(finish, durationMs + 80);
-
-    expandCleanupRef.current = () => {
-      finished = true;
-      node.removeEventListener("transitionend", onEnd);
-      window.clearTimeout(timeoutId);
-      node.style.transition = "";
-    };
-  }
-
-  function handleComposerFocusChange(focused: boolean) {
-    composerFocusedRef.current = focused;
-    if (focused) {
-      // Refocus mid-dismiss: stop expand and let the pin effect take over.
-      cancelExpandAnimation();
-      setComposerFocused(true);
-      return;
-    }
-    setComposerFocused(false);
-    animateExpandToFullscreen();
-  }
-
-  // While the mobile composer is focused, pin the panel to the visual
-  // viewport so the soft keyboard doesn't cover the input. Blur does not
-  // clear styles here — animateExpandToFullscreen owns the dismiss path.
+  // Mobile keyboard (standard pattern): keep the shell matched 1:1 to the
+  // visual viewport with no CSS transitions. No blur/focus special cases —
+  // the panel resizes with the keyboard the way native chat apps do.
+  // Desktop leaves the floating card alone. Browsers that honor
+  // interactive-widget=resizes-content still benefit from this on iOS.
   useEffect(() => {
-    if (!isOpen || !composerFocused || window.matchMedia(SM_MQ).matches) {
-      return;
-    }
-
-    cancelExpandAnimation();
+    if (!isOpen) return;
+    const node = outerRef.current;
     const vv = window.visualViewport;
-    if (!vv) return;
+    if (!node) return;
 
     function sync() {
-      const node = outerRef.current;
-      const viewport = window.visualViewport;
-      if (!node || !viewport || !composerFocusedRef.current) return;
+      if (!node) return;
       if (window.matchMedia(SM_MQ).matches) {
-        clearViewportPin();
+        clearViewportBox(node);
         return;
       }
-
-      // Don't ease with the keyboard-close animation while focused; blur
-      // handles expand. Only pin when the keyboard is actually open.
-      if (viewport.height >= window.innerHeight * 0.92) {
+      if (!vv) {
+        // No visualViewport API — rely on inset-0 + dvh.
+        clearViewportBox(node);
         return;
       }
-
-      node.style.transition = "none";
-      node.style.top = `${viewport.offsetTop}px`;
+      node.style.top = `${vv.offsetTop}px`;
       node.style.left = "0px";
       node.style.right = "0px";
       node.style.bottom = "auto";
-      node.style.height = `${viewport.height}px`;
+      node.style.height = `${vv.height}px`;
+    }
+
+    if (!vv) {
+      sync();
+      return;
     }
 
     vv.addEventListener("resize", sync);
@@ -302,17 +216,8 @@ export function ChatWidget() {
       vv.removeEventListener("resize", sync);
       vv.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
-      // Leave inline box in place so blur can animate from it.
+      clearViewportBox(node);
     };
-  }, [isOpen, composerFocused]);
-
-  // Reset pin/animation whenever the panel closes.
-  useEffect(() => {
-    if (!isOpen) {
-      composerFocusedRef.current = false;
-      setComposerFocused(false);
-      clearViewportPin();
-    }
   }, [isOpen]);
 
   // Mobile: fade + slight rise (sheet-like). Desktop: slide in from the right.
@@ -353,14 +258,11 @@ export function ChatWidget() {
             exit={motionExit}
             transition={motionTransition}
             // z-[90] sits above the cookie banner (z-80) so open chat is never blocked.
-            className={`fixed inset-0 z-[90] sm:inset-auto sm:bottom-6 sm:right-6 ${
+            className={`fixed inset-0 z-[90] h-dvh sm:inset-auto sm:bottom-6 sm:right-6 sm:h-auto ${
               cookieBannerOpen ? "lg:bottom-32" : ""
             }`}
           >
-            <ChatPanel
-              onClose={() => setIsOpen(false)}
-              onComposerFocusChange={handleComposerFocusChange}
-            />
+            <ChatPanel onClose={() => setIsOpen(false)} />
           </motion.div>
         )}
       </AnimatePresence>
