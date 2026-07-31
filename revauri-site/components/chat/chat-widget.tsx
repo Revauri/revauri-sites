@@ -47,13 +47,14 @@ export function ChatWidget() {
   const [hydrated, setHydrated] = useState(false);
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  // Only pin to visualViewport while the composer is focused. Tracking the
-  // viewport through the keyboard *dismiss* animation makes the panel grow
-  // slowly back to fullscreen after blur — feels laggy on iOS.
+  // Only pin to visualViewport while the composer is focused. On blur we
+  // ease back to fullscreen instead of tracking the keyboard dismiss or snapping.
   const [composerFocused, setComposerFocused] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
   const outerRef = useRef<HTMLDivElement>(null);
+  const expandCleanupRef = useRef<(() => void) | null>(null);
+  const composerFocusedRef = useRef(false);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -149,9 +150,16 @@ export function ChatWidget() {
     };
   }, []);
 
+  function cancelExpandAnimation() {
+    expandCleanupRef.current?.();
+    expandCleanupRef.current = null;
+  }
+
   function clearViewportPin() {
+    cancelExpandAnimation();
     const node = outerRef.current;
     if (!node) return;
+    node.style.transition = "";
     node.style.top = "";
     node.style.left = "";
     node.style.right = "";
@@ -159,51 +167,131 @@ export function ChatWidget() {
     node.style.height = "";
   }
 
-  function handleComposerFocusChange(focused: boolean) {
-    // Snap to CSS fullscreen in the blur event itself — waiting for a React
-    // effect (or visualViewport's dismiss animation) is what felt laggy.
-    if (!focused) clearViewportPin();
-    setComposerFocused(focused);
-  }
-
-  // While the mobile composer is focused, pin the panel to the visual
-  // viewport so the soft keyboard doesn't cover the input. On blur we clear
-  // via handleComposerFocusChange — this effect only runs the pin listeners.
-  useEffect(() => {
-    if (!isOpen || !composerFocused || window.matchMedia(SM_MQ).matches) {
+  /** Ease the keyboard-sized box back to layout fullscreen (avoids snap flash). */
+  function animateExpandToFullscreen() {
+    cancelExpandAnimation();
+    const node = outerRef.current;
+    if (!node || window.matchMedia(SM_MQ).matches) {
       clearViewportPin();
       return;
     }
 
+    const prefersReduced =
+      reducedMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const fromTop = node.style.top ? parseFloat(node.style.top) : 0;
+    const fromHeight = node.style.height ? parseFloat(node.style.height) : 0;
+    // Already on CSS inset-0 (or never pinned) — nothing to animate.
+    if (!fromHeight) {
+      clearViewportPin();
+      return;
+    }
+
+    const toTop = 0;
+    const toHeight = Math.max(
+      window.innerHeight,
+      document.documentElement.clientHeight,
+    );
+
+    if (prefersReduced || fromHeight >= toHeight * 0.96) {
+      clearViewportPin();
+      return;
+    }
+
+    // Lock the current keyboard box, then transition to fullscreen.
+    node.style.transition = "none";
+    node.style.top = `${fromTop}px`;
+    node.style.left = "0px";
+    node.style.right = "0px";
+    node.style.bottom = "auto";
+    node.style.height = `${fromHeight}px`;
+    void node.offsetHeight;
+
+    const durationMs = 300;
+    node.style.transition = `height ${durationMs}ms cubic-bezier(0.16, 1, 0.3, 1), top ${durationMs}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+    node.style.top = `${toTop}px`;
+    node.style.height = `${toHeight}px`;
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      node.removeEventListener("transitionend", onEnd);
+      window.clearTimeout(timeoutId);
+      expandCleanupRef.current = null;
+      // Hand off to CSS inset-0 only if the composer didn't refocus mid-ease.
+      if (!composerFocusedRef.current) {
+        node.style.transition = "";
+        node.style.top = "";
+        node.style.left = "";
+        node.style.right = "";
+        node.style.bottom = "";
+        node.style.height = "";
+      }
+    };
+
+    const onEnd = (e: TransitionEvent) => {
+      if (e.target !== node) return;
+      if (e.propertyName !== "height" && e.propertyName !== "top") return;
+      finish();
+    };
+
+    node.addEventListener("transitionend", onEnd);
+    const timeoutId = window.setTimeout(finish, durationMs + 80);
+
+    expandCleanupRef.current = () => {
+      finished = true;
+      node.removeEventListener("transitionend", onEnd);
+      window.clearTimeout(timeoutId);
+      node.style.transition = "";
+    };
+  }
+
+  function handleComposerFocusChange(focused: boolean) {
+    composerFocusedRef.current = focused;
+    if (focused) {
+      // Refocus mid-dismiss: stop expand and let the pin effect take over.
+      cancelExpandAnimation();
+      setComposerFocused(true);
+      return;
+    }
+    setComposerFocused(false);
+    animateExpandToFullscreen();
+  }
+
+  // While the mobile composer is focused, pin the panel to the visual
+  // viewport so the soft keyboard doesn't cover the input. Blur does not
+  // clear styles here — animateExpandToFullscreen owns the dismiss path.
+  useEffect(() => {
+    if (!isOpen || !composerFocused || window.matchMedia(SM_MQ).matches) {
+      return;
+    }
+
+    cancelExpandAnimation();
     const vv = window.visualViewport;
     if (!vv) return;
-
-    let prevHeight = vv.height;
 
     function sync() {
       const node = outerRef.current;
       const viewport = window.visualViewport;
-      if (!node || !viewport) return;
+      if (!node || !viewport || !composerFocusedRef.current) return;
       if (window.matchMedia(SM_MQ).matches) {
         clearViewportPin();
         return;
       }
 
-      const nextHeight = viewport.height;
-      // Keyboard closing (height growing) or essentially closed — snap to
-      // fullscreen instead of slowly tracking the dismiss animation.
-      if (nextHeight >= window.innerHeight * 0.9 || nextHeight > prevHeight + 12) {
-        prevHeight = nextHeight;
-        clearViewportPin();
+      // Don't ease with the keyboard-close animation while focused; blur
+      // handles expand. Only pin when the keyboard is actually open.
+      if (viewport.height >= window.innerHeight * 0.92) {
         return;
       }
-      prevHeight = nextHeight;
 
+      node.style.transition = "none";
       node.style.top = `${viewport.offsetTop}px`;
       node.style.left = "0px";
       node.style.right = "0px";
       node.style.bottom = "auto";
-      node.style.height = `${nextHeight}px`;
+      node.style.height = `${viewport.height}px`;
     }
 
     vv.addEventListener("resize", sync);
@@ -214,14 +302,14 @@ export function ChatWidget() {
       vv.removeEventListener("resize", sync);
       vv.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
-      clearViewportPin();
+      // Leave inline box in place so blur can animate from it.
     };
   }, [isOpen, composerFocused]);
 
-  // Reset composer-focus state whenever the panel closes so a reopen doesn't
-  // inherit a stale "keyboard open" pin.
+  // Reset pin/animation whenever the panel closes.
   useEffect(() => {
     if (!isOpen) {
+      composerFocusedRef.current = false;
       setComposerFocused(false);
       clearViewportPin();
     }
