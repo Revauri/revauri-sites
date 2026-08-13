@@ -6,6 +6,7 @@ import {
   streamText,
   type UIMessage,
 } from "ai";
+import { after } from "next/server";
 import { z } from "zod";
 import { CHAT_MODEL, openrouter } from "@/lib/chat/openrouter";
 import { SYSTEM_PROMPT } from "@/lib/chat/system-prompt";
@@ -118,9 +119,17 @@ export async function POST(req: Request) {
     }
   }
 
+  // Save the visitor turn immediately. Rev's reply is written again after the
+  // stream finishes (via after()) so a one-and-done chat still includes it.
   await persist(parsed.data.messages);
 
   if (messages.length > MAX_MESSAGES) {
+    after(() =>
+      persist([
+        ...parsed.data.messages,
+        { role: "assistant", parts: [{ type: "text", text: CONTINUE_BY_EMAIL_MESSAGE }] },
+      ]),
+    );
     const stream = createUIMessageStream({
       execute: ({ writer }) => {
         const id = crypto.randomUUID();
@@ -159,11 +168,26 @@ export async function POST(req: Request) {
     maxOutputTokens: 700,
   });
 
+  after(async () => {
+    try {
+      const [text, toolCalls] = await Promise.all([result.text, result.toolCalls]);
+      const parts: Array<{ type: string; text?: string }> = [];
+      if (typeof text === "string" && text.trim()) {
+        parts.push({ type: "text", text });
+      }
+      for (const call of toolCalls ?? []) {
+        const name = "toolName" in call && typeof call.toolName === "string" ? call.toolName : "";
+        if (name) parts.push({ type: `tool-${name}` });
+      }
+      if (parts.length === 0) return;
+      await persist([...parsed.data.messages, { role: "assistant", parts }]);
+    } catch (error) {
+      console.error("[chat] persist reply failed", error);
+    }
+  });
+
   return result.toUIMessageStreamResponse({
     originalMessages: messages,
-    onFinish: ({ messages: nextMessages }) => {
-      void persist(nextMessages);
-    },
     // Keep the client-facing message generic, but leave the real provider
     // error (model errors, upstream 4xx/5xx) in the function logs.
     onError: (error) => {

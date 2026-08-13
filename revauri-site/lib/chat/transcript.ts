@@ -36,7 +36,7 @@ type MessagePart = {
 
 export type TranscriptMessage = {
   role?: unknown;
-  parts?: unknown;
+  parts?: unknown[] | unknown;
 };
 
 const CARD_BY_TOOL: Record<string, StoredCard> = {
