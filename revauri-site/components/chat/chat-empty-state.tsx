@@ -63,6 +63,11 @@ export function ChatEmptyState({
             ? "Ask about pricing, timelines, or anything else — I'm here to help."
             : "Ask a new question whenever you're ready."}
         </p>
+        {mode === "initial" ? (
+          <p className="mt-2 text-[12px] leading-snug text-brand-mid-gray/80">
+            Conversations may be reviewed by our team.
+          </p>
+        ) : null}
       </BubbleShell>
       {mode === "initial" && (
         <div className="mt-3.5 flex w-full flex-col gap-2">

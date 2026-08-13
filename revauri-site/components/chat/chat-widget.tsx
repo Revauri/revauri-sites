@@ -267,6 +267,8 @@ export function ChatWidget() {
       ? { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }
       : { duration: 0.28, ease: [0.16, 1, 0.3, 1] as const };
 
+  if (pathname.startsWith("/inbox")) return null;
+
   return (
     <>
       {!isOpen && (

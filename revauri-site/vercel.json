@@ -8,5 +8,11 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/inbox/purge",
+      "schedule": "0 6 * * *"
+    }
   ]
 }

@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^4.0.4",
     "@ai-sdk/react": "^4.0.10",
+    "@neondatabase/serverless": "^1.1.0",
     "ai": "^7.0.9",
     "framer-motion": "^12.38.0",
     "github-slugger": "^2.0.0",

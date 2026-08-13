@@ -12,6 +12,8 @@ import { SYSTEM_PROMPT } from "@/lib/chat/system-prompt";
 import { getPageContext } from "@/lib/chat/page-context";
 import { checkRateLimit } from "@/lib/chat/rate-limit";
 import { isSameOrigin } from "@/lib/chat/same-origin";
+import { persistConversation } from "@/lib/chat/db";
+import type { TranscriptMessage } from "@/lib/chat/transcript";
 import { captureLead, getProjectHighlight, offerBooking, showPortfolio } from "@/lib/chat/tools";
 
 export const runtime = "nodejs";
@@ -62,6 +64,7 @@ const bodySchema = z.looseObject({
   ),
   // Current page path, sent by the client for page-aware answers.
   pathname: z.string().max(200).optional(),
+  conversationId: z.string().uuid().optional(),
 });
 
 function jsonError(error: string, status: number) {
@@ -99,7 +102,23 @@ export async function POST(req: Request) {
     return jsonError("Invalid request", 400);
   }
 
+  const { conversationId, pathname } = parsed.data;
   const messages = parsed.data.messages as unknown as UIMessage[];
+
+  async function persist(history: TranscriptMessage[]) {
+    if (!conversationId) return;
+    try {
+      await persistConversation({
+        conversationId,
+        pathname,
+        messages: history,
+      });
+    } catch (error) {
+      console.error("[chat] persist failed", error);
+    }
+  }
+
+  await persist(parsed.data.messages);
 
   if (messages.length > MAX_MESSAGES) {
     const stream = createUIMessageStream({
@@ -141,6 +160,10 @@ export async function POST(req: Request) {
   });
 
   return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    onFinish: ({ messages: nextMessages }) => {
+      void persist(nextMessages);
+    },
     // Keep the client-facing message generic, but leave the real provider
     // error (model errors, upstream 4xx/5xx) in the function logs.
     onError: (error) => {

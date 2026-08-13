@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             Privacy <GradientText>Policy</GradientText>
           </>
         }
-        subtitle="Last updated: July 22, 2026"
+        subtitle="Last updated: August 13, 2026"
       />
 
       <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-16 dark:prose-invert lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">
@@ -43,6 +43,9 @@ export default function PrivacyPage() {
           </li>
           <li>Content and materials you provide during a project (logos, photos, copy)</li>
           <li>Any additional information you share during calls or in emails</li>
+          <li>
+            Messages you send to the website chatbot (Rev), including the page you were viewing when you wrote them
+          </li>
         </ul>
 
         <h3>Information Collected Automatically</h3>
@@ -80,6 +83,7 @@ export default function PrivacyPage() {
           <li>To generate website audits and sample redesigns using AI-powered tools</li>
           <li>To send you updates about your website or our services (if applicable)</li>
           <li>To respond to your inquiries and support requests</li>
+          <li>To review website chatbot conversations so we can follow up on inquiries</li>
           <li>To analyze website usage, improve our marketing, and enhance user experience</li>
           <li>To comply with legal obligations and enforce our terms</li>
         </ul>
@@ -114,6 +118,10 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Vercel</strong> &mdash; Website hosting and performance infrastructure
+          </li>
+          <li>
+            <strong>Neon</strong> &mdash; Database hosting for website chatbot transcripts, processed on our behalf
+            through Vercel
           </li>
           <li>
             <strong>Calendly</strong> &mdash; Appointment scheduling
@@ -209,6 +217,11 @@ export default function PrivacyPage() {
           <li>
             <strong>Analytics data</strong>: Google Analytics (GA4) event data is retained for 14 months, after
             which it is automatically deleted
+          </li>
+          <li>
+            <strong>Chatbot transcripts</strong>: Messages sent through the website chatbot are retained for 1 year
+            and then deleted automatically, unless we need to keep a record longer for a legal obligation or an
+            active inquiry
           </li>
           <li>
             <strong>Payment records</strong>: Retained as required by tax and financial regulations

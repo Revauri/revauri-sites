@@ -9,12 +9,37 @@ import { Logo } from "@/components/logo";
 import { BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
 import { ChatEmptyState } from "@/components/chat/chat-empty-state";
 import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
+import { notifyNewChat } from "@/lib/chat/notify-new-chat";
 
 const PANEL_CARD_CLASS =
   "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px]";
 
 const TEXTAREA_MAX_HEIGHT = 120; // ~5 lines incl. padding; beyond this it scrolls internally
 const MESSAGES_STORAGE_KEY = "revauri-chat-messages";
+const CONVERSATION_ID_KEY = "revauri-chat-conversation-id";
+const NOTIFIED_KEY = "revauri-chat-notified";
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function loadOrCreateConversationId(): string {
+  try {
+    const existing = sessionStorage.getItem(CONVERSATION_ID_KEY);
+    if (existing && UUID_RE.test(existing)) return existing;
+    const id = crypto.randomUUID();
+    sessionStorage.setItem(CONVERSATION_ID_KEY, id);
+    return id;
+  } catch {
+    return crypto.randomUUID();
+  }
+}
+
+function wasAlreadyNotified(): boolean {
+  try {
+    return sessionStorage.getItem(NOTIFIED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 function loadStoredMessages(): UIMessage[] | undefined {
   if (typeof window === "undefined") return undefined;
@@ -61,6 +86,8 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   // the pathname from a ref at send time — each request carries the page the
   // visitor is actually on (see prepareSendMessagesRequest below).
   const pathnameRef = useRef(pathname);
+  const conversationIdRef = useRef(loadOrCreateConversationId());
+  const notifiedRef = useRef(wasAlreadyNotified());
   useEffect(() => {
     pathnameRef.current = pathname;
   }, [pathname]);
@@ -69,7 +96,15 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
       new DefaultChatTransport({
         api: "/api/chat",
         prepareSendMessagesRequest: ({ id, messages, body, trigger, messageId }) => ({
-          body: { ...body, id, messages, trigger, messageId, pathname: pathnameRef.current },
+          body: {
+            ...body,
+            id,
+            messages,
+            trigger,
+            messageId,
+            pathname: pathnameRef.current,
+            conversationId: conversationIdRef.current || undefined,
+          },
         }),
       }),
   );
@@ -227,6 +262,20 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         suppressAutoSendRef.current = false;
       }
     }
+    const preview = text.trim();
+    if (!notifiedRef.current && preview) {
+      notifiedRef.current = true;
+      try {
+        sessionStorage.setItem(NOTIFIED_KEY, "1");
+      } catch {
+        // private browsing — still send the email once via the ref
+      }
+      void notifyNewChat({
+        preview: preview.slice(0, 180),
+        pathname: pathnameRef.current || "/",
+        conversationId: conversationIdRef.current,
+      });
+    }
     sendMessage({ text });
   }
 
@@ -265,8 +314,13 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     stop();
     setMessages([]);
     setWasReset(true);
+    notifiedRef.current = false;
+    const nextId = crypto.randomUUID();
+    conversationIdRef.current = nextId;
     try {
       sessionStorage.removeItem(MESSAGES_STORAGE_KEY);
+      sessionStorage.removeItem(NOTIFIED_KEY);
+      sessionStorage.setItem(CONVERSATION_ID_KEY, nextId);
     } catch {
       // ignore storage errors (private browsing, quota, etc.)
     }
