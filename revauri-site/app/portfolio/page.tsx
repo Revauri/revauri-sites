@@ -8,7 +8,7 @@ import BlendedDemoFrame from "@/components/blended-demo-frame";
 import { getAllProjects } from "@/lib/portfolio-data";
 
 export const metadata: Metadata = {
-  title: "Portfolio — Revauri",
+  title: "Portfolio — Client Websites and Founder-Built Work",
   description:
     "Real work from Revauri — a mix of client projects and products founder-built from scratch.",
   alternates: { canonical: "/portfolio" },
