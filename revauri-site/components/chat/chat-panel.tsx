@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
 import { ArrowDown, ArrowUp, RotateCcw, Square, X } from "lucide-react";
-import { Logo } from "@/components/logo";
 import { BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
 import { ChatEmptyState } from "@/components/chat/chat-empty-state";
 import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
@@ -51,19 +50,22 @@ function loadStoredMessages(): UIMessage[] | undefined {
   }
 }
 
-// Mirrors what ChatMessageBubble renders, so the typing dots disappear the
-// moment the reply shows anything — first text token or a card/skeleton.
+// Mirrors what ChatMessageBubble renders, so the thinking indicator disappears
+// the moment the reply shows anything — first text token, a chip, or a
+// card/skeleton. Only ever called on the last message, which is the one place
+// pending tool chips render.
 function hasVisibleContent(message: UIMessage) {
   return message.parts.some((part) => {
     if (part.type === "text") return part.text.length > 0;
     if (!("state" in part)) return false;
     switch (part.type) {
       case "tool-offer_booking":
-        return part.state !== "output-error"; // skeleton renders before output
+        return part.state !== "output-error"; // chip + skeleton render before output
       case "tool-capture_lead":
         return part.state !== "input-streaming";
-      case "tool-get_project_highlight":
       case "tool-show_portfolio":
+        return part.state !== "output-error"; // chip renders while pending
+      case "tool-get_project_highlight":
         return part.state === "output-available";
       default:
         return false;
@@ -151,7 +153,7 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
     return () => clearTimeout(timer);
   }, [messages, isStreaming]);
   const lastMessage = messages[messages.length - 1];
-  const showTypingDots =
+  const showThinking =
     status === "submitted" ||
     (status === "streaming" &&
       !(lastMessage?.role === "assistant" && hasVisibleContent(lastMessage)));
@@ -352,11 +354,24 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
     >
       {/* Header — top safe-area on mobile fullscreen so status bar / notch clear */}
       <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[max(1.125rem,env(safe-area-inset-top))] pb-3.5 sm:pt-[18px] dark:border-brand-mid-gray/20">
-        <div>
-          <Logo />
-          <p className="mt-0.5 text-[10px] leading-tight text-brand-mid-gray">
-            Rev · AI assistant
-          </p>
+        <div className="flex items-center gap-2.5">
+          {/* Avatar tile echoes the launcher FAB; the R stands in for a logo
+              mark (both brand SVGs are full wordmarks). */}
+          <div
+            aria-hidden="true"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-orange text-sm font-semibold text-white"
+          >
+            R
+          </div>
+          <div>
+            <p className="text-sm font-semibold leading-tight text-brand-dark dark:text-brand-cream">
+              Rev
+            </p>
+            <p className="mt-0.5 flex items-center gap-1.5 text-[10px] leading-tight text-brand-mid-gray">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Online · AI assistant
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-1">
           <button
@@ -391,6 +406,7 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
               key={message.id}
               message={message}
               isLastMessage={index === messages.length - 1}
+              isStreaming={isStreaming}
               onLeadResolve={handleLeadResolve}
             />
           ))}
@@ -403,14 +419,16 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
             />
           )}
 
-          {showTypingDots && (
-            <div className="flex justify-start">
-              <div className="flex items-center gap-1 rounded-2xl bg-brand-cream px-4 py-3 dark:bg-brand-light-gray/10">
-                <span className="sr-only">Rev is typing…</span>
-                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0s]" />
-                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.15s]" />
-                <span aria-hidden="true" className="h-1.5 w-1.5 animate-dot-wave rounded-full bg-brand-orange [animation-delay:0.3s]" />
-              </div>
+          {showThinking && (
+            // Breathing orb + status text instead of a bubble — this is a
+            // status, not a message. Visible text doubles as the live-region
+            // announcement (the scroll container is aria-live="polite").
+            <div className="flex items-center gap-2.5 py-1">
+              <span
+                aria-hidden="true"
+                className="h-3 w-3 animate-orb-pulse rounded-full bg-[radial-gradient(circle_at_35%_35%,#E89B7E,#D97757_60%,#C65D3B)] motion-reduce:animate-none"
+              />
+              <span className="text-xs text-brand-mid-gray">Rev is thinking…</span>
             </div>
           )}
 

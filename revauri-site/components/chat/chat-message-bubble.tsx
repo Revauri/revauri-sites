@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import type { UIMessage } from "ai";
 import { motion, useReducedMotion } from "framer-motion";
+import { Check, Loader2 } from "lucide-react";
 import { HighlightCard, type HighlightCardProps } from "@/components/chat/highlight-card";
 import { BookingCard, type BookingCardProps } from "@/components/chat/booking-card";
 import { PortfolioCard, type PortfolioCardData } from "@/components/chat/portfolio-card";
@@ -91,6 +92,18 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   );
 }
 
+// Blinking block cursor pinned to the tip of the text while a reply streams —
+// marks the bubble as still-going, and unmounts the moment the stream settles
+// (no exit fade, so it never lingers over finished text).
+function StreamingCursor() {
+  return (
+    <span
+      aria-hidden="true"
+      className="ml-0.5 inline-block h-[1em] w-[2.5px] animate-cursor-blink rounded-full bg-brand-orange align-[-0.15em] motion-reduce:animate-none"
+    />
+  );
+}
+
 // Every block (bubble or card) fades/rises on mount, so a card arriving a beat
 // after its text bubble — the common case with in-order rendering — animates in
 // deliberately instead of popping.
@@ -127,13 +140,45 @@ function BookingSkeleton() {
   );
 }
 
+// Slim status pill for server tools with real latency (booking's Calendly
+// fetch, portfolio's model round-trip): spins while the tool runs, flips to a
+// green check when the output lands, and stays as a receipt above the card.
+function ToolChip({
+  state,
+  pendingLabel,
+  doneLabel,
+}: {
+  state: "pending" | "done";
+  pendingLabel: string;
+  doneLabel: string;
+}) {
+  if (state === "pending") {
+    return (
+      <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-brand-light-gray/60 bg-brand-light-gray/30 px-2.5 py-1 text-[11px] font-medium text-brand-mid-gray dark:border-brand-mid-gray/25 dark:bg-brand-light-gray/5">
+        <Loader2 className="h-3 w-3 animate-spin text-brand-orange" aria-hidden="true" />
+        {pendingLabel}
+      </div>
+    );
+  }
+  return (
+    <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-600/20 bg-emerald-500/[0.07] px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300">
+      <Check className="h-3 w-3" aria-hidden="true" />
+      {doneLabel}
+    </div>
+  );
+}
+
 export function ChatMessageBubble({
   message,
   isLastMessage = false,
+  isStreaming = false,
   onLeadResolve,
 }: {
   message: UIMessage;
   isLastMessage?: boolean;
+  // True while any reply is in flight; only the trailing text bubble of the
+  // last assistant message actually renders the cursor.
+  isStreaming?: boolean;
   // Resolves a pending capture_lead tool call (wired to addToolOutput). The
   // SDK only attaches tool outputs to the last message, so pending cards on
   // earlier messages render in an expired state instead.
@@ -152,7 +197,7 @@ export function ChatMessageBubble({
   // pending text and flush into the same BubbleShell.
   let pendingHighlights: Array<{ key: string; props: HighlightCardProps }> = [];
 
-  function flushBubble() {
+  function flushBubble(showCursor = false) {
     // Blank line between text parts (the bubble is whitespace-pre-wrap) — a
     // reply split around a tool call would otherwise run its sentences together.
     const text = textParts.join("\n\n");
@@ -165,6 +210,7 @@ export function ChatMessageBubble({
         <BubbleShell isUser={isUser}>
           {/* Linkify assistant replies only — user-typed text stays plain. */}
           {isUser ? text : renderInlineContent(text)}
+          {showCursor && text.length > 0 && <StreamingCursor />}
           {highlights.map((h) => (
             <HighlightCard key={h.key} {...h.props} />
           ))}
@@ -191,23 +237,39 @@ export function ChatMessageBubble({
     if (part.type === "tool-offer_booking" && "state" in part) {
       flushBubble();
       if (part.state === "output-available") {
+        const output = part.output as BookingCardProps;
+        const hasSlots = !output.fallback && (output.slots ?? []).length > 0;
         blocks.push(
           <Arrival key={part.toolCallId}>
-            <BookingCard {...(part.output as BookingCardProps)} />
+            <div className="flex flex-col items-start gap-2">
+              <ToolChip
+                state="done"
+                pendingLabel="Checking availability…"
+                doneLabel={hasSlots ? "Found open times" : "Booking link ready"}
+              />
+              <BookingCard {...output} />
+            </div>
           </Arrival>,
         );
       } else if (part.state !== "output-error") {
         if (isLastMessage) {
-          // Live availability is being fetched server-side — show a skeleton.
+          // Live availability is being fetched server-side — chip + skeleton.
           blocks.push(
             <Arrival key={part.toolCallId}>
-              <BookingSkeleton />
+              <div className="flex flex-col items-start gap-2">
+                <ToolChip
+                  state="pending"
+                  pendingLabel="Checking availability…"
+                  doneLabel="Found open times"
+                />
+                <BookingSkeleton />
+              </div>
             </Arrival>,
           );
         } else {
           // An earlier message can never receive its output (e.g. a session
           // restored mid-fetch) — degrade to the plain "Book a call" card
-          // instead of pulsing forever.
+          // instead of pulsing forever. No chip: it never checked.
           blocks.push(
             <Arrival key={part.toolCallId}>
               <BookingCard fallback />
@@ -218,16 +280,27 @@ export function ChatMessageBubble({
       continue;
     }
 
-    if (part.type === "tool-show_portfolio") {
-      if ("state" in part && part.state === "output-available") {
-        flushBubble();
-        for (const project of (part.output as { projects: PortfolioCardData[] }).projects) {
-          blocks.push(
-            <Arrival key={`${part.toolCallId}-${project.slug}`}>
-              <PortfolioCard project={project} />
-            </Arrival>,
-          );
-        }
+    if (part.type === "tool-show_portfolio" && "state" in part) {
+      flushBubble();
+      if (part.state === "output-available") {
+        const projects = (part.output as { projects: PortfolioCardData[] }).projects;
+        blocks.push(
+          <Arrival key={part.toolCallId}>
+            <div className="flex flex-col items-start gap-2">
+              <ToolChip state="done" pendingLabel="Pulling up projects…" doneLabel="Projects ready" />
+              {projects.map((project) => (
+                <PortfolioCard key={project.slug} project={project} />
+              ))}
+            </div>
+          </Arrival>,
+        );
+      } else if (part.state !== "output-error" && isLastMessage) {
+        // The model is mid tool-call — fills the gap before the cards land.
+        blocks.push(
+          <Arrival key={part.toolCallId}>
+            <ToolChip state="pending" pendingLabel="Pulling up projects…" doneLabel="Projects ready" />
+          </Arrival>,
+        );
       }
       continue;
     }
@@ -259,7 +332,9 @@ export function ChatMessageBubble({
       }
     }
   }
-  flushBubble();
+  // The trailing flush is the only block that can still be growing — earlier
+  // flushes were cut off by a tool card, so their text is final.
+  flushBubble(isStreaming && isLastMessage && !isUser);
 
   // Tool-only turns with nothing renderable (e.g. a still-streaming tool
   // input) would otherwise produce an empty wrapper.
