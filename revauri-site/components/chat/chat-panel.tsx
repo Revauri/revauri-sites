@@ -12,7 +12,7 @@ import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
 import { notifyNewChat } from "@/lib/chat/notify-new-chat";
 
 const PANEL_CARD_CLASS =
-  "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px]";
+  "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px] sm:[zoom:1.1]";
 
 const TEXTAREA_MAX_HEIGHT = 120; // ~5 lines incl. padding; beyond this it scrolls internally
 const MESSAGES_STORAGE_KEY = "revauri-chat-messages";
@@ -335,7 +335,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
       tabIndex={-1}
       onClickCapture={handlePanelClickCapture}
       onKeyDown={handlePanelKeyDown}
-      className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
+      className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[561px] sm:max-h-[calc((100dvh-3rem)/1.1)] sm:w-[352px] ${PANEL_CARD_CLASS}`}
     >
       {/* Header — top safe-area on mobile fullscreen so status bar / notch clear */}
       <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[max(1.125rem,env(safe-area-inset-top))] pb-3.5 sm:pt-[18px] dark:border-brand-mid-gray/20">

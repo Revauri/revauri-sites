@@ -23,7 +23,7 @@ const OPEN_STORAGE_KEY = "revauri-chat-open";
 const SM_MQ = "(min-width: 640px)";
 
 const PANEL_SHELL_CLASS =
-  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[352px] sm:rounded-[22px]";
+  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:h-[561px] sm:max-h-[calc((100dvh-3rem)/1.1)] sm:w-[352px] sm:rounded-[22px] sm:[zoom:1.1]";
 
 /** Placeholder that matches panel chrome so open animation never runs on an empty box. */
 function ChatPanelShell() {
