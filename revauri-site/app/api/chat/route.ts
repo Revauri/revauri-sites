@@ -2,6 +2,7 @@ import {
   convertToModelMessages,
   createUIMessageStream,
   createUIMessageStreamResponse,
+  smoothStream,
   stepCountIs,
   streamText,
   type UIMessage,
@@ -166,6 +167,9 @@ export async function POST(req: Request) {
     },
     stopWhen: stepCountIs(4),
     maxOutputTokens: 700,
+    // Re-chunk the provider's uneven bursts into a steady word-by-word cadence,
+    // so replies read like typing instead of arriving in lumps.
+    experimental_transform: smoothStream(),
   });
 
   after(async () => {

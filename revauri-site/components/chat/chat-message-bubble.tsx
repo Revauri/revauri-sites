@@ -91,6 +91,42 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   );
 }
 
+// Every block (bubble or card) fades/rises on mount, so a card arriving a beat
+// after its text bubble — the common case with in-order rendering — animates in
+// deliberately instead of popping.
+function Arrival({ children }: { children: ReactNode }) {
+  const reducedMotion = useReducedMotion();
+  return (
+    <motion.div
+      initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// Mirrors the loaded booking card's structure (eyebrow + slot rows) at roughly
+// the 3-slot height, so the swap to real times barely moves the conversation.
+function BookingSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex animate-pulse flex-col gap-1.5 rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] p-3 dark:border-brand-orange/30 dark:bg-brand-orange/10"
+    >
+      <div className="h-2.5 w-24 rounded bg-brand-orange/20 dark:bg-brand-orange/25" />
+      <div className="h-2.5 w-44 rounded bg-brand-orange/15 dark:bg-brand-orange/20" />
+      <div className="mt-0.5 flex flex-col gap-1.5">
+        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
+        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
+        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
+      </div>
+      <div className="mt-0.5 h-2.5 w-20 rounded bg-brand-orange/15 dark:bg-brand-orange/20" />
+    </div>
+  );
+}
+
 export function ChatMessageBubble({
   message,
   isLastMessage = false,
@@ -103,7 +139,6 @@ export function ChatMessageBubble({
   // earlier messages render in an expired state instead.
   onLeadResolve?: (toolCallId: string, output: LeadToolOutput) => void;
 }) {
-  const reducedMotion = useReducedMotion();
   const isUser = message.role === "user";
 
   // Render parts in the order the model produced them: consecutive text parts
@@ -126,13 +161,15 @@ export function ChatMessageBubble({
     textParts = [];
     pendingHighlights = [];
     blocks.push(
-      <BubbleShell key={`bubble-${blocks.length}`} isUser={isUser}>
-        {/* Linkify assistant replies only — user-typed text stays plain. */}
-        {isUser ? text : renderInlineContent(text)}
-        {highlights.map((h) => (
-          <HighlightCard key={h.key} {...h.props} />
-        ))}
-      </BubbleShell>,
+      <Arrival key={`bubble-${blocks.length}`}>
+        <BubbleShell isUser={isUser}>
+          {/* Linkify assistant replies only — user-typed text stays plain. */}
+          {isUser ? text : renderInlineContent(text)}
+          {highlights.map((h) => (
+            <HighlightCard key={h.key} {...h.props} />
+          ))}
+        </BubbleShell>
+      </Arrival>,
     );
   }
 
@@ -155,22 +192,27 @@ export function ChatMessageBubble({
       flushBubble();
       if (part.state === "output-available") {
         blocks.push(
-          <BookingCard key={part.toolCallId} {...(part.output as BookingCardProps)} />,
+          <Arrival key={part.toolCallId}>
+            <BookingCard {...(part.output as BookingCardProps)} />
+          </Arrival>,
         );
       } else if (part.state !== "output-error") {
         if (isLastMessage) {
           // Live availability is being fetched server-side — show a skeleton.
           blocks.push(
-            <div
-              key={part.toolCallId}
-              className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
-            />,
+            <Arrival key={part.toolCallId}>
+              <BookingSkeleton />
+            </Arrival>,
           );
         } else {
           // An earlier message can never receive its output (e.g. a session
           // restored mid-fetch) — degrade to the plain "Book a call" card
           // instead of pulsing forever.
-          blocks.push(<BookingCard key={part.toolCallId} fallback />);
+          blocks.push(
+            <Arrival key={part.toolCallId}>
+              <BookingCard fallback />
+            </Arrival>,
+          );
         }
       }
       continue;
@@ -181,7 +223,9 @@ export function ChatMessageBubble({
         flushBubble();
         for (const project of (part.output as { projects: PortfolioCardData[] }).projects) {
           blocks.push(
-            <PortfolioCard key={`${part.toolCallId}-${project.slug}`} project={project} />,
+            <Arrival key={`${part.toolCallId}-${project.slug}`}>
+              <PortfolioCard project={project} />
+            </Arrival>,
           );
         }
       }
@@ -192,19 +236,26 @@ export function ChatMessageBubble({
       flushBubble();
       if (part.state === "input-available") {
         blocks.push(
-          <LeadConfirmationCard
-            key={part.toolCallId}
-            proposed={(part.input ?? {}) as LeadProposedInput}
-            expired={!isLastMessage || !onLeadResolve}
-            onResolve={(output) => onLeadResolve?.(part.toolCallId, output)}
-          />,
+          <Arrival key={part.toolCallId}>
+            <LeadConfirmationCard
+              proposed={(part.input ?? {}) as LeadProposedInput}
+              expired={!isLastMessage || !onLeadResolve}
+              onResolve={(output) => onLeadResolve?.(part.toolCallId, output)}
+            />
+          </Arrival>,
         );
       } else if (part.state === "output-available") {
         blocks.push(
-          <LeadResolvedCard key={part.toolCallId} output={part.output as LeadToolOutput} />,
+          <Arrival key={part.toolCallId}>
+            <LeadResolvedCard output={part.output as LeadToolOutput} />
+          </Arrival>,
         );
       } else if (part.state === "output-error") {
-        blocks.push(<LeadResolvedCard key={part.toolCallId} output={{ success: false }} />);
+        blocks.push(
+          <Arrival key={part.toolCallId}>
+            <LeadResolvedCard output={{ success: false }} />
+          </Arrival>,
+        );
       }
     }
   }
@@ -214,15 +265,5 @@ export function ChatMessageBubble({
   // input) would otherwise produce an empty wrapper.
   if (blocks.length === 0) return null;
 
-  return (
-    // Subtle fade + rise on entry, matching the panel's easing (chat-widget.tsx).
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      className="space-y-2.5"
-    >
-      {blocks}
-    </motion.div>
-  );
+  return <div className="space-y-2.5">{blocks}</div>;
 }

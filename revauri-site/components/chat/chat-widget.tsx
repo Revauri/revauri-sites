@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChatLauncherButton } from "./chat-launcher-button";
 import { isCookieBannerVisible, onCookieBannerVisibilityChanged } from "@/lib/analytics";
 
@@ -50,6 +50,9 @@ function clearKeyboardPadding(node: HTMLElement) {
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  // Once opened, the panel stays mounted (hidden when closed) so an in-flight
+  // reply keeps streaming to completion — closing the chat no longer aborts it.
+  const [hasOpened, setHasOpened] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -91,6 +94,10 @@ export function ChatWidget() {
       // ignore storage errors (private browsing, quota, etc.)
     }
   }, [isOpen, hydrated]);
+
+  useEffect(() => {
+    if (isOpen) setHasOpened(true);
+  }, [isOpen]);
 
   // Escape closes the panel from anywhere on the page.
   useEffect(() => {
@@ -281,27 +288,31 @@ export function ChatWidget() {
         />
       )}
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            ref={outerRef}
-            initial={motionInitial}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            exit={motionExit}
-            transition={motionTransition}
-            // z-[90] above cookie banner (z-80). Mobile: opaque full-bleed
-            // shell that never leaves inset-0 — page content cannot show through
-            // during keyboard transitions. Desktop: transparent around the card.
-            className={`fixed inset-0 z-[90] flex flex-col overflow-hidden overscroll-none bg-brand-white dark:bg-[#1a1a19] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:overflow-visible sm:bg-transparent ${
-              cookieBannerOpen ? "lg:bottom-32" : ""
-            }`}
-          >
-            <div className="flex min-h-0 min-w-0 flex-1 flex-col sm:block sm:flex-none">
-              <ChatPanel onClose={() => setIsOpen(false)} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {hasOpened && (
+        <motion.div
+          ref={outerRef}
+          initial={motionInitial}
+          // visibility flips at the start of the open animation / end of the
+          // close one, so the hidden panel never intercepts clicks or focus.
+          animate={
+            isOpen
+              ? { opacity: 1, x: 0, y: 0, visibility: "visible" as const }
+              : { ...motionExit, visibility: "hidden" as const }
+          }
+          transition={motionTransition}
+          aria-hidden={!isOpen}
+          // z-[90] above cookie banner (z-80). Mobile: opaque full-bleed
+          // shell that never leaves inset-0 — page content cannot show through
+          // during keyboard transitions. Desktop: transparent around the card.
+          className={`fixed inset-0 z-[90] flex flex-col overflow-hidden overscroll-none bg-brand-white dark:bg-[#1a1a19] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:overflow-visible sm:bg-transparent ${
+            cookieBannerOpen ? "lg:bottom-32" : ""
+          } ${isOpen ? "" : "pointer-events-none"}`}
+        >
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col sm:block sm:flex-none">
+            <ChatPanel onClose={() => setIsOpen(false)} isOpen={isOpen} />
+          </div>
+        </motion.div>
+      )}
     </>
   );
 }

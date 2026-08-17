@@ -71,7 +71,7 @@ function hasVisibleContent(message: UIMessage) {
   });
 }
 
-export function ChatPanel({ onClose }: { onClose: () => void }) {
+export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: boolean }) {
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
@@ -129,15 +129,27 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     addToolOutput({ tool: "capture_lead", toolCallId, output });
   }
 
-  useEffect(() => {
-    try {
-      sessionStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messages));
-    } catch {
-      // ignore storage errors (private browsing, quota, etc.)
-    }
-  }, [messages]);
-
   const isStreaming = status === "submitted" || status === "streaming";
+
+  // Persist for restore across page loads. Serializing the whole conversation
+  // on every streamed token is main-thread jank mid-reply, so debounce while
+  // streaming and save immediately once the chat settles — the usual exit path
+  // (read the finished reply, then navigate away) always passes through idle.
+  useEffect(() => {
+    const save = () => {
+      try {
+        sessionStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messages));
+      } catch {
+        // ignore storage errors (private browsing, quota, etc.)
+      }
+    };
+    if (!isStreaming) {
+      save();
+      return;
+    }
+    const timer = setTimeout(save, 400);
+    return () => clearTimeout(timer);
+  }, [messages, isStreaming]);
   const lastMessage = messages[messages.length - 1];
   const showTypingDots =
     status === "submitted" ||
@@ -162,10 +174,12 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Land at the latest message when the panel opens. Autofocus the textarea
-  // only on desktop — on mobile it would pop the soft keyboard mid-open and
-  // fight the entrance animation / visual viewport.
+  // Land at the latest message each time the panel opens — it stays mounted
+  // while closed, so this runs on every reopen, not just first mount.
+  // Autofocus the textarea only on desktop — on mobile it would pop the soft
+  // keyboard mid-open and fight the entrance animation / visual viewport.
   useEffect(() => {
+    if (!isOpen) return;
     scrollToBottom("instant");
     const desktop = window.matchMedia("(min-width: 640px)").matches;
     if (desktop) {
@@ -173,7 +187,7 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     } else {
       panelRef.current?.focus({ preventScroll: true });
     }
-  }, []);
+  }, [isOpen]);
 
   // Internal links (booking, portfolio, etc.) navigate under the layout-level
   // chat shell — close immediately so the destination is visible. External /
@@ -213,10 +227,13 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
   }
 
   // Follow new content while pinned to the bottom; otherwise offer a jump pill.
+  // Instant while streaming: restarting a smooth-scroll animation on every
+  // token makes the view visibly lag behind the reply — smooth stays for
+  // discrete jumps (send, open, jump pill).
   useEffect(() => {
-    if (pinnedRef.current) scrollToBottom();
+    if (pinnedRef.current) scrollToBottom(isStreaming ? "instant" : "smooth");
     else setShowJump(true);
-  }, [messages, status, error]);
+  }, [messages, status, error, isStreaming]);
 
   function handleScroll() {
     const el = scrollRef.current;
@@ -225,14 +242,6 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
     pinnedRef.current = atBottom;
     if (atBottom) setShowJump(false);
   }
-
-  // Abort any in-flight stream when the panel unmounts (e.g. closed mid-reply).
-  // stop() is a no-op when the chat is idle.
-  useEffect(() => {
-    return () => {
-      void stop();
-    };
-  }, [stop]);
 
   async function handleSend(text: string) {
     if (!text.trim()) return;
@@ -276,6 +285,10 @@ export function ChatPanel({ onClose }: { onClose: () => void }) {
         conversationId: conversationIdRef.current,
       });
     }
+    // Sending always snaps to the newest message — even if the visitor had
+    // scrolled up to re-read, their own message is what they want to see.
+    pinnedRef.current = true;
+    setShowJump(false);
     sendMessage({ text });
   }
 
