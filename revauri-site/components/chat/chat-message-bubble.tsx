@@ -75,16 +75,6 @@ function renderInlineContent(text: string): ReactNode[] {
   return nodes;
 }
 
-function getMessageText(message: UIMessage) {
-  // Blank line between text parts (the bubble is whitespace-pre-wrap) — a
-  // reply split around a tool call would otherwise run its sentences together.
-  return message.parts
-    .filter((part) => part.type === "text")
-    .map((part) => part.text)
-    .filter((text) => text.length > 0)
-    .join("\n\n");
-}
-
 export function BubbleShell({ isUser, children }: { isUser: boolean; children: ReactNode }) {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -101,8 +91,6 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   );
 }
 
-type ToolPart = Extract<UIMessage["parts"][number], { type: `tool-${string}` }>;
-
 export function ChatMessageBubble({
   message,
   isLastMessage = false,
@@ -117,87 +105,114 @@ export function ChatMessageBubble({
 }) {
   const reducedMotion = useReducedMotion();
   const isUser = message.role === "user";
-  const text = getMessageText(message);
+
+  // Render parts in the order the model produced them: consecutive text parts
+  // merge into one bubble, and each tool card renders where its call sits.
+  // (Merging all text into one bubble above all cards put sentences meant to
+  // follow a card above it, and a silent tool call showed the card before any
+  // text arrived.)
+  const blocks: ReactNode[] = [];
+  let textParts: string[] = [];
+  // Highlight cards live inside the text bubble, so they collect with the
+  // pending text and flush into the same BubbleShell.
+  let pendingHighlights: Array<{ key: string; props: HighlightCardProps }> = [];
+
+  function flushBubble() {
+    // Blank line between text parts (the bubble is whitespace-pre-wrap) — a
+    // reply split around a tool call would otherwise run its sentences together.
+    const text = textParts.join("\n\n");
+    if (!text && pendingHighlights.length === 0) return;
+    const highlights = pendingHighlights;
+    textParts = [];
+    pendingHighlights = [];
+    blocks.push(
+      <BubbleShell key={`bubble-${blocks.length}`} isUser={isUser}>
+        {/* Linkify assistant replies only — user-typed text stays plain. */}
+        {isUser ? text : renderInlineContent(text)}
+        {highlights.map((h) => (
+          <HighlightCard key={h.key} {...h.props} />
+        ))}
+      </BubbleShell>,
+    );
+  }
+
   // A message can carry several calls to the same tool — render every one,
   // keyed by toolCallId, not just the first.
-  const highlightParts = message.parts.filter(
-    (p): p is ToolPart & { output: HighlightCardProps } =>
-      p.type === "tool-get_project_highlight" && "state" in p && p.state === "output-available",
-  );
-  const bookingParts = message.parts.filter(
-    (p): p is ToolPart => p.type === "tool-offer_booking" && "state" in p,
-  );
-  const portfolioParts = message.parts.filter(
-    (p): p is ToolPart & { output: { projects: PortfolioCardData[] } } =>
-      p.type === "tool-show_portfolio" && "state" in p && p.state === "output-available",
-  );
-  const leadParts = message.parts.filter(
-    (p): p is ToolPart => p.type === "tool-capture_lead" && "state" in p,
-  );
+  for (const part of message.parts) {
+    if (part.type === "text") {
+      if (part.text.length > 0) textParts.push(part.text);
+      continue;
+    }
 
-  const bubble = (text || highlightParts.length > 0) && (
-    <BubbleShell isUser={isUser}>
-      {/* Linkify assistant replies only — user-typed text stays plain. */}
-      {isUser ? text : renderInlineContent(text)}
-      {highlightParts.map((part) => (
-        <HighlightCard key={part.toolCallId} {...part.output} />
-      ))}
-    </BubbleShell>
-  );
+    if (part.type === "tool-get_project_highlight") {
+      if ("state" in part && part.state === "output-available") {
+        pendingHighlights.push({ key: part.toolCallId, props: part.output as HighlightCardProps });
+      }
+      continue;
+    }
 
-  const cards: ReactNode[] = [];
+    if (part.type === "tool-offer_booking" && "state" in part) {
+      flushBubble();
+      if (part.state === "output-available") {
+        blocks.push(
+          <BookingCard key={part.toolCallId} {...(part.output as BookingCardProps)} />,
+        );
+      } else if (part.state !== "output-error") {
+        if (isLastMessage) {
+          // Live availability is being fetched server-side — show a skeleton.
+          blocks.push(
+            <div
+              key={part.toolCallId}
+              className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
+            />,
+          );
+        } else {
+          // An earlier message can never receive its output (e.g. a session
+          // restored mid-fetch) — degrade to the plain "Book a call" card
+          // instead of pulsing forever.
+          blocks.push(<BookingCard key={part.toolCallId} fallback />);
+        }
+      }
+      continue;
+    }
 
-  for (const bookingPart of bookingParts) {
-    if (bookingPart.state === "output-available") {
-      cards.push(
-        <BookingCard key={bookingPart.toolCallId} {...(bookingPart.output as BookingCardProps)} />,
-      );
-    } else if (bookingPart.state !== "output-error") {
-      if (isLastMessage) {
-        // Live availability is being fetched server-side — show a skeleton.
-        cards.push(
-          <div
-            key={bookingPart.toolCallId}
-            className="h-24 animate-pulse rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] dark:border-brand-orange/30 dark:bg-brand-orange/10"
+    if (part.type === "tool-show_portfolio") {
+      if ("state" in part && part.state === "output-available") {
+        flushBubble();
+        for (const project of (part.output as { projects: PortfolioCardData[] }).projects) {
+          blocks.push(
+            <PortfolioCard key={`${part.toolCallId}-${project.slug}`} project={project} />,
+          );
+        }
+      }
+      continue;
+    }
+
+    if (part.type === "tool-capture_lead" && "state" in part) {
+      flushBubble();
+      if (part.state === "input-available") {
+        blocks.push(
+          <LeadConfirmationCard
+            key={part.toolCallId}
+            proposed={(part.input ?? {}) as LeadProposedInput}
+            expired={!isLastMessage || !onLeadResolve}
+            onResolve={(output) => onLeadResolve?.(part.toolCallId, output)}
           />,
         );
-      } else {
-        // An earlier message can never receive its output (e.g. a session
-        // restored mid-fetch) — degrade to the plain "Book a call" card
-        // instead of pulsing forever.
-        cards.push(<BookingCard key={bookingPart.toolCallId} fallback />);
+      } else if (part.state === "output-available") {
+        blocks.push(
+          <LeadResolvedCard key={part.toolCallId} output={part.output as LeadToolOutput} />,
+        );
+      } else if (part.state === "output-error") {
+        blocks.push(<LeadResolvedCard key={part.toolCallId} output={{ success: false }} />);
       }
     }
   }
-
-  for (const portfolioPart of portfolioParts) {
-    for (const project of portfolioPart.output.projects) {
-      cards.push(<PortfolioCard key={`${portfolioPart.toolCallId}-${project.slug}`} project={project} />);
-    }
-  }
-
-  for (const leadPart of leadParts) {
-    if (leadPart.state === "input-available") {
-      cards.push(
-        <LeadConfirmationCard
-          key={leadPart.toolCallId}
-          proposed={(leadPart.input ?? {}) as LeadProposedInput}
-          expired={!isLastMessage || !onLeadResolve}
-          onResolve={(output) => onLeadResolve?.(leadPart.toolCallId, output)}
-        />,
-      );
-    } else if (leadPart.state === "output-available") {
-      cards.push(
-        <LeadResolvedCard key={leadPart.toolCallId} output={leadPart.output as LeadToolOutput} />,
-      );
-    } else if (leadPart.state === "output-error") {
-      cards.push(<LeadResolvedCard key={leadPart.toolCallId} output={{ success: false }} />);
-    }
-  }
+  flushBubble();
 
   // Tool-only turns with nothing renderable (e.g. a still-streaming tool
-  // input) would otherwise produce an empty bubble.
-  if (!bubble && cards.length === 0) return null;
+  // input) would otherwise produce an empty wrapper.
+  if (blocks.length === 0) return null;
 
   return (
     // Subtle fade + rise on entry, matching the panel's easing (chat-widget.tsx).
@@ -207,8 +222,7 @@ export function ChatMessageBubble({
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
       className="space-y-2.5"
     >
-      {bubble}
-      {cards}
+      {blocks}
     </motion.div>
   );
 }
