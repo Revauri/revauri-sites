@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
 import { ArrowDown, ArrowUp, RotateCcw, Square, X } from "lucide-react";
-import { BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
+import { Arrival, BubbleShell, ChatMessageBubble } from "./chat-message-bubble";
 import { ChatEmptyState } from "@/components/chat/chat-empty-state";
+import { FollowupChips, followupsFor } from "@/components/chat/chat-followup-chips";
 import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
 import { notifyNewChat } from "@/lib/chat/notify-new-chat";
 
@@ -77,6 +78,9 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
   const [draft, setDraft] = useState("");
   const [wasReset, setWasReset] = useState(false);
   const [initialMessages] = useState(loadStoredMessages);
+  // Ids present at mount came from sessionStorage, not a live reply — follow-up
+  // chips only appear under replies that complete during this session.
+  const [restoredIds] = useState(() => new Set(initialMessages?.map((m) => m.id) ?? []));
   const [isMobileModal, setIsMobileModal] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -160,6 +164,18 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
   // The transport surfaces non-2xx bodies as the error message, so the route's
   // 429 body ({"error":"Too many requests"}) is detectable here.
   const isRateLimited = error?.message.includes("Too many requests") ?? false;
+
+  // Chips ride on the reply settling (status → ready), so they fade in a beat
+  // after the text lands; sending anything makes a user message last, which
+  // unmounts them.
+  const followupChips =
+    status === "ready" &&
+    !error &&
+    lastMessage?.role === "assistant" &&
+    hasVisibleContent(lastMessage) &&
+    !restoredIds.has(lastMessage.id)
+      ? followupsFor(lastMessage)
+      : [];
 
   function scrollToBottom(behavior: ScrollBehavior = "smooth") {
     const el = scrollRef.current;
@@ -453,6 +469,12 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
                 </>
               )}
             </BubbleShell>
+          )}
+
+          {followupChips.length > 0 && (
+            <Arrival>
+              <FollowupChips chips={followupChips} onSelect={handleSend} />
+            </Arrival>
           )}
         </div>
 

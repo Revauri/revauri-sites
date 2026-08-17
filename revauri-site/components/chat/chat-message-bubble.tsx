@@ -107,7 +107,7 @@ function StreamingCursor() {
 // Every block (bubble or card) fades/rises on mount, so a card arriving a beat
 // after its text bubble — the common case with in-order rendering — animates in
 // deliberately instead of popping.
-function Arrival({ children }: { children: ReactNode }) {
+export function Arrival({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion();
   return (
     <motion.div
@@ -252,7 +252,10 @@ export function ChatMessageBubble({
           </Arrival>,
         );
       } else if (part.state !== "output-error") {
-        if (isLastMessage) {
+        // Server-side tool: pending is only plausible mid-stream. If the chat
+        // has settled with the call still pending (interrupted stream), no
+        // output can ever arrive — degrade to the fallback card.
+        if (isLastMessage && isStreaming) {
           // Live availability is being fetched server-side — chip + skeleton.
           blocks.push(
             <Arrival key={part.toolCallId}>
@@ -294,8 +297,10 @@ export function ChatMessageBubble({
             </div>
           </Arrival>,
         );
-      } else if (part.state !== "output-error" && isLastMessage) {
+      } else if (part.state !== "output-error" && isLastMessage && isStreaming) {
         // The model is mid tool-call — fills the gap before the cards land.
+        // Settled + still pending = orphaned call (interrupted stream): render
+        // nothing rather than a chip that spins forever.
         blocks.push(
           <Arrival key={part.toolCallId}>
             <ToolChip state="pending" pendingLabel="Pulling up projects…" doneLabel="Projects ready" />
