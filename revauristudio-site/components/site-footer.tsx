@@ -17,19 +17,19 @@ export function SiteFooter() {
           <div className="flex flex-col gap-2 font-sans text-xs uppercase tracking-[0.18em] text-paper-muted md:items-end">
             <a
               href="mailto:joseph@revauri.com"
-              className="transition-colors hover:text-claret-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret-light"
+              className="transition-colors hover:text-ultramarine-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine-light"
             >
               joseph@revauri.com
             </a>
             <a
               href="https://revauri.ai/privacy"
-              className="transition-colors hover:text-claret-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret-light"
+              className="transition-colors hover:text-ultramarine-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine-light"
             >
               Privacy
             </a>
             <a
               href="https://revauri.ai/terms"
-              className="transition-colors hover:text-claret-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret-light"
+              className="transition-colors hover:text-ultramarine-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine-light"
             >
               Terms
             </a>
@@ -40,7 +40,7 @@ export function SiteFooter() {
             Website design is a different product, at{" "}
             <a
               href="https://revauri.com"
-              className="underline underline-offset-4 transition-colors hover:text-claret-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret-light"
+              className="underline underline-offset-4 transition-colors hover:text-ultramarine-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine-light"
             >
               revauri.com
             </a>

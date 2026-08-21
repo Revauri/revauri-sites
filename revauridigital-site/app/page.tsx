@@ -2,7 +2,7 @@ const BOOK_URL = "https://revauri.ai/book";
 const PRODUCT_URL = "https://revauri.ai";
 
 const primaryButton =
-  "inline-flex items-center justify-center gap-2 rounded-md bg-teal px-6 py-3 font-sans text-base font-medium text-ink transition-colors hover:bg-teal-bright active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal";
+  "inline-flex items-center justify-center gap-2 rounded-md bg-signal px-6 py-3 font-sans text-base font-medium text-ink transition-colors hover:bg-signal-bright active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal";
 
 const logLines = [
   { time: "02:14:07", verb: "SENT", message: "Quote follow-up, day 3" },
@@ -49,10 +49,10 @@ export default function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-ink">
-        <div aria-hidden="true" className="console-grid absolute inset-0" />
+        <div aria-hidden="true" className="log-roll absolute inset-0" />
         <div className="relative mx-auto max-w-6xl px-5 py-24 md:px-8 md:py-32 lg:grid lg:grid-cols-[1fr_26rem] lg:items-center lg:gap-16">
           <div className="max-w-xl">
-            <p className="animate-fade-up font-mono text-xs font-medium uppercase tracking-[0.16em] text-teal">
+            <p className="animate-fade-up font-mono text-xs font-medium uppercase tracking-[0.16em] text-signal">
               Revauri AI
             </p>
             <h1
@@ -60,7 +60,7 @@ export default function Home() {
               style={{ animationDelay: "60ms" }}
             >
               The digital work that never ends
-              <span className="text-teal">.</span>
+              <span className="text-signal">.</span>
             </h1>
             <p
               className="mt-6 animate-fade-up text-base leading-[1.65] text-muted md:text-[1.0625rem]"
@@ -106,7 +106,7 @@ export default function Home() {
                     className="flex items-baseline gap-3 py-2 font-mono text-[13px] leading-[1.9]"
                   >
                     <span className="shrink-0 text-faint">{line.time}</span>
-                    <span className="w-16 shrink-0 uppercase tracking-[0.06em] text-teal">
+                    <span className="w-16 shrink-0 uppercase tracking-[0.06em] text-signal">
                       {line.verb}
                     </span>
                     <span className="text-muted">{line.message}</span>
@@ -114,7 +114,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="flex items-center gap-2 border-t border-line-soft px-4 py-3">
-                <span aria-hidden="true" className="dot animate-dot-pulse" />
+                <span aria-hidden="true" className="dot animate-lamp-breathe" />
                 <span className="font-mono text-xs uppercase tracking-[0.08em] text-muted">
                   All threads watched
                 </span>
@@ -126,7 +126,7 @@ export default function Home() {
 
       <section id="jobs" className="border-y border-line bg-panel">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-teal">
+          <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-signal">
             The work the hire takes
           </p>
           <h2 className="mt-4 font-sans text-3xl font-semibold tracking-[-0.02em] leading-[1.1] text-text md:text-[2.5rem]">
@@ -166,7 +166,7 @@ export default function Home() {
       <section id="approval" className="bg-ink">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28 lg:grid lg:grid-cols-2 lg:gap-16">
           <div className="lg:self-start">
-            <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-teal">
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-signal">
               Your call
             </p>
             <h2 className="mt-4 font-sans text-3xl font-semibold tracking-[-0.02em] leading-[1.1] text-text md:text-[2.5rem]">
@@ -189,7 +189,7 @@ export default function Home() {
                     aria-hidden="true"
                     className={
                       point.live
-                        ? "dot animate-dot-pulse absolute top-[0.45em] -left-[37px]"
+                        ? "dot animate-lamp-breathe absolute top-[0.45em] -left-[37px]"
                         : "dot dot--idle absolute top-[0.45em] -left-[37px]"
                     }
                   />
@@ -207,7 +207,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5 pb-20 md:px-8 md:pb-28">
           <div className="flex flex-col gap-3 rounded-md border border-line bg-panel px-6 py-6 md:flex-row md:items-center md:gap-6 md:px-8">
             <span aria-hidden="true" className="dot dot--idle shrink-0" />
-            <p className="shrink-0 font-mono text-xs font-medium uppercase tracking-[0.16em] text-teal">
+            <p className="shrink-0 font-mono text-xs font-medium uppercase tracking-[0.16em] text-signal">
               Extra hire
             </p>
             <p className="flex-1 leading-relaxed text-muted">
@@ -223,22 +223,15 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden bg-ink">
-        <div aria-hidden="true" className="console-grid absolute inset-0" />
-        <div
-          aria-hidden="true"
-          className="absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(45, 212, 191, 0.07), transparent)",
-          }}
-        />
+        <div aria-hidden="true" className="log-roll absolute inset-0" />
         <div className="relative mx-auto max-w-2xl px-5 py-24 text-center md:px-8 md:py-32">
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-teal">
+          <p className="inline-flex items-center gap-2.5 font-mono text-xs font-medium uppercase tracking-[0.16em] text-signal">
+            <span aria-hidden="true" className="dot animate-lamp-breathe" />
             Revauri AI
           </p>
           <h2 className="mt-4 font-sans text-3xl font-semibold tracking-[-0.02em] leading-[1.1] text-text md:text-[2.5rem]">
             Hand off the work that never ends
-            <span className="text-teal">.</span>
+            <span className="text-signal">.</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl leading-[1.65] text-muted">
             Twenty minutes. Tell us the job you hate. We will tell you what the
@@ -250,7 +243,7 @@ export default function Home() {
             </a>
             <a
               href={PRODUCT_URL}
-              className="font-mono text-xs uppercase tracking-[0.16em] text-faint transition-colors hover:text-teal"
+              className="font-mono text-xs uppercase tracking-[0.16em] text-faint transition-colors hover:text-signal"
             >
               See Revauri AI
             </a>

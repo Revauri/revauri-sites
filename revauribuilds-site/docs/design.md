@@ -76,12 +76,16 @@ Libre Franklin is a sturdy American gothic — do not add positive tracking to d
 
 ---
 
-## 3. Texture & motifs (pick these two, nothing more)
+## 3. Texture & motifs — one signature, the ledger itself
 
-1. **The ruled ledger + mono index numbers** — the system-wide structure. The nine job cards share 1px `hairline` borders as one continuous ruled sheet (no gaps, no card shadows, no rounded boxes); every job gets a mono index number `01`–`09`; every section gets a mono eyebrow label. This is the whole "job board / workbench" voice — cheap and fast.
-2. **Ledger grid** — `.ledger-grid` (see §9), hero section only: faint ink lines at 4% on paper, 48px cells. Graph paper on the workbench. No gradients, no glow, no honeycomb.
+The signature is **the ledger**, expressed four ways and no further:
 
-Deliberately **not** used: revauribuild's copper bar markers and 2px spec-sheet top rules — those are the sibling's devices. No icons, no emoji, no stock imagery anywhere.
+1. **The ruled sheet + mono index numbers** — the nine job cards share 1px `hairline` borders as one continuous ruled sheet (no gaps, no card shadows, no rounded boxes); every job gets a mono index number `01`–`09`.
+2. **Paper grain** — a fixed SVG-noise tooth at 4% opacity over the whole page (`body::before`, pointer-transparent). The sheet reads as paper, not pixels. Static; unaffected by motion preferences.
+3. **The ledger answers the hand** — hovering a cell lights its whole row with a whisper of green (`rgb(22 163 74 / 0.045)`, via `.ledger-row:has(.job-cell:hover)` at `md+`; the touched cell alone on mobile) and draws a 1px `stamp` rule left-to-right under the entry (`.job-cell::after`, `scaleX 0→1`, 240ms). Cells stay non-interactive — this is texture, not navigation, so there is no focus state to manage.
+4. **Ledger grid** — `.ledger-grid` (see §9), hero section only: faint ink lines at 4% on paper, 48px cells. Graph paper under the masthead. No gradients, no glow, no honeycomb.
+
+Deliberately **not** used: revauribuild's copper bar markers and 2px spec-sheet top rules — those are the sibling's devices. No icons, no emoji, no stock imagery anywhere. No second motif beyond the ledger (no stamp graphics, no circles, no seals).
 
 ---
 
@@ -96,17 +100,18 @@ Global rhythm: container `mx-auto max-w-6xl px-5 md:px-8`; sections `py-20 md:py
 
 ### Hero — paper + ledger grid
 - `bg-paper ledger-grid`.
-- Mono eyebrow: `REVAURI AI` in `text-stamp-deep`.
+- Mono eyebrow: `REVAURI AI` in `text-stamp-deep`, with a 1px `hairline` rule running from it to the right edge of the container — a ruled masthead line.
 - H1 "The jobs a hire can take." — `text-ink`, "jobs" in `text-stamp-deep`.
 - Subhead (locked copy): "Quiet leads. Missed calls. Quotes that die. Reviews. Reminders. The busywork you keep meaning to hand off." — `text-ink-muted max-w-xl`.
-- CTAs: primary stamp button "Book a 20-minute call" → `https://revauri.ai/book` + text link "Go to revauri.ai ↗" (`text-stamp-deep`).
-- Optional load animation: `animate-fade-up` on eyebrow → H1 → subhead → CTA with `animation-delay` stagger of 80ms. That's the only animation on the page.
+- CTAs: primary stamp button "Book a 20-minute call" → `https://revauri.ai/book` + text link "See Revauri AI" (`text-stamp-deep`, locked label).
+- Trust line (locked copy) sits as a ledger footnote: `border-l border-hairline pl-4`, mono, `text-ink-muted`.
+- Load animation: `animate-fade-up` on eyebrow → H1 → subhead → CTA row → trust line with `animation-delay` stagger of 80ms. The token uses `both` fill mode so delayed elements start hidden. That's the only load animation on the page.
 
 ### Job grid — the ruled ledger, `id="jobs"`
-- Mono eyebrow `THE BOARD` in `text-stamp-deep`, then the grid `mt-8`.
-- The grid is one ruled sheet: `grid grid-cols-1 md:grid-cols-3 border-t border-l border-hairline`; each cell `border-b border-r border-hairline p-6 md:p-7`. Nine cells, 3×3 on desktop, stacked on mobile — every cell fully ruled on every breakpoint.
+- No section heading or eyebrow — the copy lock allows no string here; the hero headline introduces the grid directly.
+- The grid is one ruled sheet: `grid grid-cols-1 md:grid-cols-3 border-t border-l border-hairline`; each cell `.job-cell border-b border-r border-hairline p-6 md:p-7`. Nine cells, 3×3 on desktop, stacked on mobile — every cell fully ruled on every breakpoint. Cells are wrapped in three `.ledger-row contents` row groups (purely structural, `display: contents`) so CSS can light a full row on hover.
 - Each cell: mono index `01`–`09` (`font-mono font-bold text-sm text-stamp-deep`); job name (`font-sans font-semibold text-lg text-ink mt-3`); 1–2 sentence body (`text-sm text-ink-muted leading-relaxed mt-2`).
-- **Static cells only** — no links, no hover states, no picker. The ninth cell ("Something else") gets identical treatment; the copy differentiates it.
+- **Hover is the signature** (see §3.3): row lights, green rule draws under the touched cell. Cells remain non-interactive — no links, no picker, no focusable content. The ninth cell ("Something else") gets identical treatment; the copy differentiates it.
 - The nine jobs, locked wording: Quiet leads / After-hours / missed calls / Quotes with no second follow-up / Reviews / Appointment reminders / no-shows / After-the-job check-in / Inbox / admin busywork / Reactivating past customers / Something else.
 
 ### Closing band — paper-sunk
@@ -166,7 +171,7 @@ Ratios computed from relative luminance (WCAG 2.x formula), not eyeballed:
 
 Rules that fall out of this: on light backgrounds, green text is always `stamp-deep`; `stamp` is fills/decoration on light and may be text only on the ink footer. Muted colors are used at `text-xs` only in uppercase mono with wide tracking, which reads larger than its size.
 
-Motion: single subtle `fade-up` (12px translate, 0.6s) on hero load; full `prefers-reduced-motion` kill-switch in the CSS block in §9. No scroll-reveal library needed for a page this short.
+Motion: subtle `fade-up` (12px translate, 0.6s, `both` fill) staggered across the five hero elements at 80ms steps; ledger hover transitions at 160ms (tint) and 240ms (rule draw). Full `prefers-reduced-motion` kill-switch in the CSS block in §9 zeroes all of it — hover states then apply instantly. The paper grain is a static texture, not motion. No scroll-reveal library needed for a page this short.
 
 ---
 
@@ -219,7 +224,7 @@ export default function Icon() {
 - **vs revauri.ai:** that site is a product homepage — Inter, dark honeycomb hero, interactive job-picker, chatbot, orange-on-black. This page has no product UI at all: no demo, no picker, no chat widget, no honeycomb, no glow. Nine static ruled cells replace the interactive picker, and the page is light-first where revauri.ai opens dark.
 - **vs revauribuild:** that site is a charcoal-first workshop — dark header/hero/band/footer, copper `#D97757` as the site accent, Space Grotesk + IBM Plex Mono, blueprint grid on dark, spec-sheet steps with 2px top rules. This site inverts all of it: light-first paper with only a dark footer, a green stamp accent (orange quarantined to the wordmark tittle), Libre Franklin + Space Mono, a faint ledger grid on light, and one continuous ruled 3×3 ledger instead of spec-sheet steps.
 - **vs revauridesign:** that site is a cream agency brochure (`#FAF9F5`, Inter + Fraunces text). Our paper `#F5F6F2` is cooler with a faint green lean, our text never touches Inter or Fraunces (Fraunces survives only inside the official wordmark), and the numbered job ledger replaces brochure sections.
-- **Own identity:** the classifieds page, set well. A single ruled sheet of nine numbered jobs, a typewriter mono calling the rows, and one stamp-green accent — the stamp that says the job is taken. The brightest, quietest, and most ledger-like of the four sites.
+- **Own identity:** the classifieds page, set well. A single ruled sheet of nine numbered jobs on grained paper, a typewriter mono calling the rows, and one stamp-green accent — the stamp that says the job is taken. The sheet answers the hand: trace a row and it lights, touch an entry and the rule draws itself. The brightest, quietest, and most ledger-like of the four sites.
 
 ---
 
@@ -262,7 +267,7 @@ Tailwind CSS v4, same `@theme inline` pattern as the sibling sites. Replace the 
   --font-mono: var(--font-space-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif; /* LOGO WORDMARK ONLY */
 
-  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(12px); }
@@ -286,6 +291,54 @@ body {
     linear-gradient(to right, rgba(24, 28, 25, 0.04) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(24, 28, 25, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+/* Paper grain — a fixed noise tooth over the whole sheet so it reads as paper,
+   not pixels. Static, pointer-transparent, imperceptible over the ink footer. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+}
+
+/* The ledger answers the hand: the row lights faintly, and a stamp-green rule
+   draws itself left-to-right under the touched entry. Cells stay non-interactive —
+   this is texture, not navigation. */
+.job-cell {
+  position: relative;
+  transition: background-color 160ms ease;
+}
+
+.job-cell::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: var(--color-stamp);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.job-cell:hover {
+  background-color: rgb(22 163 74 / 0.045);
+}
+
+.job-cell:hover::after {
+  transform: scaleX(1);
+}
+
+@media (min-width: 768px) {
+  .ledger-row:has(.job-cell:hover) .job-cell {
+    background-color: rgb(22 163 74 / 0.045);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

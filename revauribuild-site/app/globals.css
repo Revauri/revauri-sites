@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F2ECDF;
-  --foreground: #211E1A;
+  --background: #16181D;
+  --foreground: #EDEAE0;
 }
 
 @theme inline {
@@ -11,26 +11,27 @@
 
   /* Brand tokens — required by the verbatim Logo component */
   --color-brand-orange: #D97757;
-  --color-brand-dark: #211E1A;
-  --color-brand-cream: #F2ECDF;
-  --color-brand-mid-gray: #B0AEA5;
+  --color-brand-dark: #16181D;
+  --color-brand-cream: #EDEAE0;
+  --color-brand-mid-gray: #9BA2AC;
 
   /* Site palette */
-  --color-charcoal: #211E1A;
-  --color-charcoal-panel: #2B2621;
-  --color-paper: #F2ECDF;
-  --color-paper-deep: #E9E0CC;
+  --color-steel: #16181D;
+  --color-steel-panel: #1D2026;
+  --color-steel-line: #2C3038;
+  --color-steel-muted: #9BA2AC;
+  --color-paper: #EDEAE0;
+  --color-paper-deep: #E3DDCC;
+  --color-paper-line: #D8D2C2;
+  --color-ink-muted: #5F636B;
   --color-copper: #D97757;
   --color-copper-bright: #E08B6A;
   --color-copper-deep: #9C452A;
-  --color-ink-muted: #6B6156;
-  --color-paper-muted: #B0AEA5;
-  --color-hairline: #D9CFBB;
-  --color-hairline-dark: #3D372E;
 
   /* Type */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-plex-cond), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
 
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -46,12 +47,14 @@ body {
   color: var(--foreground);
 }
 
-/* Blueprint grid — hero texture, charcoal sections only */
-.blueprint-grid {
+/* Shop grid — hero texture. Minor cells plus a heavier major line every 5 cells, like layout paper on the bench. */
+.shop-grid {
   background-image:
-    linear-gradient(to right, rgba(242, 236, 223, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(242, 236, 223, 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
+    linear-gradient(to right, rgba(237, 234, 224, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(237, 234, 224, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(237, 234, 224, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(237, 234, 224, 0.1) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 240px 240px, 240px 240px;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,127 +2,89 @@
 
 One-page trust site for people who received an email from `@revauribuild.com` and typed the domain into a browser. Message: **"We build the hire."** This is a door to the product at `https://revauri.ai`, not a product homepage.
 
-**Direction:** workshop / build. Charcoal, copper, warm bone paper. A shop floor where systems get assembled — spec sheets, hairlines, index numbers, mono labels. Not SaaS, not agency brochure, not the revauri.ai honeycomb.
+**Direction:** the shop floor at night. The page is a cold steel bench; the middle sections ("How we build" + "What you stay in charge of") are rendered as **one physical paper work order** lying on that bench — ticket header, boxed index fields, ruled spec rows, a dashed perforation, then the authorization block. A real work order is scope-of-work plus authorization, so the structure encodes what the copy already says. Copper is hardware on steel, never terracotta on cream. Not SaaS, not agency brochure, not the revauri.ai honeycomb.
 
 ---
 
 ## 1. Palette
 
-Light/dark plan: **charcoal header + hero**, warm-paper body, **charcoal phone-answering band**, warm-paper CTA, **charcoal footer**. Rhythm: dark → light → light → dark → light → dark. Both sibling sites open light; opening dark is the fastest visual separation for a visitor who just typed the domain.
+Dark-first. Only the work-order sheet is light; every other surface is steel. Rhythm: dark hero → paper artifact on dark bench → dark phone band → dark CTA → dark footer.
 
 | Token | Hex | Role |
 |---|---|---|
-| `charcoal` | `#211E1A` | Dark section backgrounds (header/hero, phone band, footer); primary text on light sections |
-| `charcoal-panel` | `#2B2621` | Raised surface on dark (rarely used — a card or chip on charcoal) |
-| `paper` | `#F2ECDF` | Page background, light sections. Warm bone/shop-paper — visibly warmer and deeper than revauridesign's `#FAF9F5` |
-| `paper-deep` | `#E9E0CC` | Alt light section background ("stay in charge" section) |
-| `copper` | `#D97757` | **Official brand orange — exact hex, do not change.** CTA button fill, accent bars, step numbers on dark, decorative marks |
+| `steel` | `#16181D` | Page background; header/hero/bench/CTA/footer; primary text on paper |
+| `steel-panel` | `#1D2026` | Phone-answering band surface |
+| `steel-line` | `#2C3038` | 1px rules and dividers on dark |
+| `steel-muted` | `#9BA2AC` | Muted/secondary text on dark |
+| `paper` | `#EDEAE0` | The work-order sheet — the page's only light surface |
+| `paper-deep` | `#E3DDCC` | Ticket header strip on the sheet |
+| `paper-line` | `#D8D2C2` | 1px rules and dividers on the sheet |
+| `ink-muted` | `#5F636B` | Muted/secondary text on the sheet |
+| `copper` | `#D97757` | **Official brand orange — exact hex, do not change.** CTA fill, eyebrow bar, sheet top bar, list markers, text on dark only |
 | `copper-bright` | `#E08B6A` | CTA hover state only |
-| `copper-deep` | `#9C452A` | Copper **text** on light backgrounds (step numbers, links, small accents). `#D97757` fails AA as text on paper — never use it for text on light |
-| `ink-muted` | `#6B6156` | Muted/secondary text on light sections |
-| `paper-muted` | `#B0AEA5` | Muted/secondary text on charcoal sections |
-| `hairline` | `#D9CFBB` | 1px rules and dividers on light sections |
-| `hairline-dark` | `#3D372E` | 1px rules and dividers on charcoal sections |
+| `copper-deep` | `#9C452A` | Copper **text** on paper (eyebrows, index numbers). `#D97757` fails AA as text on paper — never use it for text there |
 
-Brand tokens required by the verbatim `Logo` component: `brand-orange` (exact `#D97757`), `brand-dark`, `brand-cream`, `brand-mid-gray`. Judgment call: map `brand-dark` → our charcoal and `brand-cream` → our paper so the wordmark sits natively in this palette; `brand-orange` stays untouched; `brand-mid-gray` keeps the sibling value `#B0AEA5` (used only by the optional logo suffix).
+Brand tokens required by the verbatim `Logo` component: `brand-orange` (exact `#D97757`), `brand-dark` → `steel`, `brand-cream` → `paper`, `brand-mid-gray` → `steel-muted` (used only by the optional logo suffix).
 
 ---
 
-## 2. `app/globals.css` — paste-ready token block
+## 2. `app/globals.css` — token block
 
-Tailwind CSS v4, same `@theme inline` pattern as revauridesign-site. Replace the scaffolded Geist variables.
+Tailwind CSS v4 `@theme inline`. Fonts are wired in `app/layout.tsx`; the CSS variables `--font-plex-sans`, `--font-plex-cond`, `--font-plex-mono`, `--font-fraunces` come from `next/font/google`.
+
+Key tokens: `--color-steel #16181D`, `--color-steel-panel #1D2026`, `--color-steel-line #2C3038`, `--color-steel-muted #9BA2AC`, `--color-paper #EDEAE0`, `--color-paper-deep #E3DDCC`, `--color-paper-line #D8D2C2`, `--color-ink-muted #5F636B`, `--color-copper #D97757`, `--color-copper-bright #E08B6A`, `--color-copper-deep #9C452A`; `--font-sans` (Plex Sans), `--font-display` (Plex Sans Condensed), `--font-mono` (Plex Mono), `--font-serif` (Fraunces — **logo wordmark only**); `--animate-fade-up`.
+
+No dark-mode class, no theme script — sections are explicitly colored. Use `Logo variant="dark"` everywhere (every surface the logo sits on is steel).
+
+### Shop grid (hero texture)
 
 ```css
-@import "tailwindcss";
-
-:root {
-  --background: #F2ECDF;
-  --foreground: #211E1A;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  /* Brand tokens — required by the verbatim Logo component */
-  --color-brand-orange: #D97757; /* official mark, exact hex */
-  --color-brand-dark: #211E1A;
-  --color-brand-cream: #F2ECDF;
-  --color-brand-mid-gray: #B0AEA5;
-
-  /* Site palette */
-  --color-charcoal: #211E1A;
-  --color-charcoal-panel: #2B2621;
-  --color-paper: #F2ECDF;
-  --color-paper-deep: #E9E0CC;
-  --color-copper: #D97757;
-  --color-copper-bright: #E08B6A;
-  --color-copper-deep: #9C452A;
-  --color-ink-muted: #6B6156;
-  --color-paper-muted: #B0AEA5;
-  --color-hairline: #D9CFBB;
-  --color-hairline-dark: #3D372E;
-
-  /* Type */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif; /* LOGO WORDMARK ONLY */
-
-  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
-  @keyframes fade-up {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-/* Blueprint grid — hero texture, charcoal sections only. Cheap CSS, no SVG. */
-.blueprint-grid {
+.shop-grid {
   background-image:
-    linear-gradient(to right, rgba(242, 236, 223, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(242, 236, 223, 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+    linear-gradient(to right, rgba(237, 234, 224, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(237, 234, 224, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(237, 234, 224, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(237, 234, 224, 0.1) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 240px 240px, 240px 240px;
 }
 ```
 
-No dark-mode class, no theme script — sections are explicitly colored. Use `Logo variant="dark"` (cream wordmark) on charcoal sections and `variant="light"` (charcoal wordmark) on light sections; never `variant="auto"`.
+Minor cells at 5% paper-on-steel with a heavier major line every 5 cells (240px) at 10% — layout paper on the bench, present enough to read as a grid. Hero section only. No gradients, no glow, no honeycomb.
 
 ---
 
 ## 3. Typography
 
-**Pairing: Space Grotesk (display + body) + IBM Plex Mono (eyebrows, labels, step numbers, meta).** Both on Google Fonts, both industrial/technical — they read "shop floor spec sheet," and they are clearly not Inter (both siblings) and not Fraunces-for-text (revauridesign). Fraunces loads only so the official wordmark keeps its serif; it appears nowhere else on the page.
+**System: IBM Plex Sans Condensed (display) + IBM Plex Sans (body) + IBM Plex Mono (ticket chrome).** One engineered superfamily — the condensed face is the equipment-plate voice, the mono is the form-fill voice. Fraunces loads only so the official wordmark keeps its serif; it appears nowhere else on the page.
 
-`app/layout.tsx` wiring (replaces the scaffolded Geist setup):
+`app/layout.tsx` wiring:
 
 ```ts
-import { Space_Grotesk, IBM_Plex_Mono, Fraunces } from "next/font/google";
+import {
+  IBM_Plex_Sans,
+  IBM_Plex_Sans_Condensed,
+  IBM_Plex_Mono,
+  Fraunces,
+} from "next/font/google";
 
-const spaceGrotesk = Space_Grotesk({
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500"],
+  variable: "--font-plex-sans",
+  display: "swap",
+});
+
+const plexCondensed = IBM_Plex_Sans_Condensed({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-plex-cond",
   display: "swap",
 });
 
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-ibm-plex-mono",
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -130,101 +92,89 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
+  axes: ["SOFT", "WONK"],
 });
-
-// <html className={`${spaceGrotesk.variable} ${plexMono.variable} ${fraunces.variable} antialiased`}>
 ```
 
 | Element | Font / utility | Size mobile → desktop | Notes |
 |---|---|---|---|
-| Hero H1 ("We build the hire.") | `font-sans font-medium` | `text-5xl` → `md:text-7xl` | `tracking-[-0.02em] leading-[1.05]`; the period (or one word) in `text-copper` |
-| Section H2 | `font-sans font-medium` | `text-3xl` → `md:text-4xl` | `tracking-tight` |
-| Step names (Look / Build / Run) | `font-sans font-medium` | `text-2xl` | `tracking-tight` |
+| Hero H1 ("We build the hire.") | `font-display font-semibold` | `text-5xl` → `md:text-7xl` | `leading-[1.02] tracking-[-0.01em]`; the period in `text-copper` |
+| Section H2 | `font-display font-semibold` | `text-3xl` → `md:text-4xl` | `tracking-[-0.01em]`; final CTA bumps to `md:text-5xl` |
+| Step names (Look / Build / Run) | `font-display font-semibold` | `text-2xl` | `tracking-[-0.01em]` |
 | Body / lead | `font-sans` | `text-base` → `md:text-lg` | `leading-relaxed`, measure capped `max-w-xl` |
-| Eyebrows, section labels | `font-mono uppercase` | `text-xs` | `tracking-[0.2em]`, `text-copper-deep` on light / `text-copper` on dark |
-| Step numbers 01/02/03 | `font-mono font-medium` | `text-sm` | `text-copper-deep` on light / `text-copper` on dark |
-| Meta text (durations, footer, spec lists) | `font-mono uppercase` | `text-xs` | `tracking-[0.15em]`, muted color of the section |
+| Eyebrows, section labels | `font-mono uppercase` | `text-xs` | `tracking-[0.2em]`, `text-copper` on steel / `text-copper-deep` on paper |
+| Ticket header, step indexes, meta | `font-mono uppercase` | `text-[11px]`–`text-sm` | `tracking-[0.15em]`–`[0.2em]`, muted color of the surface |
 
-Space Grotesk already runs slightly condensed — do not add positive tracking to display type; only the mono labels get wide tracking.
+Headings stay sentence case as written in the copy — the uppercase industrial voice lives in the mono labels only.
 
 ---
 
-## 4. Texture & motifs (pick these two, nothing more)
+## 4. Signature: the work order
 
-1. **Blueprint grid** — `.blueprint-grid` above, hero section only, at 4.5% paper-on-charcoal. Barely-there shop drawing paper. No gradients, no glow, no honeycomb.
-2. **Hairline rules + mono index labels** — the system-wide structure. 1px `border-hairline` / `border-hairline-dark` dividers between sections and rows; every section gets a mono eyebrow label; steps get mono index numbers. This is the whole "workshop" voice — cheap and fast.
+"How we build" and "What you stay in charge of" render as **one continuous paper job ticket** on the steel bench:
 
-Small tie-in: list markers are a `10px × 2px` copper bar (`bg-copper`, `rounded-[1px]`), echoing the wordmark's accent bar. No icons, no emoji, no stock imagery anywhere.
+- The sheet: `bg-paper`, `rounded-[2px]`, `border border-black/50`, lifted off the bench with `shadow-[0_1px_0_rgba(0,0,0,0.5),0_24px_48px_-24px_rgba(0,0,0,0.6)]`.
+- A 3px `bg-copper` bar caps the sheet's top edge — the copper bar as hardware, echoing the wordmark's tittle bar.
+- Ticket header strip: `bg-paper-deep` row, mono microcopy `WORK ORDER — NO. 001` / `REVAURI AI` (form letterhead, not marketing copy).
+- Steps are ruled rows (`divide-y divide-paper-line`, capped with `border-y`): a boxed mono index (`border border-paper-line`, copper-deep number, border warms to `copper-deep` on row hover), the step name in condensed display, body in Plex Sans. Desktop: two columns `[13rem_1fr]`; mobile: stacked.
+- A **dashed perforation** (`border-t border-dashed`) separates scope of work from the authorization block.
+- Authorization checklist rows keep the `10px × 2px` copper bar markers.
+
+Everything outside the sheet stays quiet steel so the artifact is the one memorable thing.
 
 ---
 
 ## 5. Section-by-section
 
-Global rhythm: container `mx-auto max-w-6xl px-5 md:px-8`; sections `py-20 md:py-28`; header `h-16`. Mobile-first, single column until `md`.
+Global: container `mx-auto max-w-6xl px-5 md:px-8`; header `h-16`. Mobile-first, single column until `md`.
 
-### Header — charcoal, merges into hero
-- `bg-charcoal`, no bottom border (hero continues the same surface).
-- Left: `Logo variant="dark"`. Right: one mono link `REVAURI.AI ↗` (`font-mono text-xs uppercase tracking-[0.2em] text-paper-muted hover:text-copper`).
-- No nav — this page has one job.
+### Header — steel
+- `bg-steel border-b border-steel-line` — a plate seam between header and hero grid.
+- Left: `Logo variant="dark"`. Right: copper CTA button (small). No nav — this page has one job.
 
-### Hero — charcoal + blueprint grid
-- `bg-charcoal blueprint-grid`.
-- Mono eyebrow: `REVAURI BUILD — AN AI EMPLOYEE FOR THE JOB YOU HATE` in `text-copper`.
+### Hero — steel + shop grid
+- `bg-steel shop-grid`.
+- Eyebrow: 32px copper bar + mono `REVAURI AI` in `text-copper`.
 - H1 "We build the hire." — `text-paper`, copper period.
-- Lead paragraph (2 lines max): we look at how the work runs today, build two workflows, run them — you stay the boss. `text-paper-muted max-w-xl`.
-- CTAs: primary copper button (anchor to `#how`) + text link "Go to revauri.ai ↗" (`text-copper`).
-- Optional load animation: `animate-fade-up` on eyebrow → H1 → lead → CTA with `animation-delay` stagger of 80ms. That's the only animation on the page.
+- Lead `text-steel-muted max-w-xl`; CTAs: copper button + "See Revauri AI" text link in `text-copper`.
+- Door note ("Got an email from @revauribuild.com?…") as a tagged field: `border-t border-steel-line pt-5`, mono, `text-steel-muted`.
+- Load sequence: `opacity-0 animate-fade-up` with `animation-delay` stagger of 80ms across eyebrow → H1 → lead → CTAs → door note. That is the only animation on the page.
 
-### How we build — paper, `id="how"`
-- Mono eyebrow `THE PROCESS`, H2 "Look. Build. Run."
-- Three steps as a spec sheet: mobile — stacked rows `divide-y divide-hairline`, each `py-8`; desktop — `md:grid md:grid-cols-3 md:gap-10 md:divide-y-0`, each step `border-t-2 border-charcoal pt-6` (a 2px charcoal top rule per step = spec-sheet header).
-- Each step: mono index `01` / `02` / `03` in `text-copper-deep`; name (`text-2xl font-medium`); 2–3 sentence body `text-ink-muted`; mono meta line, e.g. `DAYS 1–3 — WE WATCH THE WORK` / `WEEK ONE — TWO WORKFLOWS, BUILT` / `ONGOING — WE RUN THEM, YOU APPROVE`.
-- Step copy: **Look** — we study how the job actually gets done today. **Build** — we assemble two workflows around your tools. **Run** — we operate them; every action is visible to you.
+### The work order — steel bench, paper sheet
+- See §4. Carries `id="how-we-build"` and `id="in-charge"` for the footer anchor nav.
 
-### What you stay in charge of — paper-deep
-- `bg-paper-deep`, `border-y border-hairline`.
-- Mono eyebrow `YOUR CALL`, H2 "What you stay in charge of."
-- Checklist rows, `divide-y divide-hairline`, each row `flex items-baseline gap-4 py-4`: copper bar marker + short statement in `font-sans text-lg` — e.g. "Approve every workflow before it runs." / "See every message it sends." / "Pause or stop it anytime." / "Your tools, your logins, your name on everything."
-- No cards, no boxes — rows and hairlines only.
+### Phone-answering band — steel-panel
+- `bg-steel-panel border-y border-steel-line` — a value step off the bench so the band reads as a separate plate.
+- Mono eyebrow `THE EXTRA HIRE` in `text-copper`, H2 "Phone answering", body `text-steel-muted`.
+- Guardrails as a capped spec table: `divide-y divide-steel-line border-y border-steel-line`, mono uppercase rows.
 
-### Phone-answering band — charcoal
-- `bg-charcoal`, mono eyebrow `EXTRA HIRE` in `text-copper`, H2 "It answers the phone too." in `text-paper`.
-- Two columns at `md`: left — 2–3 sentences `text-paper-muted`; right — mono spec list `divide-y divide-hairline-dark`, rows `py-3 font-mono text-xs uppercase tracking-[0.15em] text-paper`: `24/7 ANSWERING` / `MISSED-CALL TEXT-BACK` / `BOOKED STRAIGHT INTO YOUR CALENDAR`.
-- This band breaks the light rhythm and re-anchors the page in the workshop before the ask.
+### Final CTA — steel
+- Centered, `py-24 md:py-32`. H2 "Hand off the job you hate." with copper period, sub `text-steel-muted`, copper button + text link.
 
-### Final CTA — paper
-- Centered, `py-24 md:py-32`.
-- H2-scale line: "The job you hate is the first thing we build." `text-charcoal`, one word or the period in `text-copper-deep`.
-- Primary copper button: "Start at revauri.ai ↗" (external link to `https://revauri.ai`).
-- Mono sub-line under it: `REVAURI.AI` in `text-ink-muted`.
-
-### Footer — charcoal
-- `bg-charcoal border-t border-hairline-dark`, `py-10`.
-- Left: `Logo variant="dark"` at `text-base`. Right: mono meta `© 2026 REVAURI LLC` and `JOSEPH@REVAURI.COM`, `text-paper-muted`, stacked on mobile.
-- Nothing else. No social icons, no link farm.
+### Footer — steel
+- `bg-steel border-t border-steel-line`, `py-12`.
+- Top: mono anchor nav (`How we build` / `In charge` / `Phone answering` / `Book a 20-minute call`) over a `border-b border-steel-line` — the document index for the page.
+- Then logo, company line, address, contact/legal links, the revauri.com line, copyright. Mono throughout, `text-steel-muted`, links warm to `text-copper` on hover.
 
 ---
 
 ## 6. Buttons & links
 
-**Primary CTA** (copper, used twice on the page):
+**Primary CTA** (copper, three times on the page):
 
 ```
-inline-flex items-center gap-2 rounded-sm bg-copper px-6 py-3
-font-sans text-base font-medium text-charcoal
+inline-flex items-center justify-center gap-2 rounded-[2px] bg-copper px-6 py-3
+font-sans text-base font-medium text-steel
+shadow-[inset_0_-2px_0_0_rgba(22,24,29,0.25)]
 transition-colors hover:bg-copper-bright active:translate-y-px
 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper
 ```
 
-`rounded-sm` (2px) — workshop, not SaaS pill. Charcoal text on copper passes AA (see below), so no white text on copper anywhere.
+`rounded-[2px]` and the inset bottom edge read as a machined plate, not a SaaS pill. Steel text on copper passes AA — no white text on copper anywhere.
 
-**Secondary / ghost** (only if needed, dark sections): `border border-hairline-dark text-paper px-6 py-3 rounded-sm hover:border-copper hover:text-copper transition-colors`.
+**Text links on dark:** `text-copper underline-offset-4 hover:underline` with a copper focus outline.
 
-**Text links:**
-- On light: `text-copper-deep underline underline-offset-4 decoration-hairline hover:decoration-copper-deep`.
-- On dark: `text-copper underline-offset-4 hover:underline`.
-
-Focus visible everywhere: 2px copper outline, 2px offset (2px `copper-deep` outline on copper-filled elements).
+Focus visible everywhere: 2px copper outline, 2px offset (4px on the logo link).
 
 ---
 
@@ -232,26 +182,24 @@ Focus visible everywhere: 2px copper outline, 2px offset (2px `copper-deep` outl
 
 | Pair | Ratio | Verdict |
 |---|---|---|
-| `charcoal #211E1A` text on `paper #F2ECDF` | ≈14.1:1 | AAA |
-| `charcoal` on `paper-deep #E9E0CC` | ≈12.7:1 | AAA |
-| `ink-muted #6B6156` on `paper` | ≈5.1:1 | AA |
-| `ink-muted` on `paper-deep` | ≈4.6:1 | AA |
-| `paper #F2ECDF` on `charcoal` | ≈14.1:1 | AAA |
-| `paper-muted #B0AEA5` on `charcoal` | ≈7.5:1 | AAA |
-| `copper #D97757` on `charcoal` | ≈5.3:1 | AA (text OK on dark) |
-| `copper-deep #9C452A` on `paper` | ≈5.4:1 | AA |
-| `copper-deep` on `paper-deep` | ≈4.9:1 | AA |
-| `charcoal` text on `copper` button | ≈5.3:1 | AA |
-| `copper #D97757` on `paper` | ≈2.7:1 | **FAIL — decorative only on light** (bars, markers, borders); never text |
+| `paper #EDEAE0` text on `steel #16181D` | ≈14.9:1 | AAA |
+| `steel` text on `paper` | ≈14.9:1 | AAA |
+| `steel-muted #9BA2AC` on `steel` | ≈6.9:1 | AAA |
+| `ink-muted #5F636B` on `paper` | ≈5.0:1 | AA |
+| `ink-muted` on `paper-deep #E3DDCC` | ≈4.7:1 | AA |
+| `copper #D97757` on `steel` | ≈5.7:1 | AA (text OK on dark) |
+| `copper-deep #9C452A` on `paper` | ≈5.3:1 | AA |
+| `steel` text on `copper` button | ≈5.7:1 | AA |
+| `copper #D97757` on `paper` | ≈2.7:1 | **FAIL — decorative only on the sheet** (top bar, list markers); never text |
 
-Rules that fall out of this: copper `#D97757` is text **only on charcoal**; on light backgrounds copper text is always `copper-deep`. Muted colors are never used below `text-xs`… they are used *at* `text-xs` only in uppercase mono with wide tracking, which reads larger than its size.
+Rules that fall out of this: copper `#D97757` is text **only on steel**; on paper, copper text is always `copper-deep`. Muted colors appear at `text-xs` only in uppercase mono with wide tracking, which reads larger than its size.
 
-Motion: single subtle `fade-up` (12px translate, 0.6s) on hero load; full `prefers-reduced-motion` kill-switch in the CSS block above. No scroll-reveal library needed for a page this short — if added later, reuse the same keyframes and the same media query.
+Motion: single staggered `fade-up` (12px translate, 0.6s) on hero load; full `prefers-reduced-motion` kill-switch in globals.css. No scroll-reveal library — the page is short and the sheet is strong statically.
 
 ---
 
 ## 8. What makes this distinct
 
-- **vs revauri.ai:** that site is a product homepage — Inter, dark honeycomb hero, job-picker demo, chatbot. This page has no product UI at all: no demo, no chat widget, no honeycomb, no glow. Space Grotesk + IBM Plex Mono replace Inter, and the blueprint grid + spec-sheet steps replace the honeycomb.
-- **vs revauridesign-site:** that site is a cream agency brochure (`#FAF9F5`, Inter + Fraunces text). Our paper `#F2ECDF` is visibly warmer and deeper, our text never touches Inter or Fraunces (Fraunces survives only inside the official wordmark), and the charcoal-first layout inverts its light-first feel.
-- **Own identity:** the shop floor. Mono index numbers, hairline spec sheets, copper bar markers echoing the wordmark's tittle bar, and one blueprint grid — a place where the hire gets built, not a page that markets software.
+- **vs revauri.ai:** that site is a product homepage — Inter, dark honeycomb hero, job-picker demo, chatbot. This page has no product UI at all: no demo, no chat widget, no honeycomb, no glow. The Plex superfamily replaces Inter, and the work-order artifact replaces the honeycomb.
+- **vs the siblings:** the ledger site is light-first paper with a gothic + typewriter mono; the night-desk site is an operations console; the studio is editorial serif. This is the only cold-steel, dark-first page, and the only one whose signature is a physical document.
+- **Own identity:** the shop floor at night. A two-tone shop grid, a paper work order with boxed indexes and a perforation, condensed equipment-plate headings, and copper used as hardware — a place where the hire gets built, not a page that markets software.

@@ -1,19 +1,32 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, IBM_Plex_Mono, Fraunces } from "next/font/google";
+import {
+  IBM_Plex_Sans,
+  IBM_Plex_Sans_Condensed,
+  IBM_Plex_Mono,
+  Fraunces,
+} from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500"],
+  variable: "--font-plex-sans",
+  display: "swap",
+});
+
+const plexCondensed = IBM_Plex_Sans_Condensed({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-plex-cond",
   display: "swap",
 });
 
 const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-ibm-plex-mono",
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -64,7 +77,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${plexMono.variable} ${fraunces.variable} antialiased`}
+      className={`${plexSans.variable} ${plexCondensed.variable} ${plexMono.variable} ${fraunces.variable} antialiased`}
     >
       <head>
         <script
@@ -72,7 +85,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-paper text-charcoal">
+      <body className="bg-steel text-paper">
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />

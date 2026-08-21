@@ -16,7 +16,7 @@ export function SiteFooter() {
             <p>
               <a
                 href="mailto:joseph@revauri.com"
-                className="transition-colors hover:text-teal"
+                className="transition-colors hover:text-signal"
               >
                 joseph@revauri.com
               </a>
@@ -40,7 +40,7 @@ export function SiteFooter() {
               Website design is a different product at{" "}
               <a
                 href="https://revauri.com"
-                className="underline underline-offset-4 transition-colors hover:text-teal"
+                className="underline underline-offset-4 transition-colors hover:text-signal"
               >
                 revauri.com
               </a>

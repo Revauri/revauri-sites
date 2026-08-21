@@ -12,7 +12,7 @@ export function SiteHeader() {
         </Link>
         <a
           href={BOOK_URL}
-          className="inline-flex items-center gap-2 rounded-md border border-line px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-text transition-colors hover:border-teal/50 hover:text-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
+          className="inline-flex items-center gap-2 rounded-md border border-line px-4 py-2 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-text transition-colors hover:border-signal/50 hover:text-signal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
         >
           Book a 20-minute call
         </a>

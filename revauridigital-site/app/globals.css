@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0A0F14;
-  --foreground: #E6EDF3;
+  --background: #0D0B14;
+  --foreground: #EAE8F3;
 }
 
 @theme inline {
@@ -16,23 +16,23 @@
   --color-brand-mid-gray: #B0AEA5;
 
   /* Surfaces */
-  --color-ink: #0A0F14;
-  --color-panel: #0F1620;
-  --color-panel-hover: #131C28;
+  --color-ink: #0D0B14;
+  --color-panel: #14101F;
+  --color-panel-hover: #1A1528;
 
   /* Text on dark */
-  --color-text: #E6EDF3;
-  --color-muted: #93A1B0;
-  --color-faint: #7A8A99;
+  --color-text: #EAE8F3;
+  --color-muted: #A2A0B6;
+  --color-faint: #807E93;
 
   /* Hairlines */
-  --color-line: rgba(148, 163, 184, 0.14);
-  --color-line-soft: rgba(148, 163, 184, 0.08);
+  --color-line: rgba(150, 146, 190, 0.14);
+  --color-line-soft: rgba(150, 146, 190, 0.08);
 
-  /* Accent — electric teal */
-  --color-teal: #2DD4BF;
-  --color-teal-bright: #5EEAD4;
-  --color-teal-deep: #0F766E;
+  /* Accent — violet signal lamp */
+  --color-signal: #A78BFA;
+  --color-signal-bright: #C4B5FD;
+  --color-signal-deep: #4C1D95;
 
   /* Type */
   --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -40,16 +40,16 @@
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
 
   --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  --animate-dot-pulse: dot-pulse 2.4s ease-in-out infinite;
+  --animate-lamp-breathe: lamp-breathe 3.6s ease-in-out infinite;
 
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes dot-pulse {
-    0%, 100% { box-shadow: 0 0 8px rgba(45, 212, 191, 0.55); }
-    50% { box-shadow: 0 0 2px rgba(45, 212, 191, 0.2); }
+  @keyframes lamp-breathe {
+    0%, 100% { box-shadow: 0 0 9px rgba(167, 139, 250, 0.5); opacity: 1; }
+    50% { box-shadow: 0 0 2px rgba(167, 139, 250, 0.15); opacity: 0.72; }
   }
 }
 
@@ -58,30 +58,30 @@ body {
   color: var(--foreground);
 }
 
-/* Console grid — hero + final CTA only. Cool slate at 5%, masked so it recedes. */
-.console-grid {
+/* Log roll — horizontal hairlines like paper tape through the desk printer.
+   Hero + final CTA only, masked so it recedes. */
+.log-roll {
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-  background-size: 72px 72px;
+    linear-gradient(to bottom, rgba(150, 146, 190, 0.05) 1px, transparent 1px);
+  background-size: 100% 32px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 75%);
 }
 
-/* Status dots — three states only, no alarm colors */
+/* Signal lamps — three states only, no alarm colors */
 .dot {
   width: 6px;
   height: 6px;
   border-radius: 9999px;
-  background: var(--color-teal);
-  box-shadow: 0 0 8px rgba(45, 212, 191, 0.55);
+  background: var(--color-signal);
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.55);
 }
 .dot--idle {
-  background: #3E4C5C;
+  background: #3A3550;
   box-shadow: none;
 }
 .dot--needs-you {
   background: transparent;
-  border: 1px solid var(--color-teal);
+  border: 1px solid var(--color-signal);
   box-shadow: none;
 }
 

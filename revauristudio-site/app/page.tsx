@@ -2,7 +2,7 @@ const BOOK_URL = "https://revauri.ai/book";
 const PRODUCT_URL = "https://revauri.ai";
 
 const primaryButton =
-  "inline-flex items-center justify-center gap-2 rounded-none bg-claret px-6 py-3 font-sans text-base font-semibold text-paper transition-colors hover:bg-claret-bright active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret";
+  "inline-flex items-center justify-center gap-2 rounded-none bg-ultramarine px-6 py-3 font-sans text-base font-semibold text-paper transition-colors hover:bg-ultramarine-bright active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine";
 
 const steps = [
   {
@@ -35,7 +35,7 @@ export default function Home() {
     <>
       <section className="bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
-          <p className="animate-fade-up font-sans text-xs font-semibold uppercase tracking-[0.22em] text-claret">
+          <p className="animate-fade-up font-sans text-xs font-semibold uppercase tracking-[0.22em] text-ultramarine">
             Revauri AI
           </p>
           <h1
@@ -43,10 +43,10 @@ export default function Home() {
             style={{ animationDelay: "80ms" }}
           >
             Designed around{" "}
-            <span className="italic text-claret">your business</span>.
+            <span className="italic text-ultramarine">your business</span>.
           </h1>
           <p
-            className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-ink-muted md:text-lg"
+            className="mt-6 max-w-xl animate-fade-up font-display text-lg leading-relaxed text-ink-muted md:text-xl"
             style={{ animationDelay: "160ms" }}
           >
             We do not drop in a generic bot. We watch how the work runs,
@@ -61,7 +61,7 @@ export default function Home() {
             </a>
             <a
               href={PRODUCT_URL}
-              className="text-claret underline decoration-hairline underline-offset-4 hover:decoration-claret focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret"
+              className="text-ultramarine underline decoration-hairline underline-offset-4 hover:decoration-ultramarine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine"
             >
               See Revauri AI
             </a>
@@ -76,17 +76,17 @@ export default function Home() {
       <section id="the-craft" className="border-y border-hairline bg-paper-deep">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <div className="flex items-baseline gap-4">
-            <p className="font-display text-lg font-semibold text-claret">
+            <p className="font-display text-lg font-semibold text-ultramarine">
               No. 01
             </p>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-claret">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-ultramarine">
               The craft
             </p>
           </div>
           <h2 className="mt-4 font-display text-3xl leading-[1.1] font-medium text-ink md:text-4xl">
             Studio, not factory.
           </h2>
-          <div className="mt-8 max-w-xl space-y-5 text-base leading-relaxed text-ink-muted md:text-lg">
+          <div className="mt-8 max-w-xl space-y-5 font-display text-lg leading-relaxed text-ink-muted md:text-xl">
             <p className="drop-cap">
               A hire from Revauri AI is an AI employee for the job you hate.
               We build the workflow. We run it. You stay the boss.
@@ -111,10 +111,10 @@ export default function Home() {
       <section id="process" className="bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <div className="flex items-baseline gap-4">
-            <p className="font-display text-lg font-semibold text-claret">
+            <p className="font-display text-lg font-semibold text-ultramarine">
               No. 02
             </p>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-claret">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-ultramarine">
               The process
             </p>
           </div>
@@ -127,13 +127,13 @@ export default function Home() {
                 key={step.numeral}
                 className="py-8 first:pt-0 last:pb-0 md:py-0"
               >
-                <p className="font-display text-3xl font-semibold text-claret">
+                <p className="font-display text-3xl font-semibold text-ultramarine">
                   {step.numeral}
                 </p>
                 <h3 className="mt-3 font-display text-2xl font-medium text-ink">
                   {step.name}
                 </h3>
-                <p className="mt-2 leading-relaxed text-ink-muted">
+                <p className="mt-2 font-display leading-relaxed text-ink-muted">
                   {step.body}
                 </p>
                 <p className="mt-4 font-sans text-xs uppercase tracking-[0.18em] text-ink-muted">
@@ -142,10 +142,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="mt-12 max-w-xl font-sans text-xs uppercase tracking-[0.18em] text-ink-muted">
-            Phone is an extra hire, scoped on the call. It is not a
-            receptionist.
-          </p>
         </div>
       </section>
 
@@ -153,8 +149,12 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5 py-24 text-center md:px-8 md:py-32">
           <p className="mx-auto max-w-3xl font-display text-3xl leading-[1.15] font-medium text-paper md:text-5xl">
             If it is not repeatable, we will{" "}
-            <span className="italic text-claret-light">not fake</span> a
+            <span className="italic text-ultramarine-light">not fake</span> a
             system for it.
+          </p>
+          <p className="mx-auto mt-10 max-w-xl font-sans text-xs uppercase tracking-[0.18em] text-paper-muted">
+            Phone is an extra hire, scoped on the call. It is not a
+            receptionist.
           </p>
         </div>
       </section>
@@ -162,17 +162,17 @@ export default function Home() {
       <section className="bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-24 text-center md:px-8 md:py-32">
           <div className="flex items-baseline justify-center gap-4">
-            <p className="font-display text-lg font-semibold text-claret">
+            <p className="font-display text-lg font-semibold text-ultramarine">
               No. 03
             </p>
-            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-claret">
+            <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-ultramarine">
               Revauri AI
             </p>
           </div>
           <h2 className="mt-4 font-display text-3xl leading-[1.1] font-medium text-ink md:text-4xl">
             Show us the job you hate.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ink-muted">
+          <p className="mx-auto mt-4 max-w-xl font-display text-lg leading-relaxed text-ink-muted">
             Twenty minutes. We talk about the work. You decide.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -181,7 +181,7 @@ export default function Home() {
             </a>
             <a
               href={PRODUCT_URL}
-              className="text-claret underline decoration-hairline underline-offset-4 hover:decoration-claret focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-claret"
+              className="text-ultramarine underline decoration-hairline underline-offset-4 hover:decoration-ultramarine focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ultramarine"
             >
               See Revauri AI
             </a>

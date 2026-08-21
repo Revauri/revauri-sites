@@ -58,22 +58,27 @@ const supportLines = [
   "Nothing customer-facing goes out without your yes.",
 ];
 
+const jobRows = [jobs.slice(0, 3), jobs.slice(3, 6), jobs.slice(6, 9)];
+
 export default function Home() {
   return (
     <>
       <section className="ledger-grid bg-paper">
-        <div className="mx-auto max-w-6xl animate-fade-up px-5 py-24 md:px-8 md:py-32">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-stamp-deep">
-            Revauri AI
-          </p>
-          <h1 className="mt-6 font-sans text-4xl leading-[1.05] font-bold tracking-[-0.02em] text-ink md:text-6xl">
+        <div className="mx-auto max-w-6xl px-5 py-24 md:px-8 md:py-32">
+          <div className="flex animate-fade-up items-center gap-4">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-stamp-deep">
+              Revauri AI
+            </p>
+            <span aria-hidden="true" className="h-px flex-1 bg-hairline" />
+          </div>
+          <h1 className="mt-6 animate-fade-up font-sans text-4xl leading-[1.05] font-bold tracking-[-0.02em] text-ink [animation-delay:80ms] md:text-6xl">
             The <span className="text-stamp-deep">jobs</span> a hire can take.
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-muted md:text-lg">
+          <p className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-ink-muted [animation-delay:160ms] md:text-lg">
             Quiet leads. Missed calls. Quotes that die. Reviews. Reminders. The
             busywork you keep meaning to hand off.
           </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="mt-10 flex animate-fade-up flex-col gap-4 [animation-delay:240ms] sm:flex-row sm:items-center">
             <a href={BOOK_URL} className={primaryButton}>
               Book a 20-minute call
             </a>
@@ -84,7 +89,7 @@ export default function Home() {
               See Revauri AI
             </a>
           </div>
-          <p className="mt-12 max-w-xl font-mono text-xs leading-relaxed tracking-[0.15em] text-ink-muted">
+          <p className="mt-12 max-w-xl animate-fade-up border-l border-hairline pl-4 font-mono text-xs leading-relaxed tracking-[0.15em] text-ink-muted [animation-delay:320ms]">
             Got an email from @revauribuilds.com? That was us. This domain is a
             door. The company is Revauri AI.
           </p>
@@ -93,21 +98,25 @@ export default function Home() {
 
       <section id="jobs" className="bg-paper">
         <div className="mx-auto max-w-6xl px-5 pb-24 md:px-8 md:pb-32">
-          <div className="grid grid-cols-1 border-t border-l border-hairline md:grid-cols-3">
-            {jobs.map((job) => (
-              <div
-                key={job.index}
-                className="border-b border-r border-hairline p-6 md:p-7"
-              >
-                <p className="font-mono text-sm font-bold text-stamp-deep">
-                  {job.index}
-                </p>
-                <h2 className="mt-3 font-sans text-lg font-semibold tracking-tight text-ink">
-                  {job.name}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                  {job.body}
-                </p>
+          <div className="ledger grid grid-cols-1 border-t border-l border-hairline md:grid-cols-3">
+            {jobRows.map((row) => (
+              <div key={row[0].index} className="ledger-row contents">
+                {row.map((job) => (
+                  <div
+                    key={job.index}
+                    className="job-cell border-b border-r border-hairline p-6 md:p-7"
+                  >
+                    <p className="font-mono text-sm font-bold text-stamp-deep">
+                      {job.index}
+                    </p>
+                    <h2 className="mt-3 font-sans text-lg font-semibold tracking-tight text-ink">
+                      {job.name}
+                    </h2>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                      {job.body}
+                    </p>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

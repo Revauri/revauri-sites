@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F5EEE6;
-  --foreground: #1C120D;
+  --background: #F2F3F5;
+  --foreground: #151B2B;
 }
 
 @theme inline {
@@ -11,25 +11,25 @@
 
   /* Brand tokens — required by the verbatim Logo component */
   --color-brand-orange: #D97757; /* official mark, exact hex — wordmark tittle only, never a site accent */
-  --color-brand-dark: #1C120D;
-  --color-brand-cream: #F5EEE6;
+  --color-brand-dark: #151B2B;
+  --color-brand-cream: #F2F3F5;
   --color-brand-mid-gray: #B0AEA5;
 
   /* Site palette */
-  --color-paper: #F5EEE6;
-  --color-paper-deep: #EAE0D5;
-  --color-ink: #1C120D;
-  --color-ink-muted: #6E5F56;
-  --color-paper-muted: #A89A8C;
-  --color-claret: #722F37;
-  --color-claret-bright: #8A3A48;
-  --color-claret-light: #D29AA2;
-  --color-hairline: #DDD0C2;
-  --color-hairline-dark: #3A2C24;
+  --color-paper: #F2F3F5;
+  --color-paper-deep: #E2E5EA;
+  --color-ink: #151B2B;
+  --color-ink-muted: #525C70;
+  --color-paper-muted: #9BA3B4;
+  --color-ultramarine: #002FA7;
+  --color-ultramarine-bright: #1D45C2;
+  --color-ultramarine-light: #A8B6F0;
+  --color-hairline: #D7DBE2;
+  --color-hairline-dark: #2C3449;
 
   /* Type */
   --font-sans: var(--font-source-sans-3), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif; /* LOGO WORDMARK ONLY */
 
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -46,20 +46,20 @@ body {
 }
 
 ::selection {
-  background: #722F37;
-  color: #F5EEE6;
+  background: #002FA7;
+  color: #F2F3F5;
 }
 
 /* Drop cap — one per page, craft section lead paragraph only. */
 .drop-cap::first-letter {
-  font-family: var(--font-playfair), Georgia, serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-weight: 600;
   font-size: 3.4em;
   line-height: 0.85;
   float: left;
   padding-top: 0.06em;
   padding-right: 0.12em;
-  color: var(--color-claret);
+  color: var(--color-ultramarine);
 }
 
 @media (prefers-reduced-motion: reduce) {

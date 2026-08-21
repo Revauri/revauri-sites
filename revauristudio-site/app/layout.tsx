@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Sans_3, Fraunces } from "next/font/google";
+import { Newsreader, Source_Sans_3, Fraunces } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  variable: "--font-playfair",
+  axes: ["opsz"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${sourceSans.variable} ${fraunces.variable} antialiased`}
+      className={`${newsreader.variable} ${sourceSans.variable} ${fraunces.variable} antialiased`}
     >
       <head>
         <script

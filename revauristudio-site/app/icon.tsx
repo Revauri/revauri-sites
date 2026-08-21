@@ -11,7 +11,7 @@ export default function Icon() {
           width: 32,
           height: 32,
           borderRadius: 0,
-          background: "#F5EEE6",
+          background: "#F2F3F5",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -21,12 +21,12 @@ export default function Icon() {
           style={{
             fontSize: 19,
             fontWeight: 700,
-            color: "#1C120D",
+            color: "#151B2B",
             lineHeight: 1,
             fontFamily: "Georgia, serif",
           }}
         >
-          R<span style={{ color: "#722F37" }}>.</span>
+          R<span style={{ color: "#002FA7" }}>.</span>
         </span>
       </div>
     ),
