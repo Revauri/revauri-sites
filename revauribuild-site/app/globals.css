@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F2ECDF;
+  --foreground: #211E1A;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand tokens — required by the verbatim Logo component */
+  --color-brand-orange: #D97757;
+  --color-brand-dark: #211E1A;
+  --color-brand-cream: #F2ECDF;
+  --color-brand-mid-gray: #B0AEA5;
+
+  /* Site palette */
+  --color-charcoal: #211E1A;
+  --color-charcoal-panel: #2B2621;
+  --color-paper: #F2ECDF;
+  --color-paper-deep: #E9E0CC;
+  --color-copper: #D97757;
+  --color-copper-bright: #E08B6A;
+  --color-copper-deep: #9C452A;
+  --color-ink-muted: #6B6156;
+  --color-paper-muted: #B0AEA5;
+  --color-hairline: #D9CFBB;
+  --color-hairline-dark: #3D372E;
+
+  /* Type */
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Blueprint grid — hero texture, charcoal sections only */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, rgba(242, 236, 223, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242, 236, 223, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

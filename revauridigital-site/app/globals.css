@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0A0F14;
+  --foreground: #E6EDF3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand tokens — required by the verbatim Logo component. Page UI must not use these. */
+  --color-brand-orange: #D97757;
+  --color-brand-dark: #211E1A;
+  --color-brand-cream: #F2ECDF;
+  --color-brand-mid-gray: #B0AEA5;
+
+  /* Surfaces */
+  --color-ink: #0A0F14;
+  --color-panel: #0F1620;
+  --color-panel-hover: #131C28;
+
+  /* Text on dark */
+  --color-text: #E6EDF3;
+  --color-muted: #93A1B0;
+  --color-faint: #7A8A99;
+
+  /* Hairlines */
+  --color-line: rgba(148, 163, 184, 0.14);
+  --color-line-soft: rgba(148, 163, 184, 0.08);
+
+  /* Accent — electric teal */
+  --color-teal: #2DD4BF;
+  --color-teal-bright: #5EEAD4;
+  --color-teal-deep: #0F766E;
+
+  /* Type */
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-dot-pulse: dot-pulse 2.4s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(45, 212, 191, 0.55); }
+    50% { box-shadow: 0 0 2px rgba(45, 212, 191, 0.2); }
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Console grid — hero + final CTA only. Cool slate at 5%, masked so it recedes. */
+.console-grid {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 75%);
+}
+
+/* Status dots — three states only, no alarm colors */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-teal);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.55);
+}
+.dot--idle {
+  background: #3E4C5C;
+  box-shadow: none;
+}
+.dot--needs-you {
+  background: transparent;
+  border: 1px solid var(--color-teal);
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

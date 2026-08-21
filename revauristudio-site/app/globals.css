@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F5EEE6;
+  --foreground: #1C120D;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Brand tokens — required by the verbatim Logo component */
+  --color-brand-orange: #D97757; /* official mark, exact hex — wordmark tittle only, never a site accent */
+  --color-brand-dark: #1C120D;
+  --color-brand-cream: #F5EEE6;
+  --color-brand-mid-gray: #B0AEA5;
+
+  /* Site palette */
+  --color-paper: #F5EEE6;
+  --color-paper-deep: #EAE0D5;
+  --color-ink: #1C120D;
+  --color-ink-muted: #6E5F56;
+  --color-paper-muted: #A89A8C;
+  --color-claret: #722F37;
+  --color-claret-bright: #8A3A48;
+  --color-claret-light: #D29AA2;
+  --color-hairline: #DDD0C2;
+  --color-hairline-dark: #3A2C24;
+
+  /* Type */
+  --font-sans: var(--font-source-sans-3), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif; /* LOGO WORDMARK ONLY */
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: #722F37;
+  color: #F5EEE6;
+}
+
+/* Drop cap — one per page, craft section lead paragraph only. */
+.drop-cap::first-letter {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 600;
+  font-size: 3.4em;
+  line-height: 0.85;
+  float: left;
+  padding-top: 0.06em;
+  padding-right: 0.12em;
+  color: var(--color-claret);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
