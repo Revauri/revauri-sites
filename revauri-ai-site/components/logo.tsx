@@ -37,7 +37,7 @@ export function Logo({
         />
       </span>
       {suffix && (
-        <span className="ml-1.5 font-normal tracking-normal">{suffix}</span>
+        <span className="ml-[3px] text-brand-orange">{suffix}</span>
       )}
     </span>
   );

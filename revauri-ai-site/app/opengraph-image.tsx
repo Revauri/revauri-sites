@@ -54,9 +54,10 @@ export default function OGImage() {
           <span
             style={{
               fontSize: 72,
-              fontWeight: 400,
-              color: "#141413",
-              marginLeft: 18,
+              fontWeight: 700,
+              color: "#D97757",
+              letterSpacing: "-1.5px",
+              marginLeft: 11,
             }}
           >
             AI
