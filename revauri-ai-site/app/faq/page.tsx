@@ -7,7 +7,7 @@ import { FAQContent } from "./faq-content";
 export const metadata: Metadata = {
   title: "FAQ — Revauri AI",
   description:
-    "Answers to common questions about hiring Revauri AI — what an AI employee does, how setup works, approvals, the phone hire, and cancelling.",
+    "Answers about hiring a Revauri AI employee — what it does, whether it is cheaper than hiring someone, how setup works, approvals, the phone, and cancelling.",
   alternates: { canonical: "/faq" },
 };
 
@@ -18,7 +18,12 @@ const FAQ_DATA = [
       {
         question: "What is Revauri AI?",
         answer:
-          "An AI employee for the job you hate. You name the work, we build the workflow around how your business already runs, and we run it for you every week.",
+          "An AI employee for the work you'd otherwise hire someone to do. You name the work, we build the workflow around how your business already runs, and we run it for you every week. A lot cheaper than putting a person on payroll.",
+      },
+      {
+        question: "Is this cheaper than hiring someone?",
+        answer:
+          "Yes. That is the point. A hire is quoted on the job we take over, on a short call. It costs a lot less than putting another person on payroll. There is no public price list because the number depends on the work.",
       },
       {
         question: "What jobs can it do?",
@@ -114,7 +119,7 @@ export default function FAQPage() {
             Frequently Asked <GradientText>Questions</GradientText>
           </>
         }
-        subtitle="What an AI employee does, how we build it, and what stays your call."
+        subtitle="What an AI employee does, why it costs less than a person, and what stays your call."
       />
 
       <FAQContent data={FAQ_DATA} />
@@ -129,7 +134,7 @@ export default function FAQPage() {
                   Still have questions?
                 </h3>
                 <p className="mt-2 text-sm text-brand-dark/60 dark:text-brand-cream/60">
-                  Tell us the job you hate and we&apos;ll say whether a hire can take it.
+                  Tell us the job you&apos;d otherwise hire for and we&apos;ll say whether an AI employee can take it.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">

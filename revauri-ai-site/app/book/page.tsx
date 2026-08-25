@@ -7,7 +7,7 @@ import { Booking } from "@/components/booking";
 export const metadata: Metadata = {
   title: "Book a Call — Revauri AI",
   description:
-    "Book a 20-minute call with Revauri AI. Tell us the job you want off your plate and we'll tell you whether an AI hire can take it.",
+    "Book a 20-minute call with Revauri AI. Tell us the job you'd otherwise hire for. We'll tell you whether an AI employee can take it, and quote it against hiring a person.",
   alternates: { canonical: "/book" },
 };
 
@@ -26,11 +26,11 @@ export default function BookPage() {
         badge="BOOK A CALL"
         title={
           <>
-            Let&apos;s name the job you want{" "}
-            <GradientText>off your plate</GradientText>
+            Let&apos;s name the job you&apos;d otherwise{" "}
+            <GradientText>hire for</GradientText>
           </>
         }
-        subtitle="A 20-minute call. We hear the mess, tell you if a hire can take it, and what happens next."
+        subtitle="A 20-minute call. We hear the mess, tell you if an AI employee can take it, and quote it against hiring a person — not against a software tool."
       >
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-brand-mid-gray">
           <span className="flex items-center gap-2">

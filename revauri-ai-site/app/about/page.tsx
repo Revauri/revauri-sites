@@ -8,7 +8,7 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "About Revauri AI — AI Employees for Local Service Businesses",
   description:
-    "Revauri AI is a product of Revauri, founded by Joseph Silvagnoli. We put an AI employee on the job you hate, build the workflow, and run it every week. You stay the boss.",
+    "Revauri AI is a product of Revauri, founded by Joseph Silvagnoli. We put an AI employee on the work you'd otherwise hire someone for, build the workflow, and run it every week. A lot cheaper than payroll.",
   alternates: { canonical: "/about" },
 };
 
@@ -35,7 +35,7 @@ const VALUES = [
     icon: Phone,
     title: "The phone is a hire, not a gimmick",
     description:
-      "It answers the calls that currently go to voicemail. It does not pretend to be your receptionist, and it never invents prices.",
+      "It answers the calls that currently go to voicemail. It never invents prices. It does not sit at the front desk.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function AboutPage() {
             Hire the work, <GradientText>not another person</GradientText>
           </>
         }
-        subtitle="Revauri AI is a product of Revauri. We build AI employees for local service businesses and run them every week."
+        subtitle="Revauri AI is a product of Revauri. We build AI employees for local service businesses — for the work you'd otherwise hire someone to do — and run them every week."
       />
 
       {/* Founder Story */}
@@ -91,11 +91,12 @@ export default function AboutPage() {
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.14}>
                 <p className="mt-4 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                  So I build AI employees for those jobs. You name the work you
-                  hate, I build the workflow around how your business already
-                  runs, and I keep it running every week. That includes the
-                  phone. You stay the boss — nothing reaches a customer without
-                  your yes.
+                  So I build AI employees for those jobs. You name the work
+                  you&apos;d otherwise hire someone to do. I build the workflow
+                  around how your business already runs, and I keep it
+                  running every week. That includes the phone. You stay the
+                  boss — nothing reaches a customer without your yes. A lot
+                  cheaper than putting another person on payroll.
                 </p>
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.2}>

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Revauri AI — An AI Employee for the Job You Hate";
+export const alt = "An AI employee. Cheaper than a person.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -73,7 +73,7 @@ export default function OGImage() {
             fontWeight: 400,
           }}
         >
-          An AI employee for the job you hate
+          An AI employee. Cheaper than a person.
         </p>
 
         {/* Accent line */}

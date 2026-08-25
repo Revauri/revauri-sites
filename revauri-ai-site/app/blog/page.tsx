@@ -12,7 +12,7 @@ import { slugifyCategory } from "@/lib/category-slug";
 export const metadata: Metadata = {
   title: "Blog — Revauri AI",
   description:
-    "Notes on handing the jobs you hate to an AI employee — what the workflows do, what stays your call, and what we learn running them.",
+    "Notes on putting an AI employee on the work you'd otherwise hire for — what the workflows do, what stays your call, and what we learn running them.",
   alternates: { canonical: "/blog" },
 };
 
@@ -28,7 +28,7 @@ export default function BlogPage() {
     name: "Revauri AI Blog",
     url: "https://revauri.ai/blog",
     description:
-      "Notes on handing the jobs you hate to an AI employee.",
+      "Notes on putting an AI employee on work you'd otherwise hire someone to do.",
   };
 
   return (
@@ -45,7 +45,7 @@ export default function BlogPage() {
             The <GradientText>Blog</GradientText>
           </>
         }
-        subtitle="What we learn building and running AI employees for local service businesses."
+        subtitle="What we learn building and running AI employees for local service businesses — cheaper than putting another person on payroll."
       />
 
       {posts.length === 0 ? (
@@ -166,16 +166,17 @@ export default function BlogPage() {
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
             <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Which job would you{" "}
+              Ready to hire the work{" "}
               <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                hand off first?
+                instead of a person?
               </span>
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a 20-minute call. Tell us the task you keep putting off, and
-              we&apos;ll walk through what an AI employee would take over.
+              Book a short call. Tell us the job. We&apos;ll walk through what
+              an AI employee would take over — and why it costs a lot less
+              than payroll.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>

@@ -23,7 +23,7 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "Capabilities — Revauri AI",
   description:
-    "The jobs a Revauri AI hire takes off your plate — the phone, quiet leads, quotes, reviews, reminders, and the admin busywork. We build the workflow and run it.",
+    "The jobs a Revauri AI employee takes on — the phone, quiet leads, quotes, reviews, reminders, and admin busywork. The work you'd otherwise hire someone for. We build the workflow and run it.",
   alternates: { canonical: "/capabilities" },
 };
 
@@ -121,7 +121,7 @@ export default function CapabilitiesPage() {
             Example <GradientText>hires</GradientText>
           </>
         }
-        subtitle="The jobs we take off your plate. Pick the one you hate most and we build that workflow."
+        subtitle="The work you'd otherwise hire someone for. Pick the painful one. We build that workflow and run it — a lot cheaper than payroll."
       />
 
       {/* Headline hire: the phone */}
@@ -159,8 +159,8 @@ export default function CapabilitiesPage() {
 
               <div className="mt-8 border-t border-brand-light-gray/60 pt-6 dark:border-brand-mid-gray/20">
                 <p className="text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                  This is not a robot replacing your receptionist. It is a
-                  cheaper hire for the calls nobody is answering.
+                  It is a cheaper hire for the calls nobody is answering. It
+                  does not sit at the front desk.
                 </p>
                 <p className="mt-3 text-sm text-brand-mid-gray">
                   Live voice answering is scoped on the call.
@@ -279,8 +279,8 @@ export default function CapabilitiesPage() {
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Tell us the job you hate on a short call. We will say what a hire
-              would take over, and what it would not.
+              Tell us the job you&apos;d otherwise hire for. We will say what
+              an AI employee would take over, and what it would not.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>

@@ -17,25 +17,24 @@ export function Hero() {
 
           <FadeInWhenVisible delay={0.08}>
             <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl">
-              <span className="block leading-[1.1]">Hire the work.</span>
+              <span className="block leading-[1.1]">Hire an AI employee.</span>
               <span className="block leading-[1.1] bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                Including the phone.
+                Not another salary.
               </span>
             </h1>
           </FadeInWhenVisible>
 
           <FadeInWhenVisible delay={0.14}>
             <p className="mx-auto max-w-xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-              We put an AI employee on the job you hate. We build the workflow.
-              We run it. You stay the boss.
+              For the work you&apos;d otherwise put someone on payroll to do.
+              We build the workflow. We run it. You stay the boss.
             </p>
           </FadeInWhenVisible>
 
           <FadeInWhenVisible delay={0.18}>
             <p className="mx-auto max-w-xl text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
               That includes the phone. Missed, after-hours, and overflow calls
-              get answered and captured instead of dying in voicemail. It is not
-              a replacement for your receptionist.
+              get answered and captured instead of dying in voicemail.
             </p>
           </FadeInWhenVisible>
 

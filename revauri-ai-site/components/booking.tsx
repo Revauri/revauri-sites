@@ -166,7 +166,7 @@ export function Booking() {
                     Pick a time that works for you
                   </p>
                   <p className="mt-1 text-xs text-brand-dark/55 dark:text-brand-cream/55">
-                    20 minutes on the job you want off your plate. No obligation.
+                    20 minutes on the job you'd otherwise hire for. No obligation.
                   </p>
                 </div>
                 <div className="hidden rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-semibold text-brand-orange sm:inline-flex">

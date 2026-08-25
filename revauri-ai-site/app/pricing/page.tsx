@@ -7,7 +7,7 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "Pricing — Revauri AI",
   description:
-    "Revauri AI is quoted on a short call, after we look at the job. No public price list, no packages you have to squeeze into.",
+    "A Revauri AI employee is a lot less than putting another person on payroll. We look at the job, then quote it on a short call. No public price list.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -57,7 +57,7 @@ export default function PricingPage() {
       <PageHero
         badge="PRICING"
         title={<GradientText>Pricing</GradientText>}
-        subtitle="We look at the job first, then quote it on a short call. There is no public price list."
+        subtitle="A lot less than putting another person on payroll. We look at the job, then quote it on a short call. There is no public price list."
       />
 
       <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
@@ -68,13 +68,14 @@ export default function PricingPage() {
               Why there are no numbers on this page
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              A hire is priced on the job it takes over, not on a tier you have
-              to squeeze into. On a short call we name the two jobs, look at how
-              they work today, and then you get a real number for that work.
+              A hire is priced on the job it takes over, not on a software
+              tier. On a short call we name the two jobs, look at how they
+              work today, and then you get a real number for that work.
             </p>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              It is a lot less than another person on payroll. That is the whole
-              point of hiring the work instead of hiring a body.
+              It is a lot less than another person on payroll. That is the
+              whole point — you get the work a hire would do, without putting
+              a body on the books.
             </p>
           </section>
         </FadeInWhenVisible>
@@ -124,8 +125,9 @@ export default function PricingPage() {
               How to start
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              Book a call and tell us the job you hate. We look at it, tell you
-              whether we can take it, and quote it before anything gets built.
+              Book a call and tell us the job you&apos;d otherwise hire for. We
+              look at it, tell you whether we can take it, and quote it before
+              anything gets built.
             </p>
             <div className="mt-8">
               <Link

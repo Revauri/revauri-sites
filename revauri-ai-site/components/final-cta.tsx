@@ -17,17 +17,18 @@ export function FinalCTA() {
         <div className="relative flex flex-col items-center text-center space-y-5">
           <FadeInWhenVisible>
             <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Which job would you{" "}
+              Ready to hire the work{" "}
               <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                hand off first?
+                instead of a person?
               </span>
             </h2>
           </FadeInWhenVisible>
 
           <FadeInWhenVisible delay={0.15}>
             <p className="mx-auto max-w-xl text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Tell us the task you keep putting off, and
-              we&apos;ll walk through what an AI employee would take over.
+              Book a short call. Tell us the job. We&apos;ll walk through what
+              an AI employee would take over &mdash; and why it costs a lot
+              less than payroll.
             </p>
           </FadeInWhenVisible>
 

@@ -80,8 +80,8 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                         What happens next
                       </p>
                       <p className="mt-2 text-xs leading-5 text-brand-dark/60 dark:text-brand-cream/60">
-                        We&apos;ll read what you sent, reply by email, and tell you whether a hire
-                        can take that job off your plate.
+                        We&apos;ll read what you sent, reply by email, and tell you whether we
+                        can put an AI employee on that job.
                       </p>
                     </div>
                     <div className="rounded-xl border border-brand-light-gray/40 bg-brand-white/70 p-4 dark:border-brand-mid-gray/20 dark:bg-[#181817]">
@@ -221,7 +221,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       name="message"
                       required
                       rows={4}
-                      placeholder="Tell us the job you'd like off your plate..."
+                      placeholder="Tell us the job you'd otherwise hire someone to do..."
                       className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 px-4 py-3 text-base text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream"
                     />
                   </div>

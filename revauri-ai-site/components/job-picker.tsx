@@ -98,13 +98,13 @@ export function JobPicker() {
               The jobs
             </p>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Pick the job you want{" "}
+              Pick the job you&apos;d otherwise{" "}
               <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                off your plate
+                hire for
               </span>
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60">
-              Pick one and see what the hire does. Then book a short call.
+              Pick one and see what the AI employee does. Then book a short call.
             </p>
           </div>
         </FadeInWhenVisible>
@@ -137,7 +137,7 @@ export function JobPicker() {
           >
             <div key={selected.id} className="animate-fade-in">
               <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange">
-                What the hire does
+                What the AI employee does
               </p>
 
               <h3 className="mt-3 text-xl font-semibold text-brand-dark dark:text-brand-cream sm:text-2xl">
