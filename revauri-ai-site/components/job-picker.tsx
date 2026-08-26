@@ -4,86 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { FadeInWhenVisible } from "./motion-wrappers";
-
-const CUSTOM_ID = "something-else";
-
-interface Job {
-  id: string;
-  label: string;
-  preview: string;
-  note?: string;
-}
-
-const jobs: Job[] = [
-  {
-    id: "quiet-leads",
-    label: "Quiet leads",
-    preview:
-      "A form, call, or quote goes quiet. The hire waits the agreed time, then sends a short follow-up in the owner\u2019s voice. You approve the first ones. After that it runs the same way.",
-  },
-  {
-    id: "missed-calls",
-    label: "After-hours / missed calls",
-    preview:
-      "Someone calls when you cannot pick up. The hire captures name, number, and what they need, then starts the follow-up so the job does not die in voicemail.",
-    note: "Live voice answering is available and scoped on the call.",
-  },
-  {
-    id: "quotes",
-    label: "Quotes with no second follow-up",
-    preview:
-      "The estimate went out. Nobody nudged it. The hire sends the next check-in so the quote does not sit forever.",
-  },
-  {
-    id: "reviews",
-    label: "Reviews",
-    preview:
-      "After a good job, the hire asks for the review. When a new review lands, it drafts a reply for your yes / no.",
-  },
-  {
-    id: "reminders",
-    label: "Appointment reminders / no-shows",
-    preview:
-      "The hire reminds them before the visit, and follows up if they miss.",
-  },
-  {
-    id: "check-in",
-    label: "After-the-job check-in",
-    preview:
-      "\u201CHow did we do?\u201D Then a review ask or a next booking, if they are happy.",
-  },
-  {
-    id: "admin",
-    label: "Inbox / admin busywork",
-    preview:
-      "The hire drafts the repetitive replies and reminders so you are not rewriting the same email.",
-  },
-  {
-    id: "reactivation",
-    label: "Reactivating past customers",
-    preview: "People who used you once and went quiet get a simple check-back.",
-  },
-  {
-    id: CUSTOM_ID,
-    label: "Something else",
-    preview:
-      "Name the mess and we will tell you if we can take it. A custom hire gets built the same way.",
-  },
-];
-
-const customSteps = [
-  "We look at how that mess works today.",
-  "We name the steps.",
-  "We build the hire.",
-  "You approve what your customers see.",
-];
+import {
+  HIRE_DEMO_JOBS,
+  isCustomJob,
+  type HireDemoJobId,
+} from "@/lib/hire-demo-jobs";
 
 export function JobPicker() {
-  const [selectedId, setSelectedId] = useState(jobs[0].id);
+  const [selectedId, setSelectedId] = useState<HireDemoJobId>("quiet-leads");
   const [customJob, setCustomJob] = useState("");
 
-  const selected = jobs.find((job) => job.id === selectedId) ?? jobs[0];
-  const isCustom = selected.id === CUSTOM_ID;
+  const selected =
+    HIRE_DEMO_JOBS.find((job) => job.id === selectedId) ?? HIRE_DEMO_JOBS[0];
+  const custom = isCustomJob(selected);
   const customTitle = customJob.trim();
 
   return (
@@ -111,7 +44,7 @@ export function JobPicker() {
 
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,20rem)_1fr] md:gap-8">
           <div className="flex flex-col gap-2">
-            {jobs.map((job) => {
+            {HIRE_DEMO_JOBS.map((job) => {
               const isSelected = job.id === selectedId;
               return (
                 <button
@@ -119,7 +52,7 @@ export function JobPicker() {
                   type="button"
                   onClick={() => setSelectedId(job.id)}
                   aria-pressed={isSelected}
-                  className={`rounded-xl border px-4 py-3 text-left text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
+                  className={`min-h-[44px] rounded-xl border px-4 py-3 text-left text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
                     isSelected
                       ? "border-brand-orange bg-brand-orange/10 font-semibold text-brand-dark dark:text-brand-cream"
                       : "border-brand-light-gray text-brand-dark/70 hover:border-brand-orange/40 hover:text-brand-dark dark:border-brand-mid-gray/20 dark:text-brand-cream/70 dark:hover:text-brand-cream"
@@ -141,10 +74,10 @@ export function JobPicker() {
               </p>
 
               <h3 className="mt-3 text-xl font-semibold text-brand-dark dark:text-brand-cream sm:text-2xl">
-                {isCustom && customTitle ? customTitle : selected.label}
+                {custom && customTitle ? customTitle : selected.label}
               </h3>
 
-              {isCustom ? (
+              {custom ? (
                 <div className="mt-5 space-y-5">
                   <div>
                     <label
@@ -164,11 +97,11 @@ export function JobPicker() {
                   </div>
 
                   <p className="text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                    {selected.preview}
+                    {selected.caption}
                   </p>
 
                   <ol className="space-y-2.5">
-                    {customSteps.map((step, index) => (
+                    {selected.steps.map((step, index) => (
                       <li
                         key={step}
                         className="flex gap-3 text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70"
@@ -184,7 +117,7 @@ export function JobPicker() {
               ) : (
                 <div className="mt-5 space-y-4">
                   <p className="text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                    {selected.preview}
+                    {selected.caption}
                   </p>
                   {selected.note ? (
                     <p className="text-sm leading-relaxed text-brand-mid-gray">
@@ -197,7 +130,7 @@ export function JobPicker() {
               <div className="mt-8 border-t border-brand-light-gray/60 pt-6 dark:border-brand-mid-gray/20">
                 <Link
                   href="/book"
-                  className="inline-flex items-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
                 >
                   Book a call
                   <ArrowRight className="h-4 w-4" />
