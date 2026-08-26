@@ -30,9 +30,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
           </>
         }
         subtitle="Tell us the job you'd otherwise hire for. Or book a call — that's the faster way to get an answer."
-      >
-        <p className="text-sm text-brand-mid-gray">We typically respond within a few hours.</p>
-      </PageHero>
+      />
 
       <ContactContent isSubmitted={isSubmitted} />
     </div>
