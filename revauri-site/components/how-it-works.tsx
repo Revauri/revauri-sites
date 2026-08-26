@@ -1,87 +1,36 @@
 "use client";
 
+import { DiagnosticsStepArt, type DiagnosticsStepVariant } from "./diagnostics-step-art";
 import { FadeInWhenVisible, StaggerChildren } from "./motion-wrappers";
 
-const steps = [
+const steps: {
+  number: string;
+  title: string;
+  description: string;
+  variant: DiagnosticsStepVariant;
+}[] = [
   {
     number: "01",
     title: "We Build You a Free Preview",
     description:
       "Our team reviews your current website, identifies what's holding it back, and builds a custom homepage redesign using your actual business name and content. You'll receive a link to a live, working preview.",
+    variant: "layers",
   },
   {
     number: "02",
     title: "We Walk You Through It",
     description:
       "On a quick 15-minute call, we'll show you the redesign, explain the strategy behind it, and answer any questions. No pressure, no hard sell.",
+    variant: "nodes",
   },
   {
     number: "03",
     title: "You Approve, We Launch",
     description:
       "If you love what you see, we'll expand the preview into a complete website — built, deployed, and managed for you. Most projects ship in 4 to 6 weeks, sometimes sooner depending on complexity or job size.",
+    variant: "flow",
   },
 ];
-
-function DiscoveryIllustration() {
-  return (
-    <svg
-      viewBox="0 0 180 180"
-      className="h-44 w-44 text-brand-orange/40"
-      aria-hidden="true"
-    >
-      <circle cx="90" cy="40" r="18" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="40" cy="90" r="14" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="140" cy="90" r="14" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="60" cy="140" r="12" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="120" cy="140" r="12" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <line x1="90" y1="58" x2="54" y2="82" stroke="currentColor" strokeWidth="1.25" />
-      <line x1="90" y1="58" x2="126" y2="82" stroke="currentColor" strokeWidth="1.25" />
-      <line x1="54" y1="98" x2="72" y2="132" stroke="currentColor" strokeWidth="1.25" />
-      <line x1="126" y1="98" x2="108" y2="132" stroke="currentColor" strokeWidth="1.25" />
-      <line x1="72" y1="140" x2="108" y2="140" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  );
-}
-
-function DesignIllustration() {
-  return (
-    <svg
-      viewBox="0 0 180 180"
-      className="h-44 w-44 text-brand-orange/40"
-      aria-hidden="true"
-    >
-      <rect x="35" y="25" width="80" height="100" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="65" y="55" width="80" height="100" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="75" y="70" width="30" height="4" rx="2" fill="currentColor" opacity="0.3" />
-      <rect x="75" y="80" width="50" height="3" rx="1.5" fill="currentColor" opacity="0.15" />
-      <rect x="75" y="88" width="40" height="3" rx="1.5" fill="currentColor" opacity="0.15" />
-      <circle cx="55" cy="50" r="10" fill="none" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="55" cy="50" r="4" fill="currentColor" opacity="0.15" />
-    </svg>
-  );
-}
-
-function LaunchIllustration() {
-  return (
-    <svg
-      viewBox="0 0 180 180"
-      className="h-44 w-44 text-brand-orange/40"
-      aria-hidden="true"
-    >
-      <circle cx="90" cy="90" r="70" fill="none" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="90" cy="90" r="50" fill="none" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="90" cy="90" r="30" fill="none" stroke="currentColor" strokeWidth="1.25" />
-      <circle cx="90" cy="90" r="10" fill="currentColor" opacity="0.2" />
-      <line x1="90" y1="15" x2="90" y2="35" stroke="currentColor" strokeWidth="1" />
-      <line x1="90" y1="145" x2="90" y2="165" stroke="currentColor" strokeWidth="1" />
-      <line x1="15" y1="90" x2="35" y2="90" stroke="currentColor" strokeWidth="1" />
-      <line x1="145" y1="90" x2="165" y2="90" stroke="currentColor" strokeWidth="1" />
-    </svg>
-  );
-}
-
-const illustrations = [DiscoveryIllustration, DesignIllustration, LaunchIllustration];
 
 function DottedArrow() {
   return (
@@ -97,11 +46,10 @@ function DottedArrow() {
   );
 }
 
-function StepColumn({ step, index }: { step: (typeof steps)[number]; index: number }) {
-  const Illustration = illustrations[index];
+function StepColumn({ step }: { step: (typeof steps)[number] }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <Illustration />
+      <DiagnosticsStepArt variant={step.variant} />
       <div className="relative mt-6 mx-auto grid h-14 w-14 shrink-0 place-items-center">
         <span
           className="pointer-events-none absolute inset-[-14px] rounded-full bg-brand-orange/30 blur-2xl dark:bg-brand-orange/22 dark:blur-xl"
@@ -144,11 +92,11 @@ export function HowItWorks() {
 
         <div className="mt-16 md:mt-20">
           <StaggerChildren className="grid grid-cols-1 gap-12 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:gap-0 md:items-start">
-            <StepColumn step={steps[0]} index={0} />
+            <StepColumn step={steps[0]} />
             <DottedArrow />
-            <StepColumn step={steps[1]} index={1} />
+            <StepColumn step={steps[1]} />
             <DottedArrow />
-            <StepColumn step={steps[2]} index={2} />
+            <StepColumn step={steps[2]} />
           </StaggerChildren>
         </div>
       </div>
