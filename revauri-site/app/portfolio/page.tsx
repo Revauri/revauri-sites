@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { PageHero, GradientText } from "@/components/page-hero";
-import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
-import BlendedDemoFrame from "@/components/blended-demo-frame";
+import { FadeInWhenVisible } from "@/components/motion-wrappers";
+import { PortfolioFilmstrip } from "@/components/portfolio-filmstrip";
 import { getAllProjects } from "@/lib/portfolio-data";
 
 export const metadata: Metadata = {
@@ -13,22 +12,6 @@ export const metadata: Metadata = {
     "Real work from Revauri — a mix of client projects and products founder-built from scratch.",
   alternates: { canonical: "/portfolio" },
 };
-
-function GridCardPlaceholder() {
-  return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6">
-      <div className="w-full max-w-[200px] space-y-2">
-        <div className="h-2 w-3/4 rounded bg-brand-mid-gray/20" />
-        <div className="h-2 w-full rounded bg-brand-mid-gray/15" />
-        <div className="h-2 w-5/6 rounded bg-brand-mid-gray/15" />
-        <div className="mt-3 flex gap-2">
-          <div className="h-6 w-16 rounded bg-brand-orange/20" />
-          <div className="h-6 w-14 rounded bg-brand-mid-gray/15" />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function PortfolioPage() {
   return (
@@ -44,53 +27,8 @@ export default function PortfolioPage() {
       />
 
 
-      <section className="pt-10 pb-16 lg:pt-12 lg:pb-20">
-        <div className="mx-auto max-w-5xl px-6">
-          <StaggerChildren className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {getAllProjects().map((project) => (
-              <Link
-                key={project.slug}
-                href={`/portfolio/${project.slug}`}
-                className="group block focus-visible:outline-none"
-                aria-label={`View project: ${project.name}`}
-              >
-                <BlendedDemoFrame>
-                  <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
-                    <div className="relative aspect-[16/9] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
-                      {project.hasRealImages ? (
-                        <Image
-                          src={project.heroImage.src}
-                          alt={project.heroImage.alt}
-                          width={project.heroImage.width}
-                          height={project.heroImage.height}
-                          className="h-full w-full object-cover"
-                          sizes="(min-width: 768px) 40vw, 100vw"
-                        />
-                      ) : (
-                        <GridCardPlaceholder />
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <span className="mb-2 inline-block rounded-full bg-brand-orange/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-orange">
-                        {project.industry}
-                      </span>
-                      <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">
-                        {project.name}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                        {project.shortDescription}
-                      </p>
-                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange">
-                        <span className="group-hover:bg-gradient-to-r group-hover:from-brand-orange group-hover:to-amber-500 group-hover:bg-clip-text group-hover:text-transparent">View project</span>
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                      </span>
-                    </div>
-                  </article>
-                </BlendedDemoFrame>
-              </Link>
-            ))}
-          </StaggerChildren>
-        </div>
+      <section className="pt-10 pb-10 lg:pt-14 lg:pb-14">
+        <PortfolioFilmstrip projects={getAllProjects()} />
       </section>
 
       <section className="py-16 lg:py-20">
