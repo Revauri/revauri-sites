@@ -45,7 +45,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
           REVAURI AI CALL
         </span>
         <p className="text-xs text-brand-mid-gray">
-          20 minutes on the job you'd otherwise hire for — pick any time that works for you.
+          20 minutes on the work you want off your plate — pick any time that works for you.
         </p>
         <a
           href="/book#scheduler"
@@ -63,7 +63,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
         REVAURI AI CALL
       </span>
       <p className="text-xs text-brand-mid-gray">
-        20 minutes on the job you'd otherwise hire for — grab a time:
+        20 minutes on the work you want off your plate — pick any time that works for you.
       </p>
       <div className="mt-0.5 flex flex-col gap-1.5">
         {labeled.map((slot) => (

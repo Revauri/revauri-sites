@@ -6,15 +6,15 @@ import { FadeInWhenVisible } from "./motion-wrappers";
 
 const hiringAPerson = [
   "Weeks to recruit and train",
-  "They only work when they're there",
-  "You still have to manage the busywork",
   "Payroll, taxes, and overhead",
+  "They only work when they're there",
+  "You still carry the busywork",
 ];
 
 const aiEmployee = [
   "Built around how you already work",
-  "We run it every week",
-  "You approve what customers see",
+  "We run it — on the job and after hours",
+  "After setup, you are not in the busywork",
   "A lot cheaper than putting someone on payroll",
 ];
 
@@ -31,8 +31,8 @@ export function HireComparison() {
               A person on payroll vs an AI employee
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60">
-              Same kind of work. A lot less cost. We run it so you don&apos;t
-              have to.
+              Same work. Less payroll. Fewer headaches. Your time back. We run
+              it so you don&apos;t have to.
             </p>
           </div>
         </FadeInWhenVisible>

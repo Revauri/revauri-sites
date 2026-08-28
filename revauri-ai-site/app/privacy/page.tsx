@@ -91,8 +91,10 @@ export default function PrivacyPage() {
         <p>
           We use AI-powered tools and automation as part of our service delivery. This includes using automated tools
           for identifying potential clients, building and running the workflows we operate for clients, and drafting
-          customer-facing messages for approval. AI-generated outputs are reviewed as part of our quality assurance
-          process, and nothing customer-facing is sent on a client&apos;s behalf without their approval. If you have
+          customer-facing messages. During setup, customer-facing drafts are reviewed with the client so the hire
+          learns their voice. After setup, those workflows can send as part of the running hire. AI-generated outputs
+          are still subject to our quality process, and the hire does not give medical, legal, or licensed
+          professional advice or guess prices. If you have
           questions about how automation affects your data, contact us at{" "}
           <a href="mailto:joseph@revauri.com">joseph@revauri.com</a>.
         </p>

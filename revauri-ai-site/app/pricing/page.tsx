@@ -7,16 +7,16 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "Pricing — Revauri AI",
   description:
-    "A Revauri AI employee is a lot less than putting another person on payroll. We look at the job, then quote it on a short call. No public price list.",
+    "A Revauri AI employee is a lot less than putting another person on payroll. Less overhead, your time back. We look at the job, then quote it on a short call. No public price list.",
   alternates: { canonical: "/pricing" },
 };
 
 const STANDARD_HIRE = [
   "Two workflows, named in writing before anything gets built",
   "We build them around how your business already runs",
-  "We run them every week — that is the part most tools leave to you",
+  "We run them every week — after setup, you don't live in them",
   "A weekly note so you know what went out and what is waiting",
-  "You approve everything a customer sees",
+  "During setup you approve so it learns your voice. Then it runs.",
 ];
 
 const EXTRAS = [
@@ -57,7 +57,7 @@ export default function PricingPage() {
       <PageHero
         badge="PRICING"
         title={<GradientText>Pricing</GradientText>}
-        subtitle="A lot less than putting another person on payroll. We look at the job, then quote it on a short call. There is no public price list."
+        subtitle="A lot less than putting another person on payroll. Less overhead. Fewer headaches. Your time back. We look at the job, then quote it on a short call. There is no public price list."
       />
 
       <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
@@ -74,8 +74,8 @@ export default function PricingPage() {
             </p>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
               It is a lot less than another person on payroll. That is the
-              whole point — you get the work a hire would do, without putting
-              a body on the books.
+              point — you get the work without putting another body on the
+              books. Costs drop. You keep more.
             </p>
           </section>
         </FadeInWhenVisible>

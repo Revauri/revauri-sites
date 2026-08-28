@@ -101,9 +101,9 @@ const PROJECT_HIGHLIGHTS: Record<
     ctaHref: "/book",
   },
   approval: {
-    eyebrow: "YOU STAY THE BOSS",
-    figure: "You approve",
-    caption: "Nothing goes to a customer without your yes",
+    eyebrow: "WE RUN IT",
+    figure: "After setup",
+    caption: "You don't live in the busywork",
     ctaLabel: "Get started",
     ctaHref: "/book",
   },
@@ -114,8 +114,8 @@ const PROJECT_HIGHLIGHTS: Record<
 export const getProjectHighlight = tool({
   description:
     "Show a visual highlight card for a concrete, non-dollar fact about the hire (the 20-minute " +
-    "call, the two workflows a standard hire covers, or the owner approving everything customers " +
-    "see). A secondary visual. For pricing intent, offer_booking remains the preferred card.",
+    "call, the two workflows a standard hire covers, or done-for-you running after setup). A " +
+    "secondary visual. For pricing intent, offer_booking remains the preferred card.",
   inputSchema: getProjectHighlightInputSchema,
   execute: async ({ topic }) => PROJECT_HIGHLIGHTS[topic],
 });

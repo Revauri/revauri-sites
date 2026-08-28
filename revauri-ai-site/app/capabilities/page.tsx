@@ -23,7 +23,7 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "Capabilities — Revauri AI",
   description:
-    "The jobs a Revauri AI employee takes on — the phone, quiet leads, quotes, reviews, reminders, and admin busywork. The work you'd otherwise hire someone for. We build the workflow and run it.",
+    "The jobs a Revauri AI employee takes on — the phone, quiet leads, quotes, reviews, reminders, and admin. The work you'd otherwise hire for. We build it, we run it, and after setup you are out of it.",
   alternates: { canonical: "/capabilities" },
 };
 
@@ -54,7 +54,7 @@ const JOBS = [
   {
     icon: Star,
     job: "Reviews",
-    does: "Asks after a good job, drafts replies to new reviews.",
+    does: "Asks after a good job, replies to new reviews.",
   },
   {
     icon: CalendarClock,
@@ -69,7 +69,7 @@ const JOBS = [
   {
     icon: Inbox,
     job: "Inbox / admin busywork",
-    does: "Drafts the repetitive replies and reminders.",
+    does: "Handles the repetitive replies and reminders.",
   },
   {
     icon: RefreshCw,
@@ -98,17 +98,14 @@ const STEPS = [
     icon: PlayCircle,
     title: "Run",
     description:
-      "Weekly note, drafts waiting for your yes or no, small improvements.",
+      "It runs every week. After setup, you are not in the busywork. A weekly note so you know what went out.",
   },
 ];
 
 const NOT_DOING = [
-  "Replace a real receptionist, tech, or office manager",
-  "Send emails, texts, or posts to your customers without your approval",
+  "Do the licensed job — the actual roofing, plumbing, clinical work. That still needs your tech.",
+  "Guess at prices",
   "Give medical, legal, or licensed professional advice",
-  "Run your ads",
-  "Rebuild your website — that is a separate quote",
-  "Let the phone hire invent prices or book work you did not authorize",
 ];
 
 export default function CapabilitiesPage() {
@@ -121,7 +118,7 @@ export default function CapabilitiesPage() {
             Example <GradientText>hires</GradientText>
           </>
         }
-        subtitle="The work you'd otherwise hire someone for. Pick the painful one. We build that workflow and run it — a lot cheaper than payroll."
+        subtitle="The work you'd otherwise hire someone for — the phone, the follow-ups, the busywork. We build that workflow and run it. A lot cheaper than payroll. Your time back."
       />
 
       {/* Headline hire: the phone */}
@@ -160,7 +157,8 @@ export default function CapabilitiesPage() {
               <div className="mt-8 border-t border-brand-light-gray/60 pt-6 dark:border-brand-mid-gray/20">
                 <p className="text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
                   It is a cheaper hire for the calls nobody is answering. It
-                  does not sit at the front desk.
+                  can take the phone seat. It does not do the licensed job,
+                  and it never invents prices.
                 </p>
                 <p className="mt-3 text-sm text-brand-mid-gray">
                   Live voice answering is scoped on the call.
@@ -279,8 +277,8 @@ export default function CapabilitiesPage() {
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Tell us the job you&apos;d otherwise hire for. We will say what
-              an AI employee would take over, and what it would not.
+              Tell us the job you&apos;d otherwise hire for. We take it over
+              so you don&apos;t have to.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>

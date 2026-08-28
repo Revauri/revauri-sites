@@ -7,7 +7,7 @@ import { Booking } from "@/components/booking";
 export const metadata: Metadata = {
   title: "Book a Call — Revauri AI",
   description:
-    "Book a 20-minute call with Revauri AI. Tell us the job you'd otherwise hire for. We'll tell you whether an AI employee can take it, and quote it against hiring a person.",
+    "Book a 20-minute call with Revauri AI. Tell us the job you'd otherwise hire for. We'll tell you whether an AI employee can take it — and quote it against hiring a person.",
   alternates: { canonical: "/book" },
 };
 
@@ -43,7 +43,7 @@ export default function BookPage() {
           </span>
           <span className="flex items-center gap-2">
             <Check className="h-4 w-4 text-brand-orange" />
-            You stay the boss
+            Your time back
           </span>
         </div>
       </PageHero>

@@ -37,7 +37,8 @@ export function JobPicker() {
               </span>
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60">
-              Pick one and see what the AI employee does. Then book a short call.
+              Pick one. That&apos;s work leaving your plate — and a hire you
+              don&apos;t have to make.
             </p>
           </div>
         </FadeInWhenVisible>

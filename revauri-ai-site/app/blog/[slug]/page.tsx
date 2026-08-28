@@ -185,7 +185,7 @@ export default async function BlogPostPage(
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Tell us the job. We&apos;ll walk through what an AI employee would take over — and why it costs a lot less than payroll.
+              Book a short call. Tell us the job. We take it off you, run it, and you keep the time — and more of the money than another person on payroll would leave you.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>

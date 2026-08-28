@@ -7,7 +7,7 @@ import { FAQContent } from "./faq-content";
 export const metadata: Metadata = {
   title: "FAQ — Revauri AI",
   description:
-    "Answers about hiring a Revauri AI employee — what it does, whether it is cheaper than hiring someone, how setup works, approvals, the phone, and cancelling.",
+    "Answers about hiring a Revauri AI employee — what it does, whether it is cheaper than hiring someone, whether it can take a receptionist or admin seat, how setup works, and cancelling.",
   alternates: { canonical: "/faq" },
 };
 
@@ -18,12 +18,12 @@ const FAQ_DATA = [
       {
         question: "What is Revauri AI?",
         answer:
-          "An AI employee for the work you'd otherwise hire someone to do. You name the work, we build the workflow around how your business already runs, and we run it for you every week. A lot cheaper than putting a person on payroll.",
+          "An AI employee for the work you'd otherwise hire someone to do. You name the work, we build the workflow around how your business already runs, and we run it. After a short setup, you are not living in the busywork. A lot cheaper than putting a person on payroll.",
       },
       {
         question: "Is this cheaper than hiring someone?",
         answer:
-          "Yes. That is the point. A hire is quoted on the job we take over, on a short call. It costs a lot less than putting another person on payroll. There is no public price list because the number depends on the work.",
+          "Yes. That is the point. A hire is quoted on the job we take over, on a short call. It costs a lot less than putting another person on payroll. There is no public price list because the number depends on the work. Costs, overhead, and payroll drop, so you keep more. Captured jobs — missed calls, quiet leads, dead quotes — are the extra upside.",
       },
       {
         question: "What jobs can it do?",
@@ -33,7 +33,17 @@ const FAQ_DATA = [
       {
         question: "Does this replace my receptionist?",
         answer:
-          "No. It takes the work nobody is getting to — the calls going to voicemail and the follow-ups that never happen. Your people keep doing the parts that need a person.",
+          "Yes. It can take the receptionist, front desk, and phone seat, the VA or admin busywork, office-manager admin work, and the nights you were doing it yourself. It does not replace the licensed tech doing the actual job.",
+      },
+      {
+        question: "What if I already have someone doing this?",
+        answer:
+          "Then this can take that seat so you are not paying a salary for follow-ups, the phone catch, and busywork. The person who does the licensed job still does the licensed job.",
+      },
+      {
+        question: "Will this grow my business?",
+        answer:
+          "First, yes, because costs, overhead, payroll, and headaches drop, so more of the money stays yours. Then missed calls, quiet leads, and dead quotes stop leaking, so more work comes in.",
       },
     ],
   },
@@ -48,7 +58,7 @@ const FAQ_DATA = [
       {
         question: "Do I have to approve messages?",
         answer:
-          "Yes. Nothing goes to a customer unless you say yes. Drafts sit and wait for you.",
+          "During setup, yes — so it learns your voice. After that it runs on its own. You can still jump in. Nothing licensed, and no guessed prices.",
       },
       {
         question: "How long does setup take?",
@@ -119,7 +129,7 @@ export default function FAQPage() {
             Frequently Asked <GradientText>Questions</GradientText>
           </>
         }
-        subtitle="What an AI employee does, why it costs less than a person, and what stays your call."
+        subtitle="What an AI employee does, why it costs less than a person, and how you get your time back."
       />
 
       <FAQContent data={FAQ_DATA} />
@@ -134,7 +144,7 @@ export default function FAQPage() {
                   Still have questions?
                 </h3>
                 <p className="mt-2 text-sm text-brand-dark/60 dark:text-brand-cream/60">
-                  Tell us the job you&apos;d otherwise hire for and we&apos;ll say whether an AI employee can take it.
+                  Tell us the job you&apos;d otherwise hire for. We&apos;ll take it off you.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">

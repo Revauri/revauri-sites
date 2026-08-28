@@ -11,7 +11,7 @@ This is the single place to see what is locked and what is still open.
 
 **Revauri AI** is a Revauri product brand, not a separate company unless Joseph later forms one.
 
-**Promise:** An AI employee for the job the owner hates. We build the workflow. We run it. They stay the boss. Much cheaper than hiring a person.
+**Promise:** An AI employee for the job you hate — we build the workflow, we run it, and after setup you don't live in it. Time back. A lot cheaper than hiring a person.
 
 **Buyer:** Same local service owners — roofers, clinics, shops, contractors.
 
@@ -33,7 +33,7 @@ This is the single place to see what is locked and what is still open.
 | **Phone hire** | **$1,149 setup + $379/mo** · 400 min · $1/min over |
 | Bigger than that | Custom quote **before** setup |
 | Website / redesign | Separate quote, on design domains |
-| Approval | Nothing customer-facing goes out without the owner’s yes |
+| Approval | Setup: owner yes so it learns their voice. Then it auto-runs. Licensed work / prices / medical-legal still forbidden. |
 
 ---
 
@@ -61,7 +61,7 @@ New inboxes do **not** send more redesign emails.
 | `14-revauri-ai-capabilities-client.md` | Client capabilities deck |
 | `15-revauri-ai-capabilities-ops.md` | Internal engines + standard/extra/later |
 
-Cold email voice: AI employee + we build and manage the workflow. Easy. Cheap next to a hire.
+Cold email voice: AI employee + we build and manage the workflow. Easy. Cheap next to a hire. Time back. Can take the receptionist or admin seat.
 
 ---
 
@@ -86,7 +86,7 @@ Joseph said he is good with those signatures. Still waiting for an explicit “g
 - Pages: Home, Capabilities (not website portfolio), Pricing (price-silent — quoted on the call), About, FAQ, Book, Contact, Blog shell, Privacy, Terms.
 - No website before/after, no fake testimonials, no inbox copy.
 - Chatbot: yes, rewritten for Revauri AI. No website-redesign talk.
-- Demo: pick the job you hate → show the workflow → CTA
+- Demo: owner-away, auto-send — pick the job you hate → show the workflow → CTA. Not an approval desk.
 - Jobs on the picker:
   1. Quiet leads
   2. After-hours / missed calls
@@ -108,9 +108,9 @@ Joseph said he is good with those signatures. Still waiting for an explicit “g
 3. Name two workflows in writing
 4. Joseph builds them (about 6–10 hours)
 5. Walkthrough + written “does / does not”
-6. Monthly: weekly note, drafts, small improvements, private channel
+6. Monthly: weekly note, after setup it auto-runs, small improvements, private channel
 7. 14-day notice to pause or cancel
-8. If they go quiet on approvals for 14 days, customer-facing sends pause
+8. If they go quiet on approvals for 14 days during setup, customer-facing sends pause
 
 ---
 

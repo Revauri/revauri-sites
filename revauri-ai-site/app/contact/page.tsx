@@ -5,7 +5,7 @@ import { ContactContent } from "./contact-content";
 export const metadata: Metadata = {
   title: "Contact — Revauri AI",
   description:
-    "Tell Revauri AI about the job you'd otherwise hire someone for, or book a 20-minute call. We respond within a few hours.",
+    "Tell us the job you'd otherwise hire for. We'll take it off you. Or book a call — that's the faster way to get an answer.",
   alternates: { canonical: "/contact" },
 };
 
@@ -29,7 +29,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
             Contact <GradientText>Revauri AI</GradientText>
           </>
         }
-        subtitle="Tell us the job you'd otherwise hire for. Or book a call — that's the faster way to get an answer."
+        subtitle="Tell us the job you'd otherwise hire for. We'll take it off you. Or book a call — that's the faster way to get an answer."
       />
 
       <ContactContent isSubmitted={isSubmitted} />

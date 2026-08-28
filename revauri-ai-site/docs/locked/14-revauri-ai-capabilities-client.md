@@ -12,9 +12,9 @@
 
 We put an AI employee on the job you hate.  
 We build the workflow around how your business already runs.  
-We manage it every month.
+We run it. After setup, you don't live in it.
 
-You stay the boss. Nothing goes to a customer unless you say yes.
+Time back.
 
 ---
 
@@ -30,7 +30,7 @@ Revauri AI can put a voice hire on the line:
 - never guesses at prices, medical advice, or legal advice
 - hands anything sensitive to you
 
-This is not a robot replacing your receptionist.  
+It can take the phone seat. It does not do the licensed job, and it never invents prices.  
 It is a cheaper hire for the calls that currently go to voicemail.
 
 Phone answering is scoped on the call. It is an add-on: **$1,149 setup + $379/month**, with 400 answered minutes included. Extra minutes are $1 each.
@@ -59,7 +59,7 @@ Pick the painful one. We build that workflow and run it.
 
 1. **Look** — we learn how the job works in your business today  
 2. **Build** — we install the workflow  
-3. **Run** — weekly note, drafts ready for your yes / no, small improvements  
+3. **Run** — weekly note, after setup it auto-runs, small improvements  
 
 Standard plans cover **two workflows** and the weekly running of them.  
 A bigger system is quoted before we start. No surprises.
@@ -68,8 +68,8 @@ A bigger system is quoted before we start. No surprises.
 
 ## What we do not do
 
-- replace a real receptionist, tech, or office manager
-- send emails, texts, or posts without your approval
+- replace the licensed tech doing the actual job
+- guess at prices
 - give medical, legal, or licensed professional advice
 - run your ads
 - rebuild your website (separate quote if you need one)

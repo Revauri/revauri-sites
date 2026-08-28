@@ -8,16 +8,16 @@ import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers
 export const metadata: Metadata = {
   title: "About Revauri AI — AI Employees for Local Service Businesses",
   description:
-    "Revauri AI is a product of Revauri, founded by Joseph Silvagnoli. We put an AI employee on the work you'd otherwise hire someone for, build the workflow, and run it every week. A lot cheaper than payroll.",
+    "Revauri AI is a product of Revauri, founded by Joseph Silvagnoli. We put an AI employee on the work you'd otherwise hire someone for, build it, and run it. Less payroll. Your time back.",
   alternates: { canonical: "/about" },
 };
 
 const VALUES = [
   {
     icon: ShieldCheck,
-    title: "You approve what customers see",
+    title: "We take it off you",
     description:
-      "Nothing goes out to a customer unless you have said yes. Drafts wait for you, not the other way around.",
+      "After setup, you are not the one doing the follow-ups, the reviews, and the phone catch. We run it. You get the time back.",
   },
   {
     icon: Workflow,
@@ -35,7 +35,7 @@ const VALUES = [
     icon: Phone,
     title: "The phone is a hire, not a gimmick",
     description:
-      "It answers the calls that currently go to voicemail. It never invents prices. It does not sit at the front desk.",
+      "It answers the calls that currently go to voicemail. It can take the phone seat. It never invents prices. It does not do the licensed job.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function AboutPage() {
             Hire the work, <GradientText>not another person</GradientText>
           </>
         }
-        subtitle="Revauri AI is a product of Revauri. We build AI employees for local service businesses — for the work you'd otherwise hire someone to do — and run them every week."
+        subtitle="Revauri AI is a product of Revauri. We build AI employees for local service businesses — for the work you'd otherwise hire someone to do — and run them so you get the time back, and keep more of the money."
       />
 
       {/* Founder Story */}
@@ -94,9 +94,9 @@ export default function AboutPage() {
                   So I build AI employees for those jobs. You name the work
                   you&apos;d otherwise hire someone to do. I build the workflow
                   around how your business already runs, and I keep it
-                  running every week. That includes the phone. You stay the
-                  boss — nothing reaches a customer without your yes. A lot
-                  cheaper than putting another person on payroll.
+                  running every week. After setup, you are not the one doing
+                  it at 9pm. That includes the phone. A lot cheaper than
+                  putting another person on payroll.
                 </p>
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.2}>

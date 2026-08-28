@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Revauri AI — An AI Employee. Cheaper Than a Person.",
   description:
-    "An AI employee for the work local service businesses would otherwise hire someone to do. We build the workflow. We run it. A lot cheaper than putting a person on payroll.",
+    "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
   metadataBase: new URL("https://revauri.ai"),
   alternates: {
     canonical: "/",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Revauri AI — An AI Employee. Cheaper Than a Person.",
     description:
-      "An AI employee for the work local service businesses would otherwise hire someone to do. We build the workflow. We run it. A lot cheaper than putting a person on payroll.",
+      "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
     url: "https://revauri.ai",
     siteName: "Revauri AI",
     locale: "en_US",
@@ -65,7 +65,7 @@ const organizationSchema = {
   url: "https://revauri.ai",
   email: "joseph@revauri.com",
   description:
-    "An AI employee for the work local service businesses would otherwise hire someone to do. We build the workflow. We run it. A lot cheaper than putting a person on payroll.",
+    "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
   areaServed: "US",
   founder: {
     "@type": "Person",

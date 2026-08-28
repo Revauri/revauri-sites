@@ -118,7 +118,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                     </p>
                     <p className="mt-2 text-xs leading-5 text-brand-dark/60 dark:text-brand-cream/60">
                       We&apos;ll read what you sent, reply by email, and tell you whether we
-                      can put an AI employee on that job.
+                      can take that job off you.
                     </p>
                   </div>
                   <div className="rounded-xl border border-brand-light-gray/40 bg-brand-white/70 p-4 dark:border-brand-mid-gray/20 dark:bg-[#181817]">
@@ -258,7 +258,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                     name="message"
                     required
                     rows={4}
-                    placeholder="Tell us the job you'd otherwise hire someone to do..."
+                    placeholder="Tell us the job you'd otherwise put someone on payroll to do..."
                     className={FIELD_CLASS}
                   />
                 </div>

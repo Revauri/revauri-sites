@@ -32,7 +32,7 @@ export function SupportChannels() {
                   Book a call
                 </h3>
                 <p className="text-xs text-brand-mid-gray">
-                  Talk through the hire you&apos;d otherwise make
+                  The work you want off your plate
                 </p>
                 <p className="mt-1 text-xs font-medium text-brand-orange">
                   Schedule now &rarr;

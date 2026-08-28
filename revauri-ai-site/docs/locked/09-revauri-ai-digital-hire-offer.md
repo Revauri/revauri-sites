@@ -10,7 +10,7 @@ This is not a website package. Website work is optional and quoted separately.
 
 ## One-line promise
 
-An AI employee for the job you hate — we build the workflow, we run it, you stay the boss. Much cheaper than hiring a person.
+An AI employee for the job you hate — we build the workflow, we run it, and after setup you don't live in it. Time back. A lot cheaper than hiring a person.
 
 ---
 
@@ -32,7 +32,7 @@ Do not launch three tiers yet. Sell this one until 3–5 clients are live.
 
 1. **Name the job** — the pain, annoyance, or busywork sitting on the owner.
 2. **Build the workflow** — Joseph designs and installs the system around how their business actually runs.
-3. **Run the hire** — Revauri manages it every month. The owner approves anything customer-facing.
+3. **Run the hire** — Revauri manages it every month. After setup it auto-runs. Setup uses the owner's yes so it learns their voice.
 
 ### First systems we usually install
 
@@ -60,10 +60,9 @@ The front door is “AI employee.” The delivery is a custom workflow we create
 **Monthly — $895**
 - We keep running those workflows
 - Weekly plain-English note
-- Drafts ready for yes / no
+- After setup it auto-runs
 - Small improvements inside the two included workflows
 - Private channel
-- Nothing customer-facing goes out without approval
 
 ---
 
@@ -71,9 +70,8 @@ The front door is “AI employee.” The delivery is a custom workflow we create
 
 - A new website or redesign (quoted separately)
 - Ads management
-- Sending emails, texts, or posts without approval
 - Medical, legal, pricing, or licensed professional advice
-- Replacing a real receptionist, tech, or office manager
+- Replacing the licensed tech doing the actual job
 - Unlimited new workflows
 - Anything that regularly needs more than ~90 minutes a week
 
@@ -99,13 +97,13 @@ Never say “unlimited” or “we’ll just figure it out.” Name the two jobs
 ## How it is sold
 
 **Cold email front door (new domains only, after warmup):**  
-“I hire an AI employee for the job you hate, build the workflow around your business, and run it. Easy. Much cheaper than a person.”
+“I hire an AI employee for the job you hate, build the workflow, and run it. After setup you don't live in it. Easy. Much cheaper than a person.”
 
 **On the call:**  
 Name the job. Confirm it fits two workflows. Quote **$1,749 + $895**. If it does not fit, quote the heavier version before starting.
 
-**Do say:** AI employee / we build and manage the workflow / cheaper than hiring / you approve.  
-**Do not say:** this replaces your receptionist, tech, or a licensed person.
+**Do say:** AI employee / we build and run it / cheaper than hiring / time back / can take the receptionist or admin seat / after setup it runs  
+**Do not say:** this replaces the licensed tech / guessed prices / medical-legal advice / any public dollar amount / “free money”
 
 ---
 
@@ -148,7 +146,7 @@ Priced against a hire, not against website care. A part-time admin / VA is often
 - Setup due before build starts
 - Monthly card/ACH on the same date
 - 14-day notice to pause or cancel
-- If they go quiet on approvals for 14 days, customer-facing sends pause
+- If they go quiet on approvals for 14 days during setup, customer-facing sends pause
 
 ---
 
@@ -171,7 +169,7 @@ New warming inboxes are for this offer only. Do not attach live campaigns until 
 
 1. 1–2 paid setups at the standard quote
 2. Weekly delivery stays under ~90 minutes per client
-3. Owner can say: “They hired an AI employee and run the workflow for me.”
+3. Owner can say: they hired an AI employee, it runs without me, and I'm not paying a person for that work.
 4. No heavy client was taken at the standard price by accident
 
 ---
@@ -180,7 +178,7 @@ New warming inboxes are for this offer only. Do not attach live campaigns until 
 
 - Same Revauri look as revauri.com. New page, not a copy of the website shop.
 - Feels like a product. Includes a demo.
-- Demo: **pick the job you hate** → show the workflow we’d build and run → CTA.
+- Demo: owner-away, auto-send — **pick the job you hate** → show the workflow we’d build and run while they're away → CTA. Not an approval desk.
 
 ### Demo jobs on the picker
 

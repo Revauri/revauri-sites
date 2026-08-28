@@ -52,7 +52,7 @@ export function ChatEmptyState({
         </p>
         <p className="mt-1 text-brand-mid-gray">
           {mode === "initial"
-            ? "Ask about hiring an AI employee, what it costs versus a person, or book a call."
+            ? "Ask about hiring an AI employee, what it costs versus a person, or getting the work off your plate."
             : "Ask a new question whenever you're ready."}
         </p>
         {mode === "initial" ? (

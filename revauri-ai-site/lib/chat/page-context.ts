@@ -8,7 +8,7 @@ const STATIC_PAGE_CONTEXT: Record<string, string> = {
   "/blog": "the blog index page listing Revauri AI's articles",
   "/book": "the booking page with the Calendly scheduler — they're one step from booking",
   "/capabilities":
-    "the Capabilities page — the jobs a hire can take, the phone hire, and what we don't do",
+    "the Capabilities page — the jobs a hire can take, the phone hire, and the short licensed/prices/medical-legal fence",
   "/contact": "the contact page with the message form",
   "/faq": "the FAQ page",
   "/pricing": "the pricing page — no public numbers; a hire is quoted after we look at the job",

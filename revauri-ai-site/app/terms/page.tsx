@@ -18,7 +18,7 @@ export default function TermsPage() {
             Terms of <GradientText>Service</GradientText>
           </>
         }
-        subtitle="Last updated: August 18, 2026"
+        subtitle="Last updated: August 27, 2026"
       />
 
       <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-16 dark:prose-invert lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">
@@ -45,7 +45,7 @@ export default function TermsPage() {
           <li>Two workflows, designed and built around how your business already runs</li>
           <li>A walkthrough and a written &quot;what it does / what it does not do&quot;</li>
           <li>Ongoing operation of those workflows by us, with a weekly plain-English note</li>
-          <li>Customer-facing messages prepared as drafts and sent only after your approval</li>
+          <li>Customer-facing messages approved by you during setup so the hire learns your voice, then sent as part of the running workflow</li>
         </ul>
         <p>The following are quoted separately and are not part of a standard hire:</p>
         <ul>
@@ -57,14 +57,11 @@ export default function TermsPage() {
         <p>
           The phone add-on takes a caller&apos;s name, number, and what they need,
           and either books what you have pre-approved or arranges a callback. It
-          does not replace a receptionist, technician, or office manager, it does
-          not quote prices we have not agreed in writing, and it does not give
-          medical, legal, or any other licensed professional advice. Anything
-          outside its scope is routed back to you.
-        </p>
-        <p>
-          Our workflows use AI-powered tools and automation. Nothing
-          customer-facing is sent on your behalf without your approval.
+          can take receptionist, front-desk, and phone work. It does not do the
+          licensed technician&apos;s job, it does not quote prices we have not
+          agreed in writing, and it does not give medical, legal, or any other
+          licensed professional advice. Anything outside its scope is routed back
+          to you.
         </p>
 
         <h2>3. Pre-Engagement Calls and Quotes</h2>
@@ -88,7 +85,7 @@ export default function TermsPage() {
           <li>All fees are in USD and are set out in your written quote and Service Agreement. We do not publish product pricing on this website.</li>
           <li>The one-time setup fee is due upon execution of the Service Agreement and before we begin building your workflows</li>
           <li>The setup fee is non-refundable once the build has commenced (defined as Revauri beginning any configuration or development work on your workflows)</li>
-          <li>A monthly fee is required for the duration of the hire and covers running your workflows, the weekly note, drafts for your approval, and small improvements within the agreed scope</li>
+          <li>A monthly fee is required for the duration of the hire and covers running your workflows, the weekly note, and small improvements within the agreed scope</li>
           <li>The monthly fee begins on the date stated in your Service Agreement and is billed monthly via Stripe on the same calendar date each month</li>
           <li>Payments are processed securely through Stripe. We do not store your credit card information.</li>
           <li>Any payment not received within five (5) business days of the due date may incur a late fee of one and one-half percent (1.5%) per month, or the maximum rate permitted by New Jersey law, whichever is lower</li>
@@ -123,12 +120,15 @@ export default function TermsPage() {
 
         <h2>7. Approvals</h2>
         <p>
-          Nothing customer-facing goes out without your approval. Drafts wait for
-          your written yes (email is sufficient). If you do not respond to
-          approval requests for fourteen (14) consecutive calendar days, we pause
-          customer-facing sends until you respond. Internal workflow steps that do
-          not contact your customers may continue during that pause, and your
-          monthly fee continues to apply.
+          During setup, customer-facing messages go out after your written yes
+          (email is sufficient) so the hire learns your voice. After setup, those
+          workflows send as part of the running hire unless you ask to stay in the
+          loop or we pause them. If you do not respond to setup approval requests
+          for fourteen (14) consecutive calendar days, we pause customer-facing
+          sends until you respond. After the hire is running, 14-day notice pauses
+          or cancels the engagement as set out in these Terms. The hire does not
+          do the licensed job, guess prices, or give medical, legal, or other
+          licensed professional advice.
         </p>
 
         <h2>8. Intellectual Property</h2>

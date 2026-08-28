@@ -112,8 +112,8 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <Logo variant="auto" suffix="AI" />
             <p className="text-sm text-brand-mid-gray">
-              An AI employee for the work you&apos;d otherwise hire for. A lot
-              cheaper than payroll.
+              An AI employee for the work you&apos;d otherwise hire for. Less
+              payroll. Your time back.
             </p>
             <p className="text-sm text-brand-mid-gray">
               A{" "}
