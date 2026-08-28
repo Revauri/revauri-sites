@@ -7,9 +7,9 @@ import { HeroHireDemo } from "./hero-hire-demo";
 
 export function Hero() {
   return (
-    <section className="hero-honeycomb relative overflow-hidden bg-brand-cream py-20 dark:bg-brand-dark lg:py-28">
+    <section className="hero-honeycomb relative overflow-hidden bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
       <div className="relative mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)] lg:items-start lg:gap-12">
           <div className="flex min-w-0 flex-col space-y-5">
             <FadeInWhenVisible>
               <span className="inline-flex w-fit items-center rounded-full bg-brand-orange/10 px-4 py-2 text-sm font-medium text-brand-orange">
