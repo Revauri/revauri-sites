@@ -134,6 +134,37 @@
   40% { transform: translateY(-3px); opacity: 1; }
 }
 
+@keyframes hero-demo-call-in {
+  from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes hero-demo-stage-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-demo-sent-pop {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { transform: scale(1.18); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hero-demo-wait-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(48, 209, 88, 0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(48, 209, 88, 0); }
+}
+
+@keyframes hero-demo-live-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(217, 119, 87, 0.45); }
+  50% { opacity: 0.75; box-shadow: 0 0 0 5px rgba(217, 119, 87, 0); }
+}
+
+@keyframes hero-demo-wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
 .hero-demo-ring {
   animation: hero-demo-ring-pulse 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
@@ -153,11 +184,48 @@
 .hero-demo-typing-dot:nth-child(2) { animation-delay: 0.15s; }
 .hero-demo-typing-dot:nth-child(3) { animation-delay: 0.3s; }
 
+.hero-demo-call-in {
+  animation: hero-demo-call-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-demo-stage-in {
+  animation: hero-demo-stage-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-demo-sent-pop {
+  animation: hero-demo-sent-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-demo-wait-ring {
+  animation: hero-demo-wait-ring 2.4s ease-in-out infinite;
+}
+
+.hero-demo-live-dot {
+  animation: hero-demo-live-dot 2.2s ease-in-out infinite;
+}
+
+.hero-demo-wave {
+  animation: hero-demo-wave 0.9s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Native tool surfaces inside the hero board read best in the system stack */
+.hero-demo-tool {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, system-ui, sans-serif;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-demo-ring,
   .hero-demo-notify,
   .hero-demo-bubble,
-  .hero-demo-typing-dot {
+  .hero-demo-typing-dot,
+  .hero-demo-call-in,
+  .hero-demo-stage-in,
+  .hero-demo-sent-pop,
+  .hero-demo-wait-ring,
+  .hero-demo-live-dot,
+  .hero-demo-wave {
     animation: none;
   }
 }
