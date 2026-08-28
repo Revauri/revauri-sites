@@ -12,11 +12,10 @@ import {
   Stage,
   WaitGlyph,
   WaitVignette,
+  beatStartMs,
   sceneAnnouncement,
   type JobId,
 } from "./hero-hire-scenes";
-
-const BEAT_MS = 1500;
 
 function fadeClass(reducedMotion: boolean) {
   return reducedMotion ? "" : "animate-fade-in";
@@ -41,7 +40,7 @@ export function HeroHireDemo() {
 
     setBeat(0);
     const timers = Array.from({ length: lastBeat }, (_, index) =>
-      window.setTimeout(() => setBeat(index + 1), (index + 1) * BEAT_MS),
+      window.setTimeout(() => setBeat(index + 1), beatStartMs(jobId, index + 1)),
     );
 
     return () => timers.forEach((id) => window.clearTimeout(id));
@@ -54,11 +53,11 @@ export function HeroHireDemo() {
     <div className="relative isolate w-full">
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-8 rounded-[2.5rem] bg-[radial-gradient(ellipse_at_center,rgba(217,119,87,0.18)_0%,rgba(217,119,87,0.06)_45%,rgba(217,119,87,0)_72%)] blur-2xl"
+        className="pointer-events-none absolute -inset-4 rounded-[2.25rem] bg-[radial-gradient(ellipse_at_center,rgba(217,119,87,0.18)_0%,rgba(217,119,87,0.06)_38%,rgba(217,119,87,0)_58%)] blur-xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-9 rounded-[3rem] blur-3xl transition-colors duration-700 ease-out"
+        className="pointer-events-none absolute -inset-5 rounded-[2.5rem] blur-2xl transition-colors duration-700 ease-out"
         style={{ backgroundColor: ACCENT_GLOW[jobId] }}
       />
 

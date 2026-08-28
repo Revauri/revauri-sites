@@ -7,11 +7,11 @@ import type { ReactNode } from "react";
 import {
   Calendar,
   CheckCheck,
+  ClipboardList,
   ListChecks,
   Mail,
   Megaphone,
   MessageCircle,
-  Package,
   Phone,
   PhoneOff,
   Star,
@@ -30,14 +30,14 @@ export type JobId =
   | "outreach";
 
 export const JOBS: { id: JobId; label: string }[] = [
-  { id: "missed-calls", label: "Missed calls" },
-  { id: "quiet-leads", label: "Quiet leads" },
+  { id: "missed-calls", label: "Calls" },
+  { id: "quiet-leads", label: "Leads" },
   { id: "reviews", label: "Reviews" },
   { id: "quotes", label: "Quotes" },
   { id: "calendar", label: "Calendar" },
   { id: "inbox", label: "Inbox triage" },
-  { id: "check-ins", label: "Check-ins" },
-  { id: "busywork", label: "Busywork" },
+  { id: "check-ins", label: "Customers" },
+  { id: "busywork", label: "Payroll" },
   { id: "outreach", label: "Outreach" },
 ];
 
@@ -53,6 +53,21 @@ export const BEAT_COUNT: Record<JobId, number> = {
   outreach: 4,
 };
 
+const BEAT_MS = 1500;
+const CALL_HOLD_MS = 500;
+
+/** When the given beat should start, from job select. */
+export function beatStartMs(jobId: JobId, beat: number): number {
+  let elapsed = 0;
+  for (let index = 0; index < beat; index += 1) {
+    elapsed += BEAT_MS;
+    if (jobId === "missed-calls" && (index === 0 || index === 1)) {
+      elapsed += CALL_HOLD_MS;
+    }
+  }
+  return elapsed;
+}
+
 export const OWNER_CONTEXT: Record<JobId, string> = {
   "missed-calls": "You're at dinner.",
   "quiet-leads": "You're on a job.",
@@ -60,8 +75,8 @@ export const OWNER_CONTEXT: Record<JobId, string> = {
   quotes: "You're not chasing it.",
   calendar: "You're booked solid.",
   inbox: "You're still asleep.",
-  "check-ins": "You're with today's customers.",
-  busywork: "You're not counting stock.",
+  "check-ins": "You're off the site.",
+  busywork: "You're not chasing hours.",
   outreach: "You're not doing the marketing.",
 };
 
@@ -82,9 +97,9 @@ export const ACCENT_GLOW: Record<JobId, string> = {
   "missed-calls": "rgba(48, 209, 88, 0.17)",
   "quiet-leads": "rgba(10, 132, 255, 0.17)",
   reviews: "rgba(230, 168, 23, 0.16)",
-  quotes: "rgba(94, 92, 230, 0.17)",
+  quotes: "rgba(191, 90, 242, 0.15)",
   calendar: "rgba(255, 55, 95, 0.14)",
-  inbox: "rgba(191, 90, 242, 0.15)",
+  inbox: "rgba(94, 92, 230, 0.17)",
   "check-ins": "rgba(47, 180, 155, 0.17)",
   busywork: "rgba(50, 173, 230, 0.16)",
   outreach: "rgba(224, 64, 154, 0.15)",
@@ -93,9 +108,9 @@ export const ACCENT_GLOW: Record<JobId, string> = {
 export const COPY = {
   "missed-calls": {
     incoming: "Fri 7:42 PM · After hours",
-    capture: "Maria Chen · roof leak · call back tomorrow morning",
+    capture: "Maria Chen · roof leak · Thursday 9:00 AM",
     draft:
-      "Maria — thanks for calling about the leak. Want us to come by tomorrow morning?",
+      "Maria — thanks for calling about the leak. We can come Thursday at 9. Want that?",
   },
   "quiet-leads": {
     leak: "Quote request · 3 days quiet",
@@ -114,13 +129,15 @@ export const COPY = {
     leak: "Estimate sent · 11 days ago · no reply",
     line: "Nobody nudged it.",
     draft:
-      "Hey Sam — just checking this estimate is still useful. Want me to hold the date, or close it out?",
+      "Hey Sam — Thursday is still open if you want this. Reply YES and I'll hold it.",
+    reply: "YES — hold Thursday.",
   },
   calendar: {
     leak: "Tomorrow 9:00 AM · roof inspection · unconfirmed",
     line: "No confirmation yet.",
     draft:
       "Hi Maria — confirming tomorrow at 9:00 AM for the roof inspection. Reply YES and we're all set.",
+    reply: "YES",
   },
   inbox: {
     leak: "7 unsorted messages overnight",
@@ -128,20 +145,22 @@ export const COPY = {
     draft: "Inbox sorted — 5 filed, 1 spam gone, 1 real lead flagged for you.",
   },
   "check-ins": {
-    leak: "Jim Reyes · last job 14 months ago",
-    line: "Due for a check-in.",
+    leak: "Alex Rivera · job finished Tuesday",
+    line: "Check-in due.",
+    ask: "How did we do on Tuesday's job?",
+    reply: "Great — thanks.",
     draft:
-      "Hi Jim — it's been about a year since the gutter work. Want us to take a look before storm season?",
+      "Glad it went well. Want us to look at the other side this fall?",
   },
   busywork: {
-    leak: "Architectural shingles · 12 bundles left",
-    line: "Reorder point hit.",
+    leak: "Friday payroll · 3 timesheets missing",
+    line: "Hours coming in.",
     draft:
-      "Order for Hargrove Supply: 40 bundles architectural shingles, 2 rolls underlayment — deliver Thursday.",
+      "Hours in. OT flagged on Mike. Packet is ready for Gusto.",
   },
   outreach: {
     leak: "Fall roof-check special · 42 past customers",
-    line: "Queued for Monday 9 AM.",
+    line: "Email, text, and voicemail queued.",
     draft:
       "Storm season's close — we're booking free roof checks this month. Want yours on the list?",
   },
@@ -156,6 +175,7 @@ export function sceneAnnouncement(jobId: JobId, beat: number): string {
       if (beat >= 1) parts.push("Answered for you");
       if (beat >= 2) parts.push(COPY["missed-calls"].capture);
       if (beat >= 3) parts.push(`Draft: ${COPY["missed-calls"].draft}`);
+      if (beat >= 4) parts.push("Thursday 9:00 AM booked");
       break;
     case "reviews":
       parts.push(COPY.reviews.leak);
@@ -163,11 +183,26 @@ export function sceneAnnouncement(jobId: JobId, beat: number): string {
       if (beat >= 2) parts.push(`5 star review: ${COPY.reviews.review}`);
       if (beat >= 3) parts.push(`Draft: ${COPY.reviews.reply}`);
       break;
-    case "quiet-leads":
     case "quotes":
+      parts.push(COPY.quotes.leak);
+      if (beat >= 1) parts.push(COPY.quotes.line);
+      if (beat >= 2) parts.push(`Draft: ${COPY.quotes.draft}`);
+      if (beat >= 3) parts.push("Sam replied YES. Thursday held.");
+      break;
     case "calendar":
-    case "inbox":
+      parts.push(COPY.calendar.leak);
+      if (beat >= 1) parts.push(COPY.calendar.line);
+      if (beat >= 2) parts.push(`Draft: ${COPY.calendar.draft}`);
+      if (beat >= 3) parts.push("Maria replied YES. Visit confirmed.");
+      break;
     case "check-ins":
+      parts.push(COPY["check-ins"].leak);
+      if (beat >= 1) parts.push(`Draft: ${COPY["check-ins"].ask}`);
+      if (beat >= 2) parts.push(`Alex: ${COPY["check-ins"].reply}`);
+      if (beat >= 3) parts.push(`Draft: ${COPY["check-ins"].draft}`);
+      break;
+    case "quiet-leads":
+    case "inbox":
     case "busywork":
     case "outreach": {
       const copy = COPY[jobId];
@@ -381,6 +416,17 @@ function CallScene({ beat, reducedMotion }: { beat: number; reducedMotion: boole
             reducedMotion={reducedMotion}
           />
         </div>
+        {sent ? (
+          <div
+            className={`rounded-xl bg-[#30D158]/10 px-3 py-2 ring-1 ring-[#30D158]/25 ${motionClass(reducedMotion, "hero-demo-notify")}`}
+          >
+            <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#5CE28A]">
+              <Calendar className="h-3 w-3" aria-hidden />
+              Thu 9:00 AM · Booked
+            </p>
+            <p className="mt-0.5 text-[12px] text-white/70">Roof leak · Chen</p>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -595,35 +641,59 @@ function ReviewsScene({
   );
 }
 
+const OPEN_ESTIMATES = [
+  { name: "Sam", detail: "Estimate · 11 days", focus: true },
+  { name: "Lee", detail: "Estimate · 4 days", focus: false },
+] as const;
+
 function QuotesScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
-  const sent = beat >= 3;
+  const sent = beat >= 2;
+  const held = beat >= 3;
 
   return (
     <div className="flex flex-1 flex-col gap-2.5">
       <div className="rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="flex min-w-0 items-center gap-1.5">
-            <span
-              aria-hidden
-              className="h-2 w-2 shrink-0 rounded-full bg-[#5E5CE6]"
-            />
-            <span className="truncate text-[13px] font-semibold text-brand-dark dark:text-brand-cream">
-              Sam
-            </span>
-          </p>
-          <p className="shrink-0 text-[10.5px] tabular-nums text-brand-dark/45 dark:text-white/45">
-            11 days ago
-          </p>
-        </div>
-        <p className="mt-0.5 text-[13px] font-medium text-brand-dark dark:text-brand-cream">
-          Estimate
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-dark/45 dark:text-white/45">
+          2 open estimates
         </p>
-        <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/55 dark:text-brand-cream/55">
-          {COPY.quotes.leak}
-        </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {OPEN_ESTIMATES.map((item) => (
+            <li
+              key={item.name}
+              className="flex items-center justify-between gap-2 text-[12px] leading-snug"
+            >
+              <span className="flex min-w-0 items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#BF5AF2]"
+                />
+                <span className="truncate text-brand-dark/80 dark:text-brand-cream/80">
+                  {item.name}
+                  <span className="text-brand-dark/45 dark:text-white/45">
+                    {" "}
+                    · {item.detail}
+                  </span>
+                </span>
+              </span>
+              {item.focus && held ? (
+                <span className="shrink-0 rounded-full bg-[#30D158]/12 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#1E9E4A] dark:text-[#5CE28A]">
+                  Held
+                </span>
+              ) : item.focus ? (
+                <span className="shrink-0 text-[10.5px] text-brand-dark/45 dark:text-white/45">
+                  No reply
+                </span>
+              ) : (
+                <span className="shrink-0 text-[10.5px] text-brand-dark/45 dark:text-white/45">
+                  Viewed
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="mt-auto flex flex-col gap-2.5">
-        {beat >= 1 ? (
+        {beat >= 1 && !held ? (
           <ActionChip text={COPY.quotes.line} reducedMotion={reducedMotion} />
         ) : null}
         {beat >= 2 ? (
@@ -636,34 +706,68 @@ function QuotesScene({ beat, reducedMotion }: { beat: number; reducedMotion: boo
             />
           </div>
         ) : null}
+        {held ? (
+          <InboundBubble>{COPY.quotes.reply}</InboundBubble>
+        ) : null}
       </div>
     </div>
   );
 }
 
+const DAY_SLOTS = [
+  { time: "9:00 AM", title: "Roof inspection · Chen", focus: true },
+  { time: "11:30 AM", title: "Gutter estimate · Reyes", focus: false },
+  { time: "2:00 PM", title: "Leak check · Patel", focus: false },
+] as const;
+
 function CalendarScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
-  const sent = beat >= 3;
+  const sent = beat >= 2;
+  const confirmed = beat >= 3;
 
   return (
     <div className="flex flex-1 flex-col gap-2.5">
-      <div className="flex gap-2.5 rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
-        <span aria-hidden className="w-1 shrink-0 rounded-full bg-[#FF375F]" />
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline justify-between gap-2">
-            <p className="text-[13px] font-semibold text-brand-dark dark:text-brand-cream">
-              Tomorrow · 9:00 AM
-            </p>
-            <span className="shrink-0 rounded-full bg-[#FF375F]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#D81B54] dark:text-[#FF6482]">
-              Unconfirmed
-            </span>
-          </div>
-          <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
-            Roof inspection · Chen residence
-          </p>
-        </div>
+      <div className="rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-dark/45 dark:text-white/45">
+          Tomorrow
+        </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {DAY_SLOTS.map((slot) => {
+            const lockedIn = !slot.focus || confirmed;
+            return (
+              <li key={slot.time} className="flex items-center gap-2.5">
+                <span
+                  aria-hidden
+                  className={`h-8 w-1 shrink-0 rounded-full ${
+                    lockedIn ? "bg-[#30D158]" : "bg-[#FF375F]"
+                  }`}
+                />
+                <div className="flex min-w-0 flex-1 items-baseline justify-between gap-2">
+                  <p className="min-w-0 truncate text-[12px] leading-snug">
+                    <span className="font-semibold tabular-nums text-brand-dark dark:text-brand-cream">
+                      {slot.time}
+                    </span>
+                    <span className="text-brand-dark/55 dark:text-brand-cream/55">
+                      {" "}
+                      · {slot.title}
+                    </span>
+                  </p>
+                  {lockedIn ? (
+                    <span className="shrink-0 rounded-full bg-[#30D158]/12 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#1E9E4A] dark:text-[#5CE28A]">
+                      Confirmed
+                    </span>
+                  ) : (
+                    <span className="shrink-0 rounded-full bg-[#FF375F]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#D81B54] dark:text-[#FF6482]">
+                      Open
+                    </span>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
       <div className="mt-auto flex flex-col gap-2.5">
-        {beat >= 1 ? (
+        {beat >= 1 && !confirmed ? (
           <ActionChip text={COPY.calendar.line} reducedMotion={reducedMotion} />
         ) : null}
         {beat >= 2 ? (
@@ -675,6 +779,9 @@ function CalendarScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
               reducedMotion={reducedMotion}
             />
           </div>
+        ) : null}
+        {confirmed ? (
+          <InboundBubble>{COPY.calendar.reply}</InboundBubble>
         ) : null}
       </div>
     </div>
@@ -716,7 +823,7 @@ function InboxScene({ beat, reducedMotion }: { beat: number; reducedMotion: bool
                 <span
                   className={`shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] ${
                     item.status === "Flagged for you"
-                      ? "bg-[#BF5AF2]/12 text-[#9333CE] dark:text-[#D9A2FF]"
+                      ? "bg-[#5E5CE6]/12 text-[#5E5CE6] dark:text-[#8583FF]"
                       : "bg-[#30D158]/12 text-[#1E9E4A] dark:text-[#5CE28A]"
                   } ${motionClass(reducedMotion, "hero-demo-notify")}`}
                   style={
@@ -752,36 +859,47 @@ function InboxScene({ beat, reducedMotion }: { beat: number; reducedMotion: bool
 }
 
 function CheckInsScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
-  const sent = beat >= 3;
+  const askSent = beat >= 2;
+  const offerSent = beat >= 3;
 
   return (
     <div className="flex flex-1 flex-col gap-2.5">
       <div className="flex items-center gap-2.5 rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
-        <Avatar initials="JR" size="md" />
+        <Avatar initials="AR" size="md" />
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline justify-between gap-2">
             <p className="truncate text-[13px] font-semibold text-brand-dark dark:text-brand-cream">
-              Jim Reyes
+              Alex Rivera
             </p>
             <span className="shrink-0 rounded-full bg-[#2FB49B]/12 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#0F8C6E] dark:text-[#4DD0AF]">
-              Past customer
+              Just finished
             </span>
           </div>
           <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
-            Last job 14 months ago · gutter replacement
+            Job finished Tuesday · gutter replacement
           </p>
         </div>
       </div>
       <div className="mt-auto flex flex-col gap-2.5">
         {beat >= 1 ? (
-          <ActionChip text={COPY["check-ins"].line} reducedMotion={reducedMotion} />
+          <div className="flex flex-col items-end gap-1.5">
+            {!askSent && !reducedMotion ? <TypingDots /> : null}
+            <OutboundBubble
+              text={COPY["check-ins"].ask}
+              sent={askSent}
+              reducedMotion={reducedMotion}
+            />
+          </div>
         ) : null}
         {beat >= 2 ? (
+          <InboundBubble>{COPY["check-ins"].reply}</InboundBubble>
+        ) : null}
+        {beat >= 3 ? (
           <div className="flex flex-col items-end gap-1.5">
-            {!sent && !reducedMotion ? <TypingDots /> : null}
+            {!offerSent && !reducedMotion ? <TypingDots /> : null}
             <OutboundBubble
               text={COPY["check-ins"].draft}
-              sent={sent}
+              sent={offerSent}
               reducedMotion={reducedMotion}
             />
           </div>
@@ -791,50 +909,90 @@ function CheckInsScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
   );
 }
 
+const PAYROLL_ITEMS = [
+  { name: "Mike Torres", status: "Hours in", flag: "OT" },
+  { name: "Dana Cole", status: "Hours in", flag: null },
+  { name: "Chris Nguyen", status: "Hours in", flag: null },
+] as const;
+
 function BusyworkScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
-  const sent = beat >= 3;
+  const hoursIn = beat >= 1;
+  const packetReady = beat >= 2;
 
   return (
     <div className="flex flex-1 flex-col gap-2.5">
       <div className="rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="truncate text-[13px] font-semibold text-brand-dark dark:text-brand-cream">
-            Architectural shingles
-          </p>
-          <span className="shrink-0 rounded-full bg-[#FF453A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#D0342A] dark:text-[#FF6961]">
-            Low
-          </span>
-        </div>
-        <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
-          12 bundles left · reorder at 15
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-dark/45 dark:text-white/45">
+          {COPY.busywork.leak}
         </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {PAYROLL_ITEMS.map((item, index) => (
+            <li
+              key={item.name}
+              className="flex items-center justify-between gap-2 text-[12px] leading-snug"
+            >
+              <span className="min-w-0 truncate text-brand-dark/80 dark:text-brand-cream/80">
+                {item.name}
+                <span className="text-brand-dark/45 dark:text-white/45">
+                  {" "}
+                  · timesheet
+                </span>
+              </span>
+              {hoursIn ? (
+                <span className="flex shrink-0 items-center gap-1">
+                  {item.flag ? (
+                    <span className="rounded-full bg-[#FF453A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#D0342A] dark:text-[#FF6961]">
+                      {item.flag}
+                    </span>
+                  ) : null}
+                  <span
+                    className={`rounded-full bg-[#30D158]/12 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#1E9E4A] dark:text-[#5CE28A] ${motionClass(reducedMotion, "hero-demo-notify")}`}
+                    style={
+                      reducedMotion
+                        ? undefined
+                        : { animationDelay: `${index * 130}ms` }
+                    }
+                  >
+                    {item.status}
+                  </span>
+                </span>
+              ) : (
+                <span className="shrink-0 rounded-full bg-[#FF453A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#D0342A] dark:text-[#FF6961]">
+                  Missing
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {packetReady ? (
         <div
-          aria-hidden
-          className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-brand-dark/[0.06] dark:bg-white/[0.08]"
+          className={`rounded-xl bg-[#32ADE6]/10 px-3 py-2 ring-1 ring-[#32ADE6]/20 ${motionClass(reducedMotion, "hero-demo-notify")}`}
         >
-          <div className="h-full w-[20%] rounded-full bg-[#32ADE6]" />
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold text-[#0E7DAF] dark:text-[#6FC9F2]">
+            <ClipboardList className="h-3 w-3" aria-hidden />
+            Packet ready for Gusto
+          </p>
+          <p className="mt-0.5 text-[12px] text-brand-dark/55 dark:text-brand-cream/55">
+            3 timesheets in · 1 OT flagged
+          </p>
         </div>
-      </div>
-      <div className="mt-auto flex flex-col gap-2.5">
-        {beat >= 1 ? (
-          <ActionChip text={COPY.busywork.line} reducedMotion={reducedMotion} />
-        ) : null}
-        {beat >= 2 ? (
-          <div className="flex flex-col items-end gap-1.5">
-            {!sent && !reducedMotion ? <TypingDots /> : null}
-            <OutboundBubble
-              text={COPY.busywork.draft}
-              sent={sent}
-              reducedMotion={reducedMotion}
-            />
-          </div>
-        ) : null}
-      </div>
+      ) : null}
+      {hoursIn && !packetReady ? (
+        <ActionChip text={COPY.busywork.line} reducedMotion={reducedMotion} />
+      ) : null}
     </div>
   );
 }
 
+const OUTREACH_CHANNELS = [
+  { channel: "Email", count: "42", status: "Sent" },
+  { channel: "Text", count: "42", status: "Sent" },
+  { channel: "Voicemail", count: "18", status: "Dropped" },
+] as const;
+
 function OutreachScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
+  const sending = beat >= 1;
   const sent = beat >= 3;
 
   return (
@@ -845,20 +1003,59 @@ function OutreachScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
             Fall roof-check special
           </p>
           <span className="shrink-0 rounded-full bg-[#E0409A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#C22C7F] dark:text-[#F284C4]">
-            Ready
+            {sent ? "Sent" : sending ? "Sending" : "Ready"}
           </span>
         </div>
         <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
           42 past customers · not contacted this season
         </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {OUTREACH_CHANNELS.map((item, index) => (
+            <li
+              key={item.channel}
+              className="flex items-center justify-between gap-2 text-[12px] leading-snug"
+            >
+              <span className="min-w-0 truncate text-brand-dark/80 dark:text-brand-cream/80">
+                {item.channel}
+                <span className="text-brand-dark/45 dark:text-white/45">
+                  {" "}
+                  · {item.count}
+                </span>
+              </span>
+              {sending ? (
+                <span
+                  className={`shrink-0 rounded-full bg-[#E0409A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#C22C7F] dark:text-[#F284C4] ${motionClass(reducedMotion, "hero-demo-notify")}`}
+                  style={
+                    reducedMotion ? undefined : { animationDelay: `${index * 130}ms` }
+                  }
+                >
+                  {beat >= 2 ? item.status : "Queued"}
+                </span>
+              ) : (
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-dark/20 dark:bg-white/25"
+                />
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="mt-auto flex flex-col gap-2.5">
-        {beat >= 1 ? (
-          <ActionChip text={COPY.outreach.line} reducedMotion={reducedMotion} />
-        ) : null}
         {beat >= 2 ? (
+          <div
+            className={`rounded-xl bg-brand-dark/[0.03] px-3 py-2 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06] ${motionClass(reducedMotion, "hero-demo-notify")}`}
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-dark/45 dark:text-white/45">
+              Email
+            </p>
+            <p className="mt-0.5 text-[12px] font-medium text-brand-dark dark:text-brand-cream">
+              Free roof check before storm season
+            </p>
+          </div>
+        ) : null}
+        {beat >= 3 ? (
           <div className="flex flex-col items-end gap-1.5">
-            {!sent && !reducedMotion ? <TypingDots /> : null}
             <OutboundBubble
               text={COPY.outreach.draft}
               sent={sent}
@@ -878,19 +1075,22 @@ function MessagesStage({
   name,
   meta,
   surfaceClass,
+  eyebrow,
   children,
 }: {
   initials: string;
   name: string;
   meta: string;
   surfaceClass: string;
+  eyebrow: ReactNode;
   children: ReactNode;
 }) {
   return (
     <div
       className={`hero-demo-tool flex h-full flex-col rounded-[1.15rem] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_30px_-18px_rgba(20,20,19,0.25)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] ${surfaceClass}`}
     >
-      <div className="mb-2.5 flex flex-col items-center gap-1 border-b border-brand-dark/[0.06] pb-2.5 dark:border-white/[0.07]">
+      {eyebrow}
+      <div className="mb-2 flex flex-col items-center gap-1 border-b border-brand-dark/[0.06] pb-2 dark:border-white/[0.07]">
         <Avatar initials={initials} size="md" />
         <p className="text-[12px] font-semibold leading-none text-brand-dark dark:text-brand-cream">
           {name}
@@ -953,6 +1153,13 @@ export function Stage({
           name="Tom"
           meta={COPY["quiet-leads"].leak}
           surfaceClass="bg-[#F7FAFF] ring-1 ring-[#0A84FF]/[0.15] dark:bg-[#181D25] dark:ring-[#0A84FF]/[0.24]"
+          eyebrow={
+            <StageEyebrow
+              icon={<MessageCircle className="h-3 w-3" aria-hidden />}
+              label="Leads"
+              className="text-[#0A84FF]"
+            />
+          }
         >
           <QuietLeadsScene beat={beat} reducedMotion={reducedMotion} />
         </MessagesStage>
@@ -975,12 +1182,12 @@ export function Stage({
     case "quotes":
       return (
         <LightToolStage
-          surfaceClass="bg-[#FAFAFE] ring-1 ring-[#5E5CE6]/[0.14] dark:bg-[#1B1B22] dark:ring-[#5E5CE6]/[0.22]"
+          surfaceClass="bg-[#FCFAFE] ring-1 ring-[#BF5AF2]/[0.14] dark:bg-[#201B23] dark:ring-[#BF5AF2]/[0.2]"
           eyebrow={
             <StageEyebrow
-              icon={<Mail className="h-3 w-3" aria-hidden />}
-              label="Inbox"
-              className="text-[#5E5CE6] dark:text-[#8583FF]"
+              icon={<ListChecks className="h-3 w-3" aria-hidden />}
+              label="Quotes"
+              className="text-[#9333CE] dark:text-[#D9A2FF]"
             />
           }
         >
@@ -1005,12 +1212,12 @@ export function Stage({
     case "inbox":
       return (
         <LightToolStage
-          surfaceClass="bg-[#FCFAFE] ring-1 ring-[#BF5AF2]/[0.14] dark:bg-[#201B23] dark:ring-[#BF5AF2]/[0.2]"
+          surfaceClass="bg-[#FAFAFE] ring-1 ring-[#5E5CE6]/[0.14] dark:bg-[#1B1B22] dark:ring-[#5E5CE6]/[0.22]"
           eyebrow={
             <StageEyebrow
-              icon={<ListChecks className="h-3 w-3" aria-hidden />}
+              icon={<Mail className="h-3 w-3" aria-hidden />}
               label="Inbox triage"
-              className="text-[#9333CE] dark:text-[#D9A2FF]"
+              className="text-[#5E5CE6] dark:text-[#8583FF]"
             />
           }
         >
@@ -1038,8 +1245,8 @@ export function Stage({
           surfaceClass="bg-[#FAFDFE] ring-1 ring-[#32ADE6]/[0.16] dark:bg-[#191F22] dark:ring-[#32ADE6]/[0.22]"
           eyebrow={
             <StageEyebrow
-              icon={<Package className="h-3 w-3" aria-hidden />}
-              label="Supplies"
+              icon={<ClipboardList className="h-3 w-3" aria-hidden />}
+              label="Payroll"
               className="text-[#0E7DAF] dark:text-[#6FC9F2]"
             />
           }
@@ -1101,8 +1308,8 @@ export function WaitGlyph({
       );
     case "quotes":
       return (
-        <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-[#5E5CE6] text-white">
-          <Mail className="h-3 w-3" aria-hidden />
+        <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-[#BF5AF2] text-white">
+          <ListChecks className="h-3 w-3" aria-hidden />
         </span>
       );
     case "calendar":
@@ -1113,8 +1320,8 @@ export function WaitGlyph({
       );
     case "inbox":
       return (
-        <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-[#BF5AF2] text-white">
-          <ListChecks className="h-3 w-3" aria-hidden />
+        <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-[#5E5CE6] text-white">
+          <Mail className="h-3 w-3" aria-hidden />
         </span>
       );
     case "check-ins":
@@ -1126,7 +1333,7 @@ export function WaitGlyph({
     case "busywork":
       return (
         <span className="flex h-6 w-6 items-center justify-center rounded-[8px] bg-[#32ADE6] text-white">
-          <Package className="h-3 w-3" aria-hidden />
+          <ClipboardList className="h-3 w-3" aria-hidden />
         </span>
       );
     case "outreach":
@@ -1188,7 +1395,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
           <span className="mt-2 flex items-center gap-1.5">
             <span
               aria-hidden
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#5E5CE6]"
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#BF5AF2]"
             />
             <span className="truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
               Sam · Estimate
@@ -1231,10 +1438,10 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-            Jim Reyes
+            Alex Rivera
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            14 months quiet
+            Job finished Tuesday
           </span>
         </>
       );
@@ -1242,10 +1449,10 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-            Shingles · 12 left
+            Friday payroll
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            Below reorder point
+            3 timesheets missing
           </span>
         </>
       );
@@ -1256,7 +1463,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
             Fall special ready
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            42 past customers
+            Email · text · voicemail
           </span>
         </>
       );
