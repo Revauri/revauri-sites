@@ -16,6 +16,7 @@ import {
   PhoneOff,
   Star,
   Users,
+  Voicemail,
 } from "lucide-react";
 
 export type JobId =
@@ -70,12 +71,12 @@ export function beatStartMs(jobId: JobId, beat: number): number {
 
 export const OWNER_CONTEXT: Record<JobId, string> = {
   "missed-calls": "You're at dinner.",
-  "quiet-leads": "You're on a job.",
+  "quiet-leads": "You're with a client.",
   reviews: "You're already on the next one.",
   quotes: "You're not chasing it.",
   calendar: "You're booked solid.",
   inbox: "You're still asleep.",
-  "check-ins": "You're off the site.",
+  "check-ins": "You're already gone.",
   busywork: "You're not chasing hours.",
   outreach: "You're not doing the marketing.",
 };
@@ -108,22 +109,23 @@ export const ACCENT_GLOW: Record<JobId, string> = {
 export const COPY = {
   "missed-calls": {
     incoming: "Fri 7:42 PM · After hours",
-    capture: "Maria Chen · roof leak · Thursday 9:00 AM",
+    capture: "Elena Vargas · tooth pain · Thursday 9:00 AM",
     draft:
-      "Maria — thanks for calling about the leak. We can come Thursday at 9. Want that?",
+      "Elena — thanks for calling. We can see you Thursday at 9. Want that?",
   },
   "quiet-leads": {
-    leak: "Quote request · 3 days quiet",
+    leak: "Booking request · 3 days quiet",
     line: "Agreed wait is over.",
     draft:
-      "Hey Tom — still want that estimate for the back roof, or should I close this out?",
+      "Hey Tom — Saturday's still open. Want me to hold it for color?",
   },
   reviews: {
-    leak: "Job finished Tuesday · no review ask yet",
-    ask: "Glad we got that leak sorted. If you have 30 seconds, a review helps more than you’d think.",
-    review: "Fixed the leak the same week. Professional and on time.",
+    leak: "Visit Tuesday · no review ask yet",
+    ask: "Glad Tuesday went well. If you have 30 seconds, a review helps more than you’d think.",
+    review: "Easy to book, and they ran on time. Will be back.",
+    review2: "Friendly staff. In and out in 40 minutes.",
     reply:
-      "Thanks Maria — glad the leak is sorted. Appreciate you taking the time.",
+      "Thanks Maria — so glad you liked it. Appreciate you taking the time.",
   },
   quotes: {
     leak: "Estimate sent · 11 days ago · no reply",
@@ -133,24 +135,23 @@ export const COPY = {
     reply: "YES — hold Thursday.",
   },
   calendar: {
-    leak: "Tomorrow 9:00 AM · roof inspection · unconfirmed",
+    leak: "Tomorrow 9:00 AM · cleaning · unconfirmed",
     line: "No confirmation yet.",
     draft:
-      "Hi Maria — confirming tomorrow at 9:00 AM for the roof inspection. Reply YES and we're all set.",
+      "Hi Maria — confirming tomorrow at 9:00 AM for your cleaning. Reply YES and we're all set.",
     reply: "YES",
   },
   inbox: {
-    leak: "7 unsorted messages overnight",
+    leak: "5 unsorted messages overnight",
     line: "Sorted before you're up.",
-    draft: "Inbox sorted — 5 filed, 1 spam gone, 1 real lead flagged for you.",
+    draft: "Inbox sorted — 3 filed, 1 spam gone, 1 booking flagged for you.",
   },
   "check-ins": {
-    leak: "Alex Rivera · job finished Tuesday",
+    leak: "Alex Rivera · oil change Tuesday",
     line: "Check-in due.",
-    ask: "How did we do on Tuesday's job?",
+    ask: "How did Tuesday's oil change go?",
     reply: "Great — thanks.",
-    draft:
-      "Glad it went well. Want us to look at the other side this fall?",
+    draft: "Glad it went well. Want us to book the next one in 3 months?",
   },
   busywork: {
     leak: "Friday payroll · 3 timesheets missing",
@@ -159,10 +160,10 @@ export const COPY = {
       "Hours in. OT flagged on Mike. Packet is ready for Gusto.",
   },
   outreach: {
-    leak: "Fall roof-check special · 42 past customers",
+    leak: "6-month recall · 42 patients",
     line: "Email, text, and voicemail queued.",
     draft:
-      "Storm season's close — we're booking free roof checks this month. Want yours on the list?",
+      "You're due for a visit — want us to get you on the book this month?",
   },
 } as const;
 
@@ -180,7 +181,10 @@ export function sceneAnnouncement(jobId: JobId, beat: number): string {
     case "reviews":
       parts.push(COPY.reviews.leak);
       if (beat >= 1) parts.push(`Draft: ${COPY.reviews.ask}`);
-      if (beat >= 2) parts.push(`5 star review: ${COPY.reviews.review}`);
+      if (beat >= 2) {
+        parts.push(`5 star review from Maria: ${COPY.reviews.review}`);
+        parts.push(`5 star review from Jordan: ${COPY.reviews.review2}`);
+      }
       if (beat >= 3) parts.push(`Draft: ${COPY.reviews.reply}`);
       break;
     case "quotes":
@@ -280,7 +284,7 @@ function InboundBubble({
 }) {
   return (
     <div
-      className={`max-w-[88%] rounded-[16px] rounded-bl-[6px] px-3 py-2 text-[13px] leading-[1.45] ${
+      className={`w-fit max-w-[88%] self-start rounded-[16px] rounded-bl-[6px] px-3 py-2 text-[13px] leading-[1.45] ${
         onDark
           ? "bg-[#3A3A3C] text-white"
           : "bg-[#E9E9EB] text-brand-dark dark:bg-[#3A3A3C] dark:text-white"
@@ -313,7 +317,7 @@ function OutboundBubble({
 }) {
   return (
     <div
-      className={`ml-auto flex max-w-[88%] flex-col items-end ${motionClass(reducedMotion, "hero-demo-bubble")}`}
+      className={`ml-auto inline-flex max-w-[88%] flex-col items-end self-end ${motionClass(reducedMotion, "hero-demo-bubble")}`}
     >
       <p className="rounded-[16px] rounded-br-[6px] bg-[#0A6BE0] px-3 py-2 text-[13px] leading-[1.45] text-white shadow-[0_2px_8px_-2px_rgba(10,107,224,0.4)]">
         {text}
@@ -424,7 +428,7 @@ function CallScene({ beat, reducedMotion }: { beat: number; reducedMotion: boole
               <Calendar className="h-3 w-3" aria-hidden />
               Thu 9:00 AM · Booked
             </p>
-            <p className="mt-0.5 text-[12px] text-white/70">Roof leak · Chen</p>
+            <p className="mt-0.5 text-[12px] text-white/70">Tooth pain · Vargas</p>
           </div>
         ) : null}
       </div>
@@ -451,12 +455,12 @@ function CallScene({ beat, reducedMotion }: { beat: number; reducedMotion: boole
               aria-hidden
               className="relative flex h-14 w-14 select-none items-center justify-center rounded-full bg-gradient-to-b from-[#A6A6AD] to-[#75757C] text-[18px] font-semibold tracking-wide text-white"
             >
-              MC
+              EV
             </span>
           </div>
           <div className="text-center">
             <p className="text-[17px] font-semibold leading-tight text-white">
-              Maria Chen
+              Elena Vargas
             </p>
             <p className="mt-1 text-[11px] text-white/65">
               Incoming · {COPY["missed-calls"].incoming}
@@ -487,7 +491,7 @@ function CallScene({ beat, reducedMotion }: { beat: number; reducedMotion: boole
               aria-hidden
               className="relative flex h-10 w-10 select-none items-center justify-center rounded-full bg-gradient-to-b from-[#A6A6AD] to-[#75757C] text-[13px] font-semibold tracking-wide text-white"
             >
-              MC
+              EV
             </span>
             <span
               aria-hidden
@@ -498,7 +502,7 @@ function CallScene({ beat, reducedMotion }: { beat: number; reducedMotion: boole
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[14px] font-semibold leading-tight text-white">
-              Maria Chen
+              Elena Vargas
             </p>
             <p className="mt-0.5 text-[11px] text-[#5CE28A]">
               Answered · {COPY["missed-calls"].incoming}
@@ -545,7 +549,7 @@ function QuietLeadsScene({
       >
         3 days ago
       </p>
-      <InboundBubble>Can I still get that estimate for the back roof?</InboundBubble>
+      <InboundBubble>Hi — do you have Saturday open for a full color?</InboundBubble>
       {beat >= 1 ? (
         <ActionChip text={COPY["quiet-leads"].line} reducedMotion={reducedMotion} />
       ) : null}
@@ -562,6 +566,11 @@ function QuietLeadsScene({
     </div>
   );
 }
+
+const POSTED_REVIEWS = [
+  { initials: "M", name: "Maria Chen", text: COPY.reviews.review },
+  { initials: "J", name: "Jordan Hale", text: COPY.reviews.review2 },
+] as const;
 
 function ReviewsScene({
   beat,
@@ -600,31 +609,43 @@ function ReviewsScene({
         </div>
       ) : null}
       {beat >= 2 ? (
-        <div
-          className={`rounded-xl bg-white px-3 py-2.5 shadow-[0_2px_10px_-4px_rgba(20,20,19,0.12)] ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.07] dark:shadow-none dark:ring-white/[0.08] ${motionClass(reducedMotion, "hero-demo-notify")}`}
-        >
-          <div className="flex items-center gap-2">
-            <Avatar initials="M" size="sm" />
-            <div className="min-w-0">
-              <p className="text-[12px] font-semibold leading-tight text-brand-dark dark:text-brand-cream">
-                Maria Chen
-              </p>
-              <p
-                className="mt-0.5 flex items-center gap-0.5 text-[#E6A817]"
-                aria-label="5 star review"
-              >
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star key={index} className="h-3 w-3 fill-current" aria-hidden />
-                ))}
-                <span className="ml-1 text-[10px] font-semibold uppercase tracking-wide text-brand-dark/45 dark:text-white/50">
-                  5 stars
-                </span>
+        <div className="flex flex-col gap-1.5">
+          {POSTED_REVIEWS.map((item, index) => (
+            <div
+              key={item.name}
+              className={`rounded-xl bg-white px-3 py-2 shadow-[0_2px_10px_-4px_rgba(20,20,19,0.12)] ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.07] dark:shadow-none dark:ring-white/[0.08] ${motionClass(reducedMotion, "hero-demo-notify")}`}
+              style={
+                reducedMotion ? undefined : { animationDelay: `${index * 120}ms` }
+              }
+            >
+              <div className="flex items-center gap-2">
+                <Avatar initials={item.initials} size="sm" />
+                <div className="min-w-0">
+                  <p className="text-[12px] font-semibold leading-tight text-brand-dark dark:text-brand-cream">
+                    {item.name}
+                  </p>
+                  <p
+                    className="mt-0.5 flex items-center gap-0.5 text-[#E6A817]"
+                    aria-label="5 star review"
+                  >
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <Star
+                        key={starIndex}
+                        className="h-3 w-3 fill-current"
+                        aria-hidden
+                      />
+                    ))}
+                    <span className="ml-1 text-[10px] font-semibold uppercase tracking-wide text-brand-dark/45 dark:text-white/50">
+                      5 stars
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-1.5 text-[13px] leading-[1.45] text-brand-dark dark:text-brand-cream">
+                {item.text}
               </p>
             </div>
-          </div>
-          <p className="mt-1.5 text-[13px] leading-[1.45] text-brand-dark dark:text-brand-cream">
-            {COPY.reviews.review}
-          </p>
+          ))}
         </div>
       ) : null}
       {beat >= 3 ? (
@@ -642,8 +663,8 @@ function ReviewsScene({
 }
 
 const OPEN_ESTIMATES = [
-  { name: "Sam", detail: "Estimate · 11 days", focus: true },
-  { name: "Lee", detail: "Estimate · 4 days", focus: false },
+  { name: "Sam", detail: "Patio · 11 days", focus: true },
+  { name: "Lee", detail: "Kitchen · 4 days", focus: false },
 ] as const;
 
 function QuotesScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
@@ -715,9 +736,9 @@ function QuotesScene({ beat, reducedMotion }: { beat: number; reducedMotion: boo
 }
 
 const DAY_SLOTS = [
-  { time: "9:00 AM", title: "Roof inspection · Chen", focus: true },
-  { time: "11:30 AM", title: "Gutter estimate · Reyes", focus: false },
-  { time: "2:00 PM", title: "Leak check · Patel", focus: false },
+  { time: "9:00 AM", title: "Cleaning · Chen", focus: true },
+  { time: "11:30 AM", title: "New patient · Reyes", focus: false },
+  { time: "2:00 PM", title: "Follow-up · Patel", focus: false },
 ] as const;
 
 function CalendarScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
@@ -789,10 +810,27 @@ function CalendarScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
 }
 
 const INBOX_ITEMS = [
-  { label: "Supplier invoice · Hargrove Roofing Supply", status: "Filed" },
+  { label: "Supplier invoice · Metro Supply Co", status: "Filed" },
+  { label: "Receipt · First National Bank", status: "Filed" },
   { label: "Promo blast · marketing list", status: "Deleted" },
-  { label: "New lead — roof quote, Cedar St", status: "Flagged for you" },
+  { label: "Insurance update · State Farm", status: "Filed" },
+  { label: "New reservation — Sat 7pm, party of 4", status: "Flagged for you" },
 ] as const;
+
+function inboxStatusClass(status: (typeof INBOX_ITEMS)[number]["status"]): string {
+  switch (status) {
+    case "Flagged for you":
+      return "bg-[#5E5CE6]/12 text-[#5E5CE6] dark:text-[#8583FF]";
+    case "Deleted":
+      return "bg-[#FF453A]/10 text-[#D0342A] dark:text-[#FF6961]";
+    case "Filed":
+      return "bg-[#30D158]/12 text-[#1E9E4A] dark:text-[#5CE28A]";
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
+  }
+}
 
 function InboxScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
   const sorted = beat >= 1;
@@ -821,11 +859,7 @@ function InboxScene({ beat, reducedMotion }: { beat: number; reducedMotion: bool
               </span>
               {sorted ? (
                 <span
-                  className={`shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] ${
-                    item.status === "Flagged for you"
-                      ? "bg-[#5E5CE6]/12 text-[#5E5CE6] dark:text-[#8583FF]"
-                      : "bg-[#30D158]/12 text-[#1E9E4A] dark:text-[#5CE28A]"
-                  } ${motionClass(reducedMotion, "hero-demo-notify")}`}
+                  className={`shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] ${inboxStatusClass(item.status)} ${motionClass(reducedMotion, "hero-demo-notify")}`}
                   style={
                     reducedMotion ? undefined : { animationDelay: `${index * 130}ms` }
                   }
@@ -876,7 +910,7 @@ function CheckInsScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
             </span>
           </div>
           <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
-            Job finished Tuesday · gutter replacement
+            Oil change Tuesday
           </p>
         </div>
       </div>
@@ -986,10 +1020,69 @@ function BusyworkScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
 }
 
 const OUTREACH_CHANNELS = [
-  { channel: "Email", count: "42", status: "Sent" },
-  { channel: "Text", count: "42", status: "Sent" },
-  { channel: "Voicemail", count: "18", status: "Dropped" },
+  {
+    channel: "Email",
+    count: "42",
+    status: "Sent",
+    preview: "You're due for a visit",
+  },
+  {
+    channel: "Text",
+    count: "42",
+    status: "Sent",
+    preview: "Openings this month — reply YES",
+  },
+  {
+    channel: "Voicemail",
+    count: "18",
+    status: "Dropped",
+    preview: "We're booking recalls this month…",
+  },
 ] as const;
+
+type OutreachChannel = (typeof OUTREACH_CHANNELS)[number]["channel"];
+
+function OutreachChannelMark({ channel }: { channel: OutreachChannel }) {
+  switch (channel) {
+    case "Email":
+      return (
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] bg-[#0A84FF]/12 text-[#0A84FF]">
+          <Mail className="h-3 w-3" aria-hidden />
+        </span>
+      );
+    case "Text":
+      return (
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] bg-[#30D158]/12 text-[#1E9E4A] dark:text-[#5CE28A]">
+          <MessageCircle className="h-3 w-3" aria-hidden />
+        </span>
+      );
+    case "Voicemail":
+      return (
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] bg-[#FF9F0A]/12 text-[#C77700] dark:text-[#FFB340]">
+          <Voicemail className="h-3 w-3" aria-hidden />
+        </span>
+      );
+    default: {
+      const _exhaustive: never = channel;
+      return _exhaustive;
+    }
+  }
+}
+
+function outreachStatusClass(channel: OutreachChannel): string {
+  switch (channel) {
+    case "Email":
+      return "bg-[#0A84FF]/12 text-[#0A6BE0] dark:text-[#7CB8FF]";
+    case "Text":
+      return "bg-[#30D158]/12 text-[#1E9E4A] dark:text-[#5CE28A]";
+    case "Voicemail":
+      return "bg-[#FF9F0A]/12 text-[#C77700] dark:text-[#FFB340]";
+    default: {
+      const _exhaustive: never = channel;
+      return _exhaustive;
+    }
+  }
+}
 
 function OutreachScene({ beat, reducedMotion }: { beat: number; reducedMotion: boolean }) {
   const sending = beat >= 1;
@@ -1000,70 +1093,65 @@ function OutreachScene({ beat, reducedMotion }: { beat: number; reducedMotion: b
       <div className="rounded-xl bg-brand-dark/[0.03] px-3 py-2.5 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06]">
         <div className="flex items-baseline justify-between gap-2">
           <p className="truncate text-[13px] font-semibold text-brand-dark dark:text-brand-cream">
-            Fall roof-check special
+            6-month recall
           </p>
           <span className="shrink-0 rounded-full bg-[#E0409A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-[#C22C7F] dark:text-[#F284C4]">
             {sent ? "Sent" : sending ? "Sending" : "Ready"}
           </span>
         </div>
         <p className="mt-0.5 text-[12px] leading-[1.45] text-brand-dark/60 dark:text-brand-cream/60">
-          42 past customers · not contacted this season
+          42 patients · not contacted this cycle
         </p>
-        <ul className="mt-2 flex flex-col gap-1.5">
+        <ul className="mt-2 flex flex-col gap-2">
           {OUTREACH_CHANNELS.map((item, index) => (
-            <li
-              key={item.channel}
-              className="flex items-center justify-between gap-2 text-[12px] leading-snug"
-            >
-              <span className="min-w-0 truncate text-brand-dark/80 dark:text-brand-cream/80">
-                {item.channel}
-                <span className="text-brand-dark/45 dark:text-white/45">
-                  {" "}
-                  · {item.count}
-                </span>
-              </span>
-              {sending ? (
-                <span
-                  className={`shrink-0 rounded-full bg-[#E0409A]/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] text-[#C22C7F] dark:text-[#F284C4] ${motionClass(reducedMotion, "hero-demo-notify")}`}
-                  style={
-                    reducedMotion ? undefined : { animationDelay: `${index * 130}ms` }
-                  }
-                >
-                  {beat >= 2 ? item.status : "Queued"}
-                </span>
-              ) : (
-                <span
-                  aria-hidden
-                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-dark/20 dark:bg-white/25"
-                />
-              )}
+            <li key={item.channel} className="flex items-start gap-2">
+              <OutreachChannelMark channel={item.channel} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate text-[12px] font-medium text-brand-dark dark:text-brand-cream">
+                    {item.channel}
+                    <span className="font-normal text-brand-dark/45 dark:text-white/45">
+                      {" "}
+                      · {item.count}
+                    </span>
+                  </span>
+                  {sending ? (
+                    <span
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.06em] ${outreachStatusClass(item.channel)} ${motionClass(reducedMotion, "hero-demo-notify")}`}
+                      style={
+                        reducedMotion
+                          ? undefined
+                          : { animationDelay: `${index * 130}ms` }
+                      }
+                    >
+                      {beat >= 2 ? item.status : "Queued"}
+                    </span>
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-dark/20 dark:bg-white/25"
+                    />
+                  )}
+                </div>
+                {beat >= 2 ? (
+                  <p className="mt-0.5 truncate text-[11px] text-brand-dark/55 dark:text-white/50">
+                    {item.preview}
+                  </p>
+                ) : null}
+              </div>
             </li>
           ))}
         </ul>
       </div>
-      <div className="mt-auto flex flex-col gap-2.5">
-        {beat >= 2 ? (
-          <div
-            className={`rounded-xl bg-brand-dark/[0.03] px-3 py-2 ring-1 ring-brand-dark/[0.05] dark:bg-white/[0.05] dark:ring-white/[0.06] ${motionClass(reducedMotion, "hero-demo-notify")}`}
-          >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-dark/45 dark:text-white/45">
-              Email
-            </p>
-            <p className="mt-0.5 text-[12px] font-medium text-brand-dark dark:text-brand-cream">
-              Free roof check before storm season
-            </p>
-          </div>
-        ) : null}
-        {beat >= 3 ? (
-          <div className="flex flex-col items-end gap-1.5">
-            <OutboundBubble
-              text={COPY.outreach.draft}
-              sent={sent}
-              reducedMotion={reducedMotion}
-            />
-          </div>
-        ) : null}
-      </div>
+      {beat >= 3 ? (
+        <div className="mt-auto flex flex-col items-end gap-1.5">
+          <OutboundBubble
+            text={COPY.outreach.draft}
+            sent={sent}
+            reducedMotion={reducedMotion}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -1355,7 +1443,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-            Maria Chen
+            Elena Vargas
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
             Incoming · 7:42 PM
@@ -1366,7 +1454,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block w-fit max-w-full truncate rounded-[10px] rounded-bl-[4px] bg-[#E9E9EB] px-2 py-1 text-[11px] text-brand-dark dark:bg-[#3A3A3C] dark:text-white">
-            Can I still get that estimate…
+            Do you have Saturday…
           </span>
           <span className="mt-1 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
             Tom · 3 days quiet
@@ -1398,7 +1486,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
               className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#BF5AF2]"
             />
             <span className="truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-              Sam · Estimate
+              Sam · Patio
             </span>
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
@@ -1419,7 +1507,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
             </span>
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            Inspection · unconfirmed
+            Cleaning · unconfirmed
           </span>
         </>
       );
@@ -1427,10 +1515,10 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-            7 unsorted overnight
+            5 unsorted overnight
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            Invoices · spam · 1 lead
+            Invoices · spam · 1 booking
           </span>
         </>
       );
@@ -1441,7 +1529,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
             Alex Rivera
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
-            Job finished Tuesday
+            Oil change Tuesday
           </span>
         </>
       );
@@ -1460,7 +1548,7 @@ export function WaitVignette({ jobId }: { jobId: JobId }) {
       return (
         <>
           <span className="mt-2 block truncate text-[12.5px] font-semibold text-brand-dark dark:text-brand-cream">
-            Fall special ready
+            Recall list ready
           </span>
           <span className="mt-0.5 block truncate text-[11px] text-brand-dark/50 dark:text-white/50">
             Email · text · voicemail

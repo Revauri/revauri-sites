@@ -53,11 +53,11 @@ export function HeroHireDemo() {
     <div className="relative isolate w-full">
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-4 rounded-[2.25rem] bg-[radial-gradient(ellipse_at_center,rgba(217,119,87,0.18)_0%,rgba(217,119,87,0.06)_38%,rgba(217,119,87,0)_58%)] blur-xl"
+        className="pointer-events-none absolute -inset-2 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(217,119,87,0.16)_0%,rgba(217,119,87,0.05)_32%,rgba(217,119,87,0)_50%)] blur-lg"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-5 rounded-[2.5rem] blur-2xl transition-colors duration-700 ease-out"
+        className="pointer-events-none absolute -inset-3 rounded-[2.125rem] blur-xl transition-colors duration-700 ease-out"
         style={{ backgroundColor: ACCENT_GLOW[jobId] }}
       />
 

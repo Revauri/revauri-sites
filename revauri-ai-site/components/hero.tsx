@@ -28,17 +28,20 @@ export function Hero() {
 
             <FadeInWhenVisible delay={0.14}>
               <p className="max-w-xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                We build it. We run it. After a short setup, it works while
-                you&apos;re on a job — and while you&apos;re off the clock. You
-                keep the time, and more of the money.
+                We build it. We run it. A custom AI agent that automates the
+                busy work and keeps your business earning while you&apos;re on
+                the job or off the clock. You keep the money, and more of your
+                time.
               </p>
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.18}>
               <p className="max-w-xl text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                That includes the phone. Missed, after-hours, and overflow calls
-                get handled instead of dying in voicemail — without putting
-                another person on the line.
+                Answering after hours, taking the name, booking the visit so
+                the job doesn&apos;t die in voicemail. And it&apos;s not just
+                the phone. Leads, quotes, reviews, emails, payroll, outreach,
+                calendar management — if you can name it, we can build it. All
+                without putting another person on payroll.
               </p>
             </FadeInWhenVisible>
 
@@ -64,7 +67,7 @@ export function Hero() {
 
             <FadeInWhenVisible delay={0.3}>
               <p className="pt-4 text-xs text-brand-mid-gray">
-                After setup, you don&apos;t live in the busywork.
+                After setup, the agent runs the busywork — you don&apos;t.
               </p>
             </FadeInWhenVisible>
           </div>
