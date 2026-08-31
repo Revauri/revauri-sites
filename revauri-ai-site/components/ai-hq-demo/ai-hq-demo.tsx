@@ -5,10 +5,19 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUp,
+  Calendar,
   Check,
   ChevronDown,
+  FileText,
   Folder,
+  Inbox,
+  Phone,
   Search,
+  Send,
+  Star,
+  Users,
+  Wallet,
+  type LucideIcon,
 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import {
@@ -184,6 +193,21 @@ function nodePoint(index: number, radius: number): { x: number; y: number } {
   return { x: CX + radius * Math.cos(rad), y: CY + radius * Math.sin(rad) };
 }
 
+/** Inner spoke dots sit just off the hub. Left/right need more radius
+ *  because the card is wider than it is tall (same visual gap as top/bottom). */
+function innerSpokeR(index: number): number {
+  return index % 4 === 2 ? 58 : 44;
+}
+
+/** Outer spoke dots sit just shy of the job pill. Left/right and
+ *  diagonals need a shorter radius because the pill is wider than tall. */
+function outerSpokeR(index: number): number {
+  const slot = index % 4;
+  if (slot === 0) return 175;
+  if (slot === 2) return 150;
+  return 167;
+}
+
 /**
  * Ghost sub-trees continuing outward past each node, one entry per node
  * (clockwise from top). All connectors are orthogonal, org-chart style:
@@ -214,29 +238,29 @@ const GHOSTS: {
   {
     // Leads (NE): out right, elbow up
     lines: [
-      [444, 116, 476, 116],
-      [476, 116, 476, 104],
+      [444, 116, 490, 116],
+      [490, 116, 490, 104],
     ],
-    dots: [[476, 116]],
-    cards: [[476, 85]],
+    dots: [[490, 116]],
+    cards: [[490, 85]],
   },
   {
     // Quotes (right): out right, elbow down
     lines: [
-      [504, 260, 536, 260],
-      [536, 260, 536, 272],
+      [504, 260, 550, 260],
+      [550, 260, 550, 272],
     ],
-    dots: [[536, 260]],
-    cards: [[536, 291]],
+    dots: [[550, 260]],
+    cards: [[550, 291]],
   },
   {
     // Reviews (SE): out right, elbow down
     lines: [
-      [444, 404, 476, 404],
-      [476, 404, 476, 416],
+      [444, 404, 490, 404],
+      [490, 404, 490, 416],
     ],
-    dots: [[476, 404]],
-    cards: [[476, 435]],
+    dots: [[490, 404]],
+    cards: [[490, 435]],
   },
   {
     // Calendar (bottom): stub down, T-bar, two children below
@@ -258,29 +282,29 @@ const GHOSTS: {
   {
     // Inbox (SW): out left, elbow down
     lines: [
-      [76, 404, 44, 404],
-      [44, 404, 44, 416],
+      [76, 404, 30, 404],
+      [30, 404, 30, 416],
     ],
-    dots: [[44, 404]],
-    cards: [[44, 435]],
+    dots: [[30, 404]],
+    cards: [[30, 435]],
   },
   {
     // Payroll (left): out left, elbow down
     lines: [
-      [16, 260, -16, 260],
-      [-16, 260, -16, 272],
+      [16, 260, -30, 260],
+      [-30, 260, -30, 272],
     ],
-    dots: [[-16, 260]],
-    cards: [[-16, 291]],
+    dots: [[-30, 260]],
+    cards: [[-30, 291]],
   },
   {
     // Outreach (NW): out left, elbow up
     lines: [
-      [76, 116, 44, 116],
-      [44, 116, 44, 104],
+      [76, 116, 30, 116],
+      [30, 116, 30, 104],
     ],
-    dots: [[44, 116]],
-    cards: [[44, 85]],
+    dots: [[30, 116]],
+    cards: [[30, 85]],
   },
 ];
 
@@ -358,6 +382,17 @@ function NodeBadge({ counts }: { counts: BadgeCounts }) {
   );
 }
 
+const NODE_ICONS: Record<NodeId, LucideIcon> = {
+  calls: Phone,
+  leads: Users,
+  quotes: FileText,
+  reviews: Star,
+  calendar: Calendar,
+  inbox: Inbox,
+  payroll: Wallet,
+  outreach: Send,
+};
+
 function OrbitalDiagram({
   litBadges,
   flashNodes,
@@ -388,8 +423,8 @@ function OrbitalDiagram({
 
         {/* Spokes from center card to each node, with endpoint dots */}
         {NODES.map((node, i) => {
-          const p1 = nodePoint(i, 44);
-          const p2 = nodePoint(i, 183);
+          const p1 = nodePoint(i, innerSpokeR(i));
+          const p2 = nodePoint(i, outerSpokeR(i));
           return (
             <g key={`spoke-${node.id}`}>
               <line
@@ -408,25 +443,59 @@ function OrbitalDiagram({
           );
         })}
 
-        {/* Story flash: a brighter draw from center toward the nodes that
-            just received work, fired when a scenario's tasks appear */}
+        {/* Story flash: the spoke lights up and a hub-style dot travels
+            along it when a scenario's tasks appear */}
         {!reducedMotion
           ? NODES.map((node, i) => {
               if (!flashNodes.includes(node.id)) return null;
-              const p1 = nodePoint(i, 44);
-              const p2 = nodePoint(i, 183);
+              const p1 = nodePoint(i, innerSpokeR(i));
+              const p2 = nodePoint(i, outerSpokeR(i));
               return (
-                <line
-                  key={`flash-${flashKey}-${node.id}`}
-                  x1={p1.x}
-                  y1={p1.y}
-                  x2={p2.x}
-                  y2={p2.y}
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeDasharray="139"
-                  className="ai-hq-spoke-flash stroke-brand-orange"
-                />
+                <g key={`flash-${flashKey}-${node.id}`}>
+                  <line
+                    x1={p1.x}
+                    y1={p1.y}
+                    x2={p2.x}
+                    y2={p2.y}
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    className="ai-hq-spoke-flash-line stroke-brand-orange"
+                  />
+                  <circle
+                    r="2.5"
+                    cx={p1.x}
+                    cy={p1.y}
+                    strokeWidth="0.5"
+                    className="ai-hq-spoke-flash fill-brand-orange stroke-brand-orange"
+                  />
+                  <circle
+                    r="2.5"
+                    cx={p2.x}
+                    cy={p2.y}
+                    strokeWidth="0.5"
+                    className="ai-hq-spoke-flash fill-brand-orange stroke-brand-orange"
+                  />
+                  <circle
+                    r="2.5"
+                    cx={p1.x}
+                    cy={p1.y}
+                    strokeWidth="0.5"
+                    className="ai-hq-spoke-flash fill-brand-orange stroke-brand-orange"
+                  >
+                    <animate
+                      attributeName="cx"
+                      values={`${p1.x};${p2.x}`}
+                      dur="0.85s"
+                      fill="freeze"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values={`${p1.y};${p2.y}`}
+                      dur="0.85s"
+                      fill="freeze"
+                    />
+                  </circle>
+                </g>
               );
             })
           : null}
@@ -464,8 +533,8 @@ function OrbitalDiagram({
         {/* Subtle orange pulses traveling from the center toward each job */}
         {!reducedMotion
           ? NODES.map((node, i) => {
-              const p1 = nodePoint(i, 48);
-              const p2 = nodePoint(i, 180);
+              const p1 = nodePoint(i, innerSpokeR(i) + 4);
+              const p2 = nodePoint(i, outerSpokeR(i));
               const dur = "3.6s";
               const begin = `${(i * 0.45).toFixed(2)}s`;
               return (
@@ -510,23 +579,29 @@ function OrbitalDiagram({
         {NODES.map((node, i) => {
           const p = nodePoint(i, RING_R);
           const active = Boolean(litBadges[node.id]);
+          const Icon = NODE_ICONS[node.id];
           return (
             <foreignObject
               key={`node-${node.id}`}
-              x={p.x - 55}
+              x={p.x - 62}
               y={p.y - 26}
-              width="110"
+              width="124"
               height="52"
               className="overflow-visible"
             >
               <div className="flex h-full w-full items-center justify-center">
                 <div
-                  className={`flex w-[74px] items-center justify-center rounded-[7px] bg-white px-2 py-3 text-center text-[11px] leading-tight transition-colors duration-500 max-sm:w-[88px] max-sm:py-3.5 max-sm:text-[13px] dark:bg-[#2A2824] ${
+                  className={`flex w-[88px] items-center justify-center gap-1 rounded-[7px] bg-white px-1.5 py-3 text-center text-[11px] leading-tight transition-colors duration-500 max-sm:w-[102px] max-sm:py-3.5 max-sm:text-[13px] dark:bg-[#2A2824] ${
                     active
                       ? "font-medium text-brand-orange"
                       : "text-brand-dark/60 dark:text-brand-cream/60"
                   } ${HAIRLINE_CARD_SHADOW}`}
                 >
+                  <Icon
+                    aria-hidden
+                    className="h-2.5 w-2.5 shrink-0 max-sm:h-3 max-sm:w-3"
+                    strokeWidth={1.75}
+                  />
                   {node.label}
                 </div>
               </div>
@@ -542,13 +617,15 @@ function OrbitalDiagram({
           return (
             <foreignObject
               key={`badge-${node.id}`}
-              x={p.x - 4}
-              y={p.y - 40}
+              x={p.x - 55}
+              y={p.y - 41}
               width="110"
-              height="30"
+              height="24"
               className="overflow-visible"
             >
-              <NodeBadge counts={counts} />
+              <div className="flex h-full w-full items-start justify-center">
+                <NodeBadge counts={counts} />
+              </div>
             </foreignObject>
           );
         })}
