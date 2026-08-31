@@ -230,6 +230,52 @@
   }
 }
 
+/* AI employee HQ demo (cofounder-style section) */
+@keyframes ai-hq-section-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ai-hq-block-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ai-hq-badge-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes ai-hq-badge-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+
+.ai-hq-section-in {
+  animation: ai-hq-section-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.ai-hq-block-in {
+  animation: ai-hq-block-in 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.ai-hq-badge-in {
+  animation: ai-hq-badge-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.ai-hq-badge-blink {
+  animation: ai-hq-badge-blink 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-hq-section-in,
+  .ai-hq-block-in,
+  .ai-hq-badge-in,
+  .ai-hq-badge-blink {
+    animation: none;
+  }
+}
+
 /* Honeycomb pattern for hero section */
 .hero-honeycomb {
   background-image:
