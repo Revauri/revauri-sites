@@ -82,7 +82,7 @@ export function Header() {
               href="/book"
               className="rounded-xl bg-brand-orange px-5 py-[0.55rem] text-sm font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_14px_-2px_rgba(217,119,87,0.45)] transition-[box-shadow,filter] duration-300 hover:shadow-[0_2px_4px_rgba(0,0,0,0.06),0_8px_24px_-4px_rgba(217,119,87,0.55)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange active:brightness-[0.97]"
             >
-              Book a call
+              Hire one
             </Link>
           </nav>
 
@@ -173,7 +173,7 @@ export function Header() {
                   onClick={() => setMenuOpen(false)}
                   className="mt-2 inline-block rounded-xl bg-brand-orange px-8 py-[0.6875rem] text-base font-semibold text-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_14px_-2px_rgba(217,119,87,0.45)] transition-[box-shadow,filter] duration-300 hover:shadow-[0_2px_4px_rgba(0,0,0,0.06),0_8px_24px_-4px_rgba(217,119,87,0.55)] active:brightness-[0.97]"
                 >
-                  Book a call
+                  Hire one
                 </Link>
               </motion.div>
             </motion.nav>

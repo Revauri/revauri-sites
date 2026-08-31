@@ -28,7 +28,7 @@ export function Footer() {
                   <Link href="/pricing">Pricing</Link>
                 </FooterLink>
                 <FooterLink>
-                  <Link href="/book">Book a call</Link>
+                  <Link href="/book">Hire one</Link>
                 </FooterLink>
               </ul>
             </div>

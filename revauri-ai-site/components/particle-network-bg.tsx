@@ -11,7 +11,7 @@ type Particle = {
   length: number;
 };
 
-const PARTICLE_COUNT = 420;
+const PARTICLE_COUNT = 315;
 const SPEED_MULTIPLIER = 1.1;
 const FOV = 260;
 const DEPTH = 1000;

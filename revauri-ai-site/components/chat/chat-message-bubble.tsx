@@ -271,7 +271,7 @@ export function ChatMessageBubble({
           );
         } else {
           // An earlier message can never receive its output (e.g. a session
-          // restored mid-fetch) — degrade to the plain "Book a call" card
+          // restored mid-fetch) — degrade to the plain "Hire one" card
           // instead of pulsing forever. No chip: it never checked.
           blocks.push(
             <Arrival key={part.toolCallId}>

@@ -155,7 +155,7 @@ export default function AboutPage() {
               href="/book"
               className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
-              Book a call
+              Hire one
               <ArrowRight className="h-4 w-4" />
             </Link>
           </FadeInWhenVisible>

@@ -3,16 +3,16 @@
 export const HERO_COPY = {
   h1Line1: "Hire an AI employee.",
   h1Line2: "Not another salary.",
-  body: "We build it. We run it. The busywork leaves your plate while you stay on the job — and off the clock.",
-  primary: "Book a call",
-  secondary: "See the jobs",
-  micro: "After setup, you are not in the busywork.",
+  body: "We build it. We run it. The work leaves your plate so you can focus on what matters — on and off the clock.",
+  primary: "Hire one",
+  secondary: "Check out what it does",
+  micro: "A custom-built agent that reports results, not complaints.",
 } as const;
 
 export const FINAL_CTA_COPY = {
   h2: "Ready to hand the work off?",
-  body: "Book a short call. Name the job. We take it from there — and quote it against hiring a person, not against a software tool.",
-  button: "Book a call",
+  body: "Twenty minutes. Name the job. We take it from there — and quote it against hiring a person, not against a software tool.",
+  button: "Hire one",
   chip: "No obligation",
 } as const;
 
@@ -20,7 +20,7 @@ export const SUPPORT_COPY = {
   h2: "Need a hand?",
   channels: [
     {
-      title: "Book a call",
+      title: "Hire one",
       line: "The work you want off your plate",
       cta: "Schedule now",
     },
@@ -70,10 +70,10 @@ export const PAGE_HEROES = {
   contact: {
     badge: "Contact",
     title: "Get in touch",
-    subtitle: "Name the job. Or book a call — that’s faster.",
+    subtitle: "Send a note. Or hire one — that’s faster.",
   },
   book: {
-    badge: "Book a call",
+    badge: "The hire",
     title: "Name the job",
     muted: "you’d otherwise hire for",
     subtitle:

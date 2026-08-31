@@ -123,7 +123,7 @@ export default function PricingPage() {
               How to start
             </h2>
             <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              Book a call and name the job you’d otherwise hire for. We look at
+              Name the job you’d otherwise hire for. We look at
               it, tell you whether we can take it, and quote it before anything
               gets built.
             </p>
@@ -132,7 +132,7 @@ export default function PricingPage() {
                 href="/book"
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
               >
-                Book a call
+                Hire one
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

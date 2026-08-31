@@ -51,7 +51,7 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
           href="/book#scheduler"
           className="mt-1 inline-block w-fit rounded-full bg-brand-dark px-3.5 py-2 text-xs font-semibold text-white dark:bg-brand-cream dark:text-brand-dark"
         >
-          Book a call
+          Hire one
         </a>
       </div>
     );

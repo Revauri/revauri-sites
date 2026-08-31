@@ -99,6 +99,72 @@
   }
 }
 
+@keyframes kanban-flow {
+  to {
+    stroke-dashoffset: -17;
+  }
+}
+
+.kanban-flow {
+  animation: kanban-flow 1.4s linear infinite;
+}
+
+@keyframes kanban-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kanban-card-in {
+  animation: kanban-card-in 0.7s ease-out both;
+}
+
+@keyframes kanban-card-lit {
+  from {
+    opacity: 0.38;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kanban-card-lit {
+  animation: kanban-card-lit 0.45s ease-out both;
+}
+
+@keyframes kanban-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.kanban-draw {
+  animation: kanban-draw 1.35s ease-in-out forwards;
+}
+
+@keyframes kanban-hop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.kanban-hop {
+  animation:
+    kanban-hop-in 0.65s ease-out both,
+    kanban-flow 1.4s linear 0.65s infinite;
+}
+
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(217, 119, 87, 0.25); }
   50% { box-shadow: 0 0 35px rgba(217, 119, 87, 0.45); }
@@ -183,6 +249,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .kanban-flow,
+  .kanban-card-in,
+  .kanban-card-lit,
+  .kanban-draw,
+  .kanban-hop {
+    animation: none;
+  }
+
   .ai-hq-section-in,
   .ai-hq-block-in,
   .ai-hq-badge-in,

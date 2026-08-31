@@ -6,9 +6,9 @@ import { PAGE_HEROES } from "@/lib/marketing-copy";
 import { Booking } from "@/components/booking";
 
 export const metadata: Metadata = {
-  title: "Book a Call — Revauri AI",
+  title: "Name the job — Revauri AI",
   description:
-    "Book a 20-minute call with Revauri AI. Tell us the job you'd otherwise hire for. We'll tell you whether an AI employee can take it — and quote it against hiring a person.",
+    "Name the job you'd otherwise hire for. Twenty minutes. We'll tell you whether an AI employee can take it — and quote it against hiring a person.",
   alternates: { canonical: "/book" },
 };
 

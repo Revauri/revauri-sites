@@ -55,7 +55,7 @@ export default function FAQPage() {
                   href="/book"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white"
                 >
-                  Book a call <ArrowRight className="h-4 w-4" />
+                  Hire one <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="mailto:joseph@revauri.com"

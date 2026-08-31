@@ -17,7 +17,7 @@ export function followupsFor(message: UIMessage): string[] {
     }
   }
   if (hasCardCta) return [];
-  return ["What jobs can you take?", "How does pricing work?", "Book a call"];
+  return ["What jobs can you take?", "How does pricing work?", "Hire one"];
 }
 
 export function FollowupChips({

@@ -121,7 +121,7 @@ export const getProjectHighlight = tool({
 });
 
 // Server-side tool: fetches live availability from Calendly and renders an
-// inline booking card. Degrades to a fallback "Book a call" card on any
+// inline booking card. Degrades to a fallback "Hire one" card on any
 // failure (see lib/chat/calendly.ts) — the model never sees an error.
 export const offerBooking = tool({
   description:

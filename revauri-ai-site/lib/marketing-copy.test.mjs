@@ -27,26 +27,26 @@ test("hero copy matches the plan verbatim", () => {
   assert.equal(HERO_COPY.h1Line2, "Not another salary.");
   assert.equal(
     HERO_COPY.body,
-    "We build it. We run it. The busywork leaves your plate while you stay on the job — and off the clock.",
+    "We build it. We run it. The work leaves your plate so you can focus on what matters — on and off the clock.",
   );
-  assert.equal(HERO_COPY.primary, "Book a call");
-  assert.equal(HERO_COPY.secondary, "See the jobs");
-  assert.equal(HERO_COPY.micro, "After setup, you are not in the busywork.");
+  assert.equal(HERO_COPY.primary, "Hire one");
+  assert.equal(HERO_COPY.secondary, "Check out what it does");
+  assert.equal(HERO_COPY.micro, "A custom-built agent that reports results, not complaints.");
 });
 
 test("final CTA, support, and footer blurb match the plan verbatim", () => {
   assert.equal(FINAL_CTA_COPY.h2, "Ready to hand the work off?");
   assert.equal(
     FINAL_CTA_COPY.body,
-    "Book a short call. Name the job. We take it from there — and quote it against hiring a person, not against a software tool.",
+    "Twenty minutes. Name the job. We take it from there — and quote it against hiring a person, not against a software tool.",
   );
-  assert.equal(FINAL_CTA_COPY.button, "Book a call");
+  assert.equal(FINAL_CTA_COPY.button, "Hire one");
   assert.equal(FINAL_CTA_COPY.chip, "No obligation");
   assert.equal(SUPPORT_COPY.h2, "Need a hand?");
   assert.deepEqual(
     SUPPORT_COPY.channels.map((c) => [c.title, c.line, c.cta]),
     [
-      ["Book a call", "The work you want off your plate", "Schedule now"],
+      ["Hire one", "The work you want off your plate", "Schedule now"],
       ["Email us", "We reply within a few hours", "joseph@revauri.com"],
       ["Browse FAQ", "Answers to common questions", "View FAQ"],
     ],
@@ -76,7 +76,7 @@ test("PageHero table strings match the plan verbatim", () => {
   assert.equal(PAGE_HEROES.contact.title, "Get in touch");
   assert.equal(
     PAGE_HEROES.contact.subtitle,
-    "Name the job. Or book a call — that’s faster.",
+    "Send a note. Or hire one — that’s faster.",
   );
   assert.equal(PAGE_HEROES.book.title, "Name the job");
   assert.equal(PAGE_HEROES.book.muted, "you’d otherwise hire for");

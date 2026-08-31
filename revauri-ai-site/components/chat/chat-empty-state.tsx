@@ -13,19 +13,19 @@ type StarterRow = { label: string; icon: LucideIcon };
 const DEFAULT_ROWS: StarterRow[] = [
   { label: "What jobs can you take?", icon: ListChecks },
   { label: "How does pricing work?", icon: DollarSign },
-  { label: "Book a call", icon: Calendar },
+  { label: "Hire one", icon: Calendar },
 ];
 
 const PRICING_ROWS: StarterRow[] = [
   { label: "How does pricing work?", icon: DollarSign },
   { label: "What's included?", icon: ListChecks },
-  { label: "Book a call", icon: Calendar },
+  { label: "Hire one", icon: Calendar },
 ];
 
 const CAPABILITIES_ROWS: StarterRow[] = [
   { label: "Can it answer my phone?", icon: Phone },
   { label: "What if my job isn't on the list?", icon: ListChecks },
-  { label: "Book a call", icon: Calendar },
+  { label: "Hire one", icon: Calendar },
 ];
 
 // Always exactly three rows; only the copy varies by page.

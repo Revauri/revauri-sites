@@ -1136,7 +1136,7 @@ export function AiHqDemo() {
             href="/book"
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-[15px] font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
           >
-            Book a call
+            Name the job
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

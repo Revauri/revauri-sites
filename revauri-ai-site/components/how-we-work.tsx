@@ -33,13 +33,13 @@ export function HowWeWork() {
               <span className="section-h2-muted">Then we keep it running.</span>
             </h2>
             <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-              Read the steps. Then book a call and name the job.
+              Read the steps. Then hire one.
             </p>
             <Link
               href="/book"
               className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
-              Book a call
+              Hire one
             </Link>
           </div>
         </FadeInWhenVisible>

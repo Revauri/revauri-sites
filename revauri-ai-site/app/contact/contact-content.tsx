@@ -70,7 +70,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
             <ContactMethod
               href="/book"
               icon={<Phone className="h-4 w-4" aria-hidden="true" />}
-              label="Book a 20-minute call"
+              label="Hire one"
               internal
             />
             <ContactMethod
@@ -126,7 +126,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       Need to talk sooner?
                     </p>
                     <p className="mt-2 text-xs leading-5 text-brand-dark/60 dark:text-brand-cream/60">
-                      Book a 20-minute call instead if you&apos;d rather talk it through out
+                      Pick a time instead if you&apos;d rather talk it through out
                       loud. No obligation.
                     </p>
                   </div>
@@ -136,7 +136,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                     href="/book"
                     className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-brand-orange px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
                   >
-                    Book a Call
+                    Hire one
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link

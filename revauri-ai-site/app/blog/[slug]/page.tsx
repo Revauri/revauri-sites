@@ -185,7 +185,7 @@ export default async function BlogPostPage(
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Name the job. We take it from there.
+              Twenty minutes. Name the job. We take it from there.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
@@ -193,7 +193,7 @@ export default async function BlogPostPage(
               href="/book"
               className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
-              Book a call
+              Hire one
               <ArrowRight className="h-4 w-4" />
             </Link>
           </FadeInWhenVisible>

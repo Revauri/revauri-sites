@@ -6,7 +6,7 @@ import { ContactContent } from "./contact-content";
 export const metadata: Metadata = {
   title: "Contact — Revauri AI",
   description:
-    "Tell us the job you'd otherwise hire for. We'll take it off you. Or book a call — that's the faster way to get an answer.",
+    "Tell us the job you'd otherwise hire for. We'll take it off you. Or hire one — that's the faster way to get an answer.",
   alternates: { canonical: "/contact" },
 };
 

@@ -52,11 +52,11 @@ export default function BlogPage() {
               <p className="text-lg text-brand-dark/60 dark:text-brand-cream/60">
                 Notes are coming.{" "}
                 <Link href="/capabilities" className="font-medium text-brand-orange hover:underline">
-                  See the jobs
+                  Check out what it does
                 </Link>{" "}
                 or{" "}
                 <Link href="/book" className="font-medium text-brand-orange hover:underline">
-                  book a call
+                  hire one
                 </Link>
                 .
               </p>
@@ -166,7 +166,7 @@ export default function BlogPage() {
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Name the job. We take it from there.
+              Twenty minutes. Name the job. We take it from there.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
@@ -174,7 +174,7 @@ export default function BlogPage() {
               href="/book"
               className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
-              Book a call
+              Hire one
               <ArrowRight className="h-4 w-4" />
             </Link>
           </FadeInWhenVisible>

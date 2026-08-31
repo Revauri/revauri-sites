@@ -3,7 +3,7 @@
 // CALENDLY_TOKEN env var (a free Calendly personal access token). Every
 // failure mode — missing token, network error, timeout, zero availability —
 // resolves to { fallback: true } so the booking card can degrade to a plain
-// "Book a call" link; this must never surface an error to the visitor.
+// "Hire one" link; this must never surface an error to the visitor.
 
 const API_BASE = "https://api.calendly.com";
 // The event type embedded on /book (see components/booking.tsx).

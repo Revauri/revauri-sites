@@ -142,7 +142,7 @@ export function DetailPanel({
             href="/book"
             className="inline-flex min-h-11 items-center justify-center rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
           >
-            Book a call
+            Hire one
           </Link>
         </div>
       </div>
