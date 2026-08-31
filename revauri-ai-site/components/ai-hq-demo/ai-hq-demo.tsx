@@ -286,15 +286,35 @@ const GHOSTS: {
 
 function GhostCard({ x, y }: { x: number; y: number }) {
   return (
-    <rect
-      x={x - 26}
-      y={y - 17}
-      width="52"
-      height="34"
-      rx="6"
-      className="fill-white stroke-brand-dark/10 opacity-30 dark:fill-white/[0.06] dark:stroke-white/10"
-      strokeWidth="0.8"
-    />
+    <g className="opacity-30">
+      <rect
+        x={x - 26}
+        y={y - 17}
+        width="52"
+        height="34"
+        rx="6"
+        className="fill-white stroke-brand-dark/10 dark:fill-white/[0.06] dark:stroke-white/10"
+        strokeWidth="0.8"
+      />
+      <line
+        x1={x - 14}
+        y1={y - 4}
+        x2={x + 6}
+        y2={y - 4}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        className="stroke-brand-dark/45 dark:stroke-white/45"
+      />
+      <line
+        x1={x - 14}
+        y1={y + 5}
+        x2={x + 13}
+        y2={y + 5}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        className="stroke-brand-dark/35 dark:stroke-white/35"
+      />
+    </g>
   );
 }
 
@@ -884,6 +904,21 @@ function ChatPanel({
 /* Section                                                             */
 /* ------------------------------------------------------------------ */
 
+const FEATURE_BLURBS = [
+  {
+    title: "Always answering",
+    body: "Calls, texts, and emails get picked up the moment they arrive, day or night.",
+  },
+  {
+    title: "You stay in control",
+    body: "Anything customer-facing waits for your approval before it sends.",
+  },
+  {
+    title: "Built for your trade",
+    body: "Every agent is set up around how your business actually runs.",
+  },
+] as const;
+
 export function AiHqDemo() {
   const reducedMotion = Boolean(useReducedMotion());
   const sectionRef = useRef<HTMLElement>(null);
@@ -1074,36 +1109,21 @@ export function AiHqDemo() {
         </div>
 
         {/* Feature blurbs */}
-        <div className="mt-10 grid w-full grid-cols-1 gap-6 min-[1000px]:mt-20 min-[1000px]:grid-cols-3 min-[1000px]:gap-10">
-          <p className="m-0 max-w-[473px] text-[15px] leading-[1.4]">
-            <span className="font-medium text-brand-dark dark:text-brand-cream">
-              Always answering
-            </span>
-            <span className="text-brand-dark/70 dark:text-brand-cream/70">
-              {" "}
-              — calls, texts, and emails get picked up the moment they arrive,
-              day or night.
-            </span>
-          </p>
-          <p className="m-0 max-w-[473px] text-[15px] leading-[1.4]">
-            <span className="font-medium text-brand-dark dark:text-brand-cream">
-              You stay in control
-            </span>
-            <span className="text-brand-dark/70 dark:text-brand-cream/70">
-              {" "}
-              — anything customer-facing waits for your approval before it
-              sends.
-            </span>
-          </p>
-          <p className="m-0 max-w-[473px] text-[15px] leading-[1.4]">
-            <span className="font-medium text-brand-dark dark:text-brand-cream">
-              Built for your trade
-            </span>
-            <span className="text-brand-dark/70 dark:text-brand-cream/70">
-              {" "}
-              — every agent is set up around how your business actually runs.
-            </span>
-          </p>
+        <div className="mt-10 grid w-full grid-cols-1 gap-8 min-[1000px]:mt-20 min-[1000px]:grid-cols-3 min-[1000px]:gap-10">
+          {FEATURE_BLURBS.map(({ title, body }) => (
+            <div key={title} className="max-w-[473px]">
+              <span
+                aria-hidden
+                className="mb-3 block h-px w-8 bg-brand-orange/70"
+              />
+              <p className="m-0 text-[16px] font-medium leading-snug text-brand-dark dark:text-brand-cream">
+                {title}
+              </p>
+              <p className="m-0 mt-2 text-[15px] leading-[1.45] text-brand-dark/65 dark:text-brand-cream/65">
+                {body}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* CTA row */}
