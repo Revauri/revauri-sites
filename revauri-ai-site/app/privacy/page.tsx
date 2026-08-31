@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Revauri AI",
@@ -12,13 +13,9 @@ export default function PrivacyPage() {
   return (
     <div>
       <PageHero
-        badge="LEGAL"
-        title={
-          <>
-            Privacy <GradientText>Policy</GradientText>
-          </>
-        }
-        subtitle="Last updated: August 13, 2026"
+        badge={PAGE_HEROES.privacy.badge}
+        title={PAGE_HEROES.privacy.title}
+        subtitle={PAGE_HEROES.privacy.subtitle}
       />
 
       <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-16 dark:prose-invert lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">

@@ -3,47 +3,48 @@ import { FadeInWhenVisible } from "./motion-wrappers";
 interface PageHeroProps {
   badge: string;
   title: React.ReactNode;
+  muted?: React.ReactNode;
   subtitle?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-export function PageHero({ badge, title, subtitle, children }: PageHeroProps) {
+export function PageHero({
+  badge,
+  title,
+  muted,
+  subtitle,
+  children,
+}: PageHeroProps) {
   return (
-    <section className="bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] md:py-24">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col items-center text-center space-y-4 sm:space-y-5">
-          {/* Badge with decorative lines */}
+    <section className="bg-brand-cream py-16 dark:bg-brand-dark md:py-24">
+      <div className="section-measure px-6">
+        <div className="flex max-w-2xl flex-col items-start space-y-4 sm:space-y-5">
           <FadeInWhenVisible>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-brand-orange/60 sm:w-12" />
-              <span className="text-xs font-medium tracking-[0.2em] text-brand-orange sm:text-sm">
-                {badge}
-              </span>
-              <span className="h-px w-8 bg-brand-orange/60 sm:w-12" />
-            </div>
+            <p className="section-eyebrow">{badge}</p>
           </FadeInWhenVisible>
 
-          {/* Heading */}
           <FadeInWhenVisible delay={0.08}>
-            <h1 className="text-4xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl lg:text-6xl">
+            <h1 className="text-[32px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream md:text-[40px]">
               {title}
+              {muted ? (
+                <>
+                  <br />
+                  <span className="section-h2-muted">{muted}</span>
+                </>
+              ) : null}
             </h1>
           </FadeInWhenVisible>
 
-          {/* SubHeading */}
           {subtitle && (
             <FadeInWhenVisible delay={0.14}>
-              <p className="mx-auto max-w-2xl text-lg text-brand-dark/60 dark:text-brand-cream/60 lg:text-xl">
+              <p className="max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60 md:text-lg">
                 {subtitle}
               </p>
             </FadeInWhenVisible>
           )}
 
-          {/* Extra content slot */}
           {children && (
-            <FadeInWhenVisible delay={0.2}>
-              {children}
-            </FadeInWhenVisible>
+            <FadeInWhenVisible delay={0.2}>{children}</FadeInWhenVisible>
           )}
         </div>
       </div>

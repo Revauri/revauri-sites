@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Check } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 import { Booking } from "@/components/booking";
 
 export const metadata: Metadata = {
@@ -23,16 +24,12 @@ export default function BookPage() {
         strategy="afterInteractive"
       />
       <PageHero
-        badge="BOOK A CALL"
-        title={
-          <>
-            Let&apos;s name the job you&apos;d otherwise{" "}
-            <GradientText>hire for</GradientText>
-          </>
-        }
-        subtitle="A 20-minute call. We hear the mess, tell you if an AI employee can take it, and quote it against hiring a person — not against a software tool."
+        badge={PAGE_HEROES.book.badge}
+        title={PAGE_HEROES.book.title}
+        muted={PAGE_HEROES.book.muted}
+        subtitle={PAGE_HEROES.book.subtitle}
       >
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-brand-mid-gray">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-brand-dark/45 dark:text-brand-cream/45">
           <span className="flex items-center gap-2">
             <Check className="h-4 w-4 text-brand-orange" />
             20 minutes

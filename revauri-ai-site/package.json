@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --experimental-strip-types --test lib/**/*.test.mjs"
+    "test": "node --experimental-strip-types --test lib/*.test.mjs lib/**/*.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.4",

@@ -31,7 +31,7 @@ export function PostCard({ post }: { post: PostMeta }) {
       className="group block focus-visible:outline-none"
       aria-label={`Read post: ${post.title}`}
     >
-      <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+      <article className="overflow-hidden rounded-[16px] border border-black/[0.08] bg-brand-white transition-colors duration-300 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-white/[0.08] dark:bg-[#1a1a19]">
         <div className="relative aspect-[16/9] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
           {post.image ? (
             <Image
@@ -46,7 +46,7 @@ export function PostCard({ post }: { post: PostMeta }) {
           )}
         </div>
         <div className="p-6">
-          <span className="mb-2 inline-block rounded-full bg-brand-orange/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-orange">
+          <span className="section-eyebrow mb-2 inline-block">
             {post.category}
           </span>
           <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">

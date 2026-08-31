@@ -17,8 +17,9 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 
 export const metadata: Metadata = {
   title: "Capabilities — Revauri AI",
@@ -108,39 +109,24 @@ const NOT_DOING = [
   "Give medical, legal, or licensed professional advice",
 ];
 
+const HERO = PAGE_HEROES.capabilities;
+
 export default function CapabilitiesPage() {
   return (
     <div>
-      <PageHero
-        badge="CAPABILITIES"
-        title={
-          <>
-            Example <GradientText>hires</GradientText>
-          </>
-        }
-        subtitle="The work you'd otherwise hire someone for — the phone, the follow-ups, the busywork. We build that workflow and run it. A lot cheaper than payroll. Your time back."
-      />
+      <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
-      {/* Headline hire: the phone */}
       <section className="py-16 lg:py-20">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <div className="rounded-2xl border border-brand-light-gray/60 bg-brand-cream p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] lg:p-10">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-orange/10">
-                  <Phone className="h-5 w-5 text-brand-orange" />
-                </span>
-                <p className="text-xs font-semibold uppercase tracking-widest text-brand-orange">
-                  Headline hire
-                </p>
-              </div>
-
-              <h2 className="mt-5 text-2xl font-bold text-brand-dark dark:text-brand-cream sm:text-3xl">
+            <div className="hairline-card p-8 lg:p-10">
+              <p className="section-eyebrow">Headline hire</p>
+              <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
                 The phone
               </h2>
-              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                Missed calls are lost jobs. A voice hire picks up the calls that
-                currently go to voicemail.
+              <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70 md:text-base">
+                Missed calls are lost jobs. A voice hire picks up what currently
+                goes to voicemail.
               </p>
 
               <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -154,13 +140,13 @@ export default function CapabilitiesPage() {
                 ))}
               </ul>
 
-              <div className="mt-8 border-t border-brand-light-gray/60 pt-6 dark:border-brand-mid-gray/20">
-                <p className="text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                  It is a cheaper hire for the calls nobody is answering. It
-                  can take the phone seat. It does not do the licensed job,
-                  and it never invents prices.
+              <div className="mt-8 border-t border-black/[0.06] pt-6 dark:border-white/[0.06]">
+                <p className="text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  It is a cheaper hire for the calls nobody is answering. It can
+                  take the phone seat. It does not do the licensed job, and it
+                  never invents prices.
                 </p>
-                <p className="mt-3 text-sm text-brand-mid-gray">
+                <p className="mt-3 text-sm text-brand-dark/45 dark:text-brand-cream/45">
                   Live voice answering is scoped on the call.
                 </p>
               </div>
@@ -169,30 +155,22 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* Other jobs */}
-      <section className="bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
-        <div className="mx-auto max-w-6xl px-6">
+      <section className="py-16 lg:py-20">
+        <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-                Other jobs we <GradientText>hire for</GradientText>
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60">
-                Pick the painful one. We build that workflow and run it.
-              </p>
-            </div>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              Other jobs we hire for
+            </h2>
+            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60">
+              Pick the painful one. We build that workflow and run it.
+            </p>
           </FadeInWhenVisible>
 
-          <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {JOBS.map(({ icon: Icon, job, does }) => (
-              <div
-                key={job}
-                className="group rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
-              >
-                <div className="mb-4 inline-flex rounded-xl bg-brand-orange/10 p-3 transition-colors duration-200 group-hover:bg-brand-orange">
-                  <Icon className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
-                </div>
-                <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+              <div key={job} className="hairline-card p-5">
+                <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
+                <h3 className="mt-3 text-base font-semibold text-brand-dark dark:text-brand-cream">
                   {job}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
@@ -204,26 +182,22 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* What you get */}
       <section className="py-16 lg:py-20">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="text-center text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              What you <GradientText>get</GradientText>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              What you get
             </h2>
           </FadeInWhenVisible>
 
-          <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3">
             {STEPS.map(({ icon: Icon, title, description }, index) => (
-              <div
-                key={title}
-                className="rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
-              >
+              <div key={title} className="hairline-card p-6">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-orange/10 text-sm font-semibold text-brand-orange">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] text-sm font-semibold text-brand-dark/60 dark:border-white/[0.08] dark:text-brand-cream/60">
                     {index + 1}
                   </span>
-                  <Icon className="h-5 w-5 text-brand-orange" />
+                  <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-brand-dark dark:text-brand-cream">
                   {title}
@@ -236,7 +210,7 @@ export default function CapabilitiesPage() {
           </StaggerChildren>
 
           <FadeInWhenVisible delay={0.1}>
-            <p className="mx-auto mt-8 max-w-2xl text-center text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+            <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
               A standard hire covers two workflows and the weekly running of
               them. Anything bigger gets quoted before we start.
             </p>
@@ -244,16 +218,15 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* What we do not do */}
-      <section className="bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
-        <div className="mx-auto max-w-3xl px-6">
+      <section className="py-16 lg:py-20">
+        <div className="section-measure max-w-3xl px-6">
           <FadeInWhenVisible>
-            <h2 className="text-center text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
               What we do not do
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
-            <ul className="mt-8 grid grid-cols-1 gap-4">
+            <ul className="mt-8 grid grid-cols-1 gap-3">
               {NOT_DOING.map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <X className="mt-0.5 h-5 w-5 shrink-0 text-brand-mid-gray" />
@@ -267,24 +240,22 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 lg:py-20">
-        <div className="mx-auto max-w-2xl px-6 text-center">
+        <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Which job goes <GradientText>first?</GradientText>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              Which job goes first?
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
-            <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Tell us the job you&apos;d otherwise hire for. We take it over
-              so you don&apos;t have to.
+            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60 md:text-base">
+              Name the job you’d otherwise hire for.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
             <Link
               href="/book"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
               Book a call
               <ArrowRight className="h-4 w-4" />

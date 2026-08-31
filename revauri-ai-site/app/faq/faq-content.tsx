@@ -89,7 +89,7 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search questions..."
-          className="w-full rounded-lg border border-brand-light-gray bg-brand-cream/50 py-3 pl-10 pr-4 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream dark:placeholder:text-brand-mid-gray/60"
+          className="w-full rounded-[10px] border border-black/[0.08] bg-white/60 py-3 pl-10 pr-4 text-sm text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange/50 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-brand-cream dark:placeholder:text-brand-mid-gray/60"
         />
       </div>
 
@@ -103,9 +103,7 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
           <div className="space-y-10">
             {filteredData.map((cat) => (
               <div key={cat.category}>
-                <h2 className="mb-4 text-lg font-semibold text-brand-orange">
-                  {cat.category}
-                </h2>
+                <h2 className="section-eyebrow mb-4">{cat.category}</h2>
                 <FAQAccordion items={cat.items} />
               </div>
             ))}
@@ -141,8 +139,8 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
                     onClick={() => scrollToCategory(category)}
                     className={`w-full rounded-lg px-4 py-2.5 text-left text-sm transition-colors ${
                       activeCategory === category
-                        ? "border-l-2 border-brand-orange bg-brand-orange/10 font-semibold text-brand-orange"
-                        : "border-l-2 border-transparent text-brand-dark/60 hover:bg-brand-orange/[0.03] hover:text-brand-dark dark:text-brand-cream/60 dark:hover:text-brand-cream"
+                        ? "border-l-2 border-brand-orange font-medium text-brand-dark dark:text-brand-cream"
+                        : "border-l-2 border-transparent text-brand-dark/45 hover:text-brand-dark dark:text-brand-cream/45 dark:hover:text-brand-cream"
                     }`}
                   >
                     {category}
@@ -162,9 +160,7 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
                     else sectionRefs.current.delete(category);
                   }}
                 >
-                  <h2 className="mb-4 text-lg font-semibold text-brand-orange">
-                    {category}
-                  </h2>
+                  <h2 className="section-eyebrow mb-4">{category}</h2>
                   <FAQAccordion items={items} />
                 </section>
               ))}

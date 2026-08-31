@@ -246,6 +246,162 @@
   --tw-prose-td-borders: rgba(176, 174, 165, 0.2);
 }
 
+/* Cofounder-language primitives (Revauri tokens). Do not use on the HQ demo.
+   Layered as components so Tailwind utilities on the same element can override. */
+@layer components {
+.dotted-grid {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(20, 20, 19, 0.13) 1px,
+    transparent 1.15px
+  );
+  background-size: 24px 24px;
+}
+
+.dark .dotted-grid {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(250, 249, 245, 0.14) 1px,
+    transparent 1.15px
+  );
+}
+
+.hairline-card {
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.dark .hairline-card {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.product-frame {
+  border-radius: 16px;
+  background: #f1efe7;
+  box-shadow:
+    inset 0 0 0.5px 1.5px rgba(255, 255, 255, 0.35),
+    inset 0 2px 0 0 #fff,
+    0 0 2px 0 rgba(20, 20, 19, 0.25),
+    0 0 0 4px rgba(232, 230, 220, 0.4);
+}
+
+.dark .product-frame {
+  background: #1c1b19;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 0 2px 0 rgba(0, 0, 0, 0.6),
+    0 0 0 4px rgba(255, 255, 255, 0.04);
+}
+
+.section-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(20, 20, 19, 0.4);
+}
+
+.dark .section-eyebrow {
+  color: rgba(250, 249, 245, 0.4);
+}
+
+.section-h2 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 767px) {
+  .section-h2 {
+    font-size: 32px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .section-h2 {
+    font-size: 40px;
+  }
+}
+
+.section-h2-muted {
+  color: rgba(20, 20, 19, 0.55);
+}
+
+.dark .section-h2-muted {
+  color: rgba(250, 249, 245, 0.6);
+}
+
+.section-measure {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+.accordion-row {
+  display: flex;
+  width: 100%;
+  min-height: 47px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.dark .accordion-row {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.detail-panel {
+  background: rgba(250, 249, 245, 0.98);
+  backdrop-filter: blur(18px);
+  box-shadow: -28px 0 80px -32px rgba(20, 20, 19, 0.38);
+}
+
+.dark .detail-panel {
+  background: rgba(20, 20, 19, 0.98);
+  box-shadow: -28px 0 80px -32px rgba(0, 0, 0, 0.7);
+}
+
+.word-search-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.7rem;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba(20, 20, 19, 0.42);
+  border-radius: 6px;
+  transition: color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+}
+
+.dark .word-search-cell {
+  color: rgba(250, 249, 245, 0.42);
+}
+
+.word-search-cell.is-on {
+  color: #141413;
+  box-shadow: inset 0 0 0 1.5px rgba(217, 119, 87, 0.5);
+  background: rgba(217, 119, 87, 0.06);
+}
+
+.dark .word-search-cell.is-on {
+  color: #faf9f5;
+  box-shadow: inset 0 0 0 1.5px rgba(217, 119, 87, 0.55);
+  background: rgba(217, 119, 87, 0.1);
+}
+}
+
 /* Offset anchor scroll targets so headings aren't hidden under the sticky header */
 .blog-article h2,
 .blog-article h3 {

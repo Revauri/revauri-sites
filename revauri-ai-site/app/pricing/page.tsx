@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, Phone, Layers, Globe } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
+import { HireComparison } from "@/components/hire-comparison";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 
 export const metadata: Metadata = {
   title: "Pricing — Revauri AI",
@@ -24,66 +26,67 @@ const EXTRAS = [
     icon: Phone,
     title: "The phone hire",
     description:
-      "Answering the missed, after-hours, and overflow calls is available as an add-on. We scope it on the call, once we know your call volume and what the hire is allowed to book.",
+      "Answering missed, after-hours, and overflow calls is an add-on. We scope it on the call.",
   },
   {
     icon: Layers,
     title: "Heavier or custom work",
     description:
-      "Bigger than two workflows, or something unusual? We quote it before we start. We will not quietly absorb a job that does not fit, and you will not get a surprise invoice.",
+      "Bigger than two workflows, or unusual? We quote it before we start. No surprise invoice.",
   },
   {
     icon: Globe,
     title: "Website work",
     description: (
       <>
-        Separate, and only worth doing if the site itself is the leak. That is a
-        different door —{" "}
+        Separate, and only if the site itself is the leak. That’s{" "}
         <a
           href="https://revauri.com"
           className="font-medium text-brand-orange hover:underline"
         >
           revauri.com
-        </a>{" "}
-        — not something we sell on this product.
+        </a>
+        — not this product.
       </>
     ),
   },
 ];
 
+const HERO = PAGE_HEROES.pricing;
+
 export default function PricingPage() {
   return (
     <div>
       <PageHero
-        badge="PRICING"
-        title={<GradientText>Pricing</GradientText>}
-        subtitle="A lot less than putting another person on payroll. Less overhead. Fewer headaches. Your time back. We look at the job, then quote it on a short call. There is no public price list."
+        badge={HERO.badge}
+        title={HERO.title}
+        muted={HERO.muted}
+        subtitle={HERO.subtitle}
       />
 
-      <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
-        {/* The promise */}
+      <div className="section-measure px-6 py-16 lg:py-20">
         <FadeInWhenVisible>
-          <section className="text-center">
-            <h2 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
+          <section>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
               Why there are no numbers on this page
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
               A hire is priced on the job it takes over, not on a software
-              tier. On a short call we name the two jobs, look at how they
-              work today, and then you get a real number for that work.
+              tier. On a short call we name the two jobs, look at how they work
+              today, and then you get a real number for that work.
             </p>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
               It is a lot less than another person on payroll. That is the
-              point — you get the work without putting another body on the
-              books. Costs drop. You keep more.
+              point.
             </p>
           </section>
         </FadeInWhenVisible>
 
-        {/* What a standard hire includes */}
+        <HireComparison />
+
         <FadeInWhenVisible delay={0.08}>
-          <section className="mt-16 rounded-2xl border border-brand-light-gray/60 bg-brand-cream p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] lg:p-10">
-            <h2 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
+          <section className="hairline-card mt-16 p-8 lg:p-10">
+            <h2 className="text-[22px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream sm:text-[24px]">
               What a standard hire includes
             </h2>
             <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -99,18 +102,14 @@ export default function PricingPage() {
           </section>
         </FadeInWhenVisible>
 
-        {/* Add-ons and separate work */}
-        <StaggerChildren className="mt-8 grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+        <StaggerChildren className="mt-4 grid grid-cols-1 items-stretch gap-3 md:grid-cols-3">
           {EXTRAS.map(({ icon: Icon, title, description }) => (
-            <div
-              key={title}
-              className="flex h-full flex-col rounded-2xl border border-brand-light-gray bg-brand-white p-8 transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
-            >
-              <Icon className="h-6 w-6 text-brand-orange" />
+            <div key={title} className="hairline-card flex h-full flex-col p-6">
+              <Icon className="h-5 w-5 text-brand-dark/40 dark:text-brand-cream/40" />
               <h3 className="mt-4 text-lg font-semibold text-brand-dark dark:text-brand-cream">
                 {title}
               </h3>
-              <div className="my-5 h-px bg-brand-light-gray dark:bg-brand-mid-gray/20" />
+              <div className="my-4 h-px bg-black/[0.08] dark:bg-white/[0.08]" />
               <p className="text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
                 {description}
               </p>
@@ -118,21 +117,20 @@ export default function PricingPage() {
           ))}
         </StaggerChildren>
 
-        {/* How to start */}
         <FadeInWhenVisible delay={0.2}>
-          <section className="mt-16 text-center">
-            <h2 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
+          <section className="mt-16">
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
               How to start
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              Book a call and tell us the job you&apos;d otherwise hire for. We
-              look at it, tell you whether we can take it, and quote it before
-              anything gets built.
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+              Book a call and name the job you’d otherwise hire for. We look at
+              it, tell you whether we can take it, and quote it before anything
+              gets built.
             </p>
             <div className="mt-8">
               <Link
                 href="/book"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
               >
                 Book a call
                 <ArrowRight className="h-4 w-4" />

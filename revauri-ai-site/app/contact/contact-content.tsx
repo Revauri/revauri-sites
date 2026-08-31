@@ -15,17 +15,17 @@ type ContactContentProps = {
 };
 
 const FORM_CARD_CLASS =
-  "rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] sm:p-8 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]";
+  "hairline-card p-6 sm:p-8";
 
 const FIELD_CLASS =
-  "w-full rounded-xl border border-brand-light-gray bg-brand-cream/50 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream";
+  "w-full rounded-[10px] border border-black/[0.08] bg-white/60 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-brand-cream";
 
 const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-brand-dark dark:text-brand-cream";
 
 const SUCCESS_PATH = "/contact?sent=true";
 
 const ICON_SQUARE_CLASS =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-dark text-brand-cream transition-colors duration-200 group-hover:bg-brand-orange dark:bg-brand-cream dark:text-brand-dark dark:group-hover:bg-brand-orange dark:group-hover:text-white";
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-black/[0.08] text-brand-dark/70 dark:border-white/[0.08] dark:text-brand-cream/70";
 
 export function ContactContent({ isSubmitted = false }: ContactContentProps) {
   // Web3Forms needs an absolute redirect URL, so build it from the current

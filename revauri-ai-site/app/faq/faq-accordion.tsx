@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { StaggerChildren } from "@/components/motion-wrappers";
 
@@ -18,32 +17,27 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
   };
 
   return (
-    <StaggerChildren className="divide-y divide-brand-light-gray dark:divide-brand-mid-gray/20">
+    <StaggerChildren className="flex flex-col gap-2">
       {items.map((faq, i) => {
         const isOpen = openIndex === i;
         return (
-          <div
-            key={i}
-            className={`border-l-2 pl-4 transition-colors duration-200 ${
-              isOpen
-                ? "border-l-brand-orange/50"
-                : "border-l-transparent hover:border-l-brand-orange/30"
-            }`}
-          >
+          <div key={i} className="hairline-card overflow-hidden">
             <button
+              type="button"
               onClick={() => toggle(i)}
-              className="-mx-2 flex w-[calc(100%+1rem)] items-center justify-between gap-4 rounded-lg px-2 py-5 text-left transition-colors hover:bg-brand-orange/[0.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="accordion-row border-0 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
               aria-expanded={isOpen}
               aria-controls={`faq-answer-${i}`}
             >
-              <span className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+              <span className="flex-1 text-[14px] font-medium text-brand-dark dark:text-brand-cream">
                 {faq.question}
               </span>
-              <ChevronDown
-                className={`h-5 w-5 shrink-0 text-brand-mid-gray transition-transform duration-300 ${
-                  isOpen ? "rotate-180" : ""
-                }`}
-              />
+              <span
+                aria-hidden
+                className="flex h-6 w-6 items-center justify-center text-lg leading-none text-brand-dark/40 dark:text-brand-cream/40"
+              >
+                {isOpen ? "×" : "+"}
+              </span>
             </button>
             <AnimatePresence initial={false}>
               {isOpen && (
@@ -56,7 +50,7 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="pb-5 leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                  <p className="px-4 pb-4 text-[15px] leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
                     {faq.answer}
                   </p>
                 </motion.div>

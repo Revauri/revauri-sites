@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronUp } from "lucide-react";
+import { FOOTER_BLURB } from "@/lib/marketing-copy";
 import { Logo } from "./logo";
 import { requestCookiePreferences } from "@/lib/analytics";
 
@@ -111,9 +112,8 @@ export function Footer() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col gap-4">
             <Logo variant="auto" suffix="AI" />
-            <p className="text-sm text-brand-mid-gray">
-              An AI employee for the work you&apos;d otherwise hire for. Less
-              payroll. Your time back.
+            <p className="text-sm text-brand-dark/45 dark:text-brand-cream/45">
+              {FOOTER_BLURB}
             </p>
             <p className="text-sm text-brand-mid-gray">
               A{" "}
@@ -137,7 +137,7 @@ export function Footer() {
 
 function FooterGroupHeading({ children }: React.PropsWithChildren) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-wider text-brand-orange">
+    <p className="section-eyebrow">
       {children}
     </p>
   );

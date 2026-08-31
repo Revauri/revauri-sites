@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { StaggerChildren, FadeInWhenVisible } from "@/components/motion-wrappers";
 import { PostCard } from "@/components/blog/post-card";
 import { getAllCategories, getPostsByCategory } from "@/lib/blog";
@@ -43,7 +43,7 @@ export default async function BlogCategoryPage(
 
   return (
     <div>
-      <div className="bg-brand-orange/5 pt-6 dark:bg-brand-orange/[0.03]">
+      <div className="bg-brand-cream pt-6 dark:bg-brand-dark">
         <div className="mx-auto max-w-6xl px-6">
           <Link
             href="/blog"
@@ -56,12 +56,8 @@ export default async function BlogCategoryPage(
       </div>
 
       <PageHero
-        badge="CATEGORY"
-        title={
-          <>
-            <GradientText>{category}</GradientText>
-          </>
-        }
+        badge="Blog"
+        title={category}
         subtitle={`Posts filed under ${category}.`}
       />
 
@@ -78,24 +74,19 @@ export default async function BlogCategoryPage(
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Ready to hire the work{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                instead of a person?
-              </span>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              Ready to hand the work off?
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Tell us the job. We take it off you, run
-              it, and you keep the time — and more of the money than another
-              person on payroll would leave you.
+              Book a short call. Name the job. We take it from there.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
             <Link
               href="/book"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
               Book a call
               <ArrowRight className="h-4 w-4" />

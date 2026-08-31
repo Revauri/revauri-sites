@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import BlendedDemoFrame from "@/components/blended-demo-frame";
 import { PostCard, PostImageFallback, formatDate } from "@/components/blog/post-card";
@@ -39,13 +40,9 @@ export default function BlogPage() {
       />
 
       <PageHero
-        badge="BLOG"
-        title={
-          <>
-            The <GradientText>Blog</GradientText>
-          </>
-        }
-        subtitle="What we learn building and running AI employees for local service businesses — cheaper than putting another person on payroll."
+        badge={PAGE_HEROES.blog.badge}
+        title={PAGE_HEROES.blog.title}
+        subtitle={PAGE_HEROES.blog.subtitle}
       />
 
       {posts.length === 0 ? (
@@ -53,9 +50,9 @@ export default function BlogPage() {
           <div className="mx-auto max-w-2xl px-6 text-center">
             <FadeInWhenVisible>
               <p className="text-lg text-brand-dark/60 dark:text-brand-cream/60">
-                Notes are coming — check back soon. In the meantime,{" "}
+                Notes are coming.{" "}
                 <Link href="/capabilities" className="font-medium text-brand-orange hover:underline">
-                  see what a hire can take
+                  See the jobs
                 </Link>{" "}
                 or{" "}
                 <Link href="/book" className="font-medium text-brand-orange hover:underline">
@@ -79,7 +76,7 @@ export default function BlogPage() {
                     aria-label={`Read featured post: ${featured.title}`}
                   >
                     <BlendedDemoFrame>
-                      <article className="grid grid-cols-1 overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] md:grid-cols-2">
+                      <article className="grid grid-cols-1 overflow-hidden rounded-[16px] border border-black/[0.08] bg-brand-white transition-colors duration-300 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-white/[0.08] dark:bg-[#1a1a19] md:grid-cols-2">
                         <div className="relative aspect-[16/9] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10 md:aspect-auto">
                           {featured.image ? (
                             <Image
@@ -95,9 +92,7 @@ export default function BlogPage() {
                           )}
                         </div>
                         <div className="flex flex-col justify-center p-8">
-                          <span className="mb-3 inline-flex w-fit items-center rounded-full bg-brand-orange/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-orange">
-                            Featured
-                          </span>
+                          <span className="section-eyebrow mb-3">Featured</span>
                           <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-cream">
                             {featured.title}
                           </h2>
@@ -165,24 +160,19 @@ export default function BlogPage() {
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Ready to hire the work{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                instead of a person?
-              </span>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              Ready to hand the work off?
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
             <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Tell us the job. We take it off you, run
-              it, and you keep the time — and more of the money than another
-              person on payroll would leave you.
+              Book a short call. Name the job. We take it from there.
             </p>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.16}>
             <Link
               href="/book"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
               Book a call
               <ArrowRight className="h-4 w-4" />

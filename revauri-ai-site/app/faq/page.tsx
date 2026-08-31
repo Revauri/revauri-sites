@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
+import { PAGE_HEROES } from "@/lib/marketing-copy";
 import { FAQContent } from "./faq-content";
+import { FAQ_DATA } from "./faq-data";
 
 export const metadata: Metadata = {
   title: "FAQ — Revauri AI",
@@ -11,97 +13,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
 };
 
-const FAQ_DATA = [
-  {
-    category: "The hire",
-    items: [
-      {
-        question: "What is Revauri AI?",
-        answer:
-          "An AI employee for the work you'd otherwise hire someone to do. You name the work, we build the workflow around how your business already runs, and we run it. After a short setup, you are not living in the busywork. A lot cheaper than putting a person on payroll.",
-      },
-      {
-        question: "Is this cheaper than hiring someone?",
-        answer:
-          "Yes. That is the point. A hire is quoted on the job we take over, on a short call. It costs a lot less than putting another person on payroll. There is no public price list because the number depends on the work. Costs, overhead, and payroll drop, so you keep more. Captured jobs — missed calls, quiet leads, dead quotes — are the extra upside.",
-      },
-      {
-        question: "What jobs can it do?",
-        answer:
-          "Quiet leads, after-hours and missed calls, quotes with no second follow-up, review asks and replies, appointment reminders and no-shows, after-the-job check-ins, inbox and admin busywork, and reactivating past customers. The full list is on the Capabilities page. If your mess is not on it, name it and we will tell you whether we can take it.",
-      },
-      {
-        question: "Does this replace my receptionist?",
-        answer:
-          "Yes. It can take the receptionist, front desk, and phone seat, the VA or admin busywork, office-manager admin work, and the nights you were doing it yourself. It does not replace the licensed tech doing the actual job.",
-      },
-      {
-        question: "What if I already have someone doing this?",
-        answer:
-          "Then this can take that seat so you are not paying a salary for follow-ups, the phone catch, and busywork. The person who does the licensed job still does the licensed job.",
-      },
-      {
-        question: "Will this grow my business?",
-        answer:
-          "First, yes, because costs, overhead, payroll, and headaches drop, so more of the money stays yours. Then missed calls, quiet leads, and dead quotes stop leaking, so more work comes in.",
-      },
-    ],
-  },
-  {
-    category: "How it works",
-    items: [
-      {
-        question: "What happens after I book?",
-        answer:
-          "A short call. We name the two jobs worth handing off first. Then we look at how they work today, quote the work, and build it.",
-      },
-      {
-        question: "Do I have to approve messages?",
-        answer:
-          "During setup, yes — so it learns your voice. After that it runs on its own. You can still jump in. Nothing licensed, and no guessed prices.",
-      },
-      {
-        question: "How long does setup take?",
-        answer:
-          "Usually days once we have agreed the two jobs, not months. We will give you a real timeline on the call, after we have seen the job.",
-      },
-    ],
-  },
-  {
-    category: "Phone",
-    items: [
-      {
-        question: "Can it answer the phone?",
-        answer:
-          "Yes, as an add-on. It picks up the missed, after-hours, and overflow calls, takes the name, number, and what they need, and either books what you have pre-approved or gets them a callback. We scope it on the call.",
-      },
-      {
-        question: "Will it quote prices or give medical or legal advice?",
-        answer:
-          "No. The phone hire never guesses at prices, and it does not give medical, legal, or any other licensed professional advice. Anything sensitive goes straight back to you.",
-      },
-    ],
-  },
-  {
-    category: "Working together",
-    items: [
-      {
-        question: "What if the job is bigger than two workflows?",
-        answer:
-          "We quote that before we start. We will not quietly absorb a job that does not fit, and you will not get a surprise invoice.",
-      },
-      {
-        question: "Can I cancel?",
-        answer: "Yes. 14-day notice to pause or cancel.",
-      },
-      {
-        question: "Do you redesign websites here?",
-        answer:
-          "Not on this product. Website work is separate and only worth doing if the site itself is the leak — that is a separate quote at revauri.com.",
-      },
-    ],
-  },
-];
+const HERO = PAGE_HEROES.faq;
 
 export default function FAQPage() {
   const allItems = FAQ_DATA.flatMap((cat) => cat.items);
@@ -122,41 +34,32 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <PageHero
-        badge="FAQ"
-        title={
-          <>
-            Frequently Asked <GradientText>Questions</GradientText>
-          </>
-        }
-        subtitle="What an AI employee does, why it costs less than a person, and how you get your time back."
-      />
+      <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
       <FAQContent data={FAQ_DATA} />
 
-      {/* Still have questions? */}
       <section className="pb-20">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="rounded-2xl border border-brand-light-gray/60 bg-brand-cream p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
-            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+        <div className="section-measure px-6">
+          <div className="hairline-card p-8">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <div className="flex-1">
                 <h3 className="text-xl font-semibold text-brand-dark dark:text-brand-cream">
                   Still have questions?
                 </h3>
                 <p className="mt-2 text-sm text-brand-dark/60 dark:text-brand-cream/60">
-                  Tell us the job you&apos;d otherwise hire for. We&apos;ll take it off you.
+                  Name the job you’d otherwise hire for.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white"
                 >
                   Book a call <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="mailto:joseph@revauri.com"
-                  className="inline-flex items-center justify-center rounded-lg border border-brand-orange/30 px-6 py-3 text-sm font-medium text-brand-orange transition-all duration-200 hover:bg-brand-orange/5"
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-black/[0.08] px-6 py-3 text-sm font-medium text-brand-dark dark:border-white/[0.08] dark:text-brand-cream"
                 >
                   joseph@revauri.com
                 </a>

@@ -2,53 +2,41 @@
 
 import Link from "next/link";
 import { ArrowRight, Shield } from "lucide-react";
+import { FINAL_CTA_COPY } from "@/lib/marketing-copy";
 import { FadeInWhenVisible } from "./motion-wrappers";
 
 export function FinalCTA() {
   return (
-    <section
-      className="relative overflow-hidden py-16 lg:py-20"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 50% at 50% 50%, var(--surface-accent) 0%, transparent 70%), var(--background)",
-      }}
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="relative flex flex-col items-center text-center space-y-5">
+    <section className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
+      <div className="section-measure px-6">
+        <div className="flex max-w-2xl flex-col items-start space-y-5">
           <FadeInWhenVisible>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
-              Ready to hire the work{" "}
-              <span className="bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
-                instead of a person?
-              </span>
+            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+              {FINAL_CTA_COPY.h2}
             </h2>
           </FadeInWhenVisible>
 
-          <FadeInWhenVisible delay={0.15}>
-            <p className="mx-auto max-w-xl text-lg text-brand-dark/60 dark:text-brand-cream/60">
-              Book a short call. Tell us the job. We take it off you, run it,
-              and you keep the time — and more of the money than another person
-              on payroll would leave you.
+          <FadeInWhenVisible delay={0.12}>
+            <p className="max-w-xl text-[15px] leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 md:text-base">
+              {FINAL_CTA_COPY.body}
             </p>
           </FadeInWhenVisible>
 
-          <FadeInWhenVisible delay={0.22}>
+          <FadeInWhenVisible delay={0.18}>
             <Link
               href="/book"
-              className="inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
             >
-              Book a call
+              {FINAL_CTA_COPY.button}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </FadeInWhenVisible>
 
-          <FadeInWhenVisible delay={0.28}>
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs text-brand-mid-gray">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-light-gray bg-brand-white/70 px-3 py-1 dark:border-brand-mid-gray/20 dark:bg-brand-dark/70">
-                <Shield className="h-3.5 w-3.5 text-brand-orange" />
-                No obligation
-              </span>
-            </div>
+          <FadeInWhenVisible delay={0.24}>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] px-3 py-1 text-xs text-brand-dark/45 dark:border-white/[0.08] dark:text-brand-cream/45">
+              <Shield className="h-3.5 w-3.5 text-brand-orange" />
+              {FINAL_CTA_COPY.chip}
+            </span>
           </FadeInWhenVisible>
         </div>
       </div>
