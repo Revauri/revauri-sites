@@ -251,6 +251,25 @@
   50% { opacity: 0.15; }
 }
 
+@keyframes ai-hq-caret-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes ai-hq-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Bright draw from the center toward a node when work is dispatched.
+   139 matches the spoke length in the diagram's 520x520 viewBox. */
+@keyframes ai-hq-spoke-flash {
+  0% { stroke-dashoffset: 139; opacity: 0; }
+  12% { opacity: 0.55; }
+  55% { stroke-dashoffset: 0; opacity: 0.55; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
 .ai-hq-section-in {
   animation: ai-hq-section-in 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
@@ -267,11 +286,26 @@
   animation: ai-hq-badge-blink 2s ease-in-out infinite;
 }
 
+.ai-hq-caret-blink {
+  animation: ai-hq-caret-blink 1.1s step-end infinite;
+}
+
+.ai-hq-fade-out {
+  animation: ai-hq-fade-out 0.45s ease-out both;
+}
+
+.ai-hq-spoke-flash {
+  animation: ai-hq-spoke-flash 1.4s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ai-hq-section-in,
   .ai-hq-block-in,
   .ai-hq-badge-in,
-  .ai-hq-badge-blink {
+  .ai-hq-badge-blink,
+  .ai-hq-caret-blink,
+  .ai-hq-fade-out,
+  .ai-hq-spoke-flash {
     animation: none;
   }
 }

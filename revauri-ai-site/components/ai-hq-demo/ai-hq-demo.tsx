@@ -2,23 +2,113 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUp, ChevronDown, Folder, Search } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUp,
+  Check,
+  ChevronDown,
+  Folder,
+  Search,
+} from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import {
-  CYCLE_RESET_MS,
+  ACTIVITY,
   FRAME_CAPTION,
   INPUT_PLACEHOLDER,
   NODES,
+  PHASE_MS,
   SCENARIOS,
-  STEPS_PER_SCENARIO,
-  TAB_LABELS,
-  TOTAL_STEPS,
+  TABS,
+  TYPING_LEAD_MS,
+  TYPING_MS_PER_CHAR,
+  TYPING_TAIL_MS,
   scenarioAnnouncement,
-  stepStartMs,
   type BadgeCounts,
   type NodeId,
+  type Phase,
+  type Scenario,
+  type TabId,
   type TaskItem,
 } from "./script";
+
+/* ------------------------------------------------------------------ */
+/* Playback engine                                                     */
+/* ------------------------------------------------------------------ */
+
+interface Pos {
+  scenario: number;
+  phase: Phase;
+}
+
+/** How far playback has advanced; used to derive what's visible. */
+const PHASE_RANK: Record<Phase, number> = {
+  idle: -1,
+  typing: 0,
+  user: 1,
+  reply: 2,
+  tasks: 3,
+  progress: 4,
+  hold: 5,
+  fadeout: 6,
+};
+
+function phaseDuration(pos: Pos): number {
+  switch (pos.phase) {
+    case "idle":
+      return 0;
+    case "typing":
+      return (
+        TYPING_LEAD_MS +
+        SCENARIOS[pos.scenario].user.length * TYPING_MS_PER_CHAR +
+        TYPING_TAIL_MS
+      );
+    case "user":
+    case "reply":
+    case "tasks":
+    case "progress":
+    case "hold":
+    case "fadeout":
+      return PHASE_MS[pos.phase];
+    default: {
+      const exhaustive: never = pos.phase;
+      return exhaustive;
+    }
+  }
+}
+
+function nextPos(pos: Pos): Pos {
+  switch (pos.phase) {
+    case "idle":
+      return { scenario: 0, phase: "typing" };
+    case "typing":
+      return { ...pos, phase: "user" };
+    case "user":
+      return { ...pos, phase: "reply" };
+    case "reply":
+      return { ...pos, phase: "tasks" };
+    case "tasks":
+      return { ...pos, phase: "progress" };
+    case "progress":
+      return pos.scenario < SCENARIOS.length - 1
+        ? { scenario: pos.scenario + 1, phase: "typing" }
+        : { ...pos, phase: "hold" };
+    case "hold":
+      return { ...pos, phase: "fadeout" };
+    case "fadeout":
+      return { scenario: 0, phase: "typing" };
+    default: {
+      const exhaustive: never = pos.phase;
+      return exhaustive;
+    }
+  }
+}
+
+interface SectionView {
+  scenario: Scenario;
+  showReply: boolean;
+  showTasks: boolean;
+  progressed: boolean;
+}
 
 /* ------------------------------------------------------------------ */
 /* Shared bits                                                         */
@@ -78,6 +168,9 @@ function AssistantGlyph() {
 const HAIRLINE_CARD_SHADOW =
   "shadow-[0_0_0_0.8px_#FFF_inset,0_0_0_0.8px_rgba(20,20,19,0.08),0_4px_12px_rgba(20,20,19,0.06)] dark:shadow-[0_0_0_0.8px_rgba(255,255,255,0.07)_inset,0_0_0_0.8px_rgba(0,0,0,0.5),0_4px_12px_rgba(0,0,0,0.4)]";
 
+const ROW_SHELL =
+  "rounded-[8px] bg-gradient-to-b from-brand-dark/[0.03] to-brand-dark/[0.015] shadow-[0_0_0_1px_rgba(20,20,19,0.04),0_1.5px_0_0_#FFF_inset] dark:from-white/[0.05] dark:to-white/[0.02] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_1px_0_0_rgba(255,255,255,0.05)_inset]";
+
 /* ------------------------------------------------------------------ */
 /* Orbital diagram                                                     */
 /* ------------------------------------------------------------------ */
@@ -121,29 +214,29 @@ const GHOSTS: {
   {
     // Leads (NE): out right, elbow up
     lines: [
-      [444, 116, 466, 116],
-      [466, 116, 466, 104],
+      [444, 116, 476, 116],
+      [476, 116, 476, 104],
     ],
-    dots: [[466, 116]],
-    cards: [[466, 85]],
+    dots: [[476, 116]],
+    cards: [[476, 85]],
   },
   {
     // Quotes (right): out right, elbow down
     lines: [
-      [504, 260, 526, 260],
-      [526, 260, 526, 272],
+      [504, 260, 536, 260],
+      [536, 260, 536, 272],
     ],
-    dots: [[526, 260]],
-    cards: [[526, 291]],
+    dots: [[536, 260]],
+    cards: [[536, 291]],
   },
   {
     // Reviews (SE): out right, elbow down
     lines: [
-      [444, 404, 466, 404],
-      [466, 404, 466, 416],
+      [444, 404, 476, 404],
+      [476, 404, 476, 416],
     ],
-    dots: [[466, 404]],
-    cards: [[466, 435]],
+    dots: [[476, 404]],
+    cards: [[476, 435]],
   },
   {
     // Calendar (bottom): stub down, T-bar, two children below
@@ -165,29 +258,29 @@ const GHOSTS: {
   {
     // Inbox (SW): out left, elbow down
     lines: [
-      [76, 404, 54, 404],
-      [54, 404, 54, 416],
+      [76, 404, 44, 404],
+      [44, 404, 44, 416],
     ],
-    dots: [[54, 404]],
-    cards: [[54, 435]],
+    dots: [[44, 404]],
+    cards: [[44, 435]],
   },
   {
     // Payroll (left): out left, elbow down
     lines: [
-      [16, 260, -6, 260],
-      [-6, 260, -6, 272],
+      [16, 260, -16, 260],
+      [-16, 260, -16, 272],
     ],
-    dots: [[-6, 260]],
-    cards: [[-6, 291]],
+    dots: [[-16, 260]],
+    cards: [[-16, 291]],
   },
   {
     // Outreach (NW): out left, elbow up
     lines: [
-      [76, 116, 54, 116],
-      [54, 116, 54, 104],
+      [76, 116, 44, 116],
+      [44, 116, 44, 104],
     ],
-    dots: [[54, 116]],
-    cards: [[54, 85]],
+    dots: [[44, 116]],
+    cards: [[44, 85]],
   },
 ];
 
@@ -247,9 +340,14 @@ function NodeBadge({ counts }: { counts: BadgeCounts }) {
 
 function OrbitalDiagram({
   litBadges,
+  flashNodes,
+  flashKey,
   reducedMotion,
 }: {
   litBadges: Partial<Record<NodeId, BadgeCounts>>;
+  /** Nodes whose spokes flash orange (work being dispatched right now). */
+  flashNodes: NodeId[];
+  flashKey: number;
   reducedMotion: boolean;
 }) {
   return (
@@ -289,6 +387,29 @@ function OrbitalDiagram({
             </g>
           );
         })}
+
+        {/* Story flash: a brighter draw from center toward the nodes that
+            just received work, fired when a scenario's tasks appear */}
+        {!reducedMotion
+          ? NODES.map((node, i) => {
+              if (!flashNodes.includes(node.id)) return null;
+              const p1 = nodePoint(i, 44);
+              const p2 = nodePoint(i, 183);
+              return (
+                <line
+                  key={`flash-${flashKey}-${node.id}`}
+                  x1={p1.x}
+                  y1={p1.y}
+                  x2={p2.x}
+                  y2={p2.y}
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeDasharray="139"
+                  className="ai-hq-spoke-flash stroke-brand-orange"
+                />
+              );
+            })
+          : null}
 
         {/* Ghost sub-trees continuing outward past each node (orthogonal) */}
         {NODES.map((node, i) => {
@@ -373,14 +494,14 @@ function OrbitalDiagram({
             <foreignObject
               key={`node-${node.id}`}
               x={p.x - 55}
-              y={p.y - 24}
+              y={p.y - 26}
               width="110"
-              height="48"
+              height="52"
               className="overflow-visible"
             >
               <div className="flex h-full w-full items-center justify-center">
                 <div
-                  className={`flex w-[74px] items-center justify-center rounded-[7px] bg-white px-2 py-3 text-center text-[11px] leading-tight transition-colors duration-500 dark:bg-[#2A2824] ${
+                  className={`flex w-[74px] items-center justify-center rounded-[7px] bg-white px-2 py-3 text-center text-[11px] leading-tight transition-colors duration-500 max-sm:w-[88px] max-sm:py-3.5 max-sm:text-[13px] dark:bg-[#2A2824] ${
                     active
                       ? "font-medium text-brand-orange"
                       : "text-brand-dark/60 dark:text-brand-cream/60"
@@ -413,13 +534,13 @@ function OrbitalDiagram({
         })}
 
         {/* Center card */}
-        <foreignObject x={CX - 50} y={CY - 26} width="100" height="52" className="overflow-visible">
+        <foreignObject x={CX - 50} y={CY - 28} width="100" height="56" className="overflow-visible">
           <div className="flex h-full w-full items-center justify-center">
             <div
-              className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
+              className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] max-sm:h-[54px] max-sm:w-[98px] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
             >
               {/* Mini version of the nav wordmark (see components/logo.tsx) */}
-              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark max-sm:text-[14px] dark:text-brand-cream">
                 <span className="relative">
                   Revauri
                   <span
@@ -449,139 +570,311 @@ function OrbitalDiagram({
 /* Chat panel                                                          */
 /* ------------------------------------------------------------------ */
 
-function StatusPill({ status }: { status: TaskItem["status"] }) {
-  if (status === "running") {
+type TaskStatus = TaskItem["status"] | "done";
+
+function StatusPill({ status }: { status: TaskStatus }) {
+  switch (status) {
+    case "running":
+      return (
+        <span className="inline-flex shrink-0 items-center rounded-[3px] bg-brand-orange/15 px-[5px] py-[2px] text-[8px] font-medium leading-[9.5px] text-[#9A4B2E] dark:bg-brand-orange/20 dark:text-[#EDA383]">
+          Running
+        </span>
+      );
+    case "queued":
+      return (
+        <span className="inline-flex shrink-0 items-center rounded-[3px] border border-brand-dark/15 px-[5px] py-[2px] text-[8px] font-medium leading-[9.5px] text-brand-dark/50 dark:border-brand-cream/15 dark:text-brand-cream/50">
+          Queued
+        </span>
+      );
+    case "done":
+      return (
+        <span className="inline-flex shrink-0 items-center rounded-[3px] bg-[#71CE45]/15 px-[5px] py-[2px] text-[8px] font-medium leading-[9.5px] text-[#3F7A2E] dark:bg-[#71CE45]/20 dark:text-[#8FD96C]">
+          Done
+        </span>
+      );
+    default: {
+      const exhaustive: never = status;
+      return exhaustive;
+    }
+  }
+}
+
+function TaskGlyph({ status }: { status: TaskStatus }) {
+  if (status === "running") return <Spinner size={8} />;
+  if (status === "done") {
     return (
-      <span className="inline-flex shrink-0 items-center rounded-[3px] bg-brand-orange/15 px-[5px] py-[2px] text-[8px] font-medium leading-[9.5px] text-[#9A4B2E] dark:bg-brand-orange/20 dark:text-[#EDA383]">
-        Running
-      </span>
+      <span aria-hidden className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#71CE45]" />
     );
   }
   return (
-    <span className="inline-flex shrink-0 items-center rounded-[3px] border border-brand-dark/15 px-[5px] py-[2px] text-[8px] font-medium leading-[9.5px] text-brand-dark/50 dark:border-brand-cream/15 dark:text-brand-cream/50">
-      Queued
-    </span>
+    <span aria-hidden className="h-[6px] w-[6px] shrink-0 rounded-full bg-brand-mid-gray/70" />
   );
 }
 
-function TaskRow({ task, delayMs }: { task: TaskItem; delayMs: number }) {
+function TaskRow({
+  task,
+  status,
+  delayMs,
+}: {
+  task: TaskItem;
+  status: TaskStatus;
+  delayMs: number;
+}) {
   return (
     <div
-      className="ai-hq-block-in flex items-center gap-2 rounded-[8px] bg-gradient-to-b from-brand-dark/[0.03] to-brand-dark/[0.015] px-[10px] py-2 shadow-[0_0_0_1px_rgba(20,20,19,0.04),0_1.5px_0_0_#FFF_inset] dark:from-white/[0.05] dark:to-white/[0.02] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_1px_0_0_rgba(255,255,255,0.05)_inset]"
+      className={`ai-hq-block-in flex items-center gap-2 px-[10px] py-2 ${ROW_SHELL}`}
       style={{ animationDelay: `${delayMs}ms` }}
     >
-      {task.status === "running" ? (
-        <Spinner size={8} />
-      ) : (
-        <span
-          aria-hidden
-          className="h-[6px] w-[6px] shrink-0 rounded-full bg-brand-mid-gray/70"
-        />
-      )}
+      <TaskGlyph status={status} />
       <span className="shrink-0 text-[10px] font-medium leading-[15px] text-brand-dark/85 dark:text-brand-cream/85">
         {task.agent}
       </span>
       <span className="min-w-0 flex-1 truncate text-[9px] leading-[15px] text-brand-dark/50 dark:text-brand-cream/50">
         {task.detail}
       </span>
-      <StatusPill status={task.status} />
+      <StatusPill status={status} />
     </div>
   );
 }
 
-function ChatPanel({ step, className }: { step: number; className?: string }) {
+function JobsPane({
+  litBadges,
+}: {
+  litBadges: Partial<Record<NodeId, BadgeCounts>>;
+}) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-[6px] overflow-y-auto px-3 pb-3 pt-[10px]">
+      {NODES.map((node) => {
+        const counts = litBadges[node.id];
+        return (
+          <div
+            key={node.id}
+            className={`ai-hq-block-in flex items-center gap-2 px-[10px] py-2 ${ROW_SHELL}`}
+          >
+            {counts ? (
+              <Spinner size={8} />
+            ) : (
+              <span
+                aria-hidden
+                className="h-[6px] w-[6px] shrink-0 rounded-full bg-brand-mid-gray/70"
+              />
+            )}
+            <span className="shrink-0 text-[10px] font-medium leading-[15px] text-brand-dark/85 dark:text-brand-cream/85">
+              {node.label}
+            </span>
+            <span className="min-w-0 flex-1 truncate text-right text-[9px] leading-[15px] text-brand-dark/50 dark:text-brand-cream/50">
+              {counts
+                ? `${counts.running} running · ${counts.queued} queued · ${counts.done} done`
+                : "Idle — ready for work"}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActivityPane() {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-[6px] overflow-y-auto px-3 pb-3 pt-[10px]">
+      {ACTIVITY.map((item, i) => (
+        <div
+          key={i}
+          className={`ai-hq-block-in flex items-start gap-2 px-[10px] py-2 ${ROW_SHELL}`}
+        >
+          {item.state === "done" ? (
+            <span
+              aria-hidden
+              className="mt-[2px] flex h-3 w-3 shrink-0 items-center justify-center rounded-full bg-[#30D158]"
+            >
+              <Check className="h-2 w-2 text-white" strokeWidth={3.5} />
+            </span>
+          ) : (
+            <span
+              aria-hidden
+              className="ai-hq-badge-blink mt-[5px] h-[6px] w-[6px] shrink-0 rounded-full bg-brand-orange"
+            />
+          )}
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[10px] font-medium leading-[15px] text-brand-dark/85 dark:text-brand-cream/85">
+              {item.text}
+            </span>
+            <span className="block truncate text-[9px] leading-[14px] text-brand-dark/50 dark:text-brand-cream/50">
+              {item.meta}
+            </span>
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const TAB_RETURN_MS = 8000;
+
+function ChatPanel({
+  sections,
+  typingText,
+  fading,
+  litBadges,
+  scrollKey,
+  className,
+}: {
+  sections: SectionView[];
+  typingText: string | null;
+  fading: boolean;
+  litBadges: Partial<Record<NodeId, BadgeCounts>>;
+  scrollKey: number;
+  className?: string;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<TabId>("home");
+
+  // Curious visitors can peek at Jobs/Activity; snap back so the story resumes.
+  useEffect(() => {
+    if (activeTab === "home") return;
+    const timer = window.setTimeout(() => setActiveTab("home"), TAB_RETURN_MS);
+    return () => window.clearTimeout(timer);
+  }, [activeTab]);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    if (step === 0) {
+    if (sections.length === 0) {
       el.scrollTop = 0;
     } else {
       el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
     }
-  }, [step]);
+  }, [scrollKey, sections.length, activeTab]);
 
   return (
     <div
       className={`flex flex-col items-center overflow-hidden rounded-[7px] bg-[#F5F3EC] pb-1 pl-1 pr-1 pt-0 shadow-[0_0_0_0.7px_#FFF_inset,0_0_0_0.7px_rgba(20,20,19,0.08),0_2px_8px_rgba(20,20,19,0.03)] dark:bg-[#22211E] dark:shadow-[0_0_0_0.7px_rgba(255,255,255,0.06)_inset,0_0_0_0.7px_rgba(0,0,0,0.5),0_2px_8px_rgba(0,0,0,0.35)] ${className ?? ""}`}
     >
       {/* Tab bar */}
-      <div className="flex items-center gap-[8px] px-2 py-[13px]">
-        {TAB_LABELS.map((label, i) => (
-          <span
-            key={label}
-            className={`flex h-[17px] items-center justify-center whitespace-nowrap rounded-[4px] px-[6px] text-[10px] font-medium leading-none ${
-              i === 0
-                ? "border border-black/5 bg-black/5 text-brand-dark/80 dark:border-white/5 dark:bg-white/10 dark:text-brand-cream/80"
-                : "text-brand-dark/60 dark:text-brand-cream/60"
-            }`}
-          >
-            {label}
-          </span>
-        ))}
+      <div
+        role="tablist"
+        aria-label="AI employee panels"
+        className="flex items-center gap-[8px] px-2 py-[9px]"
+      >
+        {TABS.map((tab) => {
+          const selected = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex h-[21px] items-center justify-center whitespace-nowrap rounded-[4px] px-[7px] text-[10px] font-medium leading-none transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
+                selected
+                  ? "border border-black/5 bg-black/5 text-brand-dark/80 dark:border-white/5 dark:bg-white/10 dark:text-brand-cream/80"
+                  : "text-brand-dark/60 hover:bg-black/[0.03] hover:text-brand-dark/80 dark:text-brand-cream/60 dark:hover:bg-white/[0.05] dark:hover:text-brand-cream/80"
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Inner chat card */}
-      <div className="flex w-full min-h-0 flex-1 flex-col overflow-hidden rounded-[7px] bg-[#FCFAF4] shadow-[0_0_0_0.7px_#FFF_inset,0_0_0_0.7px_rgba(20,20,19,0.08)] dark:bg-[#191816] dark:shadow-[0_0_0_0.7px_rgba(255,255,255,0.05)_inset,0_0_0_0.7px_rgba(0,0,0,0.5)]">
-        <div
-          ref={scrollRef}
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pb-2 pt-[10px]"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {SCENARIOS.map((scenario, i) => {
-            const base = i * STEPS_PER_SCENARIO;
-            const showUser = step >= base + 1;
-            const showReply = step >= base + 2;
-            const showTasks = step >= base + 3;
-            if (!showUser) return null;
-            return (
-              <div
-                key={scenario.id}
-                className={`ai-hq-section-in flex flex-col ${i === 0 ? "mt-0" : "mt-[26px]"}`}
-              >
-                <div className="ai-hq-block-in flex justify-end">
-                  <div className="max-w-[82%] rounded-[8px] border border-black/[0.06] bg-brand-dark/[0.04] px-3 py-[9px] text-[11px] font-medium leading-normal text-brand-dark/85 dark:border-white/[0.08] dark:bg-white/[0.06] dark:text-brand-cream/85">
-                    {scenario.user}
+      {/* Inner panel card */}
+      <div
+        role="tabpanel"
+        className="flex w-full min-h-0 flex-1 flex-col overflow-hidden rounded-[7px] bg-[#FCFAF4] shadow-[0_0_0_0.7px_#FFF_inset,0_0_0_0.7px_rgba(20,20,19,0.08)] dark:bg-[#191816] dark:shadow-[0_0_0_0.7px_rgba(255,255,255,0.05)_inset,0_0_0_0.7px_rgba(0,0,0,0.5)]"
+      >
+        {activeTab === "jobs" ? <JobsPane litBadges={litBadges} /> : null}
+        {activeTab === "activity" ? <ActivityPane /> : null}
+
+        {activeTab === "home" ? (
+          <>
+            <div
+              ref={scrollRef}
+              className={`flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pb-2 pt-[10px] ${
+                fading ? "ai-hq-fade-out" : ""
+              }`}
+              style={{ scrollbarWidth: "none" }}
+            >
+              {sections.map(({ scenario, showReply, showTasks, progressed }) => (
+                <div
+                  key={scenario.id}
+                  className="ai-hq-section-in mt-[26px] flex flex-col first:mt-0"
+                >
+                  <div className="ai-hq-block-in flex justify-end">
+                    <div className="max-w-[82%] rounded-[8px] border border-black/[0.06] bg-brand-dark/[0.04] px-3 py-[9px] text-[11px] font-medium leading-normal text-brand-dark/85 dark:border-white/[0.08] dark:bg-white/[0.06] dark:text-brand-cream/85">
+                      {scenario.user}
+                    </div>
                   </div>
+
+                  {showReply ? (
+                    <div className="ai-hq-block-in mt-[18px] flex items-start gap-2">
+                      <AssistantGlyph />
+                      <p className="m-0 flex-1 text-[11px] font-normal leading-[1.6] text-brand-dark/70 dark:text-brand-cream/70">
+                        <span>{scenario.replyBefore}</span>
+                        <span className="font-semibold text-brand-dark/85 dark:text-brand-cream/85">
+                          {scenario.replyBold}
+                        </span>
+                        {scenario.replyAfter ? <span>{scenario.replyAfter}</span> : null}
+                      </p>
+                    </div>
+                  ) : null}
+
+                  {showTasks ? (
+                    <div className="mt-[18px] flex flex-col gap-[6px]">
+                      {scenario.tasks.map((task, ti) => (
+                        <TaskRow
+                          key={ti}
+                          task={task}
+                          status={
+                            progressed
+                              ? ti === 0
+                                ? "done"
+                                : "running"
+                              : task.status
+                          }
+                          delayMs={ti * 250}
+                        />
+                      ))}
+                      {progressed && scenario.approval ? (
+                        <div className="ai-hq-block-in mt-[2px] flex">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 shadow-[0_0_0_0.8px_rgba(20,20,19,0.08)] dark:bg-white/[0.06] dark:shadow-[0_0_0_0.8px_rgba(255,255,255,0.08)]">
+                            <span
+                              aria-hidden
+                              className="flex h-3 w-3 items-center justify-center rounded-full bg-[#30D158]"
+                            >
+                              <Check className="h-2 w-2 text-white" strokeWidth={3.5} />
+                            </span>
+                            <span className="text-[9px] font-medium leading-none text-brand-dark/70 dark:text-brand-cream/70">
+                              {scenario.approval}
+                            </span>
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
+              ))}
+            </div>
 
-                {showReply ? (
-                  <div className="ai-hq-block-in mt-[18px] flex items-start gap-2">
-                    <AssistantGlyph />
-                    <p className="m-0 flex-1 text-[11px] font-normal leading-[1.6] text-brand-dark/70 dark:text-brand-cream/70">
-                      <span>{scenario.replyBefore}</span>
-                      <span className="font-semibold text-brand-dark/85 dark:text-brand-cream/85">
-                        {scenario.replyBold}
-                      </span>
-                      {scenario.replyAfter ? <span>{scenario.replyAfter}</span> : null}
-                    </p>
-                  </div>
-                ) : null}
-
-                {showTasks ? (
-                  <div className="mt-[18px] flex flex-col gap-[6px]">
-                    {scenario.tasks.map((task, ti) => (
-                      <TaskRow key={ti} task={task} delayMs={ti * 250} />
-                    ))}
-                  </div>
-                ) : null}
+            {/* Decorative input bar — types the next owner message */}
+            <div className="mx-2 mb-2" aria-hidden>
+              <div className="flex min-h-[36px] items-center gap-[14px] rounded-[8px] bg-white px-3 py-2 shadow-[0_0_0_1px_#FFF_inset,0_0_0_1px_rgba(20,20,19,0.08),0_4px_10px_rgba(20,20,19,0.06)] dark:bg-white/[0.05] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_0_1px_rgba(0,0,0,0.5),0_4px_10px_rgba(0,0,0,0.3)]">
+                {typingText !== null ? (
+                  <span className="flex-1 text-[10px] leading-[1.55] text-brand-dark/75 dark:text-brand-cream/75">
+                    {typingText}
+                    <span className="ai-hq-caret-blink ml-[1px] inline-block h-[11px] w-[1.5px] translate-y-[2px] bg-brand-orange" />
+                  </span>
+                ) : (
+                  <span className="flex-1 text-[10px] leading-[1.55] text-brand-dark/30 dark:text-brand-cream/30">
+                    {INPUT_PLACEHOLDER}
+                  </span>
+                )}
+                <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[4px] border border-[#383838] bg-gradient-to-b from-[#4F4F4F] to-[#202020] shadow-[0_1.5px_0_0_rgba(255,255,255,0.24)_inset,0_-0.5px_2px_rgba(0,0,0,0.25)_inset]">
+                  <ArrowUp className="h-[11px] w-[11px] text-[#E7E7E3]" strokeWidth={2.5} />
+                </span>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Decorative input bar */}
-        <div className="mx-2 mb-2" aria-hidden>
-          <div className="flex min-h-[36px] items-center gap-[14px] rounded-[8px] bg-white px-3 py-2 shadow-[0_0_0_1px_#FFF_inset,0_0_0_1px_rgba(20,20,19,0.08),0_4px_10px_rgba(20,20,19,0.06)] dark:bg-white/[0.05] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset,0_0_0_1px_rgba(0,0,0,0.5),0_4px_10px_rgba(0,0,0,0.3)]">
-            <span className="flex-1 text-[10px] leading-[1.55] text-brand-dark/30 dark:text-brand-cream/30">
-              {INPUT_PLACEHOLDER}
-            </span>
-            <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[4px] border border-[#383838] bg-gradient-to-b from-[#4F4F4F] to-[#202020] shadow-[0_1.5px_0_0_rgba(255,255,255,0.24)_inset,0_-0.5px_2px_rgba(0,0,0,0.25)_inset]">
-              <ArrowUp className="h-[11px] w-[11px] text-[#E7E7E3]" strokeWidth={2.5} />
-            </span>
-          </div>
-        </div>
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );
@@ -594,53 +887,81 @@ function ChatPanel({ step, className }: { step: number; className?: string }) {
 export function AiHqDemo() {
   const reducedMotion = Boolean(useReducedMotion());
   const sectionRef = useRef<HTMLElement>(null);
-  const [started, setStarted] = useState(false);
-  const [cycle, setCycle] = useState(0);
-  const [step, setStep] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [pos, setPos] = useState<Pos>({ scenario: 0, phase: "idle" });
+  const [typed, setTyped] = useState("");
 
+  // Track visibility continuously so playback pauses off-screen.
   useEffect(() => {
-    if (reducedMotion) {
-      setStep(TOTAL_STEPS);
-      return;
-    }
+    if (reducedMotion) return;
     const el = sectionRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 },
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.25 },
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, [reducedMotion]);
 
+  // Phase machine: each phase schedules the next; pausing just clears the timer.
   useEffect(() => {
-    if (reducedMotion || !started) return;
+    if (reducedMotion || !inView) return;
+    const timer = window.setTimeout(() => setPos(nextPos(pos)), phaseDuration(pos));
+    return () => window.clearTimeout(timer);
+  }, [pos, inView, reducedMotion]);
 
-    setStep(0);
-    const timers: number[] = [];
-    for (let s = 1; s <= TOTAL_STEPS; s += 1) {
-      timers.push(window.setTimeout(() => setStep(s), stepStartMs(s)));
+  // Character-by-character typing into the decorative input bar.
+  useEffect(() => {
+    if (reducedMotion || !inView || pos.phase !== "typing") {
+      setTyped("");
+      return;
     }
-    timers.push(
-      window.setTimeout(() => setCycle((c) => c + 1), CYCLE_RESET_MS),
-    );
-    return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [started, cycle, reducedMotion]);
+    const message = SCENARIOS[pos.scenario].user;
+    let count = 0;
+    const interval = window.setInterval(() => {
+      count += 1;
+      setTyped(message.slice(0, count));
+      if (count >= message.length) window.clearInterval(interval);
+    }, TYPING_MS_PER_CHAR);
+    return () => window.clearInterval(interval);
+  }, [pos, inView, reducedMotion]);
 
-  // Badges accumulate as scenarios' task rows appear, and clear on loop reset.
+  // Under reduced motion, show the finished transcript with all work progressed.
+  const view: Pos = reducedMotion
+    ? { scenario: SCENARIOS.length - 1, phase: "hold" }
+    : pos;
+  const rank = PHASE_RANK[view.phase];
+
+  const sections: SectionView[] = SCENARIOS.flatMap((scenario, i) => {
+    const started = i < view.scenario || (i === view.scenario && rank >= 1);
+    if (!started) return [];
+    const current = i === view.scenario;
+    return [
+      {
+        scenario,
+        showReply: !current || rank >= 2,
+        showTasks: !current || rank >= 3,
+        progressed: !current || rank >= 4,
+      },
+    ];
+  });
+
   const litBadges: Partial<Record<NodeId, BadgeCounts>> = {};
   SCENARIOS.forEach((scenario, i) => {
-    if (step >= (i + 1) * STEPS_PER_SCENARIO) {
+    if (i < view.scenario || (i === view.scenario && rank >= 3)) {
       Object.assign(litBadges, scenario.badges);
     }
   });
 
-  const activeScenario = step === 0 ? -1 : Math.floor((step - 1) / STEPS_PER_SCENARIO);
+  const flashing = !reducedMotion && pos.phase === "tasks";
+  const flashNodes = flashing
+    ? (Object.keys(SCENARIOS[pos.scenario].badges) as NodeId[])
+    : [];
+
+  const typingText = !reducedMotion && pos.phase === "typing" ? typed : null;
+  const fading = !reducedMotion && pos.phase === "fadeout";
+  const scrollKey = view.scenario * 10 + rank;
 
   return (
     <section
@@ -662,7 +983,7 @@ export function AiHqDemo() {
         </div>
 
         <div className="sr-only" aria-live="polite" aria-atomic="true">
-          {scenarioAnnouncement(activeScenario)}
+          {view.phase === "idle" ? "" : scenarioAnnouncement(view.scenario)}
         </div>
 
         {/* App-window frame */}
@@ -717,19 +1038,38 @@ export function AiHqDemo() {
               </div>
 
               <div className="flex flex-1 items-center justify-center px-10 pb-20 pt-0 max-[999px]:flex-none max-[999px]:px-5 max-[999px]:pb-5 max-[999px]:pt-5">
-                <OrbitalDiagram litBadges={litBadges} reducedMotion={reducedMotion} />
+                <OrbitalDiagram
+                  litBadges={litBadges}
+                  flashNodes={flashNodes}
+                  flashKey={pos.scenario}
+                  reducedMotion={reducedMotion}
+                />
               </div>
             </div>
 
             {/* Right: chat panel (desktop) */}
             <div className="hidden shrink-0 flex-col p-2 pl-0 min-[1000px]:flex">
-              <ChatPanel step={step} className="h-[580px] w-[328px]" />
+              <ChatPanel
+                sections={sections}
+                typingText={typingText}
+                fading={fading}
+                litBadges={litBadges}
+                scrollKey={scrollKey}
+                className="h-[580px] w-[328px]"
+              />
             </div>
           </div>
 
           {/* Chat panel (mobile/tablet) */}
           <div className="w-full p-2 pt-0 min-[1000px]:hidden">
-            <ChatPanel step={step} className="h-[300px] w-full" />
+            <ChatPanel
+              sections={sections}
+              typingText={typingText}
+              fading={fading}
+              litBadges={litBadges}
+              scrollKey={scrollKey}
+              className="h-[300px] w-full"
+            />
           </div>
         </div>
 

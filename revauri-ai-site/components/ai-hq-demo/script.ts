@@ -46,6 +46,8 @@ export interface Scenario {
   tasks: [TaskItem, TaskItem];
   /** Nodes whose activity badges light up when this scenario plays. */
   badges: Partial<Record<NodeId, BadgeCounts>>;
+  /** Optional chip shown once the scenario's work has progressed. */
+  approval?: string;
 }
 
 export const SCENARIOS: Scenario[] = [
@@ -117,6 +119,7 @@ export const SCENARIOS: Scenario[] = [
       reviews: { queued: 1, running: 2, done: 5 },
       inbox: { queued: 2, running: 1, done: 3 },
     },
+    approval: "Approved by you · review ask sent 4:05 PM",
   },
   {
     id: "inbox",
@@ -143,31 +146,72 @@ export const SCENARIOS: Scenario[] = [
   },
 ];
 
-/** Steps per scenario: 1 = user bubble, 2 = +reply, 3 = +task rows. */
-export const STEPS_PER_SCENARIO = 3;
-export const TOTAL_STEPS = SCENARIOS.length * STEPS_PER_SCENARIO;
+/** Playback phases within a scenario, plus end-of-cycle phases. */
+export type Phase =
+  | "idle"
+  | "typing"
+  | "user"
+  | "reply"
+  | "tasks"
+  | "progress"
+  | "hold"
+  | "fadeout";
 
-const SCENARIO_INTERVAL_MS = 6000;
-const REPLY_DELAY_MS = 900;
-const TASKS_DELAY_MS = 1800;
-/** Hold on the finished transcript before clearing and looping. */
-export const LOOP_HOLD_MS = 3000;
+export const TYPING_MS_PER_CHAR = 28;
+/** Delay before typing begins + hold after the message finishes typing. */
+export const TYPING_LEAD_MS = 350;
+export const TYPING_TAIL_MS = 500;
 
-/** Absolute time (ms from cycle start) at which each step 1..TOTAL_STEPS fires. */
-export function stepStartMs(step: number): number {
-  const scenario = Math.floor((step - 1) / STEPS_PER_SCENARIO);
-  const sub = (step - 1) % STEPS_PER_SCENARIO;
-  const base = scenario * SCENARIO_INTERVAL_MS;
-  if (sub === 0) return base;
-  if (sub === 1) return base + REPLY_DELAY_MS;
-  return base + TASKS_DELAY_MS;
-}
+export const PHASE_MS: Record<Exclude<Phase, "idle" | "typing">, number> = {
+  user: 900,
+  reply: 900,
+  tasks: 2800,
+  progress: 1600,
+  hold: 2400,
+  fadeout: 500,
+};
 
-/** Time at which the cycle clears and restarts. */
-export const CYCLE_RESET_MS =
-  stepStartMs(TOTAL_STEPS) + SCENARIO_INTERVAL_MS - TASKS_DELAY_MS + LOOP_HOLD_MS;
+export type TabId = "home" | "jobs" | "activity";
 
-export const TAB_LABELS = ["Home", "Jobs", "Activity", "Calendar", "Context"];
+export const TABS: { id: TabId; label: string }[] = [
+  { id: "home", label: "Home" },
+  { id: "jobs", label: "Jobs" },
+  { id: "activity", label: "Activity" },
+];
+
+/** Rows shown in the Activity tab. */
+export const ACTIVITY: {
+  text: string;
+  meta: string;
+  state: "done" | "awaiting";
+}[] = [
+  {
+    text: "After-hours call answered · Elena V.",
+    meta: "Booked Thu 9:00 AM · 7:42 PM",
+    state: "done",
+  },
+  {
+    text: "Review ask sent · yesterday's install",
+    meta: "Approved by you · 4:05 PM",
+    state: "done",
+  },
+  {
+    text: "Quote follow-up drafted · Sam, patio",
+    meta: "Awaiting your approval",
+    state: "awaiting",
+  },
+  {
+    text: "Inbox sorted · 4 filed, 1 flagged",
+    meta: "Done before you were up · 6:12 AM",
+    state: "done",
+  },
+  {
+    text: "Payroll packet prepared",
+    meta: "Sent to Gusto · 3:20 PM",
+    state: "done",
+  },
+];
+
 export const INPUT_PLACEHOLDER = "Ask your AI employee to pick up a new job…";
 export const FRAME_CAPTION = "revauri/your-business";
 
