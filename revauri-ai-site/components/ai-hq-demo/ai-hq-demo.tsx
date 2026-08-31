@@ -91,6 +91,106 @@ function nodePoint(index: number, radius: number): { x: number; y: number } {
   return { x: CX + radius * Math.cos(rad), y: CY + radius * Math.sin(rad) };
 }
 
+/**
+ * Ghost sub-trees continuing outward past each node, one entry per node
+ * (clockwise from top). All connectors are orthogonal, org-chart style:
+ * lines are [x1, y1, x2, y2], dots mark junctions, cards are ghost centers.
+ */
+const GHOSTS: {
+  lines: [number, number, number, number][];
+  dots: [number, number][];
+  cards: [number, number][];
+}[] = [
+  {
+    // Calls (top): stub up, T-bar, two children above
+    lines: [
+      [260, 36, 260, 24],
+      [190, 24, 330, 24],
+      [190, 24, 190, 14],
+      [330, 24, 330, 14],
+    ],
+    dots: [
+      [190, 24],
+      [330, 24],
+    ],
+    cards: [
+      [190, -4],
+      [330, -4],
+    ],
+  },
+  {
+    // Leads (NE): out right, elbow up
+    lines: [
+      [444, 116, 466, 116],
+      [466, 116, 466, 104],
+    ],
+    dots: [[466, 116]],
+    cards: [[466, 85]],
+  },
+  {
+    // Quotes (right): out right, elbow down
+    lines: [
+      [504, 260, 526, 260],
+      [526, 260, 526, 272],
+    ],
+    dots: [[526, 260]],
+    cards: [[526, 291]],
+  },
+  {
+    // Reviews (SE): out right, elbow down
+    lines: [
+      [444, 404, 466, 404],
+      [466, 404, 466, 416],
+    ],
+    dots: [[466, 404]],
+    cards: [[466, 435]],
+  },
+  {
+    // Calendar (bottom): stub down, T-bar, two children below
+    lines: [
+      [260, 484, 260, 496],
+      [190, 496, 330, 496],
+      [190, 496, 190, 506],
+      [330, 496, 330, 506],
+    ],
+    dots: [
+      [190, 496],
+      [330, 496],
+    ],
+    cards: [
+      [190, 523],
+      [330, 523],
+    ],
+  },
+  {
+    // Inbox (SW): out left, elbow down
+    lines: [
+      [76, 404, 54, 404],
+      [54, 404, 54, 416],
+    ],
+    dots: [[54, 404]],
+    cards: [[54, 435]],
+  },
+  {
+    // Payroll (left): out left, elbow down
+    lines: [
+      [16, 260, -6, 260],
+      [-6, 260, -6, 272],
+    ],
+    dots: [[-6, 260]],
+    cards: [[-6, 291]],
+  },
+  {
+    // Outreach (NW): out left, elbow up
+    lines: [
+      [76, 116, 54, 116],
+      [54, 116, 54, 104],
+    ],
+    dots: [[54, 116]],
+    cards: [[54, 85]],
+  },
+];
+
 function GhostCard({ x, y }: { x: number; y: number }) {
   return (
     <rect
@@ -147,8 +247,10 @@ function NodeBadge({ counts }: { counts: BadgeCounts }) {
 
 function OrbitalDiagram({
   litBadges,
+  reducedMotion,
 }: {
   litBadges: Partial<Record<NodeId, BadgeCounts>>;
+  reducedMotion: boolean;
 }) {
   return (
     <div className="relative aspect-square w-full max-w-[520px]">
@@ -188,55 +290,85 @@ function OrbitalDiagram({
           );
         })}
 
-        {/* Ghost sub-trees continuing outward past each node */}
+        {/* Ghost sub-trees continuing outward past each node (orthogonal) */}
         {NODES.map((node, i) => {
-          const isAxis = i === 0 || i === 4; // top and bottom get two children
-          const from = nodePoint(i, 226);
-          const stubEnd = nodePoint(i, 248);
-          const rad = ((i * 45 - 90) * Math.PI) / 180;
-          const perpX = -Math.sin(rad);
-          const perpY = Math.cos(rad);
-          const ghostCenters = isAxis
-            ? [
-                { x: stubEnd.x + perpX * 56 + Math.cos(rad) * 26, y: stubEnd.y + perpY * 56 + Math.sin(rad) * 26 },
-                { x: stubEnd.x - perpX * 56 + Math.cos(rad) * 26, y: stubEnd.y - perpY * 56 + Math.sin(rad) * 26 },
-              ]
-            : [nodePoint(i, 276)];
+          const ghost = GHOSTS[i];
           return (
             <g key={`ghost-${node.id}`}>
-              <line
-                x1={from.x}
-                y1={from.y}
-                x2={stubEnd.x}
-                y2={stubEnd.y}
-                strokeWidth="1"
-                strokeLinecap="round"
-                strokeDasharray="4 4"
-                className="stroke-brand-dark/10 opacity-60 dark:stroke-brand-cream/10"
-              />
-              <EndpointDot x={stubEnd.x} y={stubEnd.y} />
-              {ghostCenters.map((g, gi) => (
-                <g key={gi}>
-                  <line
-                    x1={stubEnd.x}
-                    y1={stubEnd.y}
-                    x2={g.x}
-                    y2={g.y}
-                    strokeWidth="1"
-                    strokeLinecap="round"
-                    strokeDasharray="4 4"
-                    className="stroke-brand-dark/[0.07] dark:stroke-brand-cream/[0.07]"
-                  />
-                  <GhostCard x={g.x} y={g.y} />
+              {ghost.lines.map(([x1, y1, x2, y2], li) => (
+                <line
+                  key={li}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeDasharray="4 4"
+                  className="stroke-brand-dark/[0.08] dark:stroke-brand-cream/[0.08]"
+                />
+              ))}
+              {ghost.dots.map(([x, y], di) => (
+                <g key={di} opacity="0.5">
+                  <EndpointDot x={x} y={y} />
                 </g>
+              ))}
+              {ghost.cards.map(([x, y], ci) => (
+                <GhostCard key={ci} x={x} y={y} />
               ))}
             </g>
           );
         })}
 
-        {/* Job node cards */}
+        {/* Subtle orange pulses traveling from the center toward each job */}
+        {!reducedMotion
+          ? NODES.map((node, i) => {
+              const p1 = nodePoint(i, 48);
+              const p2 = nodePoint(i, 180);
+              const dur = "3.6s";
+              const begin = `${(i * 0.45).toFixed(2)}s`;
+              return (
+                <circle
+                  key={`pulse-${node.id}`}
+                  r="2.2"
+                  cx={p1.x}
+                  cy={p1.y}
+                  opacity="0"
+                  className="fill-brand-orange"
+                >
+                  <animate
+                    attributeName="cx"
+                    values={`${p1.x};${p2.x};${p2.x}`}
+                    keyTimes="0;0.32;1"
+                    dur={dur}
+                    begin={begin}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="cy"
+                    values={`${p1.y};${p2.y};${p2.y}`}
+                    keyTimes="0;0.32;1"
+                    dur={dur}
+                    begin={begin}
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0;0.5;0.5;0;0"
+                    keyTimes="0;0.06;0.24;0.32;1"
+                    dur={dur}
+                    begin={begin}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              );
+            })
+          : null}
+
+        {/* Job node cards — label glows orange while the job has agents on it */}
         {NODES.map((node, i) => {
           const p = nodePoint(i, RING_R);
+          const active = Boolean(litBadges[node.id]);
           return (
             <foreignObject
               key={`node-${node.id}`}
@@ -248,7 +380,11 @@ function OrbitalDiagram({
             >
               <div className="flex h-full w-full items-center justify-center">
                 <div
-                  className={`flex w-[74px] items-center justify-center rounded-[7px] bg-white px-2 py-3 text-center text-[11px] leading-tight text-brand-dark/60 dark:bg-[#2A2824] dark:text-brand-cream/60 ${HAIRLINE_CARD_SHADOW}`}
+                  className={`flex w-[74px] items-center justify-center rounded-[7px] bg-white px-2 py-3 text-center text-[11px] leading-tight transition-colors duration-500 dark:bg-[#2A2824] ${
+                    active
+                      ? "font-medium text-brand-orange"
+                      : "text-brand-dark/60 dark:text-brand-cream/60"
+                  } ${HAIRLINE_CARD_SHADOW}`}
                 >
                   {node.label}
                 </div>
@@ -282,9 +418,24 @@ function OrbitalDiagram({
             <div
               className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
             >
-              <span className="text-[12px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
-                Revauri
-                <span className="text-brand-orange"> AI</span>
+              {/* Mini version of the nav wordmark (see components/logo.tsx) */}
+              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+                <span className="relative">
+                  Revauri
+                  <span
+                    aria-hidden
+                    className="absolute bg-brand-orange"
+                    style={{
+                      width: "5px",
+                      height: "1.6px",
+                      borderRadius: "1px",
+                      right: "0px",
+                      top: "0.15em",
+                      transform: "rotate(-35deg)",
+                    }}
+                  />
+                </span>
+                <span className="ml-[2px] text-brand-orange">AI</span>
               </span>
             </div>
           </div>
@@ -566,7 +717,7 @@ export function AiHqDemo() {
               </div>
 
               <div className="flex flex-1 items-center justify-center px-10 pb-20 pt-0 max-[999px]:flex-none max-[999px]:px-5 max-[999px]:pb-5 max-[999px]:pt-5">
-                <OrbitalDiagram litBadges={litBadges} />
+                <OrbitalDiagram litBadges={litBadges} reducedMotion={reducedMotion} />
               </div>
             </div>
 
