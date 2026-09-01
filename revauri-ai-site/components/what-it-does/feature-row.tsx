@@ -26,7 +26,7 @@ export function FeatureRow({
 }) {
   const copy = (
     <div className="flex flex-col">
-      <p className="section-eyebrow">{section.kicker}</p>
+      <p className="section-eyebrow text-brand-orange!">{section.kicker}</p>
       <h3 className="mt-4 max-w-xl text-[22px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream min-[767px]:text-[32px] min-[1000px]:max-w-[22rem] min-[1000px]:text-[36px]">
         {section.heading}
       </h3>
