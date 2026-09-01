@@ -157,10 +157,10 @@ export function Booking() {
           <div id="scheduler" className="mx-auto mt-6 w-full max-w-[980px] scroll-mt-24 md:mt-8">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-10 top-10 h-44 rounded-full bg-brand-orange/10 blur-3xl md:inset-x-16 md:h-48"
+              className="pointer-events-none absolute inset-x-4 top-10 h-44 rounded-full bg-brand-orange/10 blur-3xl md:inset-x-16 md:h-48"
             />
-            <div className="relative overflow-hidden rounded-[1.85rem] border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-2.5 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:rounded-[2rem] sm:p-3.5">
-              <div className="mb-2.5 flex items-center justify-between gap-3 rounded-[1.25rem] border border-brand-light-gray/50 bg-brand-white/85 px-4 py-3 dark:border-brand-mid-gray/20 dark:bg-brand-dark/85 sm:mb-3 sm:rounded-[1.35rem]">
+            <div className="relative overflow-hidden rounded-2xl border border-brand-light-gray/50 bg-gradient-to-br from-brand-white via-brand-cream to-brand-orange/[0.08] p-1.5 shadow-[0_32px_80px_-42px_rgba(217,119,87,0.42)] dark:border-brand-mid-gray/20 dark:from-[#1a1a19] dark:via-[#171716] dark:to-brand-orange/[0.08] sm:rounded-[2rem] sm:p-3.5">
+              <div className="mb-2.5 flex items-center justify-between gap-3 rounded-[1.25rem] border border-brand-light-gray/50 bg-brand-white/85 px-3 py-3 dark:border-brand-mid-gray/20 dark:bg-brand-dark/85 sm:mb-3 sm:rounded-[1.35rem] sm:px-4">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
                     Pick a time that works for you

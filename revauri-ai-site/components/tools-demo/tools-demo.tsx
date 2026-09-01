@@ -35,7 +35,7 @@ function ApproveMock() {
           call.
         </p>
       </div>
-      <div className="flex items-center gap-2 border-t border-black/[0.06] px-5 py-3 dark:border-white/[0.06]">
+      <div className="flex flex-wrap items-center gap-2 border-t border-black/[0.06] px-5 py-3 dark:border-white/[0.06]">
         <button
           type="button"
           aria-disabled="true"
@@ -151,7 +151,7 @@ export function ToolsDemo() {
           <div
             role="tablist"
             aria-label="Hire tools"
-            className="mx-auto grid max-w-4xl grid-cols-1 gap-px min-[767px]:grid-cols-3"
+            className="mx-auto grid max-w-4xl grid-cols-1 gap-px min-[1000px]:grid-cols-3"
           >
             {TOOLS_TABS.map((tab, index) => {
               const selected = tab.id === active;

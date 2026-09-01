@@ -260,6 +260,15 @@ function KanbanCard({
   );
 }
 
+/** Which board the mobile carousel should show. Scrolls as hops draw
+ *  toward the next column so the dotted line and the stage move together. */
+function focusColumn(drawingIndex: number, completed: number): number {
+  const hop = drawingIndex >= 0 ? drawingIndex : completed - 1;
+  if (hop < 0) return 0;
+  if (hop < CAPTURE_HOPS) return 1;
+  return 2;
+}
+
 function reachedIds(completed: number): Set<string> {
   const ids = new Set<string>(["in-1"]);
   for (let index = 0; index < completed; index += 1) {
@@ -272,6 +281,7 @@ function reachedIds(completed: number): Set<string> {
 }
 
 export function CatchKanban() {
+  const shellRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [anchors, setAnchors] = useState<Record<string, Anchor>>({});
   const [jobIndex, setJobIndex] = useState(0);
@@ -282,6 +292,9 @@ export function CatchKanban() {
   const job = JOBS[jobIndex] ?? JOBS[0];
   const columns = columnsFor(job);
   const reached = reachedIds(reducedMotion ? SEQUENCE.length : completed);
+  const focus = reducedMotion
+    ? 0
+    : focusColumn(drawingIndex, completed);
 
   useEffect(() => {
     if (reducedMotion) {
@@ -342,6 +355,19 @@ export function CatchKanban() {
       }
 
       setAnchors(next);
+
+      const shell = shellRef.current;
+      const focusedCol = frame.querySelector(`[data-kanban-col="${focus}"]`);
+      if (shell) {
+        if (
+          window.matchMedia("(max-width: 767px)").matches &&
+          focusedCol instanceof HTMLElement
+        ) {
+          shell.style.height = `${focusedCol.offsetHeight}px`;
+        } else {
+          shell.style.height = "";
+        }
+      }
     };
 
     measure();
@@ -351,35 +377,56 @@ export function CatchKanban() {
       observer.observe(stack);
     }
     return () => observer.disconnect();
-  }, [jobIndex]);
+  }, [jobIndex, focus]);
 
   return (
-    <div className="max-w-full overflow-x-auto">
+    <div
+      className={
+        reducedMotion
+          ? "max-w-full overflow-x-auto"
+          : "max-w-full overflow-hidden"
+      }
+    >
       <div
-        ref={frameRef}
-        className="product-frame relative min-h-[360px] overflow-hidden max-[767px]:min-h-[300px] max-[767px]:min-w-[540px]"
+        ref={shellRef}
+        className="product-frame relative overflow-hidden min-[768px]:min-h-[360px]"
       >
-        <div className="dotted-grid grid h-full min-h-[360px] grid-cols-3 max-[767px]:min-h-[300px]">
+        <div
+          ref={frameRef}
+          key={jobIndex}
+          className={`dotted-grid relative max-[767px]:flex max-[767px]:w-[264%] max-[767px]:items-start max-[767px]:ease-in-out min-[768px]:grid min-[768px]:h-full min-[768px]:min-h-[360px] min-[768px]:w-full min-[768px]:grid-cols-3 ${
+            reducedMotion
+              ? ""
+              : "max-[767px]:transition-transform max-[767px]:duration-[1350ms]"
+          } ${
+            focus === 1
+              ? "max-[767px]:-translate-x-1/3"
+              : focus === 2
+                ? "max-[767px]:-translate-x-[calc(100%-100%/2.64)]"
+                : "max-[767px]:translate-x-0"
+          }`}
+        >
           {columns.map((col, i) => (
             <div
               key={col.name}
-              className={`flex h-full flex-col p-3 min-[767px]:p-4 ${
+              data-kanban-col={i}
+              className={`flex w-1/3 shrink-0 flex-col self-start px-2.5 pt-2.5 pb-6 min-[768px]:h-full min-[768px]:w-auto min-[768px]:self-auto min-[768px]:p-4 ${
                 i < columns.length - 1
                   ? "border-r border-black/[0.06] dark:border-white/[0.06]"
                   : ""
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="rounded-full border border-black/[0.08] bg-white/70 px-2 py-0.5 text-[10px] font-medium text-brand-dark/70 dark:border-white/[0.1] dark:bg-white/[0.06] dark:text-brand-cream/70">
+                <span className="max-w-full truncate rounded-full border border-black/[0.08] bg-white/70 px-2 py-0.5 text-[10px] font-medium text-brand-dark/70 dark:border-white/[0.1] dark:bg-white/[0.06] dark:text-brand-cream/70">
                   {col.name}
                 </span>
-                <span className="text-[10px] text-brand-dark/35 dark:text-brand-cream/35">
+                <span className="text-[10px] text-brand-orange">
                   {col.cards.length}
                 </span>
               </div>
               <div
                 data-card-stack
-                className="flex min-h-0 flex-1 flex-col justify-center gap-2"
+                className="mt-3 flex flex-col gap-2 min-[768px]:mt-0 min-[768px]:min-h-0 min-[768px]:flex-1 min-[768px]:justify-center"
               >
                 {col.cards.map((card) => (
                   <KanbanCard
@@ -392,14 +439,14 @@ export function CatchKanban() {
               </div>
             </div>
           ))}
+          <KanbanConnectors
+            anchors={anchors}
+            completed={reducedMotion ? SEQUENCE.length : completed}
+            drawingIndex={reducedMotion ? -1 : drawingIndex}
+            reducedMotion={reducedMotion}
+          />
         </div>
-        <KanbanConnectors
-          anchors={anchors}
-          completed={reducedMotion ? SEQUENCE.length : completed}
-          drawingIndex={reducedMotion ? -1 : drawingIndex}
-          reducedMotion={reducedMotion}
-        />
-        <span className="absolute bottom-3 left-3 font-mono text-[8px] leading-[11px] text-brand-dark/40 dark:text-brand-cream/40">
+        <span className="absolute bottom-2 left-2.5 font-mono text-[8px] leading-[11px] text-brand-dark/40 dark:text-brand-cream/40">
           Example — phone hire
         </span>
       </div>

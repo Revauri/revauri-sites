@@ -62,7 +62,7 @@ export default function AboutPage() {
                   alt="Joseph Silvagnoli, founder of Revauri"
                   width={224}
                   height={224}
-                  className="block h-52 w-52 rounded-[16px] object-cover object-top ring-1 ring-black/[0.08] sm:h-56 sm:w-56 dark:ring-white/[0.08]"
+                  className="block h-40 w-40 rounded-[16px] object-cover object-top ring-1 ring-black/[0.08] sm:h-52 sm:w-52 lg:h-56 lg:w-56 dark:ring-white/[0.08]"
                 />
               </div>
             </FadeInWhenVisible>

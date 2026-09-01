@@ -47,15 +47,15 @@ const TECH_STACK = [
 export function StatsBar() {
   return (
     <FadeInWhenVisible>
-      <section className="relative overflow-hidden bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
+      <section className="relative overflow-hidden bg-brand-orange/5 py-8 dark:bg-brand-orange/[0.03] lg:py-8">
         <ParticleNetworkBg />
         <div className="relative z-10 mx-auto max-w-6xl px-6">
           <p className="mb-10 text-center text-xs font-semibold uppercase tracking-widest text-brand-mid-gray">
             Powered by the leading AI models
           </p>
 
-          {/* Mobile / tablet: 2x2 grid */}
-          <div className="grid grid-cols-2 gap-8 xl:hidden">
+          {/* Mobile: stacked. Tablet+: 2x2. Desktop row is the xl:flex below. */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 xl:hidden">
             {TECH_STACK.map((tech) => (
               <div key={tech.name} className="flex flex-col">
                 <div className="mb-3 h-10 flex items-end">{tech.icon}</div>

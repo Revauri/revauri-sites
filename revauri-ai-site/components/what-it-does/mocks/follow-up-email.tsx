@@ -1,7 +1,7 @@
 export function FollowUpEmail() {
   return (
     <div className="relative min-h-[360px] max-[767px]:min-h-[320px]">
-      <div className="product-frame relative mr-0 overflow-hidden min-[640px]:w-[74%]">
+      <div className="product-frame relative mr-0 overflow-hidden min-[900px]:w-[74%]">
         <div className="border-b border-black/[0.06] px-4 py-3 dark:border-white/[0.06]">
           <p className="text-[12px] font-medium text-brand-dark dark:text-brand-cream">
             Email preview
@@ -10,7 +10,7 @@ export function FollowUpEmail() {
         <dl className="divide-y divide-black/[0.06] text-[12px] dark:divide-white/[0.06]">
           <div className="grid grid-cols-[72px_1fr] gap-3 px-4 py-2.5">
             <dt className="text-brand-dark/40 dark:text-brand-cream/40">To</dt>
-            <dd className="text-brand-dark dark:text-brand-cream">
+            <dd className="min-w-0 break-all text-brand-dark dark:text-brand-cream">
               Maya Chen{" "}
               <span className="text-brand-dark/40 dark:text-brand-cream/40">
                 maya@example.com
@@ -47,7 +47,7 @@ export function FollowUpEmail() {
         </span>
       </div>
 
-      <div className="absolute right-0 top-14 w-[min(42%,236px)] rounded-[16px] border border-black/[0.08] bg-white/95 p-4 shadow-[0_18px_40px_-24px_rgba(20,20,19,0.45)] max-[639px]:relative max-[639px]:right-auto max-[639px]:top-3 max-[639px]:mx-3 max-[639px]:mb-3 max-[639px]:w-auto dark:border-white/[0.08] dark:bg-[#242321]">
+      <div className="absolute right-0 top-14 w-[min(42%,236px)] rounded-[16px] border border-black/[0.08] bg-white/95 p-4 shadow-[0_18px_40px_-24px_rgba(20,20,19,0.45)] max-[899px]:relative max-[899px]:right-auto max-[899px]:top-3 max-[899px]:mx-3 max-[899px]:mb-3 max-[899px]:w-auto dark:border-white/[0.08] dark:bg-[#242321]">
         <div className="flex items-center justify-between">
           <p className="text-[12px] font-medium text-brand-dark dark:text-brand-cream">
             Follow-up report

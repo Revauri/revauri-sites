@@ -74,7 +74,7 @@ export function DetailPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`detail-panel absolute top-2 right-2 bottom-2 flex w-[min(620px,calc(100vw-16px))] flex-col overflow-hidden rounded-[16px] max-[639px]:left-2 max-[639px]:w-auto ${
+        className={`detail-panel absolute top-[max(0.5rem,env(safe-area-inset-top))] right-2 bottom-[max(0.5rem,env(safe-area-inset-bottom))] flex w-[min(620px,calc(100vw-16px))] flex-col overflow-hidden rounded-[16px] max-[639px]:left-2 max-[639px]:w-auto ${
           reducedMotion ? "" : "ai-hq-section-in"
         }`}
       >
@@ -83,7 +83,7 @@ export function DetailPanel({
             <p className="section-eyebrow">{item.code}</p>
             <h3
               id={titleId}
-              className="mt-3 text-[28px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream min-[767px]:text-[32px]"
+              className="mt-3 text-[22px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream min-[767px]:text-[28px] min-[1024px]:text-[32px]"
             >
               {item.title}
             </h3>
@@ -102,7 +102,7 @@ export function DetailPanel({
           </button>
         </div>
 
-        <div className="dotted-grid mx-6 grid grid-cols-3 gap-2 rounded-[12px] border border-black/[0.06] p-3 min-[767px]:mx-8 dark:border-white/[0.06]">
+        <div className="dotted-grid mx-6 grid grid-cols-1 gap-2 rounded-[12px] border border-black/[0.06] p-3 min-[480px]:grid-cols-3 min-[767px]:mx-8 dark:border-white/[0.06]">
           {item.strip.map((label) => (
             <div
               key={label}

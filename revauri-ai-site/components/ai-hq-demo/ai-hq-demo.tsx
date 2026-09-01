@@ -308,9 +308,17 @@ const GHOSTS: {
   },
 ];
 
+const HQ_VIEW = 520;
+
+/** True when a ghost mark would clip the 520 viewBox (cut-off slivers on phones). */
+function ghostClipsViewBox(x: number, y: number, halfW: number, halfH: number) {
+  return x - halfW < 0 || x + halfW > HQ_VIEW || y - halfH < 0 || y + halfH > HQ_VIEW;
+}
+
 function GhostCard({ x, y }: { x: number; y: number }) {
+  const clips = ghostClipsViewBox(x, y, 26, 17);
   return (
-    <g className="opacity-30">
+    <g className={clips ? "opacity-30 max-[767px]:hidden" : "opacity-30"}>
       <rect
         x={x - 26}
         y={y - 17}
@@ -406,12 +414,12 @@ function OrbitalDiagram({
   reducedMotion: boolean;
 }) {
   return (
-    <div className="relative aspect-square w-full max-w-[520px]">
+    <div className="relative aspect-square w-full max-w-[520px] overflow-hidden min-[768px]:overflow-visible">
       <svg
         viewBox="0 0 520 520"
         fill="none"
         aria-hidden
-        className="absolute inset-0 h-full w-full overflow-visible"
+        className="absolute inset-0 h-full w-full overflow-hidden min-[768px]:overflow-visible"
       >
         <circle
           cx={CX}
@@ -505,21 +513,34 @@ function OrbitalDiagram({
           const ghost = GHOSTS[i];
           return (
             <g key={`ghost-${node.id}`}>
-              {ghost.lines.map(([x1, y1, x2, y2], li) => (
-                <line
-                  key={li}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeDasharray="4 4"
-                  className="stroke-brand-dark/[0.08] dark:stroke-brand-cream/[0.08]"
-                />
-              ))}
+              {ghost.lines.map(([x1, y1, x2, y2], li) => {
+                const clips =
+                  ghostClipsViewBox(x1, y1, 0, 0) ||
+                  ghostClipsViewBox(x2, y2, 0, 0);
+                return (
+                  <line
+                    key={li}
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeDasharray="4 4"
+                    className={`stroke-brand-dark/[0.08] dark:stroke-brand-cream/[0.08]${
+                      clips ? " max-[767px]:hidden" : ""
+                    }`}
+                  />
+                );
+              })}
               {ghost.dots.map(([x, y], di) => (
-                <g key={di} opacity="0.5">
+                <g
+                  key={di}
+                  opacity="0.5"
+                  className={
+                    ghostClipsViewBox(x, y, 4, 4) ? "max-[767px]:hidden" : undefined
+                  }
+                >
                   <EndpointDot x={x} y={y} />
                 </g>
               ))}
@@ -591,7 +612,7 @@ function OrbitalDiagram({
             >
               <div className="flex h-full w-full items-center justify-center">
                 <div
-                  className={`flex w-[88px] items-center justify-center gap-1 rounded-[7px] bg-white px-1.5 py-3 text-center text-[11px] leading-tight transition-colors duration-500 max-sm:w-[102px] max-sm:py-3.5 max-sm:text-[13px] dark:bg-[#2A2824] ${
+                  className={`flex w-[72px] items-center justify-center gap-1 rounded-[7px] bg-white px-1.5 py-3 text-center text-[10px] leading-tight transition-colors duration-500 sm:w-[88px] sm:text-[12px] dark:bg-[#2A2824] ${
                     active
                       ? "font-medium text-brand-orange"
                       : "text-brand-dark/60 dark:text-brand-cream/60"
@@ -599,7 +620,7 @@ function OrbitalDiagram({
                 >
                   <Icon
                     aria-hidden
-                    className="h-2.5 w-2.5 shrink-0 max-sm:h-3 max-sm:w-3"
+                    className="h-2.5 w-2.5 shrink-0"
                     strokeWidth={1.75}
                   />
                   {node.label}
@@ -634,10 +655,10 @@ function OrbitalDiagram({
         <foreignObject x={CX - 50} y={CY - 28} width="100" height="56" className="overflow-visible">
           <div className="flex h-full w-full items-center justify-center">
             <div
-              className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] max-sm:h-[54px] max-sm:w-[98px] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
+              className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
             >
               {/* Mini version of the nav wordmark (see components/logo.tsx) */}
-              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark max-sm:text-[14px] dark:text-brand-cream">
+              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
                 <span className="relative">
                   Revauri
                   <span
@@ -1180,7 +1201,7 @@ export function AiHqDemo() {
               fading={fading}
               litBadges={litBadges}
               scrollKey={scrollKey}
-              className="h-[300px] w-full"
+              className="h-[min(420px,70dvh)] w-full"
             />
           </div>
         </div>
@@ -1204,7 +1225,7 @@ export function AiHqDemo() {
         </div>
 
         {/* CTA row */}
-        <div className="mt-10 flex w-full flex-col items-center justify-center gap-4 text-center min-[768px]:flex-row min-[768px]:gap-6 min-[768px]:text-left">
+        <div className="mt-10 flex w-full flex-col items-center justify-center gap-4 text-center min-[900px]:flex-row min-[900px]:gap-6 min-[900px]:text-left">
           <p className="m-0 max-w-[460px] text-[15px] leading-[1.4] text-brand-dark/70 dark:text-brand-cream/70">
             Tell us the jobs that eat your week, and we&apos;ll set your AI
             employee up around them.

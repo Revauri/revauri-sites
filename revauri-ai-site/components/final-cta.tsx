@@ -7,7 +7,7 @@ import { FadeInWhenVisible } from "./motion-wrappers";
 
 export function FinalCTA() {
   return (
-    <section className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
+    <section className="bg-brand-cream py-12 dark:bg-brand-dark sm:py-16 lg:py-20">
       <div className="section-measure px-6">
         <div className="flex max-w-2xl flex-col items-start space-y-5">
           <FadeInWhenVisible>
@@ -25,7 +25,7 @@ export function FinalCTA() {
           <FadeInWhenVisible delay={0.18}>
             <Link
               href="/book"
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange sm:w-auto"
             >
               {FINAL_CTA_COPY.button}
               <ArrowRight className="h-4 w-4" />

@@ -431,7 +431,7 @@
   display: flex;
   width: 100%;
   min-height: 47px;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -449,6 +449,8 @@
   background: rgba(250, 249, 245, 0.98);
   backdrop-filter: blur(18px);
   box-shadow: -28px 0 80px -32px rgba(20, 20, 19, 0.38);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .dark .detail-panel {
@@ -460,14 +462,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.35rem;
-  height: 1.7rem;
-  font-size: 17px;
+  min-width: 0;
+  height: 1.35rem;
+  font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   color: rgba(20, 20, 19, 0.42);
   border-radius: 6px;
   transition: color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+}
+
+@media (min-width: 767px) {
+  .word-search-cell {
+    min-width: 1.35rem;
+    height: 1.7rem;
+    font-size: 17px;
+    letter-spacing: 0.12em;
+  }
 }
 
 .dark .word-search-cell {
@@ -508,6 +519,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
+  overflow-x: clip;
 }
 
 /* Scroll reveal animation system (CSS fallback) */

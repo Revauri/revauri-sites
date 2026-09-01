@@ -18,7 +18,7 @@ const FORM_CARD_CLASS =
   "hairline-card p-6 sm:p-8";
 
 const FIELD_CLASS =
-  "w-full rounded-[10px] border border-black/[0.08] bg-white/60 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-brand-cream";
+  "w-full min-w-0 max-w-full rounded-[10px] border border-black/[0.08] bg-white/60 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-brand-cream";
 
 const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-brand-dark dark:text-brand-cream";
 
@@ -54,7 +54,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
     <section className="py-16 lg:py-20">
       <div className="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <FadeInWhenVisible className="lg:sticky lg:top-28">
-          <h2 className="text-3xl font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+          <h2 className="text-xl font-semibold tracking-tight text-brand-dark sm:text-2xl lg:text-3xl dark:text-brand-cream">
             Get in touch
           </h2>
           <p className="mt-3 text-brand-dark/60 dark:text-brand-cream/60">
@@ -134,14 +134,14 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                 <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
                   <Link
                     href="/book"
-                    className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-brand-orange px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-orange px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
                   >
                     Hire one
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/contact"
-                    className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-brand-orange/25 px-6 py-3.5 text-sm font-semibold text-brand-orange transition-colors hover:bg-brand-orange/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-brand-orange/25 px-6 py-3.5 text-sm font-semibold text-brand-orange transition-colors hover:bg-brand-orange/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
                   >
                     Send Another Message
                     <RotateCcw className="h-4 w-4" />
@@ -293,12 +293,12 @@ function ContactMethod({
   external?: boolean;
 }) {
   const className =
-    "group flex items-center gap-3 rounded-lg text-brand-dark/80 outline-none transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:text-brand-cream";
+    "group flex min-w-0 items-center gap-3 rounded-lg text-brand-dark/80 outline-none transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:text-brand-cream";
 
   const content = (
     <>
       <span className={ICON_SQUARE_CLASS}>{icon}</span>
-      <span>{label}</span>
+      <span className="min-w-0 break-words">{label}</span>
     </>
   );
 

@@ -53,12 +53,12 @@ export function TradesWordSearch() {
           Trades we hire for: {TRADE_WORDS.join(", ")}.
         </p>
 
-        <div className="mt-12 max-w-full overflow-x-auto">
+        <div className="mt-12 max-w-full overflow-x-hidden">
           <div
             aria-hidden="true"
-            className="mx-auto grid w-max min-w-full justify-center gap-y-2.5 gap-x-2 min-[767px]:gap-x-3.5 min-[767px]:gap-y-3.5"
+            className="mx-auto grid w-full justify-center gap-x-1 gap-y-1.5 min-[767px]:gap-x-3.5 min-[767px]:gap-y-3.5"
             style={{
-              gridTemplateColumns: `repeat(${WORD_SEARCH_COLS}, minmax(1.15rem, 1.75rem))`,
+              gridTemplateColumns: `repeat(${WORD_SEARCH_COLS}, minmax(0, 1fr))`,
             }}
           >
             {WORD_SEARCH_GRID.flatMap((row, r) =>

@@ -64,7 +64,7 @@ export default function PricingPage() {
         subtitle={HERO.subtitle}
       />
 
-      <div className="section-measure px-6 py-16 lg:py-20">
+      <div className="section-measure px-6 py-10 sm:py-16 lg:py-20">
         <FadeInWhenVisible>
           <section>
             <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
@@ -85,7 +85,7 @@ export default function PricingPage() {
         <HireComparison />
 
         <FadeInWhenVisible delay={0.08}>
-          <section className="hairline-card mt-16 p-8 lg:p-10">
+          <section className="hairline-card mt-16 p-5 sm:p-8 lg:p-10">
             <h2 className="text-[22px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream sm:text-[24px]">
               What a standard hire includes
             </h2>
@@ -102,7 +102,7 @@ export default function PricingPage() {
           </section>
         </FadeInWhenVisible>
 
-        <StaggerChildren className="mt-4 grid grid-cols-1 items-stretch gap-3 md:grid-cols-3">
+        <StaggerChildren className="mt-4 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {EXTRAS.map(({ icon: Icon, title, description }) => (
             <div key={title} className="hairline-card flex h-full flex-col p-6">
               <Icon className="h-5 w-5 text-brand-dark/40 dark:text-brand-cream/40" />
@@ -130,7 +130,7 @@ export default function PricingPage() {
             <div className="mt-8">
               <Link
                 href="/book"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                className="inline-flex w-full min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
               >
                 Hire one
                 <ArrowRight className="h-4 w-4" />

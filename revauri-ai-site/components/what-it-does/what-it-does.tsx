@@ -33,7 +33,7 @@ export function WhatItDoes() {
           </div>
         </FadeInWhenVisible>
 
-        <div className="mt-16 flex flex-col gap-20 min-[1000px]:mt-24 min-[1000px]:gap-28">
+        <div className="mt-10 flex flex-col gap-12 md:mt-16 md:gap-20 min-[1000px]:mt-24 min-[1000px]:gap-28">
           {FEATURE_SECTIONS.map((section) => (
             <FadeInWhenVisible key={section.id}>
               <FeatureRow

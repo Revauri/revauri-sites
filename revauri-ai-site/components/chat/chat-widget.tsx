@@ -23,7 +23,7 @@ const OPEN_STORAGE_KEY = "revauri-chat-open";
 const SM_MQ = "(min-width: 640px)";
 
 const PANEL_SHELL_CLASS =
-  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:h-[561px] sm:max-h-[calc((100dvh-3rem)/1.1)] sm:w-[352px] sm:rounded-[22px] sm:[zoom:1.1]";
+  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[320px] md:w-[352px] sm:rounded-[22px]";
 
 /** Placeholder that matches panel chrome so open animation never runs on an empty box. */
 function ChatPanelShell() {
@@ -305,7 +305,7 @@ export function ChatWidget() {
           // shell that never leaves inset-0 — page content cannot show through
           // during keyboard transitions. Desktop: transparent around the card.
           className={`fixed inset-0 z-[90] flex flex-col overflow-hidden overscroll-none bg-brand-white dark:bg-[#1a1a19] sm:inset-auto sm:bottom-6 sm:right-6 sm:block sm:overflow-visible sm:bg-transparent ${
-            cookieBannerOpen ? "lg:bottom-32" : ""
+            cookieBannerOpen ? "sm:bottom-36 lg:bottom-32" : ""
           } ${isOpen ? "" : "pointer-events-none"}`}
         >
           <div className="flex min-h-0 min-w-0 flex-1 flex-col sm:block sm:flex-none">

@@ -56,7 +56,7 @@ export function Header() {
 
           {/* Desktop Nav */}
           <nav
-            className="hidden items-center gap-5 md:flex lg:gap-6"
+            className="hidden items-center gap-5 lg:flex lg:gap-6"
             aria-label="Main navigation"
           >
             <div className="flex items-center gap-6 lg:gap-8">
@@ -88,7 +88,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 md:hidden dark:text-brand-cream"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 lg:hidden dark:text-brand-cream"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -106,7 +106,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed inset-0 z-[60] bg-brand-white md:hidden dark:bg-brand-dark"
+            className="fixed inset-0 z-[90] bg-brand-white pt-[env(safe-area-inset-top)] lg:hidden dark:bg-brand-dark"
             role="dialog"
             aria-modal="true"
           >

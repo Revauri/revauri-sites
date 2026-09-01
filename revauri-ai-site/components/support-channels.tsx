@@ -21,7 +21,7 @@ const CHANNELS = [
 
 export function SupportChannels() {
   return (
-    <section className="bg-brand-cream py-16 dark:bg-brand-dark lg:py-20">
+    <section className="bg-brand-cream py-12 dark:bg-brand-dark sm:py-16 lg:py-20">
       <div className="section-measure px-6">
         <div className="flex flex-col items-start space-y-8">
           <FadeInWhenVisible>
@@ -30,7 +30,7 @@ export function SupportChannels() {
             </h2>
           </FadeInWhenVisible>
 
-          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid w-full grid-cols-1 gap-3 lg:grid-cols-3">
             {CHANNELS.map((channel) => {
               const className =
                 "hairline-card flex h-full min-h-[96px] flex-col justify-center px-5 py-5 transition-colors hover:bg-white/80 dark:hover:bg-white/[0.06]";

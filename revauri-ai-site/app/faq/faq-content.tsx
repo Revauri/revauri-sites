@@ -80,7 +80,7 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
     : data;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16 lg:py-20">
+    <div className="mx-auto max-w-5xl px-6 py-10 md:py-16 lg:py-20">
       {/* Search bar */}
       <div className="relative mb-10">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-mid-gray" />
@@ -112,7 +112,7 @@ export function FAQContent({ data }: { data: FAQCategory[] }) {
       ) : (
         <>
           {/* Mobile: horizontal scrollable pills */}
-          <div className="mb-6 flex gap-2 overflow-x-auto pb-2 lg:hidden" style={{ scrollbarWidth: "none" }}>
+          <div className="mb-6 flex gap-2 overflow-x-auto pr-8 pb-2 [mask-image:linear-gradient(to_right,#000_85%,transparent)] lg:hidden" style={{ scrollbarWidth: "none" }}>
             {data.map(({ category }) => (
               <button
                 key={category}

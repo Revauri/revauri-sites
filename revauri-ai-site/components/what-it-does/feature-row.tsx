@@ -27,13 +27,13 @@ export function FeatureRow({
   const copy = (
     <div className="flex flex-col">
       <p className="section-eyebrow">{section.kicker}</p>
-      <h3 className="mt-4 max-w-[22rem] text-[28px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream min-[767px]:text-[32px] min-[1000px]:text-[36px]">
+      <h3 className="mt-4 max-w-xl text-[22px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream min-[767px]:text-[32px] min-[1000px]:max-w-[22rem] min-[1000px]:text-[36px]">
         {section.heading}
       </h3>
-      <p className="mt-4 max-w-[22rem] text-[15px] leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+      <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 min-[1000px]:max-w-[22rem]">
         {section.body}
       </p>
-      <ul className="mt-6 flex max-w-[22rem] flex-col gap-2">
+      <ul className="mt-6 flex max-w-xl flex-col gap-2 min-[1000px]:max-w-[22rem]">
         {section.items.map((item) => {
           const isOpen = openCode === item.code;
           return (
@@ -48,7 +48,7 @@ export function FeatureRow({
                 <span className="w-8 shrink-0 text-[12px] tabular-nums text-brand-dark/40 dark:text-brand-cream/40">
                   {item.code}
                 </span>
-                <span className="flex-1 text-[14px] font-medium text-brand-dark dark:text-brand-cream">
+                <span className="min-w-0 flex-1 text-[14px] font-medium text-brand-dark dark:text-brand-cream">
                   {item.title}
                 </span>
                 <span

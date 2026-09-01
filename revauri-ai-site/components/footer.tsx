@@ -17,7 +17,7 @@ export function Footer() {
     <footer className="border-t border-brand-light-gray dark:border-brand-mid-gray/20">
       <div className="bg-brand-white pt-10 pb-8 dark:bg-brand-dark lg:pt-12 lg:pb-10">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 min-[400px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8">
             <div className="flex flex-col space-y-2.5">
               <FooterGroupHeading>Revauri AI</FooterGroupHeading>
               <ul className="flex flex-col space-y-2">
@@ -63,11 +63,13 @@ export function Footer() {
               </ul>
             </div>
 
-            <div className="flex flex-col space-y-2.5">
+            <div className="flex min-w-0 flex-col space-y-2.5">
               <FooterGroupHeading>Get in Touch</FooterGroupHeading>
               <ul className="flex flex-col space-y-2">
                 <FooterLink>
-                  <a href="mailto:joseph@revauri.com">joseph@revauri.com</a>
+                  <a href="mailto:joseph@revauri.com" className="break-all">
+                    joseph@revauri.com
+                  </a>
                 </FooterLink>
                 <FooterLink>
                   <Link href="/contact">Send a message</Link>
@@ -84,7 +86,7 @@ export function Footer() {
 
       <div className="bg-brand-white py-6 dark:bg-brand-dark lg:py-8">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
               onClick={requestCookiePreferences}

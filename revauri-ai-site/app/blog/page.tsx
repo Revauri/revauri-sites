@@ -67,7 +67,7 @@ export default function BlogPage() {
         <>
           {/* Featured post */}
           {featured && (
-            <section className="pt-10 pb-6 lg:pt-12">
+            <section className="overflow-x-hidden pt-10 pb-6 lg:pt-12">
               <div className="mx-auto max-w-5xl px-6">
                 <FadeInWhenVisible>
                   <Link
@@ -91,9 +91,9 @@ export default function BlogPage() {
                             <PostImageFallback category={featured.category} />
                           )}
                         </div>
-                        <div className="flex flex-col justify-center p-8">
+                        <div className="flex flex-col justify-center p-5 sm:p-6 md:p-8">
                           <span className="section-eyebrow mb-3">Featured</span>
-                          <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-cream">
+                          <h2 className="text-xl font-bold text-brand-dark sm:text-2xl dark:text-brand-cream">
                             {featured.title}
                           </h2>
                           <p className="mt-3 text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">

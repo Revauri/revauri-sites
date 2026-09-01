@@ -16,7 +16,7 @@ export function PageHero({
   children,
 }: PageHeroProps) {
   return (
-    <section className="bg-brand-cream py-16 dark:bg-brand-dark md:py-24">
+    <section className="bg-brand-cream py-10 dark:bg-brand-dark sm:py-14 md:py-20">
       <div className="section-measure px-6">
         <div className="flex max-w-2xl flex-col items-start space-y-4 sm:space-y-5">
           <FadeInWhenVisible>
@@ -24,7 +24,7 @@ export function PageHero({
           </FadeInWhenVisible>
 
           <FadeInWhenVisible delay={0.08}>
-            <h1 className="text-[32px] font-semibold leading-[1.15] tracking-tight text-brand-dark dark:text-brand-cream md:text-[40px]">
+            <h1 className="text-balance text-[28px] font-semibold leading-[1.2] tracking-tight text-brand-dark dark:text-brand-cream md:text-[36px] lg:text-[40px]">
               {title}
               {muted ? (
                 <>

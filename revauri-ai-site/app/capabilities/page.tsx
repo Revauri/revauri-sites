@@ -116,10 +116,10 @@ export default function CapabilitiesPage() {
     <div>
       <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
-      <section className="py-16 lg:py-20">
+      <section className="py-10 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <div className="hairline-card p-8 lg:p-10">
+            <div className="hairline-card p-5 sm:p-8 lg:p-10">
               <p className="section-eyebrow">Headline hire</p>
               <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
                 The phone
@@ -155,7 +155,7 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-10 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
             <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
@@ -168,7 +168,7 @@ export default function CapabilitiesPage() {
 
           <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {JOBS.map(({ icon: Icon, job, does }) => (
-              <div key={job} className="hairline-card p-5">
+              <div key={job} className="hairline-card p-5 last:sm:col-span-2 last:lg:col-span-1">
                 <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
                 <h3 className="mt-3 text-base font-semibold text-brand-dark dark:text-brand-cream">
                   {job}
@@ -182,7 +182,7 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-10 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
             <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
@@ -190,7 +190,7 @@ export default function CapabilitiesPage() {
             </h2>
           </FadeInWhenVisible>
 
-          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3">
+          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 lg:grid-cols-3">
             {STEPS.map(({ icon: Icon, title, description }, index) => (
               <div key={title} className="hairline-card p-6">
                 <div className="flex items-center gap-3">
@@ -218,7 +218,7 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-10 sm:py-16 lg:py-20">
         <div className="section-measure max-w-3xl px-6">
           <FadeInWhenVisible>
             <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
@@ -240,7 +240,7 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="py-10 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
             <h2 className="section-h2 text-brand-dark dark:text-brand-cream">

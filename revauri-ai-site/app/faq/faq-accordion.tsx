@@ -29,7 +29,7 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
               aria-expanded={isOpen}
               aria-controls={`faq-answer-${i}`}
             >
-              <span className="flex-1 text-[14px] font-medium text-brand-dark dark:text-brand-cream">
+              <span className="min-w-0 flex-1 text-[14px] font-medium text-brand-dark dark:text-brand-cream">
                 {faq.question}
               </span>
               <span

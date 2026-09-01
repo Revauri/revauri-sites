@@ -11,7 +11,7 @@ function TocList({ headings, activeSlug }: { headings: TocEntry[]; activeSlug: s
           <a
             href={`#${heading.slug}`}
             aria-current={activeSlug === heading.slug ? "location" : undefined}
-            className={`block border-l-2 py-0.5 pl-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
+            className={`block min-w-0 break-words border-l-2 py-0.5 pl-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
               activeSlug === heading.slug
                 ? "border-brand-orange text-brand-orange"
                 : "border-transparent text-brand-dark/60 hover:text-brand-dark dark:text-brand-cream/60 dark:hover:text-brand-cream"
@@ -55,7 +55,7 @@ export function TableOfContents({ headings }: { headings: TocEntry[] }) {
     <nav aria-label="Table of contents" className="lg:h-full">
       {/* Mobile / tablet: collapsed by default so it never pushes the article down */}
       <details className="mb-8 rounded-xl border border-brand-light-gray/60 bg-brand-white p-4 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] lg:hidden">
-        <summary className="cursor-pointer text-sm font-semibold text-brand-dark dark:text-brand-cream">
+        <summary className="flex cursor-pointer list-none items-center text-sm font-semibold text-brand-dark dark:text-brand-cream [&::-webkit-details-marker]:hidden">
           On this page
         </summary>
         <div className="mt-4">

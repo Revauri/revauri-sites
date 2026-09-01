@@ -11,7 +11,7 @@ export function RelatedPosts({ posts }: { posts: PostMeta[] }) {
         <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
           Related reading
         </h2>
-        <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerChildren className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}

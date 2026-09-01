@@ -202,11 +202,11 @@ export function LeadResolvedCard({ output }: { output: LeadToolOutput }) {
   return (
     <div className={CARD_CLASS}>
       {output.success ? (
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-brand-dark dark:text-brand-cream">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs font-semibold text-brand-dark dark:text-brand-cream">
           <Check className="h-3.5 w-3.5 text-brand-orange" />
           Inquiry sent
           {output.email && (
-            <span className="font-normal text-brand-mid-gray">· {output.email}</span>
+            <span className="min-w-0 break-all font-normal text-brand-mid-gray">· {output.email}</span>
           )}
         </div>
       ) : (

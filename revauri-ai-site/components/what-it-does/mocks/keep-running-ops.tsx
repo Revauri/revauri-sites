@@ -15,7 +15,7 @@ export function KeepRunningOps() {
   return (
     <div className="relative min-h-[360px] max-[767px]:min-h-[320px]">
       <div className="product-frame relative min-h-[360px] overflow-hidden p-4 max-[767px]:min-h-[320px] min-[767px]:p-5">
-        <div className="grid grid-cols-3 gap-3 border-b border-black/[0.06] pb-4 dark:border-white/[0.06]">
+        <div className="grid grid-cols-3 gap-3 border-b border-black/[0.06] pb-4 max-[479px]:grid-cols-1 dark:border-white/[0.06]">
           {STATS.map((stat) => (
             <div key={stat.label}>
               <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">
@@ -41,7 +41,7 @@ export function KeepRunningOps() {
         </span>
       </div>
 
-      <div className="absolute bottom-6 right-4 w-[min(58%,260px)] rounded-[16px] border border-black/[0.08] bg-white/95 p-3.5 shadow-[0_18px_40px_-24px_rgba(20,20,19,0.45)] max-[639px]:relative max-[639px]:bottom-auto max-[639px]:right-auto max-[639px]:mx-3 max-[639px]:-mt-8 max-[639px]:mb-3 max-[639px]:w-auto dark:border-white/[0.08] dark:bg-[#242321]">
+      <div className="absolute bottom-6 right-4 w-[min(58%,260px)] rounded-[16px] border border-black/[0.08] bg-white/95 p-3.5 shadow-[0_18px_40px_-24px_rgba(20,20,19,0.45)] max-[899px]:relative max-[899px]:bottom-auto max-[899px]:right-auto max-[899px]:mx-3 max-[899px]:-mt-8 max-[899px]:mb-3 max-[899px]:w-auto dark:border-white/[0.08] dark:bg-[#242321]">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-[12px] font-medium text-brand-dark dark:text-brand-cream">
             This week

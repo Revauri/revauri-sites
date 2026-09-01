@@ -18,7 +18,7 @@ export default function TermsPage() {
         subtitle={PAGE_HEROES.terms.subtitle}
       />
 
-      <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-16 dark:prose-invert lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">
+      <article className="prose prose-neutral mx-auto max-w-3xl px-6 py-10 dark:prose-invert md:py-16 lg:py-20 [&_h2]:text-brand-dark [&_h2]:dark:text-brand-cream [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-brand-dark [&_h3]:dark:text-brand-cream [&_h3]:text-lg [&_h3]:font-medium [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-brand-dark/70 [&_p]:dark:text-brand-cream/70 [&_p]:leading-relaxed [&_li]:text-brand-dark/70 [&_li]:dark:text-brand-cream/70 [&_a]:text-brand-orange [&_a]:hover:underline">
 
         <h2>1. Agreement</h2>
         <p>
@@ -211,7 +211,7 @@ export default function TermsPage() {
           inaccurate information you provided, third-party service changes, or
           factors outside our reasonable control.
         </p>
-        <p className="uppercase text-xs">
+        <p className="uppercase text-xs leading-5 tracking-wide">
           EXCEPT FOR THE EXPRESS WARRANTY ABOVE, REVAURI PROVIDES ALL SERVICES AND
           THE WEBSITE ON AN &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; BASIS. WE DISCLAIM ALL OTHER
           WARRANTIES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WARRANTIES
