@@ -16,15 +16,18 @@ export function PageHero({
   children,
 }: PageHeroProps) {
   return (
-    <section className="bg-brand-cream py-10 dark:bg-brand-dark sm:py-14 md:py-20">
-      <div className="section-measure px-6">
+    <section className="relative overflow-hidden border-b border-black/[0.06] bg-brand-cream pt-14 pb-10 dark:border-white/[0.06] dark:bg-brand-dark sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16">
+      <div aria-hidden className="hero-dots pointer-events-none absolute inset-0" />
+      <div className="relative section-measure px-6">
         <div className="flex max-w-2xl flex-col items-start space-y-4 sm:space-y-5">
           <FadeInWhenVisible>
-            <p className="section-eyebrow">{badge}</p>
+            <p className="section-eyebrow flex items-center gap-3 before:h-px before:w-6 before:bg-brand-orange before:content-['']">
+              {badge}
+            </p>
           </FadeInWhenVisible>
 
           <FadeInWhenVisible delay={0.08}>
-            <h1 className="text-balance text-[28px] font-semibold leading-[1.2] tracking-tight text-brand-dark dark:text-brand-cream md:text-[36px] lg:text-[40px]">
+            <h1 className="text-balance text-[2rem] font-bold leading-[1.08] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl lg:text-[52px]">
               {title}
               {muted ? (
                 <>
@@ -37,7 +40,7 @@ export function PageHero({
 
           {subtitle && (
             <FadeInWhenVisible delay={0.14}>
-              <p className="max-w-xl text-base text-brand-dark/60 dark:text-brand-cream/60 md:text-lg">
+              <p className="mt-1 max-w-xl text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 md:text-lg">
                 {subtitle}
               </p>
             </FadeInWhenVisible>

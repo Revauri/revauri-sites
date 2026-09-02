@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
-  ArrowRight,
   CalendarClock,
   Check,
   ClipboardCheck,
@@ -18,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { PageCTA } from "@/components/page-cta";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import { PAGE_HEROES } from "@/lib/marketing-copy";
 
@@ -116,11 +115,18 @@ export default function CapabilitiesPage() {
     <div>
       <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
-      <section className="py-10 sm:py-16 lg:py-20">
+      <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <div className="hairline-card p-5 sm:p-8 lg:p-10">
-              <p className="section-eyebrow">Headline hire</p>
+            <div className="hairline-card relative overflow-hidden p-6 sm:p-8 lg:p-10">
+              <div
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-brand-orange/60 via-brand-orange/20 to-transparent"
+              />
+              <span className="icon-tile">
+                <Phone className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <p className="section-eyebrow mt-4 text-brand-orange!">Headline hire</p>
               <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
                 The phone
               </h2>
@@ -132,8 +138,10 @@ export default function CapabilitiesPage() {
               <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {PHONE_POINTS.map((point) => (
                   <li key={point} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
-                    <span className="text-sm leading-relaxed text-brand-dark/80 dark:text-brand-cream/80">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                      <Check className="h-4 w-4 text-brand-orange" aria-hidden="true" />
+                    </span>
+                    <span className="text-[15px] leading-relaxed text-brand-dark/80 dark:text-brand-cream/80">
                       {point}
                     </span>
                   </li>
@@ -155,10 +163,11 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 lg:py-20">
+      <section className="dotted-grid py-12 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+            <p className="section-eyebrow">The roster</p>
+            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
               Other jobs we hire for
             </h2>
             <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60">
@@ -166,43 +175,59 @@ export default function CapabilitiesPage() {
             </p>
           </FadeInWhenVisible>
 
-          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {JOBS.map(({ icon: Icon, job, does }) => (
-              <div key={job} className="hairline-card p-5 last:sm:col-span-2 last:lg:col-span-1">
-                <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
-                <h3 className="mt-3 text-base font-semibold text-brand-dark dark:text-brand-cream">
-                  {job}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                  {does}
-                </p>
-              </div>
-            ))}
-          </StaggerChildren>
+          <FadeInWhenVisible delay={0.08}>
+            <ol className="mt-10 grid grid-cols-1 gap-x-12 lg:grid-cols-2">
+              {JOBS.map(({ icon: Icon, job, does }, index) => (
+                <li
+                  key={job}
+                  className="flex items-start gap-4 border-t border-black/[0.08] py-5 dark:border-white/[0.08] first:border-t-0 lg:[&:nth-child(2)]:border-t-0 lg:last:col-span-2"
+                >
+                  <span className="w-7 shrink-0 pt-2 text-[12px] tabular-nums text-brand-dark/40 dark:text-brand-cream/40">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="icon-tile shrink-0">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+                      {job}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                      {does}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </FadeInWhenVisible>
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 lg:py-20">
+      <section className="py-12 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+            <p className="section-eyebrow">The process</p>
+            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
               What you get
             </h2>
           </FadeInWhenVisible>
 
           <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 lg:grid-cols-3">
             {STEPS.map(({ icon: Icon, title, description }, index) => (
-              <div key={title} className="hairline-card p-6">
+              <div key={title} className="hairline-card hairline-card-hover h-full p-6 sm:p-7">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] text-sm font-semibold text-brand-dark/60 dark:border-white/[0.08] dark:text-brand-cream/60">
-                    {index + 1}
+                  <span className="text-[12px] tabular-nums text-brand-dark/40 dark:text-brand-cream/40">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                  <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
+                  <span className="icon-tile">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-brand-dark dark:text-brand-cream">
                   {title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                <div className="mt-5 h-px w-full bg-black/[0.08] dark:bg-white/[0.08]" />
+                <p className="mt-4 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
                   {description}
                 </p>
               </div>
@@ -218,51 +243,35 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 lg:py-20">
-        <div className="section-measure max-w-3xl px-6">
+      <section className="bg-brand-orange/5 py-12 dark:bg-brand-orange/[0.03] sm:py-16 lg:py-20">
+        <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              What we do not do
-            </h2>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.08}>
-            <ul className="mt-8 grid grid-cols-1 gap-3">
-              {NOT_DOING.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <X className="mt-0.5 h-5 w-5 shrink-0 text-brand-mid-gray" />
-                  <span className="text-sm text-brand-dark/80 dark:text-brand-cream/80">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <div className="hairline-card max-w-3xl p-6 sm:p-8">
+              <p className="section-eyebrow">Guardrails</p>
+              <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
+                What we do not do
+              </h2>
+              <ul className="mt-8 grid grid-cols-1 gap-3">
+                {NOT_DOING.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-black/[0.05] text-brand-dark/60 dark:bg-white/[0.08] dark:text-brand-cream/60">
+                      <X className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <span className="text-[15px] leading-relaxed text-brand-dark/80 dark:text-brand-cream/80">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </FadeInWhenVisible>
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 lg:py-20">
-        <div className="section-measure px-6">
-          <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              Which job goes first?
-            </h2>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.08}>
-            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60 md:text-base">
-              Name the job you’d otherwise hire for.
-            </p>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.16}>
-            <Link
-              href="/book"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-            >
-              Hire one
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </FadeInWhenVisible>
-        </div>
-      </section>
+      <PageCTA
+        heading="Which job goes first?"
+        body="Name the job you'd otherwise hire for."
+      />
     </div>
   );
 }

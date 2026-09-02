@@ -15,17 +15,20 @@ type ContactContentProps = {
 };
 
 const FORM_CARD_CLASS =
-  "hairline-card p-6 sm:p-8";
+  "hairline-card relative overflow-hidden p-6 sm:p-8 shadow-[var(--shadow-md)]";
+
+const FORM_ACCENT_CLASS =
+  "absolute inset-x-0 top-0 h-px bg-gradient-to-r from-brand-orange/60 via-brand-orange/20 to-transparent";
 
 const FIELD_CLASS =
-  "w-full min-w-0 max-w-full rounded-[10px] border border-black/[0.08] bg-white/60 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-brand-cream";
+  "w-full min-w-0 max-w-full rounded-lg border border-black/[0.08] bg-white/70 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] hover:border-black/[0.14] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-brand-cream dark:hover:border-white/[0.14]";
 
 const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-brand-dark dark:text-brand-cream";
 
-const SUCCESS_PATH = "/contact?sent=true";
+const PRIMARY_BUTTON_CLASS =
+  "inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
 
-const ICON_SQUARE_CLASS =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-black/[0.08] text-brand-dark/70 dark:border-white/[0.08] dark:text-brand-cream/70";
+const SUCCESS_PATH = "/contact?sent=true";
 
 export function ContactContent({ isSubmitted = false }: ContactContentProps) {
   // Web3Forms needs an absolute redirect URL, so build it from the current
@@ -51,11 +54,12 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
   }, [isSubmitted]);
 
   return (
-    <section className="py-16 lg:py-20">
-      <div className="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2 lg:gap-16">
+    <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
+      <div className="section-measure grid items-start gap-12 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
         <FadeInWhenVisible className="lg:sticky lg:top-28">
-          <h2 className="text-xl font-semibold tracking-tight text-brand-dark sm:text-2xl lg:text-3xl dark:text-brand-cream">
-            Get in touch
+          <p className="section-eyebrow">Direct line</p>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-brand-dark sm:text-3xl dark:text-brand-cream">
+            Reach us directly
           </h2>
           <p className="mt-3 text-brand-dark/60 dark:text-brand-cream/60">
             We typically respond within a few hours.
@@ -81,28 +85,33 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
             />
           </ul>
 
-          <p className="mt-8 text-sm text-brand-dark/55 dark:text-brand-cream/55">
-            Looking for a quick answer?
-          </p>
-          <Link
-            href="/faq"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors hover:text-brand-orange/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-          >
-            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-            Browse the FAQ
-          </Link>
+          <div className="hairline-card mt-8 p-4">
+            <div className="flex items-start gap-3">
+              <span className="icon-tile shrink-0">
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="text-sm text-brand-dark/55 dark:text-brand-cream/55">
+                  Looking for a quick answer?
+                </p>
+                <Link
+                  href="/faq"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors hover:text-brand-orange/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                >
+                  Browse the FAQ
+                </Link>
+              </div>
+            </div>
+          </div>
         </FadeInWhenVisible>
 
         <FadeInWhenVisible delay={0.08}>
           {isSubmitted ? (
-            <div className={`${FORM_CARD_CLASS} relative overflow-hidden`}>
-              <div
-                className="pointer-events-none absolute inset-x-12 top-0 h-24 rounded-full bg-brand-orange/15 blur-3xl"
-                aria-hidden="true"
-              />
+            <div className={FORM_CARD_CLASS}>
+              <div aria-hidden className={FORM_ACCENT_CLASS} />
               <div className="relative flex flex-col items-center text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange/12 ring-1 ring-brand-orange/20">
-                  <CheckCircle2 className="h-8 w-8 text-brand-orange" />
+                  <CheckCircle2 className="h-8 w-8 text-brand-orange" aria-hidden="true" />
                 </div>
                 <h3 className="mt-6 text-2xl font-semibold text-brand-dark dark:text-brand-cream">
                   Message received
@@ -111,8 +120,8 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                   Thanks for reaching out. We&apos;ve got your note and someone from Revauri AI
                   will follow up shortly, usually within a few hours.
                 </p>
-                <div className="mt-6 grid w-full gap-3 rounded-2xl border border-brand-light-gray/50 bg-brand-cream/60 p-4 text-left dark:border-brand-mid-gray/20 dark:bg-brand-dark/40 sm:grid-cols-2">
-                  <div className="rounded-xl border border-brand-light-gray/40 bg-brand-white/70 p-4 dark:border-brand-mid-gray/20 dark:bg-[#181817]">
+                <div className="mt-6 grid w-full gap-3 text-left sm:grid-cols-2">
+                  <div className="hairline-card p-4">
                     <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
                       What happens next
                     </p>
@@ -121,7 +130,7 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                       can take that job off you.
                     </p>
                   </div>
-                  <div className="rounded-xl border border-brand-light-gray/40 bg-brand-white/70 p-4 dark:border-brand-mid-gray/20 dark:bg-[#181817]">
+                  <div className="hairline-card p-4">
                     <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
                       Need to talk sooner?
                     </p>
@@ -134,17 +143,17 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                 <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
                   <Link
                     href="/book"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-orange px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className={`${PRIMARY_BUTTON_CLASS} flex-1 sm:w-auto`}
                   >
                     Hire one
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Link>
                   <Link
                     href="/contact"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-brand-orange/25 px-6 py-3.5 text-sm font-semibold text-brand-orange transition-colors hover:bg-brand-orange/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-brand-light-gray bg-brand-white/70 px-6 py-3.5 text-base font-semibold text-brand-dark transition-colors duration-200 hover:border-brand-orange/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:border-brand-mid-gray/20 dark:bg-brand-dark/70 dark:text-brand-cream"
                   >
                     Send Another Message
-                    <RotateCcw className="h-4 w-4" />
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -155,13 +164,14 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
               method="POST"
               className={FORM_CARD_CLASS}
             >
+              <div aria-hidden className={FORM_ACCENT_CLASS} />
               {/* Web3Forms config */}
               <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
               <input type="hidden" name="redirect" value={successUrl} />
               <input type="hidden" name="subject" value="New message from revauri.ai" />
               <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 
-              <div className="space-y-4">
+              <div className="relative space-y-5">
                 <div>
                   <label htmlFor="name" className={LABEL_CLASS}>
                     Name <span className="text-brand-orange">*</span>
@@ -265,10 +275,10 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
 
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-orange px-8 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-brand-orange/90 hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                  className={PRIMARY_BUTTON_CLASS}
                 >
                   Send Message
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
             </form>
@@ -293,12 +303,12 @@ function ContactMethod({
   external?: boolean;
 }) {
   const className =
-    "group flex min-w-0 items-center gap-3 rounded-lg text-brand-dark/80 outline-none transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:text-brand-cream";
+    "group -mx-2 flex min-w-0 items-center gap-3 rounded-lg px-2 py-1.5 text-brand-dark/80 outline-none transition-colors hover:bg-black/[0.03] hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:bg-white/[0.04] dark:hover:text-brand-cream";
 
   const content = (
     <>
-      <span className={ICON_SQUARE_CLASS}>{icon}</span>
-      <span className="min-w-0 break-words">{label}</span>
+      <span className="icon-tile">{icon}</span>
+      <span className="min-w-0 break-words text-[15px]">{label}</span>
     </>
   );
 

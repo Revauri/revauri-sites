@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Check, Phone, Layers, Globe } from "lucide-react";
+import { Check, Phone, Layers, Globe } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { PageCTA } from "@/components/page-cta";
 import { HireComparison } from "@/components/hire-comparison";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import { PAGE_HEROES } from "@/lib/marketing-copy";
@@ -42,10 +42,10 @@ const EXTRAS = [
         Separate, and only if the site itself is the leak. That’s{" "}
         <a
           href="https://revauri.com"
-          className="font-medium text-brand-orange hover:underline"
+          className="font-medium text-brand-orange hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
         >
           revauri.com
-        </a>
+        </a>{" "}
         — not this product.
       </>
     ),
@@ -64,81 +64,79 @@ export default function PricingPage() {
         subtitle={HERO.subtitle}
       />
 
-      <div className="section-measure px-6 py-10 sm:py-16 lg:py-20">
-        <FadeInWhenVisible>
-          <section>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+      <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
+        <div className="section-measure px-6">
+          <FadeInWhenVisible>
+            <p className="section-eyebrow">How pricing works</p>
+            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
               Why there are no numbers on this page
             </h2>
-            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              A hire is priced on the job it takes over, not on a software
-              tier. On a short call we name the two jobs, look at how they work
-              today, and then you get a real number for that work.
-            </p>
-            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              It is a lot less than another person on payroll. That is the
-              point.
-            </p>
-          </section>
-        </FadeInWhenVisible>
-
-        <HireComparison />
-
-        <FadeInWhenVisible delay={0.08}>
-          <section className="hairline-card mt-16 p-5 sm:p-8 lg:p-10">
-            <h2 className="text-[22px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream sm:text-[24px]">
-              What a standard hire includes
-            </h2>
-            <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {STANDARD_HIRE.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
-                  <span className="text-sm leading-relaxed text-brand-dark/80 dark:text-brand-cream/80">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </FadeInWhenVisible>
-
-        <StaggerChildren className="mt-4 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {EXTRAS.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="hairline-card flex h-full flex-col p-6">
-              <Icon className="h-5 w-5 text-brand-dark/40 dark:text-brand-cream/40" />
-              <h3 className="mt-4 text-lg font-semibold text-brand-dark dark:text-brand-cream">
-                {title}
-              </h3>
-              <div className="my-4 h-px bg-black/[0.08] dark:bg-white/[0.08]" />
-              <p className="text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                {description}
+            <div className="relative mt-8 max-w-2xl border-l-2 border-brand-orange pl-6 sm:pl-8">
+              <p className="text-lg leading-relaxed text-brand-dark/80 dark:text-brand-cream/80 md:text-xl">
+                A hire is priced on the job it takes over, not on a software
+                tier. On a short call we name the two jobs, look at how they work
+                today, and then you get a real number for that work.
+              </p>
+              <p className="mt-4 text-[15px] font-medium text-brand-dark dark:text-brand-cream">
+                It is a lot less than another person on payroll. That is the
+                point.
               </p>
             </div>
-          ))}
-        </StaggerChildren>
+          </FadeInWhenVisible>
+        </div>
+      </section>
 
-        <FadeInWhenVisible delay={0.2}>
-          <section className="mt-16">
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              How to start
-            </h2>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              Name the job you’d otherwise hire for. We look at
-              it, tell you whether we can take it, and quote it before anything
-              gets built.
-            </p>
-            <div className="mt-8">
-              <Link
-                href="/book"
-                className="inline-flex w-full min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-              >
-                Hire one
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+      <HireComparison />
+
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="section-measure px-6">
+          <FadeInWhenVisible delay={0.08}>
+            <div className="hairline-card p-5 sm:p-8 lg:p-10">
+              <p className="section-eyebrow">Included</p>
+              <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
+                What a standard hire includes
+              </h2>
+              <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {STANDARD_HIRE.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                      <Check className="h-4 w-4 text-brand-orange" aria-hidden="true" />
+                    </span>
+                    <span className="text-[15px] leading-relaxed text-brand-dark/80 dark:text-brand-cream/80">
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </section>
-        </FadeInWhenVisible>
-      </div>
+          </FadeInWhenVisible>
+
+          <StaggerChildren className="mt-3 grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {EXTRAS.map(({ icon: Icon, title, description }) => (
+              <div
+                key={title}
+                className="hairline-card hairline-card-hover flex h-full flex-col p-6"
+              >
+                <span className="icon-tile">
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                </span>
+                <h3 className="mt-4 text-lg font-semibold text-brand-dark dark:text-brand-cream">
+                  {title}
+                </h3>
+                <div className="my-4 h-px bg-black/[0.08] dark:bg-white/[0.08]" />
+                <p className="text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </StaggerChildren>
+        </div>
+      </section>
+
+      <PageCTA
+        heading="How to start"
+        body="Name the job you'd otherwise hire for. We look at it, tell you whether we can take it, and quote it before anything gets built."
+      />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Workflow, ClipboardList, Phone } from "lucide-react";
+import { ShieldCheck, Workflow, ClipboardList, Phone } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { PageCTA } from "@/components/page-cta";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import { PAGE_HEROES } from "@/lib/marketing-copy";
 
@@ -52,29 +52,34 @@ export default function AboutPage() {
         subtitle={HERO.subtitle}
       />
 
-      <section className="py-16 lg:py-20">
+      <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
         <div className="section-measure px-6">
-          <div className="grid grid-cols-1 items-center justify-items-center gap-12 lg:grid-cols-[auto_1fr] lg:justify-items-stretch lg:gap-16">
+          <div className="grid grid-cols-1 items-start justify-items-center gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:justify-items-stretch lg:gap-16">
             <FadeInWhenVisible direction="left" className="mx-auto w-fit lg:mx-0">
               <div className="relative isolate mx-auto w-fit lg:mx-0">
+                <div
+                  aria-hidden
+                  className="dotted-grid absolute -top-6 -left-6 h-full w-full rounded-2xl opacity-70"
+                />
                 <Image
                   src="/joseph-headshot.jpg"
                   alt="Joseph Silvagnoli, founder of Revauri"
-                  width={224}
-                  height={224}
-                  className="block h-40 w-40 rounded-[16px] object-cover object-top ring-1 ring-black/[0.08] sm:h-52 sm:w-52 lg:h-56 lg:w-56 dark:ring-white/[0.08]"
+                  width={320}
+                  height={320}
+                  className="relative z-10 block h-64 w-64 rounded-2xl object-cover object-top shadow-[var(--shadow-lg)] ring-1 ring-black/[0.08] sm:h-72 sm:w-72 lg:h-80 lg:w-80 dark:ring-white/[0.1]"
                 />
               </div>
             </FadeInWhenVisible>
 
             <div className="w-full">
               <FadeInWhenVisible>
-                <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+                <p className="section-eyebrow">The founder</p>
+                <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
                   Hi, I&apos;m Joseph.
                 </h2>
               </FadeInWhenVisible>
               <FadeInWhenVisible delay={0.08}>
-                <p className="mt-6 text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70 md:text-base">
+                <p className="mt-6 text-base leading-relaxed text-brand-dark/80 dark:text-brand-cream/80 md:text-lg">
                   I run Revauri. Working with local service businesses, I kept
                   hearing the same thing: the owner is the one chasing quiet
                   leads at 9pm, missing calls during a job, and never getting
@@ -98,7 +103,7 @@ export default function AboutPage() {
                   door —{" "}
                   <a
                     href="https://revauri.com"
-                    className="font-medium text-brand-orange hover:underline"
+                    className="font-medium text-brand-orange hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
                   >
                     revauri.com
                   </a>
@@ -110,10 +115,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="dotted-grid py-12 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
+            <p className="section-eyebrow">What you can count on</p>
+            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
               How we work
             </h2>
           </FadeInWhenVisible>
@@ -122,8 +128,13 @@ export default function AboutPage() {
             {VALUES.map((value) => {
               const Icon = value.icon;
               return (
-                <div key={value.title} className="hairline-card p-6">
-                  <Icon className="h-4 w-4 text-brand-dark/40 dark:text-brand-cream/40" />
+                <div
+                  key={value.title}
+                  className="hairline-card hairline-card-hover h-full bg-white/90 p-6 dark:bg-[#1c1b19]/92"
+                >
+                  <span className="icon-tile">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
                   <h3 className="mt-4 text-base font-semibold text-brand-dark dark:text-brand-cream">
                     {value.title}
                   </h3>
@@ -137,30 +148,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
-        <div className="section-measure px-6">
-          <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              Tell me the job you hate.
-            </h2>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.08}>
-            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60 md:text-base">
-              A short call is enough to name the two jobs worth handing off
-              first.
-            </p>
-          </FadeInWhenVisible>
-          <FadeInWhenVisible delay={0.16}>
-            <Link
-              href="/book"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-            >
-              Hire one
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </FadeInWhenVisible>
-        </div>
-      </section>
+      <PageCTA
+        heading="Tell me the job you hate."
+        body="A short call is enough to name the two jobs worth handing off first."
+      />
     </div>
   );
 }
