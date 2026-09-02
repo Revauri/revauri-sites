@@ -658,7 +658,7 @@ function OrbitalDiagram({
             <div
               className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
             >
-              <Logo className="h-3" />
+              <Logo className="h-[15.6px]" />
             </div>
           </div>
         </foreignObject>
