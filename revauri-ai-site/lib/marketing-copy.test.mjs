@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   HERO_COPY,
+  OG_TAGLINE,
+  SITE_TITLE,
   FINAL_CTA_COPY,
   SUPPORT_COPY,
   FOOTER_BLURB,
@@ -21,6 +23,14 @@ import {
   gridHasWord,
 } from "../components/trades-word-search/script.ts";
 import { HOW_WE_WORK_CARDS } from "../components/how-we-work-data.ts";
+
+test("share title and OG tagline match the homepage headline", () => {
+  assert.equal(OG_TAGLINE, "Hire an AI employee. Not another salary.");
+  assert.equal(
+    SITE_TITLE,
+    "Revauri AI — Hire an AI employee. Not another salary.",
+  );
+});
 
 test("hero copy matches the plan verbatim", () => {
   assert.equal(HERO_COPY.h1Line1, "Hire an AI employee.");

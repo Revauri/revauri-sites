@@ -20,6 +20,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
+import { Logo } from "@/components/logo";
 import {
   ACTIVITY,
   FRAME_CAPTION,
@@ -657,25 +658,7 @@ function OrbitalDiagram({
             <div
               className={`flex h-[46px] w-[84px] items-center justify-center rounded-[7px] bg-[#FBF9F2] dark:bg-[#302E29] ${HAIRLINE_CARD_SHADOW}`}
             >
-              {/* Mini version of the nav wordmark (see components/logo.tsx) */}
-              <span className="inline-flex items-baseline text-[12px] font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
-                <span className="relative">
-                  Revauri
-                  <span
-                    aria-hidden
-                    className="absolute bg-brand-orange"
-                    style={{
-                      width: "5px",
-                      height: "1.6px",
-                      borderRadius: "1px",
-                      right: "0px",
-                      top: "0.15em",
-                      transform: "rotate(-35deg)",
-                    }}
-                  />
-                </span>
-                <span className="ml-[2px] text-brand-orange">AI</span>
-              </span>
+              <Logo className="h-3" />
             </div>
           </div>
         </foreignObject>

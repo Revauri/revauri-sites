@@ -1,44 +1,60 @@
 interface LogoProps {
   variant?: "light" | "dark" | "auto";
-  suffix?: string;
   className?: string;
 }
 
+const SIZE = { width: 532, height: 132 };
+
 export function Logo({
   variant = "auto",
-  suffix,
-  className = "",
+  className = "h-8",
 }: LogoProps) {
-  const textColor =
-    variant === "dark"
-      ? "text-brand-cream"
-      : variant === "light"
-        ? "text-brand-dark"
-        : "text-brand-dark dark:text-brand-cream";
+  const imgClass = `w-auto ${className}`;
 
-  return (
-    <span
-      className={`inline-flex w-fit items-baseline text-xl font-semibold tracking-tight ${textColor} ${className}`}
-    >
-      <span className="relative">
-        Revauri
-        {/* Rising accent bar — overlays the i's tittle */}
-        <span
-          className="absolute bg-brand-orange"
-          style={{
-            width: "8px",
-            height: "2.5px",
-            borderRadius: "1.5px",
-            right: "0px",
-            top: "0.15em",
-            transform: "rotate(-35deg)",
-          }}
-          aria-hidden="true"
+  switch (variant) {
+    case "light":
+      return (
+        <img
+          src="/logo.png"
+          alt="Revauri AI"
+          width={SIZE.width}
+          height={SIZE.height}
+          className={imgClass}
         />
-      </span>
-      {suffix && (
-        <span className="ml-[3px] text-brand-orange">{suffix}</span>
-      )}
-    </span>
-  );
+      );
+    case "dark":
+      return (
+        <img
+          src="/logo-dark.png"
+          alt="Revauri AI"
+          width={SIZE.width}
+          height={SIZE.height}
+          className={imgClass}
+        />
+      );
+    case "auto":
+      return (
+        <span className="inline-flex">
+          <span className="sr-only">Revauri AI</span>
+          <img
+            src="/logo.png"
+            alt=""
+            width={SIZE.width}
+            height={SIZE.height}
+            className={`${imgClass} dark:hidden`}
+          />
+          <img
+            src="/logo-dark.png"
+            alt=""
+            width={SIZE.width}
+            height={SIZE.height}
+            className={`${imgClass} hidden dark:block`}
+          />
+        </span>
+      );
+    default: {
+      const _exhaustive: never = variant;
+      return _exhaustive;
+    }
+  }
 }

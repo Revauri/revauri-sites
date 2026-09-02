@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ChatWidget } from "@/components/chat/chat-widget";
@@ -22,7 +23,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Revauri — Custom Websites for Businesses That Want to Stand Out",
+  title: "Revauri — The website your business actually deserves",
   description:
     "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
   metadataBase: new URL("https://www.revauri.com"),
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Revauri — Custom Websites for Businesses That Want to Stand Out",
+    title: "Revauri — The website your business actually deserves",
     description:
       "We design and build custom, conversion-focused websites for businesses that want to stand out online. See a free preview of your site redesign before you spend a dime.",
     url: "https://www.revauri.com",
@@ -71,7 +72,7 @@ const organizationSchema = {
     "@type": "Person",
     name: "Joseph Silvagnoli",
   },
-  logo: "https://www.revauri.com/logo.svg",
+  logo: "https://www.revauri.com/logo.png",
 };
 
 const websiteSchema = {
@@ -100,7 +101,6 @@ export default function RootLayout({
           title="Revauri Blog"
           href="/blog/rss.xml"
         />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -111,6 +111,9 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Script id="theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
         <Header />
         <main>{children}</main>
         <Footer />

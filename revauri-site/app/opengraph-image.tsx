@@ -1,10 +1,13 @@
 import { ImageResponse } from "next/og";
+import { loadOgInter, loadOgLogoSrc } from "@/lib/og-wordmark";
 
-export const alt = "Revauri — Custom Websites for Businesses That Want to Stand Out";
+export const alt = "The website your business actually deserves";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
+  const [inter, logoSrc] = await Promise.all([loadOgInter(), loadOgLogoSrc()]);
+
   return new ImageResponse(
     (
       <div
@@ -16,43 +19,11 @@ export default function OGImage() {
           alignItems: "center",
           justifyContent: "center",
           background: "#FAF9F5",
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "Inter",
         }}
       >
-        {/* Logo mark */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            position: "relative",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 72,
-              fontWeight: 700,
-              color: "#141413",
-              letterSpacing: "-1.5px",
-            }}
-          >
-            Revauri
-          </span>
-          {/* Rising accent bar */}
-          <div
-            style={{
-              position: "absolute",
-              top: 12,
-              right: -2,
-              width: 28,
-              height: 8,
-              borderRadius: 4,
-              background: "#D97757",
-              transform: "rotate(-35deg)",
-            }}
-          />
-        </div>
+        <img src={logoSrc} width={283} height={92} alt="" />
 
-        {/* Tagline */}
         <p
           style={{
             fontSize: 28,
@@ -61,10 +32,9 @@ export default function OGImage() {
             fontWeight: 400,
           }}
         >
-          Custom websites for founders and businesses that refuse to settle
+          The website your business actually deserves
         </p>
 
-        {/* Accent line */}
         <div
           style={{
             width: 60,
@@ -76,6 +46,16 @@ export default function OGImage() {
         />
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Inter",
+          data: inter,
+          style: "normal",
+          weight: 600,
+        },
+      ],
+    },
   );
 }

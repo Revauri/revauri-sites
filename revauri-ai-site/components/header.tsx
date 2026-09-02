@@ -51,7 +51,7 @@ export function Header() {
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center">
-            <Logo suffix="AI" />
+            <Logo />
           </Link>
 
           {/* Desktop Nav */}
@@ -112,7 +112,7 @@ export function Header() {
           >
             <div className="flex items-center justify-between px-6 py-4">
               <Link href="/" className="flex items-center" onClick={() => setMenuOpen(false)}>
-                <Logo suffix="AI" />
+                <Logo />
               </Link>
               <button
                 className="flex h-10 w-10 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 dark:text-brand-cream"

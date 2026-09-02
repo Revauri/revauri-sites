@@ -1,10 +1,14 @@
 import { ImageResponse } from "next/og";
+import { OG_TAGLINE } from "@/lib/marketing-copy";
+import { loadOgInter, loadOgLogoSrc } from "@/lib/og-wordmark";
 
-export const alt = "An AI employee. Cheaper than a person.";
+export const alt = OG_TAGLINE;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
+  const [inter, logoSrc] = await Promise.all([loadOgInter(), loadOgLogoSrc()]);
+
   return new ImageResponse(
     (
       <div
@@ -16,55 +20,11 @@ export default function OGImage() {
           alignItems: "center",
           justifyContent: "center",
           background: "#FAF9F5",
-          fontFamily: "Inter, sans-serif",
+          fontFamily: "Inter",
         }}
       >
-        {/* Logo mark */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-          }}
-        >
-          <div style={{ display: "flex", position: "relative" }}>
-            <span
-              style={{
-                fontSize: 72,
-                fontWeight: 700,
-                color: "#141413",
-                letterSpacing: "-1.5px",
-              }}
-            >
-              Revauri
-            </span>
-            {/* Rising accent bar */}
-            <div
-              style={{
-                position: "absolute",
-                top: 12,
-                right: -2,
-                width: 28,
-                height: 8,
-                borderRadius: 4,
-                background: "#D97757",
-                transform: "rotate(-35deg)",
-              }}
-            />
-          </div>
-          <span
-            style={{
-              fontSize: 72,
-              fontWeight: 700,
-              color: "#D97757",
-              letterSpacing: "-1.5px",
-              marginLeft: 11,
-            }}
-          >
-            AI
-          </span>
-        </div>
+        <img src={logoSrc} width={371} height={92} alt="" />
 
-        {/* Tagline */}
         <p
           style={{
             fontSize: 28,
@@ -73,10 +33,9 @@ export default function OGImage() {
             fontWeight: 400,
           }}
         >
-          An AI employee. Cheaper than a person.
+          {OG_TAGLINE}
         </p>
 
-        {/* Accent line */}
         <div
           style={{
             width: 60,
@@ -88,6 +47,16 @@ export default function OGImage() {
         />
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Inter",
+          data: inter,
+          style: "normal",
+          weight: 600,
+        },
+      ],
+    },
   );
 }

@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { CookieConsent } from "@/components/cookie-consent";
+import { SITE_TITLE } from "@/lib/marketing-copy";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Revauri AI — An AI Employee. Cheaper Than a Person.",
+  title: SITE_TITLE,
   description:
     "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
   metadataBase: new URL("https://revauri.ai"),
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Revauri AI — An AI Employee. Cheaper Than a Person.",
+    title: SITE_TITLE,
     description:
       "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
     url: "https://revauri.ai",
@@ -76,7 +78,7 @@ const organizationSchema = {
     name: "Revauri",
     url: "https://revauri.com",
   },
-  logo: "https://revauri.ai/logo.svg",
+  logo: "https://revauri.ai/logo.png",
 };
 
 const websiteSchema = {
@@ -105,7 +107,6 @@ export default function RootLayout({
           title="Revauri AI Blog"
           href="/blog/rss.xml"
         />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -116,6 +117,9 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Script id="theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
         <Header />
         <main>{children}</main>
         <Footer />

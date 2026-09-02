@@ -1,5 +1,10 @@
 /** Canonical marketing strings. UI and tests import from here. */
 
+export const OG_TAGLINE = "Hire an AI employee. Not another salary.";
+
+export const SITE_TITLE =
+  "Revauri AI — Hire an AI employee. Not another salary.";
+
 export const HERO_COPY = {
   h1Line1: "Hire an AI employee.",
   h1Line2: "Not another salary.",

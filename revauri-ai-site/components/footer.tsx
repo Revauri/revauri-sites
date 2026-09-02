@@ -113,7 +113,7 @@ export function Footer() {
       <div className="bg-brand-white pt-6 pb-8 dark:bg-brand-dark lg:pt-8 lg:pb-10">
         <div className="mx-auto max-w-6xl px-6">
           <div className="flex flex-col gap-4">
-            <Logo variant="auto" suffix="AI" />
+            <Logo variant="auto" />
             <p className="text-sm text-brand-dark/45 dark:text-brand-cream/45">
               {FOOTER_BLURB}
             </p>
