@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FadeInWhenVisible } from "../motion-wrappers";
 import { ApproveMock } from "./approve-mock";
 import { ParallelMock } from "./parallel-mock";
 import { ScopedMock } from "./scoped-mock";
 import { TOOLS_INTRO, TOOLS_TABS, type ToolsTabId } from "./script";
+
+const ROTATE_MS = 6_500;
+const PANEL_EASE = [0.16, 1, 0.3, 1] as const;
 
 function ToolsPanel({ active }: { active: ToolsTabId }) {
   switch (active) {
@@ -24,6 +28,36 @@ function ToolsPanel({ active }: { active: ToolsTabId }) {
 
 export function ToolsDemo() {
   const [active, setActive] = useState<ToolsTabId>("approve");
+  const [hovered, setHovered] = useState(false);
+  const [inView, setInView] = useState(false);
+  // Bumped on any interaction inside the stage so the rotation timer restarts.
+  const [interactionTick, setInteractionTick] = useState(0);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = Boolean(useReducedMotion());
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.35 },
+    );
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion || hovered || !inView) return;
+    const timer = window.setTimeout(() => {
+      setActive((current) => {
+        const index = TOOLS_TABS.findIndex((tab) => tab.id === current);
+        return TOOLS_TABS[(index + 1) % TOOLS_TABS.length].id;
+      });
+    }, ROTATE_MS);
+    return () => window.clearTimeout(timer);
+  }, [active, hovered, inView, reducedMotion, interactionTick]);
+
+  const bumpInteraction = () => setInteractionTick((tick) => tick + 1);
 
   return (
     <section className="bg-brand-cream py-16 dark:bg-brand-dark md:py-24">
@@ -86,9 +120,9 @@ export function ToolsDemo() {
                         .getElementById(`tools-tab-${next.id}`)
                         ?.focus();
                     }}
-                    className={`min-h-11 w-full border-l-2 px-4 py-3 text-left text-[14px] leading-snug transition-colors ${
+                    className={`min-h-11 w-full border-l-2 px-4 py-3 text-left text-[14px] leading-snug transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange/60 ${
                       selected
-                        ? "border-brand-orange text-brand-dark dark:text-brand-cream"
+                        ? "border-brand-orange font-medium text-brand-dark dark:text-brand-cream"
                         : "border-transparent text-brand-dark/40 hover:text-brand-dark/70 dark:text-brand-cream/40 dark:hover:text-brand-cream/70"
                     }`}
                   >
@@ -99,19 +133,36 @@ export function ToolsDemo() {
             })}
           </div>
 
-          <div className="relative z-10 mx-auto mt-10 w-full min-[767px]:mt-14 min-[1000px]:w-[800px]">
-            <div className="relative isolate overflow-hidden rounded-[20px] border border-brand-cream bg-brand-cream p-3 dark:border-brand-dark dark:bg-brand-dark">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-[20px] bg-black/[0.06] dark:bg-white/[0.08]"
-              />
+          <div
+            ref={stageRef}
+            className="relative z-10 mx-auto mt-10 w-full min-[767px]:mt-14 min-[1000px]:w-[800px]"
+            onPointerEnter={() => setHovered(true)}
+            onPointerLeave={() => setHovered(false)}
+            onPointerDownCapture={bumpInteraction}
+            onKeyDownCapture={bumpInteraction}
+          >
+            <div className="relative isolate rounded-[20px] bg-[#ECEAE2] p-3 shadow-[0_0_0_1px_rgba(20,20,19,0.04)] dark:bg-[#232220] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
               <div
                 id="tools-panel"
                 role="tabpanel"
                 aria-labelledby={`tools-tab-${active}`}
-                className="relative min-h-[400px] overflow-hidden rounded-[16px] bg-[#F1EFE7] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.65)] dark:bg-[#1C1B19] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] min-[767px]:min-h-[440px]"
+                className="demo-stage relative min-h-[400px] overflow-hidden min-[767px]:h-[440px] min-[767px]:min-h-0"
               >
-                <ToolsPanel active={active} />
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.div
+                    key={active}
+                    className="h-full"
+                    initial={{ opacity: 0, y: 18, scale: 0.985 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -14, scale: 0.985 }}
+                    transition={{
+                      duration: reducedMotion ? 0 : 0.48,
+                      ease: PANEL_EASE,
+                    }}
+                  >
+                    <ToolsPanel active={active} />
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>

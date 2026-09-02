@@ -151,18 +151,44 @@ export type ScopedHighlight = "trigger" | "jobs" | "icons";
 export const SCOPED_SETUP = {
   title: "Customize hire setup",
   nameLabel: "Name",
-  name: "Local HVAC",
-  instructionsLabel: "Custom Instructions",
-  instructionsPlaceholder:
-    "After-hours catch, no prices, licensed work stays with the shop.",
+  name: "Agent",
+  voiceLabel: "Voice",
+  voice: "Your shop",
+  rulesLabel: "Rules",
+  rules: "After-hours catch. No prices. Licensed work stays with the shop.",
   triggerLabel: "Add trigger",
-  hireName: "Local HVAC",
+  hireName: "Agent",
   hireRole: "The hire",
   addJobLabel: "Add job",
   jobs: [
     { name: "Catch", role: "Job" },
     { name: "Follow up", role: "Job" },
-    { name: "Keep running", role: "Job" },
+    { name: "Running", role: "Job" },
   ],
-  extraIntegrations: 3,
+} as const;
+
+export const SCOPED_TRIGGER = {
+  title: "Add trigger",
+  scheduleLabel: "On a schedule",
+  eventLabel: "On an event",
+  everyLabel: "Every",
+  everyValue: "Night",
+  atLabel: "At",
+  atValue: "After hours",
+  endingLabel: "Ending",
+  endingValue: "Never",
+  eventWhenLabel: "When",
+  eventWhenValue: "Missed call",
+  eventSourceLabel: "Source",
+  eventSourceValue: "Phone",
+} as const;
+
+export const SCOPED_JOB_FORM = {
+  title: "Add job",
+  outcomeLabel: "Outcome",
+  outcome: "Hold a callback",
+  channelLabel: "Channel",
+  channel: "Phone + text",
+  approvalLabel: "Approval",
+  approval: "Required to send",
 } as const;
