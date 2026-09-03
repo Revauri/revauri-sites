@@ -50,7 +50,7 @@ const TECH_STACK = [
 export function StatsBar() {
   return (
     <FadeInWhenVisible>
-      <section className="relative overflow-hidden bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
+      <section className="relative overflow-hidden bg-brand-orange/5 py-8 dark:bg-brand-orange/[0.03] lg:py-8">
         <ParticleNetworkBg />
         <div className="relative z-10 mx-auto max-w-6xl px-6">
           <p className="mb-10 text-center text-xs font-semibold uppercase tracking-widest text-brand-mid-gray">

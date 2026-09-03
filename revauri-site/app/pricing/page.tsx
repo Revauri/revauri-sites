@@ -180,7 +180,7 @@ export default function PricingPage() {
 
         {/* Add-ons */}
         <FadeInWhenVisible>
-          <section className="mt-20 rounded-2xl bg-brand-orange/10 px-6 py-12 lg:px-10 lg:py-14">
+          <section className="mt-20">
             <div className="text-center">
               <h3 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
                 Add-ons and other services available
@@ -190,27 +190,23 @@ export default function PricingPage() {
               </p>
             </div>
 
-            <StaggerChildren className="mt-10 grid grid-cols-1 auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <StaggerChildren className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {ADD_ONS.map(({ icon: Icon, title, description }) => (
                 <div
                   key={title}
-                  className="group relative flex h-full flex-col items-center p-6 text-center"
+                  className="flex gap-4 rounded-2xl border border-brand-light-gray bg-brand-white p-5 transition-colors duration-300 hover:border-brand-orange/30 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
                 >
-                  <div className="relative grid h-12 w-12 shrink-0 place-items-center">
-                    <span
-                      className="pointer-events-none absolute inset-[-8px] rounded-full bg-brand-orange/30 opacity-60 blur-xl transition-opacity duration-300 group-hover:opacity-100 dark:bg-brand-orange/22"
-                      aria-hidden
-                    />
-                    <div className="relative z-[1] flex h-full w-full items-center justify-center rounded-full bg-brand-dark text-brand-cream shadow-[0_0_14px_8px_rgba(217,119,87,0.14)] dark:bg-brand-cream dark:text-brand-dark">
-                      <Icon className="h-5 w-5" />
-                    </div>
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10 text-brand-orange">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <h4 className="mt-5 text-base font-semibold text-brand-dark dark:text-brand-cream">
-                    {title}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-                    {description}
-                  </p>
+                  <div className="min-w-0">
+                    <h4 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+                      {title}
+                    </h4>
+                    <p className="mt-1.5 text-sm leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                      {description}
+                    </p>
+                  </div>
                 </div>
               ))}
             </StaggerChildren>
