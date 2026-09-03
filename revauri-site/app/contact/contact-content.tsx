@@ -2,7 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Mail, MapPin, Phone, BookOpen, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Mail, MapPin, Phone, BookOpen, RotateCcw } from "lucide-react";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
 import {
   onConsentChanged,
@@ -223,19 +223,25 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                   <label htmlFor="referral" className={LABEL_CLASS}>
                     How did you hear about us? <span className="text-xs text-brand-mid-gray">(optional)</span>
                   </label>
-                  <select
-                    id="referral"
-                    name="referral"
-                    defaultValue=""
-                    className={FIELD_CLASS}
-                  >
-                    <option value="" disabled className="text-brand-mid-gray">Select an option</option>
-                    <option value="Google">Google</option>
-                    <option value="Referral">Referral</option>
-                    <option value="Social Media">Social Media</option>
-                    <option value="Cold Email">Cold Email</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      id="referral"
+                      name="referral"
+                      defaultValue=""
+                      className={`${FIELD_CLASS} appearance-none pr-10`}
+                    >
+                      <option value="" disabled className="text-brand-mid-gray">Select an option</option>
+                      <option value="Google">Google</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Cold Email">Cold Email</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <ChevronDown
+                      className="pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2 text-brand-dark/50 dark:text-brand-cream/50"
+                      aria-hidden="true"
+                    />
+                  </div>
                 </div>
 
                 <div>

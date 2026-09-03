@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { ContactContent } from "./contact-content";
 
 export const metadata: Metadata = {
@@ -24,11 +24,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
     <div>
       <PageHero
         badge="GET IN TOUCH"
-        title={
-          <>
-            Contact <GradientText>Revauri</GradientText>
-          </>
-        }
+        title="Contact Revauri"
         subtitle="Book a free call or drop us a message. We'll get back to you quickly."
       />
 

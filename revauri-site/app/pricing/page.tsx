@@ -13,7 +13,7 @@ import {
   Target,
 } from "lucide-react";
 import Link from "next/link";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import BlendedDemoFrame from "@/components/blended-demo-frame";
 
@@ -101,12 +101,7 @@ export default function PricingPage() {
     <div>
       <PageHero
         badge="PRICING"
-        title={
-          <>
-            Custom website quotes, built around{" "}
-            <GradientText>your business</GradientText>
-          </>
-        }
+        title="Custom website quotes, built around your business"
         subtitle="Every project is scoped after a short discovery call. Free preview redesign included."
       />
 

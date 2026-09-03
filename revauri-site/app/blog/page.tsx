@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import BlendedDemoFrame from "@/components/blended-demo-frame";
 import { PostCard, PostImageFallback, formatDate } from "@/components/blog/post-card";
@@ -40,11 +40,7 @@ export default function BlogPage() {
 
       <PageHero
         badge="BLOG"
-        title={
-          <>
-            The <GradientText>Blog</GradientText>
-          </>
-        }
+        title="The Blog"
         subtitle="Practical advice on web design, pricing, and building sites that convert — drawn from real client work."
       />
 

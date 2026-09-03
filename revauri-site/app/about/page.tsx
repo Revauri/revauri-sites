@@ -56,11 +56,7 @@ export default function AboutPage() {
     <div>
       <PageHero
         badge="ABOUT"
-        title={
-          <>
-            Built by a founder who <GradientText>gets it</GradientText>
-          </>
-        }
+        title="Built by a founder who gets it"
         subtitle="Great businesses deserve websites that work as hard as they do."
       />
 

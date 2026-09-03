@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { StaggerChildren, FadeInWhenVisible } from "@/components/motion-wrappers";
 import { PostCard } from "@/components/blog/post-card";
 import { getAllCategories, getPostsByCategory } from "@/lib/blog";
@@ -57,11 +57,7 @@ export default async function BlogCategoryPage(
 
       <PageHero
         badge="CATEGORY"
-        title={
-          <>
-            <GradientText>{category}</GradientText>
-          </>
-        }
+        title={category}
         subtitle={`Posts filed under ${category}.`}
       />
 

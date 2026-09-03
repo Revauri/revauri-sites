@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 
 export const metadata: Metadata = {
   title: "Terms of Service — Revauri",
@@ -13,11 +13,7 @@ export default function TermsPage() {
     <div>
       <PageHero
         badge="LEGAL"
-        title={
-          <>
-            Terms of <GradientText>Service</GradientText>
-          </>
-        }
+        title="Terms of Service"
         subtitle="Last updated: April 3, 2026"
       />
 

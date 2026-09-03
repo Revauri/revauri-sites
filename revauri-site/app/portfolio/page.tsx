@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
 import { PortfolioFilmstrip } from "@/components/portfolio-filmstrip";
 import { getAllProjects } from "@/lib/portfolio-data";
@@ -18,11 +18,7 @@ export default function PortfolioPage() {
     <div>
       <PageHero
         badge="PORTFOLIO"
-        title={
-          <>
-            Real <GradientText>Work</GradientText>
-          </>
-        }
+        title="Real Work"
         subtitle="Founder-built from scratch. Every project here was personally designed and built end-to-end."
       />
 

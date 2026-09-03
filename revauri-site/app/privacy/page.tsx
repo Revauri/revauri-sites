@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Revauri",
@@ -13,11 +13,7 @@ export default function PrivacyPage() {
     <div>
       <PageHero
         badge="LEGAL"
-        title={
-          <>
-            Privacy <GradientText>Policy</GradientText>
-          </>
-        }
+        title="Privacy Policy"
         subtitle="Last updated: August 13, 2026"
       />
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PageHero, GradientText } from "@/components/page-hero";
+import { PageHero } from "@/components/page-hero";
 import { FAQContent } from "./faq-content";
 
 export const metadata: Metadata = {
@@ -140,11 +140,7 @@ export default function FAQPage() {
 
       <PageHero
         badge="FAQ"
-        title={
-          <>
-            Frequently Asked <GradientText>Questions</GradientText>
-          </>
-        }
+        title="Frequently Asked Questions"
         subtitle="Everything you need to know about working with Revauri."
       />
 

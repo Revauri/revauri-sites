@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Mail, MapPin, Phone, BookOpen, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronDown, Mail, MapPin, Phone, BookOpen, RotateCcw } from "lucide-react";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
 import {
   onConsentChanged,
@@ -15,18 +15,18 @@ type ContactContentProps = {
 };
 
 const FORM_CARD_CLASS =
-  "hairline-card relative overflow-hidden p-6 sm:p-8 shadow-[var(--shadow-md)]";
-
-const FORM_ACCENT_CLASS =
-  "absolute inset-x-0 top-0 h-px bg-gradient-to-r from-brand-orange/60 via-brand-orange/20 to-transparent";
+  "rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] sm:p-8 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]";
 
 const FIELD_CLASS =
-  "w-full min-w-0 max-w-full rounded-lg border border-black/[0.08] bg-white/70 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] hover:border-black/[0.14] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-brand-cream dark:hover:border-white/[0.14]";
+  "w-full rounded-xl border border-brand-light-gray bg-brand-cream/50 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream";
 
 const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-brand-dark dark:text-brand-cream";
 
 const PRIMARY_BUTTON_CLASS =
-  "inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
+  "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-orange px-8 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-brand-orange/90 hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
+
+const ICON_SQUARE_CLASS =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-dark text-brand-cream transition-colors duration-200 group-hover:bg-brand-orange dark:bg-brand-cream dark:text-brand-dark dark:group-hover:bg-brand-orange dark:group-hover:text-white";
 
 const SUCCESS_PATH = "/contact?sent=true";
 
@@ -54,12 +54,11 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
   }, [isSubmitted]);
 
   return (
-    <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
-      <div className="section-measure grid items-start gap-12 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
+    <section className="py-16 lg:py-20">
+      <div className="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <FadeInWhenVisible className="lg:sticky lg:top-28">
-          <p className="section-eyebrow">Direct line</p>
-          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-brand-dark sm:text-3xl dark:text-brand-cream">
-            Reach us directly
+          <h2 className="text-3xl font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+            Get in touch
           </h2>
           <p className="mt-3 text-brand-dark/60 dark:text-brand-cream/60">
             We typically respond within a few hours.
@@ -85,30 +84,21 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
             />
           </ul>
 
-          <div className="hairline-card mt-8 p-4">
-            <div className="flex items-start gap-3">
-              <span className="icon-tile shrink-0">
-                <BookOpen className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-sm text-brand-dark/55 dark:text-brand-cream/55">
-                  Looking for a quick answer?
-                </p>
-                <Link
-                  href="/faq"
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors hover:text-brand-orange/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
-                >
-                  Browse the FAQ
-                </Link>
-              </div>
-            </div>
-          </div>
+          <p className="mt-8 text-sm text-brand-dark/55 dark:text-brand-cream/55">
+            Looking for a quick answer?
+          </p>
+          <Link
+            href="/faq"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors hover:text-brand-orange/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+          >
+            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+            Browse the FAQ
+          </Link>
         </FadeInWhenVisible>
 
         <FadeInWhenVisible delay={0.08}>
           {isSubmitted ? (
-            <div className={FORM_CARD_CLASS}>
-              <div aria-hidden className={FORM_ACCENT_CLASS} />
+            <div className={`${FORM_CARD_CLASS} relative overflow-hidden`}>
               <div className="relative flex flex-col items-center text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange/12 ring-1 ring-brand-orange/20">
                   <CheckCircle2 className="h-8 w-8 text-brand-orange" aria-hidden="true" />
@@ -164,14 +154,13 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
               method="POST"
               className={FORM_CARD_CLASS}
             >
-              <div aria-hidden className={FORM_ACCENT_CLASS} />
               {/* Web3Forms config */}
               <input type="hidden" name="access_key" value="84431b19-9bc8-45f0-a60a-eb6d683a0008" />
               <input type="hidden" name="redirect" value={successUrl} />
               <input type="hidden" name="subject" value="New message from revauri.ai" />
               <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} />
 
-              <div className="relative space-y-5">
+              <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className={LABEL_CLASS}>
                     Name <span className="text-brand-orange">*</span>
@@ -244,19 +233,25 @@ export function ContactContent({ isSubmitted = false }: ContactContentProps) {
                   <label htmlFor="referral" className={LABEL_CLASS}>
                     How did you hear about us? <span className="text-xs text-brand-mid-gray">(optional)</span>
                   </label>
-                  <select
-                    id="referral"
-                    name="referral"
-                    defaultValue=""
-                    className={FIELD_CLASS}
-                  >
-                    <option value="" disabled className="text-brand-mid-gray">Select an option</option>
-                    <option value="Google">Google</option>
-                    <option value="Referral">Referral</option>
-                    <option value="Social Media">Social Media</option>
-                    <option value="Cold Email">Cold Email</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      id="referral"
+                      name="referral"
+                      defaultValue=""
+                      className={`${FIELD_CLASS} appearance-none pr-10`}
+                    >
+                      <option value="" disabled className="text-brand-mid-gray">Select an option</option>
+                      <option value="Google">Google</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Cold Email">Cold Email</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <ChevronDown
+                      className="pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2 text-brand-dark/50 dark:text-brand-cream/50"
+                      aria-hidden="true"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -303,12 +298,12 @@ function ContactMethod({
   external?: boolean;
 }) {
   const className =
-    "group -mx-2 flex min-w-0 items-center gap-3 rounded-lg px-2 py-1.5 text-brand-dark/80 outline-none transition-colors hover:bg-black/[0.03] hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:bg-white/[0.04] dark:hover:text-brand-cream";
+    "group flex items-center gap-3 rounded-lg text-brand-dark/80 outline-none transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:text-brand-cream";
 
   const content = (
     <>
-      <span className="icon-tile">{icon}</span>
-      <span className="min-w-0 break-words text-[15px]">{label}</span>
+      <span className={ICON_SQUARE_CLASS}>{icon}</span>
+      <span>{label}</span>
     </>
   );
 

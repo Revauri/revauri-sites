@@ -228,3 +228,50 @@ body {
     animation: none !important;
   }
 }
+
+.hero-dots {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(20, 20, 19, 0.13) 1px,
+    transparent 1.15px
+  );
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 75% 90% at 25% 35%, #000 20%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 90% at 25% 35%, #000 20%, transparent 72%);
+}
+
+.dark .hero-dots {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(250, 249, 245, 0.14) 1px,
+    transparent 1.15px
+  );
+}
+
+.section-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(20, 20, 19, 0.4);
+}
+
+.dark .section-eyebrow {
+  color: rgba(250, 249, 245, 0.4);
+}
+
+.section-h2-muted {
+  color: rgba(20, 20, 19, 0.55);
+}
+
+.dark .section-h2-muted {
+  color: rgba(250, 249, 245, 0.6);
+}
+
+.section-measure {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+}
