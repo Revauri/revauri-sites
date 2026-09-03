@@ -104,7 +104,7 @@ function BeforeAfterMockup() {
   return (
     <BlendedDemoFrame>
     <>
-    <div className="rounded-2xl border border-brand-light-gray/40 bg-brand-white/80 p-1 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/80">
+    <div className="rounded-2xl border border-brand-light-gray/40 bg-brand-white/80 p-0.5 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]/80 sm:p-1">
       {/* Mock browser chrome */}
       <div className="rounded-t-xl bg-brand-cream/80 px-4 pt-3 pb-2 dark:bg-brand-dark/80">
         <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ function BeforeAfterMockup() {
       {/* Before / After split content */}
       <div
         ref={containerRef}
-        className="relative h-[500px] overflow-hidden rounded-b-xl select-none sm:h-[640px]"
+        className="relative h-[560px] overflow-visible rounded-b-xl select-none sm:h-[672px]"
         style={{
           "--slider-position": `${position}%`,
         } as React.CSSProperties}
@@ -147,25 +147,27 @@ function BeforeAfterMockup() {
         />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-black/4 to-transparent dark:from-white/[0.03]" />
         {/* ── BEFORE side (full width, underneath) ── */}
-        <div className="absolute inset-0 flex flex-col overflow-hidden bg-[#dcdcdc] dark:bg-[#1c1c1b]">
+        <div className="absolute inset-0 flex flex-col overflow-hidden rounded-b-xl bg-[#dcdcdc] dark:bg-[#1c1c1b]">
           {/* Garish teal announcement bar */}
           <div className="shrink-0 bg-[#008B8B] px-3 py-1 sm:px-4 sm:py-1.5">
             <p className="text-center font-mono text-[10px] font-bold uppercase leading-tight text-white sm:text-[12px]">
-              *** SPECIAL OFFER THIS MONTH ONLY — CALL NOW!!! ***
+              <span className="sm:hidden">*** SPECIAL OFFER — CALL NOW!!! ***</span>
+              <span className="hidden sm:inline">*** SPECIAL OFFER THIS MONTH ONLY — CALL NOW!!! ***</span>
             </p>
           </div>
           {/* Ugly cramped nav */}
           <div className="shrink-0 border-b-4 border-gray-500 bg-[#c0c0c0] px-2 py-1.5 dark:bg-[#2a2a28] sm:px-3">
             <div className="flex items-center justify-between gap-2">
               <span className="shrink-0 font-mono text-[12px] font-black uppercase tracking-tight text-gray-700 dark:text-gray-400 sm:text-[15px]" style={{ letterSpacing: "-0.02em" }}>ACME Corp.</span>
-              <span className="truncate font-mono text-[8px] text-gray-600 dark:text-gray-500 sm:text-[11px]" style={{ letterSpacing: "0.05em" }}>HOME&nbsp;&nbsp;|&nbsp;&nbsp;ABOUT&nbsp;&nbsp;|&nbsp;&nbsp;SERVICES&nbsp;&nbsp;|&nbsp;&nbsp;CONTACT&nbsp;&nbsp;|&nbsp;&nbsp;FAQ&nbsp;&nbsp;|&nbsp;&nbsp;SITEMAP</span>
+              <span className="font-mono text-[9px] text-gray-600 dark:text-gray-500 sm:hidden" style={{ letterSpacing: "0.04em" }}>HOME&nbsp;|&nbsp;ABOUT&nbsp;|&nbsp;MORE</span>
+              <span className="hidden truncate font-mono text-[11px] text-gray-600 dark:text-gray-500 sm:inline" style={{ letterSpacing: "0.05em" }}>HOME&nbsp;&nbsp;|&nbsp;&nbsp;ABOUT&nbsp;&nbsp;|&nbsp;&nbsp;SERVICES&nbsp;&nbsp;|&nbsp;&nbsp;CONTACT&nbsp;&nbsp;|&nbsp;&nbsp;FAQ&nbsp;&nbsp;|&nbsp;&nbsp;SITEMAP</span>
             </div>
           </div>
           {/* Dated hero banner */}
           <div className="shrink-0 bg-[#a8a8a8] px-3 py-2 dark:bg-[#333330] sm:px-4 sm:py-2.5">
-            <p className="font-mono text-[15px] font-black uppercase leading-tight tracking-widest text-gray-700 dark:text-gray-300 sm:text-[18px]" style={{ letterSpacing: "0.12em" }}>WELCOME TO OUR BUSINESS!!</p>
+            <p className="font-mono text-[13px] font-black uppercase leading-tight text-gray-700 dark:text-gray-300 sm:text-[18px]" style={{ letterSpacing: "0.08em" }}>WELCOME TO OUR BUSINESS!!</p>
             <p className="mt-0.5 font-mono text-[10px] font-bold uppercase leading-tight tracking-wider text-gray-600 dark:text-gray-400 sm:text-[12px]">EST. 1998 — QUALITY YOU CAN TRUST</p>
-            <p className="mt-0.5 font-mono text-[10px] leading-snug text-gray-600 dark:text-gray-400 sm:text-[12px]">We provide quality services since 1998. Call us today for a free quote. We serve the tri-state area.</p>
+            <p className="mt-0.5 hidden font-mono text-[10px] leading-snug text-gray-600 dark:text-gray-400 sm:block sm:text-[12px]">We provide quality services since 1998. Call us today for a free quote. We serve the tri-state area.</p>
             <div className="mt-1.5 flex items-center gap-2 sm:gap-2.5">
               {/* Broken image placeholder */}
               <div className="flex h-10 w-10 flex-col items-center justify-center border-2 border-gray-500 bg-[#b8b8b8] dark:bg-[#2a2a28] sm:h-12 sm:w-12">
@@ -187,7 +189,7 @@ function BeforeAfterMockup() {
           </div>
           {/* Boxy content blocks */}
           <div className="flex min-h-0 flex-1 flex-col justify-between gap-1 overflow-hidden px-2 py-1.5 sm:px-3">
-            <div className="grid shrink-0 grid-cols-3 gap-1">
+            <div className="grid shrink-0 grid-cols-2 gap-1 sm:grid-cols-3">
               <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523] sm:p-2">
                 <p className="font-mono text-[10px] font-black uppercase text-gray-700 dark:text-gray-400 sm:text-[12px]">Our Services</p>
                 <p className="mt-0.5 font-mono text-[9px] leading-snug text-gray-600 dark:text-gray-500 sm:text-[11px]">Lorem ipsum dolor sit amet consectetur adipiscing elit sed.</p>
@@ -196,7 +198,7 @@ function BeforeAfterMockup() {
                 <p className="font-mono text-[10px] font-black uppercase text-gray-700 dark:text-gray-400 sm:text-[12px]">About Us</p>
                 <p className="mt-0.5 font-mono text-[9px] leading-snug text-gray-600 dark:text-gray-500 sm:text-[11px]">In business for over 20 years serving all clients big and small.</p>
               </div>
-              <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523] sm:p-2">
+              <div className="col-span-2 border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523] sm:col-span-1 sm:p-2">
                 <p className="font-mono text-[10px] font-black uppercase text-gray-700 dark:text-gray-400 sm:text-[12px]">Contact</p>
                 <p className="mt-0.5 font-mono text-[9px] leading-snug text-gray-600 dark:text-gray-500 sm:text-[11px]">Call (555) 012-3456 Mon–Fri 9–5pm EST. Leave msg.</p>
               </div>
@@ -204,10 +206,10 @@ function BeforeAfterMockup() {
             <div className="shrink-0 border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523] sm:p-2">
               <p className="font-mono text-[10px] font-black uppercase text-gray-700 dark:text-gray-400 sm:text-[12px]">Latest News &amp; Updates</p>
               <p className="mt-0.5 font-mono text-[9px] leading-snug text-gray-600 dark:text-gray-500 sm:text-[11px]">Check back soon for updates and announcements from our team. Last updated March 2015.</p>
-              <p className="font-mono text-[9px] leading-snug text-gray-500/80 dark:text-gray-600 sm:text-[11px]">We are working on exciting new things. Please be patient. Thank you for your continued support.</p>
+              <p className="hidden font-mono text-[9px] leading-snug text-gray-500/80 dark:text-gray-600 sm:block sm:text-[11px]">We are working on exciting new things. Please be patient. Thank you for your continued support.</p>
               <p className="mt-0.5 font-mono text-[9px] leading-snug text-blue-600 underline dark:text-blue-400 sm:text-[11px]">Click here to read more &gt;&gt;</p>
             </div>
-            <div className="grid shrink-0 grid-cols-2 gap-1">
+            <div className="hidden shrink-0 grid-cols-2 gap-1 sm:grid">
               <div className="border-2 border-gray-500/60 bg-[#cccccc] p-1.5 dark:bg-[#252523] sm:p-2">
                 <p className="font-mono text-[10px] font-black uppercase text-gray-700 dark:text-gray-400 sm:text-[12px]">Testimonials</p>
                 <p className="mt-0.5 font-mono text-[9px] leading-snug text-gray-600 dark:text-gray-500 sm:text-[11px]">&quot;Great company!&quot; — Bob J.</p>
@@ -234,14 +236,15 @@ function BeforeAfterMockup() {
           </div>
           {/* Footer */}
           <div className="shrink-0 bg-gray-600 px-3 py-1.5 dark:bg-[#111110] sm:px-4">
-            <p className="font-mono text-[9px] text-gray-300 dark:text-gray-400 sm:text-[11px]">© 2015 ACME Corp. All Rights Reserved. | Privacy Policy | Terms | Sitemap | Accessibility | Disclaimer</p>
+            <p className="font-mono text-[9px] text-gray-300 dark:text-gray-400 sm:hidden">© 2015 ACME Corp. All Rights Reserved.</p>
+            <p className="hidden font-mono text-[11px] text-gray-300 dark:text-gray-400 sm:block">© 2015 ACME Corp. All Rights Reserved. | Privacy Policy | Terms | Sitemap | Accessibility | Disclaimer</p>
             <p className="font-mono text-[9px] text-gray-400 dark:text-gray-500 sm:text-[11px]">Best viewed in Internet Explorer 8. 800x600 resolution recommended.</p>
           </div>
         </div>
 
         {/* ── AFTER side (clips from left based on position) ── */}
         <div
-          className="absolute inset-0 will-change-[clip-path]"
+          className="absolute inset-0 overflow-hidden rounded-b-xl will-change-[clip-path]"
           style={{
             clipPath: "inset(0 0 0 var(--slider-position))",
             transition: isDragging ? "none" : "clip-path 180ms ease-out",
@@ -252,130 +255,98 @@ function BeforeAfterMockup() {
             <div className="flex h-full flex-col overflow-hidden sm:hidden">
               <div className="flex shrink-0 items-center justify-between border-b border-brand-light-gray/30 px-3 py-2 dark:border-brand-mid-gray/20">
                 <span className="text-[13px] font-bold text-brand-dark dark:text-brand-cream">Acme</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-brand-dark/50 dark:text-brand-cream/50">Home</span>
-                  <span className="text-[10px] text-brand-dark/50 dark:text-brand-cream/50">About</span>
-                  <span className="text-[10px] text-brand-dark/50 dark:text-brand-cream/50">Services</span>
-                  <span className="text-[10px] text-brand-dark/50 dark:text-brand-cream/50">FAQ</span>
-                  <span className="text-[10px] text-brand-dark/50 dark:text-brand-cream/50">Contact</span>
-                  <span className="rounded-full bg-brand-orange px-2 py-0.5 text-[10px] font-bold leading-[16px] text-white shadow-sm">Sign up</span>
-                </div>
+                <span className="rounded-full bg-brand-orange px-2.5 py-1 text-[10px] font-bold leading-none text-white shadow-sm">Sign up</span>
               </div>
 
-              <div className="bg-gradient-to-br from-brand-cream/80 to-brand-orange/[0.04] px-3 py-2 dark:from-brand-dark dark:to-brand-orange/[0.03]">
-                <div className="grid grid-cols-[1.05fr_0.95fr] items-start gap-2">
-                  <div className="grid h-full grid-rows-[3rem_3rem_1fr] gap-1.5">
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <div className="relative h-12 overflow-hidden rounded-xl border border-brand-orange/22 bg-gradient-to-br from-brand-cream via-brand-orange/[0.2] to-brand-orange/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_1px_2px_rgba(217,119,87,0.1)] dark:border-white/12 dark:from-[#34312e] dark:via-brand-orange/[0.22] dark:to-[#1f1e1c] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.2)]">
-                        <div
-                          aria-hidden
-                          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_35%_-10%,rgba(255,255,255,0.72)_0%,transparent_55%)] opacity-85 dark:opacity-55"
-                        />
-                        <svg className="relative h-full w-full p-1" viewBox="0 0 52 44" fill="none" aria-hidden>
-                          <rect x="4" y="5" width="44" height="34" rx="3" className="fill-brand-orange/[0.11] stroke-brand-orange/30 dark:fill-white/[0.08] dark:stroke-white/16" strokeWidth="0.75" />
-                          <circle cx="38" cy="14" r="4" className="fill-brand-orange/45 dark:fill-brand-orange/55" />
-                          <path d="M8 32 L18 22 L26 28 L34 18 L44 26 V36 H8 Z" className="fill-brand-orange/28 dark:fill-brand-orange/38" />
-                        </svg>
-                      </div>
-                      <div className="relative h-12 overflow-hidden rounded-lg border border-brand-orange/20 bg-gradient-to-br from-brand-cream/95 via-brand-orange/[0.16] to-brand-orange/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#32302d] dark:via-brand-orange/[0.18] dark:to-[#1a1918] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_1px_2px_rgba(0,0,0,0.22)]">
-                        <div
-                          aria-hidden
-                          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.22)_0%,transparent_55%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.35)_0%,transparent_55%)]"
-                        />
-                        <svg className="relative h-full w-full p-1" viewBox="0 0 52 44" fill="none" aria-hidden>
-                          <rect x="5" y="6" width="42" height="32" rx="3.5" className="fill-brand-orange/[0.09] stroke-brand-orange/28 dark:fill-white/[0.05] dark:stroke-white/15" strokeWidth="0.75" />
-                          <circle cx="26" cy="22" r="7" className="fill-brand-orange/25 stroke-brand-orange/35 dark:fill-brand-orange/30 dark:stroke-brand-orange/45" strokeWidth="0.75" />
-                          <path d="M24 18.5 L30.5 22 L24 25.5 V18.5Z" className="fill-brand-cream dark:fill-brand-cream/95" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="w-full rounded-lg border border-brand-light-gray/40 bg-brand-white/55 px-2 py-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/8">
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-brand-orange/70">Launch</p>
-                      <p className="mt-1 text-[11px] font-semibold text-brand-dark dark:text-brand-cream">Conversion-first</p>
-                      <p className="mt-0.5 text-[10px] text-brand-dark/45 dark:text-brand-cream/45">Copy, speed, and trust tuned together.</p>
-                    </div>
+              <div className="shrink-0 bg-gradient-to-br from-brand-cream/80 to-brand-orange/[0.04] px-3 py-2.5 dark:from-brand-dark dark:to-brand-orange/[0.03]">
+                <p className="text-[18px] font-bold leading-tight text-brand-dark dark:text-brand-cream">Grow Your Business</p>
+                <p className="text-[18px] font-bold leading-tight bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">Online, Faster.</p>
+                <p className="mt-1.5 text-[11px] leading-relaxed text-brand-dark/50 dark:text-brand-cream/50">
+                  Custom websites that convert visitors into customers.
+                </p>
+                <div className="mt-2.5 flex gap-1.5">
+                  <span className="inline-flex rounded-md bg-brand-orange px-2.5 py-1.5 text-[11px] font-semibold leading-none text-white shadow-sm shadow-brand-orange/20">Get Started</span>
+                  <span className="inline-flex rounded-md border border-brand-orange/40 px-2.5 py-1.5 text-[11px] font-medium leading-none text-brand-orange">Our Work</span>
+                </div>
+                <div className="mt-2.5 grid grid-cols-2 gap-1.5">
+                  <div className="relative h-14 overflow-hidden rounded-xl border border-brand-orange/22 bg-gradient-to-br from-brand-cream via-brand-orange/[0.2] to-brand-orange/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_1px_2px_rgba(217,119,87,0.1)] dark:border-white/12 dark:from-[#34312e] dark:via-brand-orange/[0.22] dark:to-[#1f1e1c] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.2)]">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_35%_-10%,rgba(255,255,255,0.72)_0%,transparent_55%)] opacity-85 dark:opacity-55"
+                    />
+                    <svg className="relative h-full w-full p-1" viewBox="0 0 52 44" fill="none" aria-hidden>
+                      <rect x="4" y="5" width="44" height="34" rx="3" className="fill-brand-orange/[0.11] stroke-brand-orange/30 dark:fill-white/[0.08] dark:stroke-white/16" strokeWidth="0.75" />
+                      <circle cx="38" cy="14" r="4" className="fill-brand-orange/45 dark:fill-brand-orange/55" />
+                      <path d="M8 32 L18 22 L26 28 L34 18 L44 26 V36 H8 Z" className="fill-brand-orange/28 dark:fill-brand-orange/38" />
+                    </svg>
                   </div>
-                  <div className="rounded-xl border border-brand-light-gray/35 bg-brand-white/55 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/8">
-                    <p className="text-[15px] font-bold leading-tight text-brand-dark dark:text-brand-cream">Grow Your Business</p>
-                    <p className="text-[15px] font-bold leading-tight bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">Online, Faster.</p>
-                    <p className="mt-1.5 text-[11px] leading-relaxed text-brand-dark/50 dark:text-brand-cream/50">
-                      Custom websites that convert visitors into customers.
-                    </p>
-                    <div className="mt-2 flex justify-start gap-1.5">
-                      <span className="inline-flex rounded-md bg-brand-orange px-2 py-1 text-[10px] font-semibold leading-none text-white shadow-sm shadow-brand-orange/20">Get Started</span>
-                      <span className="inline-flex rounded-md border border-brand-orange/40 px-2 py-1 text-[10px] font-medium leading-none text-brand-orange">Our Work</span>
-                    </div>
-                    <div className="mt-2 rounded-lg border border-brand-light-gray/35 bg-brand-cream/40 px-2 py-1.5 dark:border-brand-mid-gray/15 dark:bg-brand-mid-gray/10">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-brand-dark/35 dark:text-brand-cream/35">Live</span>
-                        <span className="text-[11px] font-bold text-emerald-500">+47%</span>
-                      </div>
-                      <p className="mt-0.5 text-[10px] text-brand-dark/45 dark:text-brand-cream/45">Qualified conversions</p>
-                    </div>
+                  <div className="relative h-14 overflow-hidden rounded-xl border border-brand-orange/20 bg-gradient-to-br from-brand-cream/95 via-brand-orange/[0.16] to-brand-orange/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#32302d] dark:via-brand-orange/[0.18] dark:to-[#1a1918] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_1px_2px_rgba(0,0,0,0.22)]">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.22)_0%,transparent_55%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.35)_0%,transparent_55%)]"
+                    />
+                    <svg className="relative h-full w-full p-1" viewBox="0 0 52 44" fill="none" aria-hidden>
+                      <rect x="5" y="6" width="42" height="32" rx="3.5" className="fill-brand-orange/[0.09] stroke-brand-orange/28 dark:fill-white/[0.05] dark:stroke-white/15" strokeWidth="0.75" />
+                      <circle cx="26" cy="22" r="7" className="fill-brand-orange/25 stroke-brand-orange/35 dark:fill-brand-orange/30 dark:stroke-brand-orange/45" strokeWidth="0.75" />
+                      <path d="M24 18.5 L30.5 22 L24 25.5 V18.5Z" className="fill-brand-cream dark:fill-brand-cream/95" />
+                    </svg>
                   </div>
                 </div>
               </div>
 
-              <div className="grid shrink-0 grid-cols-3 gap-1.5 px-3 pt-2">
-                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
-                  <p className="text-[11px] font-bold text-brand-dark dark:text-brand-cream">Lightning Fast</p>
-                  <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Sub-second loads</p>
+              <div className="grid shrink-0 grid-cols-3 gap-1.5 px-3 pt-2.5">
+                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 px-1.5 py-2 text-center dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                  <p className="text-[10px] font-bold text-brand-dark dark:text-brand-cream">Fast</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Sub-second</p>
                 </div>
-                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
-                  <p className="text-[11px] font-bold text-brand-dark dark:text-brand-cream">Mobile-First</p>
-                  <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Any screen</p>
+                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 px-1.5 py-2 text-center dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                  <p className="text-[10px] font-bold text-brand-dark dark:text-brand-cream">Mobile</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Any screen</p>
                 </div>
-                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 p-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
-                  <p className="text-[11px] font-bold text-brand-dark dark:text-brand-cream">SEO Ready</p>
-                  <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Rank on Google</p>
+                <div className="rounded-lg border border-brand-light-gray/40 bg-brand-cream/20 px-1.5 py-2 text-center dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/5">
+                  <p className="text-[10px] font-bold text-brand-dark dark:text-brand-cream">SEO</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Google-ready</p>
                 </div>
               </div>
 
-              <div className="mx-3 mt-2 shrink-0 rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 px-2.5 py-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
+              <div className="mx-3 mt-2.5 shrink-0 rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 px-2.5 py-2 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
                 <div className="flex items-center gap-2">
                   <div className="h-7 w-7 shrink-0 rounded-full bg-brand-orange/25" />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-amber-400">★★★★★</span>
-                      <p className="text-[10px] font-semibold text-brand-dark/50 dark:text-brand-cream/40">Modern Design</p>
-                    </div>
-                    <p className="mt-0.5 text-[11px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">
+                    <p className="text-[11px] text-amber-400">★★★★★</p>
+                    <p className="text-[11px] leading-tight text-brand-dark/60 dark:text-brand-cream/50">
                       Built to convert visitors into customers.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mx-3 mt-2 grid shrink-0 grid-cols-[1fr_auto] gap-1.5">
-                <div className="grid grid-cols-2 gap-1 rounded-xl bg-brand-dark/[0.03] px-2 py-2 dark:bg-brand-cream/[0.03]">
-                  <div className="text-center">
-                    <p className="text-[16px] font-bold text-brand-orange">99</p>
-                    <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Performance</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-[16px] font-bold text-brand-orange">100%</p>
-                    <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Mobile-First</p>
-                  </div>
+              <div className="mx-3 mt-2.5 grid shrink-0 grid-cols-3 gap-1.5">
+                <div className="rounded-xl bg-brand-dark/[0.03] py-2 text-center dark:bg-brand-cream/[0.03]">
+                  <p className="text-[15px] font-bold text-brand-orange">99</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Speed</p>
                 </div>
-                <div className="flex items-center justify-center rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 px-3 py-1.5 dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
-                  <div className="text-center">
-                    <p className="text-[15px] font-bold text-brand-orange">24h</p>
-                    <p className="text-[10px] text-brand-dark/40 dark:text-brand-cream/40">Uptime</p>
-                  </div>
+                <div className="rounded-xl bg-brand-dark/[0.03] py-2 text-center dark:bg-brand-cream/[0.03]">
+                  <p className="text-[15px] font-bold text-brand-orange">100%</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Mobile</p>
+                </div>
+                <div className="rounded-xl border border-brand-light-gray/40 bg-brand-cream/30 py-2 text-center dark:border-brand-mid-gray/20 dark:bg-brand-mid-gray/10">
+                  <p className="text-[15px] font-bold text-emerald-500">+47%</p>
+                  <p className="text-[9px] text-brand-dark/40 dark:text-brand-cream/40">Live</p>
                 </div>
               </div>
 
-              <div className="mx-3 mt-2 shrink-0 rounded-xl bg-gradient-to-r from-brand-orange via-[#de8b62] to-amber-500 px-3 py-2.5 text-center" style={{ boxShadow: "0 0 20px 4px rgba(217,119,87,0.18), 0 0 40px 8px rgba(217,119,87,0.08)" }}>
-                <p className="text-[12px] font-bold text-white">Ready to grow? Book a free strategy call.</p>
+              <div className="mx-3 mt-2.5 shrink-0 rounded-xl bg-gradient-to-r from-brand-orange via-[#de8b62] to-amber-500 px-3 py-2 text-center" style={{ boxShadow: "0 0 20px 4px rgba(217,119,87,0.18), 0 0 40px 8px rgba(217,119,87,0.08)" }}>
+                <p className="text-[12px] font-bold text-white">Ready to grow? Book a free call.</p>
               </div>
 
               <div className="mt-auto shrink-0 border-t border-brand-light-gray/30 bg-brand-dark/[0.03] px-3 py-2 dark:border-brand-mid-gray/20 dark:bg-brand-cream/[0.02]">
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
                     <p className="text-[11px] font-bold text-brand-dark dark:text-brand-cream">Acme</p>
                     <p className="mt-0.5 text-[10px] text-brand-dark/35 dark:text-brand-cream/35">Modern sites for growing brands</p>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex shrink-0 items-center gap-1">
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M22 5.8a8.5 8.5 0 0 1-2.36.65 4.1 4.1 0 0 0 1.8-2.27 8.2 8.2 0 0 1-2.6 1A4.07 4.07 0 0 0 12 8.03c0 .32.04.63.1.92A11.56 11.56 0 0 1 3.7 4.7a4.04 4.04 0 0 0 1.26 5.43 4 4 0 0 1-1.84-.5v.05A4.08 4.08 0 0 0 6.38 13a4.1 4.1 0 0 1-1.83.07 4.08 4.08 0 0 0 3.8 2.82A8.2 8.2 0 0 1 2 17.6a11.54 11.54 0 0 0 6.29 1.84c7.54 0 11.66-6.24 11.66-11.66 0-.18 0-.35-.01-.53A8.18 8.18 0 0 0 22 5.8Z" />
@@ -404,8 +375,8 @@ function BeforeAfterMockup() {
                   <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">Home</span>
                   <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">About</span>
                   <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">Services</span>
-                  <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">Portfolio</span>
-                  <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">Pricing</span>
+                  <span className="hidden text-[12px] text-brand-dark/50 dark:text-brand-cream/50 md:inline">Portfolio</span>
+                  <span className="hidden text-[12px] text-brand-dark/50 dark:text-brand-cream/50 md:inline">Pricing</span>
                   <span className="text-[12px] text-brand-dark/50 dark:text-brand-cream/50">Contact</span>
                   <span className="rounded-full bg-brand-orange px-2.5 py-1 text-[12px] font-bold leading-none text-white shadow-sm">Sign up</span>
                 </div>
@@ -413,11 +384,11 @@ function BeforeAfterMockup() {
 
               {/* Hero section with subtle gradient bg */}
               <div className="shrink-0 bg-gradient-to-br from-brand-cream/80 to-brand-orange/[0.04] px-5 py-3 dark:from-brand-dark dark:to-brand-orange/[0.03]">
-                <div className="flex items-center gap-4">
+                <div className="flex items-stretch gap-3">
                   {/* Hero image placeholders — left side */}
-                  <div className="flex shrink-0 gap-2">
+                  <div className="flex shrink-0 items-stretch gap-1.5">
                   {/* Hero thumb — landscape / photography */}
-                  <div className="relative h-16 w-[5.25rem] overflow-hidden rounded-xl border border-brand-orange/22 bg-gradient-to-br from-brand-cream via-brand-orange/[0.2] to-brand-orange/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_1px_2px_rgba(217,119,87,0.1)] dark:border-white/12 dark:from-[#34312e] dark:via-brand-orange/[0.22] dark:to-[#1f1e1c] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.2)]">
+                  <div className="relative w-[4.75rem] self-stretch overflow-hidden rounded-xl border border-brand-orange/22 bg-gradient-to-br from-brand-cream via-brand-orange/[0.2] to-brand-orange/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_1px_2px_rgba(217,119,87,0.1)] dark:border-white/12 dark:from-[#34312e] dark:via-brand-orange/[0.22] dark:to-[#1f1e1c] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_1px_2px_rgba(0,0,0,0.2)] md:w-24 min-[1000px]:w-32">
                     <div
                       aria-hidden
                       className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_35%_-10%,rgba(255,255,255,0.72)_0%,transparent_55%)] opacity-85 dark:opacity-55"
@@ -445,7 +416,7 @@ function BeforeAfterMockup() {
                     </svg>
                   </div>
                   {/* Hero thumb — product / UI frame */}
-                  <div className="relative h-16 w-[5.25rem] overflow-hidden rounded-xl border border-brand-orange/18 bg-gradient-to-br from-white via-brand-cream/95 to-brand-orange/[0.14] shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/10 dark:from-[#2e2c29] dark:via-brand-mid-gray/28 dark:to-[#1c1b1a] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.25)]">
+                  <div className="relative w-[4.75rem] self-stretch overflow-hidden rounded-xl border border-brand-orange/18 bg-gradient-to-br from-white via-brand-cream/95 to-brand-orange/[0.14] shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/10 dark:from-[#2e2c29] dark:via-brand-mid-gray/28 dark:to-[#1c1b1a] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.25)] md:w-24 min-[1000px]:w-32">
                     <div
                       aria-hidden
                       className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_0%,rgba(217,119,87,0.2)_0%,transparent_50%)] dark:bg-[radial-gradient(ellipse_80%_50%_at_80%_0%,rgba(217,119,87,0.32)_0%,transparent_50%)]"
@@ -472,7 +443,7 @@ function BeforeAfterMockup() {
                     </svg>
                   </div>
                   {/* Hero thumb — video / motion */}
-                  <div className="relative h-16 w-[5.25rem] overflow-hidden rounded-xl border border-brand-orange/20 bg-gradient-to-br from-brand-cream/95 via-brand-orange/[0.16] to-brand-orange/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#32302d] dark:via-brand-orange/[0.18] dark:to-[#1a1918] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_1px_2px_rgba(0,0,0,0.22)]">
+                  <div className="relative w-[4.75rem] self-stretch overflow-hidden rounded-xl border border-brand-orange/20 bg-gradient-to-br from-brand-cream/95 via-brand-orange/[0.16] to-brand-orange/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#32302d] dark:via-brand-orange/[0.18] dark:to-[#1a1918] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_1px_2px_rgba(0,0,0,0.22)] md:w-24 min-[1000px]:w-32">
                     <div
                       aria-hidden
                       className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.22)_0%,transparent_55%)] dark:bg-[radial-gradient(ellipse_70%_55%_at_20%_100%,rgba(217,119,87,0.35)_0%,transparent_55%)]"
@@ -502,6 +473,33 @@ function BeforeAfterMockup() {
                       <path
                         d="M24 18.5 L30.5 22 L24 25.5 V18.5Z"
                         className="fill-brand-cream dark:fill-brand-cream/95"
+                      />
+                    </svg>
+                  </div>
+                  {/* Hero thumb — analytics / growth */}
+                  <div className="relative w-[4.75rem] self-stretch overflow-hidden rounded-xl border border-brand-orange/20 bg-gradient-to-br from-white via-brand-orange/[0.12] to-brand-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_1px_2px_rgba(217,119,87,0.09)] dark:border-white/11 dark:from-[#2f2d2a] dark:via-brand-orange/[0.2] dark:to-[#1b1a18] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.22)] md:w-24 min-[1000px]:w-32">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_70%_100%,rgba(217,119,87,0.2)_0%,transparent_55%)] dark:bg-[radial-gradient(ellipse_75%_50%_at_70%_100%,rgba(217,119,87,0.34)_0%,transparent_55%)]"
+                    />
+                    <svg
+                      className="relative h-full w-full p-1"
+                      viewBox="0 0 52 44"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <rect
+                        x="6"
+                        y="7"
+                        width="40"
+                        height="30"
+                        rx="3.5"
+                        className="fill-brand-orange/[0.09] stroke-brand-orange/28 dark:fill-white/[0.05] dark:stroke-white/15"
+                        strokeWidth="0.75"
+                      />
+                      <path
+                        d="M12 28 V22 H16 V28 H12 Z M20 28 V18 H24 V28 H20 Z M28 28 V15 H32 V28 H28 Z M36 28 V12 H40 V28 H36 Z"
+                        className="fill-brand-orange/35 dark:fill-brand-orange/45"
                       />
                     </svg>
                   </div>
@@ -563,7 +561,7 @@ function BeforeAfterMockup() {
               {/* Stats + Conversion Rate side by side */}
               <div className="mx-5 mt-2 grid shrink-0 grid-cols-[1fr_auto] gap-2">
               {/* Stats bar */}
-              <div className="grid grid-cols-4 gap-1 rounded-xl bg-brand-dark/[0.03] px-3 py-3 dark:bg-brand-cream/[0.03]">
+              <div className="grid grid-cols-4 gap-1 rounded-xl bg-brand-dark/[0.03] px-3 py-2 dark:bg-brand-cream/[0.03]">
                 <div className="text-center">
                   <p className="text-[18px] font-bold text-brand-orange">99</p>
                   <p className="text-[11px] text-brand-dark/40 dark:text-brand-cream/40">Performance</p>
@@ -602,7 +600,7 @@ function BeforeAfterMockup() {
               </div>
 
               {/* Trusted by logos */}
-              <div className="mt-2 shrink-0 px-5">
+              <div className="mt-2 mb-3 shrink-0 px-5">
               <p className="text-center text-[10px] font-medium uppercase tracking-wider text-brand-dark/30 dark:text-brand-cream/30">Built with modern infrastructure</p>
               <div className="mt-1 flex items-center justify-center gap-3">
                 <div className="h-1.5 w-10 rounded bg-brand-dark/10 dark:bg-brand-cream/10" />
@@ -763,7 +761,7 @@ export function Hero() {
             </FadeInWhenVisible>
 
             <FadeInWhenVisible delay={0.14}>
-              <p className="max-w-2xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 lg:text-xl">
+              <p className="max-w-2xl text-base leading-relaxed text-brand-dark/60 dark:text-brand-cream/60 sm:text-lg lg:text-xl">
                 We design and build custom, conversion-focused websites for businesses that want to stand out online or need an upgrade. Get a free preview of your site redesign before you spend a dime.
               </p>
             </FadeInWhenVisible>
@@ -827,12 +825,12 @@ export function Hero() {
     </section>
 
     <section
-      className="relative overflow-hidden bg-brand-cream pb-20 pt-16 dark:bg-brand-dark md:pb-28"
+      className="relative overflow-hidden bg-brand-cream pb-16 pt-10 dark:bg-brand-dark sm:pb-20 sm:pt-16 md:pb-28"
       aria-label="Your site, reimagined"
     >
-      <div className="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center px-6">
+      <div className="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center px-4 sm:px-6">
         <div className="w-full text-center">
-          <h2 className="mx-auto text-[28px] font-semibold leading-[1.15] tracking-tight min-[767px]:text-[32px] min-[1000px]:text-[40px]">
+          <h2 className="mx-auto text-[24px] font-semibold leading-[1.2] tracking-tight sm:text-[28px] min-[767px]:text-[32px] min-[1000px]:text-[40px]">
             <span className="text-brand-dark dark:text-brand-cream">
               Your site, reimagined
             </span>
@@ -843,7 +841,7 @@ export function Hero() {
           </h2>
         </div>
 
-        <FadeInWhenVisible delay={0.12} className="relative mt-10 w-full min-w-0 min-[768px]:mt-20">
+        <FadeInWhenVisible delay={0.12} className="relative mt-8 w-full min-w-0 sm:mt-10 min-[768px]:mt-20">
           <BeforeAfterMockup />
         </FadeInWhenVisible>
       </div>
