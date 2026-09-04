@@ -33,8 +33,8 @@ test("share title and OG tagline match the homepage headline", () => {
 });
 
 test("hero copy matches the plan verbatim", () => {
-  assert.equal(HERO_COPY.h1Line1, "Hire an AI employee.");
-  assert.equal(HERO_COPY.h1Line2, "Not another salary.");
+  assert.equal(HERO_COPY.h1Line1, "Hire an AI employee");
+  assert.equal(HERO_COPY.h1Line2, "Not another salary");
   assert.equal(
     HERO_COPY.body,
     "We build it. We run it. The work leaves your plate so you can focus on what matters — on and off the clock.",

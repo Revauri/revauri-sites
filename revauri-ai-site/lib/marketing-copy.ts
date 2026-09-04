@@ -6,8 +6,8 @@ export const SITE_TITLE =
   "Revauri AI — Hire an AI employee. Not another salary.";
 
 export const HERO_COPY = {
-  h1Line1: "Hire an AI employee.",
-  h1Line2: "Not another salary.",
+  h1Line1: "Hire an AI employee",
+  h1Line2: "Not another salary",
   body: "We build it. We run it. The work leaves your plate so you can focus on what matters — on and off the clock.",
   primary: "Hire one",
   secondary: "Check out what it does",
