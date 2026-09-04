@@ -9,7 +9,7 @@ export type BookingCardProps = {
 };
 
 const CARD_CLASS =
-  "flex flex-col gap-1.5 rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] p-3 dark:border-brand-orange/30 dark:bg-brand-orange/10";
+  "flex flex-col gap-1.5 rounded-2xl border border-brand-orange/15 bg-gradient-to-b from-brand-orange/[0.08] to-brand-orange/[0.03] p-3.5 dark:border-brand-orange/25 dark:from-brand-orange/[0.14] dark:to-brand-orange/[0.06]";
 
 // Formats an ISO start time in the visitor's local timezone,
 // e.g. "Wed, Jul 8 · 2:30 PM".
@@ -41,15 +41,15 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
   if (fallback || labeled.length === 0) {
     return (
       <div className={CARD_CLASS}>
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-orange">
+        <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-brand-orange">
           REVAURI AI CALL
         </span>
-        <p className="text-xs text-brand-mid-gray">
+        <p className="text-xs leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
           20 minutes on the work you want off your plate — pick any time that works for you.
         </p>
         <a
           href="/book#scheduler"
-          className="mt-1 inline-block w-fit rounded-full bg-brand-dark px-3.5 py-2 text-xs font-semibold text-white dark:bg-brand-cream dark:text-brand-dark"
+          className="mt-1 inline-flex w-fit items-center rounded-xl bg-brand-dark px-3.5 py-2 text-xs font-semibold text-brand-cream shadow-sm transition-all hover:brightness-110 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 dark:bg-brand-cream dark:text-brand-dark"
         >
           Hire one
         </a>
@@ -59,29 +59,29 @@ export function BookingCard({ slots, fallback }: BookingCardProps) {
 
   return (
     <div className={CARD_CLASS}>
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-orange">
+      <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-brand-orange">
         REVAURI AI CALL
       </span>
-      <p className="text-xs text-brand-mid-gray">
+      <p className="text-xs leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
         20 minutes on the work you want off your plate — pick any time that works for you.
       </p>
-      <div className="mt-0.5 flex flex-col gap-1.5">
+      <div className="mt-1 flex flex-col gap-1.5">
         {labeled.map((slot) => (
           <a
             key={slot.startTime}
             href={slot.schedulingUrl}
             target="_blank"
             rel="noopener"
-            className="group flex items-center justify-between rounded-lg border border-brand-light-gray/60 bg-brand-white px-3 py-2 text-xs font-medium text-brand-dark transition-colors hover:border-brand-orange/50 dark:border-brand-mid-gray/30 dark:bg-brand-dark/40 dark:text-brand-cream dark:hover:border-brand-orange/60"
+            className="group flex items-center justify-between rounded-xl border border-brand-dark/[0.06] bg-brand-white px-3 py-2 text-xs font-medium text-brand-dark shadow-sm transition-all hover:border-brand-orange/50 hover:shadow-[0_6px_16px_-8px_rgba(217,119,87,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-brand-cream dark:hover:border-brand-orange/60"
           >
             {slot.label}
-            <ArrowUpRight className="h-3.5 w-3.5 text-brand-mid-gray transition-colors group-hover:text-brand-orange" />
+            <ArrowUpRight className="h-3.5 w-3.5 text-brand-dark/30 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-orange dark:text-brand-cream/30" />
           </a>
         ))}
       </div>
       <a
         href="/book#scheduler"
-        className="mt-0.5 w-fit text-xs font-medium text-brand-mid-gray underline underline-offset-2 hover:text-brand-orange"
+        className="mt-1 w-fit rounded-sm text-xs font-medium text-brand-dark/60 underline decoration-brand-dark/20 underline-offset-[3px] transition-colors hover:text-brand-orange hover:decoration-brand-orange/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 dark:text-brand-cream/60 dark:decoration-brand-cream/20"
       >
         See all times →
       </a>

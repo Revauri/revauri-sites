@@ -15,7 +15,7 @@ import {
 } from "@/components/chat/lead-confirmation-card";
 
 const LINK_CLASS =
-  "text-brand-orange underline underline-offset-2 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
+  "font-medium text-brand-orange underline decoration-brand-orange/40 underline-offset-[3px] transition-colors hover:decoration-brand-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 rounded-sm";
 
 // Matches, in priority order: markdown links `[label](url)`, bare http(s) URLs,
 // bare site-relative paths (e.g. "/book" or "/Book/" typed without markdown
@@ -80,10 +80,10 @@ export function BubbleShell({ isUser, children }: { isUser: boolean; children: R
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] whitespace-pre-wrap rounded-[16px] px-[13px] py-[10px] text-xs leading-relaxed ${
+        className={`max-w-[86%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-[13px] leading-[1.55] ${
           isUser
-            ? "bg-brand-dark font-medium text-brand-cream dark:bg-brand-cream dark:text-brand-dark"
-            : "bg-brand-cream text-brand-dark dark:bg-brand-light-gray/10 dark:text-brand-cream"
+            ? "rounded-br-md bg-brand-dark font-medium text-brand-cream shadow-[0_4px_12px_-6px_rgba(20,20,19,0.4)] dark:bg-brand-cream dark:text-brand-dark"
+            : "rounded-bl-md border border-brand-dark/[0.06] bg-brand-white text-brand-dark shadow-sm dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-brand-cream"
         }`}
       >
         {children}
@@ -99,7 +99,7 @@ function StreamingCursor() {
   return (
     <span
       aria-hidden="true"
-      className="ml-0.5 inline-block h-[1em] w-[2.5px] animate-cursor-blink rounded-full bg-brand-orange align-[-0.15em] motion-reduce:animate-none"
+      className="ml-0.5 inline-block h-[1em] w-[2px] animate-cursor-blink rounded-full bg-brand-orange align-[-0.15em] shadow-[0_0_6px_rgba(217,119,87,0.6)] motion-reduce:animate-none"
     />
   );
 }
@@ -126,14 +126,14 @@ function BookingSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="flex animate-pulse flex-col gap-1.5 rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] p-3 dark:border-brand-orange/30 dark:bg-brand-orange/10"
+      className="flex animate-pulse flex-col gap-1.5 rounded-2xl border border-brand-orange/15 bg-gradient-to-b from-brand-orange/[0.08] to-brand-orange/[0.03] p-3.5 dark:border-brand-orange/25 dark:from-brand-orange/[0.14] dark:to-brand-orange/[0.06]"
     >
       <div className="h-2.5 w-24 rounded bg-brand-orange/20 dark:bg-brand-orange/25" />
       <div className="h-2.5 w-44 rounded bg-brand-orange/15 dark:bg-brand-orange/20" />
-      <div className="mt-0.5 flex flex-col gap-1.5">
-        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
-        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
-        <div className="h-[34px] rounded-lg border border-brand-light-gray/60 bg-brand-white dark:border-brand-mid-gray/30 dark:bg-brand-dark/40" />
+      <div className="mt-1 flex flex-col gap-1.5">
+        <div className="h-9 rounded-xl border border-brand-dark/[0.06] bg-brand-white dark:border-white/[0.08] dark:bg-white/[0.04]" />
+        <div className="h-9 rounded-xl border border-brand-dark/[0.06] bg-brand-white dark:border-white/[0.08] dark:bg-white/[0.04]" />
+        <div className="h-9 rounded-xl border border-brand-dark/[0.06] bg-brand-white dark:border-white/[0.08] dark:bg-white/[0.04]" />
       </div>
       <div className="mt-0.5 h-2.5 w-20 rounded bg-brand-orange/15 dark:bg-brand-orange/20" />
     </div>
@@ -154,14 +154,14 @@ function ToolChip({
 }) {
   if (state === "pending") {
     return (
-      <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-brand-light-gray/60 bg-brand-light-gray/30 px-2.5 py-1 text-[11px] font-medium text-brand-mid-gray dark:border-brand-mid-gray/25 dark:bg-brand-light-gray/5">
+      <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-brand-dark/[0.06] bg-brand-white px-2.5 py-1 text-[11px] font-medium text-brand-dark/60 shadow-sm dark:border-white/[0.08] dark:bg-white/[0.05] dark:text-brand-cream/60">
         <Loader2 className="h-3 w-3 animate-spin text-brand-orange" aria-hidden="true" />
         {pendingLabel}
       </div>
     );
   }
   return (
-    <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-600/20 bg-emerald-500/[0.07] px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300">
+    <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-600/15 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 shadow-sm dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300">
       <Check className="h-3 w-3" aria-hidden="true" />
       {doneLabel}
     </div>

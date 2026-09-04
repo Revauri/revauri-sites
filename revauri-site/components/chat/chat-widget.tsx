@@ -23,21 +23,24 @@ const OPEN_STORAGE_KEY = "revauri-chat-open";
 const SM_MQ = "(min-width: 640px)";
 
 const PANEL_SHELL_CLASS =
-  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:h-[561px] sm:max-h-[calc((100dvh-3rem)/1.1)] sm:w-[352px] sm:rounded-[22px] sm:[zoom:1.1]";
+  "flex h-full w-full flex-col overflow-hidden rounded-none border border-brand-dark/[0.06] bg-brand-white shadow-[0_24px_64px_-16px_rgba(20,20,19,0.28),0_0_0_1px_rgba(20,20,19,0.04)] dark:border-white/[0.08] dark:bg-[#1a1a19] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)] sm:h-[600px] sm:max-h-[calc(100dvh-3rem)] sm:w-[380px] sm:rounded-[20px]";
 
 /** Placeholder that matches panel chrome so open animation never runs on an empty box. */
 function ChatPanelShell() {
   return (
     <div className={PANEL_SHELL_CLASS} aria-busy="true" aria-label="Loading chat">
-      <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[max(1.125rem,env(safe-area-inset-top))] pb-3.5 sm:pt-[18px] dark:border-brand-mid-gray/20">
-        <div>
-          <div className="h-6 w-24 animate-pulse rounded bg-brand-light-gray/60 dark:bg-brand-mid-gray/20" />
-          <div className="mt-1 h-2.5 w-16 animate-pulse rounded bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
+      <div className="flex items-center justify-between border-b border-brand-dark/[0.06] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-3 sm:pt-4 dark:border-white/[0.08]">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 shrink-0 rounded-full bg-brand-cream ring-1 ring-brand-orange/50 ring-offset-2 ring-offset-brand-white dark:ring-offset-[#1a1a19]" />
+          <div>
+            <div className="h-3.5 w-10 animate-pulse rounded bg-brand-dark/[0.08] dark:bg-white/[0.1]" />
+            <div className="mt-1.5 h-2.5 w-24 animate-pulse rounded bg-brand-dark/[0.05] dark:bg-white/[0.07]" />
+          </div>
         </div>
       </div>
-      <div className="flex-1" />
-      <div className="border-t border-brand-light-gray/60 px-4 pt-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] sm:pb-3.5 dark:border-brand-mid-gray/20">
-        <div className="h-10 animate-pulse rounded-[22px] bg-brand-light-gray/40 dark:bg-brand-mid-gray/15" />
+      <div className="flex-1 bg-brand-cream/70 dark:bg-[#161615]" />
+      <div className="border-t border-brand-dark/[0.06] px-3.5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-3 dark:border-white/[0.08]">
+        <div className="h-[48px] animate-pulse rounded-2xl border border-brand-dark/[0.08] bg-brand-white dark:border-white/[0.1] dark:bg-white/[0.04]" />
       </div>
     </div>
   );

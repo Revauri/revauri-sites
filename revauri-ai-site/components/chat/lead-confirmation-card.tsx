@@ -68,12 +68,12 @@ function sanitizeProposed(value: string | undefined): string {
 }
 
 const CARD_CLASS =
-  "flex flex-col gap-2 rounded-xl border border-brand-orange/20 bg-brand-orange/[0.06] p-3 dark:border-brand-orange/30 dark:bg-brand-orange/10";
+  "flex flex-col gap-2 rounded-2xl border border-brand-orange/15 bg-gradient-to-b from-brand-orange/[0.08] to-brand-orange/[0.03] p-3.5 dark:border-brand-orange/25 dark:from-brand-orange/[0.14] dark:to-brand-orange/[0.06]";
 
 const FIELD_CLASS =
-  "w-full rounded-lg border border-brand-light-gray/60 bg-brand-white px-2.5 py-2 text-xs text-brand-dark placeholder:text-brand-mid-gray focus:border-brand-orange focus:outline-none disabled:opacity-60 dark:border-brand-mid-gray/30 dark:bg-brand-dark/40 dark:text-brand-cream";
+  "w-full rounded-xl border border-brand-dark/[0.08] bg-brand-white px-3 py-2 text-xs text-brand-dark shadow-sm transition-[border-color,box-shadow] placeholder:text-brand-dark/40 focus:border-brand-orange/60 focus:outline-none focus:ring-2 focus:ring-brand-orange/25 disabled:opacity-60 dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-brand-cream dark:placeholder:text-brand-cream/40";
 
-const LABEL_CLASS = "text-[10px] font-semibold uppercase tracking-wide text-brand-mid-gray";
+const LABEL_CLASS = "text-[10.5px] font-semibold uppercase tracking-[0.12em] text-brand-dark/50 dark:text-brand-cream/50";
 
 // Editable "confirm your details" card shown for a pending capture_lead tool
 // call. Nothing is sent until the visitor clicks "Send inquiry" — submitLead
@@ -117,7 +117,7 @@ export function LeadConfirmationCard({
 
   return (
     <div className={CARD_CLASS}>
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-orange">
+      <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-brand-orange">
         CONFIRM YOUR DETAILS
       </span>
       <label className="flex flex-col gap-1">
@@ -141,7 +141,7 @@ export function LeadConfirmationCard({
           placeholder="you@company.com"
           aria-invalid={email.trim() !== "" && !emailValid}
           className={`${FIELD_CLASS} ${
-            email.trim() !== "" && !emailValid ? "border-red-400 dark:border-red-500" : ""
+            email.trim() !== "" && !emailValid ? "border-red-400 focus:border-red-400 focus:ring-red-400/25 dark:border-red-500" : ""
           }`}
         />
       </label>
@@ -168,7 +168,7 @@ export function LeadConfirmationCard({
         />
       </label>
       {expired ? (
-        <p className="text-[11px] text-brand-mid-gray">
+        <p className="text-[11px] text-brand-dark/60 dark:text-brand-cream/60">
           This card is no longer active — ask Rev to send your details again.
         </p>
       ) : (
@@ -177,7 +177,7 @@ export function LeadConfirmationCard({
             type="button"
             onClick={handleSend}
             disabled={!canSend}
-            className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-3.5 py-2 text-xs font-semibold text-white transition-all hover:brightness-[1.04] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-orange px-3.5 py-2 text-xs font-semibold text-white shadow-[0_4px_12px_-4px_rgba(217,119,87,0.6)] transition-all hover:brightness-[1.05] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2"
           >
             {pending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {pending ? "Sending..." : "Send inquiry"}
@@ -186,7 +186,7 @@ export function LeadConfirmationCard({
             type="button"
             onClick={() => onResolve?.({ status: "cancelled", success: false, cancelled: true })}
             disabled={pending}
-            className="rounded-full px-3 py-2 text-xs font-medium text-brand-mid-gray transition-colors hover:text-brand-dark disabled:opacity-50 dark:hover:text-brand-cream"
+            className="rounded-xl px-3 py-2 text-xs font-medium text-brand-dark/60 transition-colors hover:bg-brand-dark/[0.05] hover:text-brand-dark disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 dark:text-brand-cream/60 dark:hover:bg-white/[0.06] dark:hover:text-brand-cream"
           >
             Cancel
           </button>
@@ -206,11 +206,11 @@ export function LeadResolvedCard({ output }: { output: LeadToolOutput }) {
           <Check className="h-3.5 w-3.5 text-brand-orange" />
           Inquiry sent
           {output.email && (
-            <span className="min-w-0 break-all font-normal text-brand-mid-gray">· {output.email}</span>
+            <span className="min-w-0 break-all font-normal text-brand-dark/60 dark:text-brand-cream/60">· {output.email}</span>
           )}
         </div>
       ) : (
-        <p className="text-xs text-brand-mid-gray">Inquiry not sent</p>
+        <p className="text-xs text-brand-dark/60 dark:text-brand-cream/60">Inquiry not sent</p>
       )}
     </div>
   );

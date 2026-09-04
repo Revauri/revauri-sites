@@ -6,7 +6,6 @@ import {
   Phone,
   type LucideIcon,
 } from "lucide-react";
-import { BubbleShell } from "@/components/chat/chat-message-bubble";
 
 type StarterRow = { label: string; icon: LucideIcon };
 
@@ -45,40 +44,45 @@ export function ChatEmptyState({
   onSelect: (text: string) => void;
 }) {
   return (
-    <div>
-      <BubbleShell isUser={false}>
-        <p className="font-semibold text-brand-dark dark:text-brand-cream">
+    <div className="pt-2">
+      {/* Greeting sits directly on the message surface (not in a bubble) so the
+          first thing visitors see reads as an intro, not as a reply. */}
+      <div className="px-1">
+        <p className="text-[15px] font-semibold leading-tight tracking-tight text-brand-dark dark:text-brand-cream">
           {mode === "initial" ? "Hi, I'm Rev." : "Conversation cleared"}
         </p>
-        <p className="mt-1 text-brand-mid-gray">
+        <p className="mt-1.5 max-w-[30ch] text-[13px] leading-[1.55] text-brand-dark/60 dark:text-brand-cream/60">
           {mode === "initial"
             ? "Ask about hiring an AI employee, what it costs versus a person, or getting the work off your plate."
             : "Ask a new question whenever you're ready."}
         </p>
-        {mode === "initial" ? (
-          <p className="mt-2 text-[12px] leading-snug text-brand-mid-gray/80">
+      </div>
+      {mode === "initial" && (
+        <>
+          <div className="mt-5 flex w-full flex-col gap-2">
+            {startersFor(pathname).map(({ label, icon: Icon }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => onSelect(label)}
+                className="group flex items-center justify-between gap-3 rounded-2xl border border-brand-dark/[0.06] bg-brand-white px-3 py-2.5 text-left shadow-sm transition-all duration-200 hover:border-brand-orange/40 hover:shadow-[0_8px_20px_-10px_rgba(217,119,87,0.45)] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream dark:border-white/[0.08] dark:bg-white/[0.05] dark:hover:border-brand-orange/50 dark:focus-visible:ring-offset-[#161615]"
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-orange/10 text-brand-orange transition-colors group-hover:bg-brand-orange group-hover:text-white dark:bg-brand-orange/15">
+                    <Icon className="h-4 w-4" strokeWidth={2} />
+                  </span>
+                  <span className="text-[13px] font-medium leading-snug text-brand-dark dark:text-brand-cream">
+                    {label}
+                  </span>
+                </div>
+                <ChevronRight className="h-4 w-4 shrink-0 text-brand-dark/30 transition-all group-hover:translate-x-0.5 group-hover:text-brand-orange dark:text-brand-cream/30" />
+              </button>
+            ))}
+          </div>
+          <p className="mt-4 text-center text-[11px] leading-snug text-brand-dark/45 dark:text-brand-cream/45">
             Conversations may be reviewed by our team.
           </p>
-        ) : null}
-      </BubbleShell>
-      {mode === "initial" && (
-        <div className="mt-3.5 flex w-full flex-col gap-2">
-          {startersFor(pathname).map(({ label, icon: Icon }) => (
-            <button
-              key={label}
-              onClick={() => onSelect(label)}
-              className="group flex items-center justify-between gap-2 rounded-xl bg-brand-light-gray/40 px-4 py-3.5 text-left transition-colors hover:bg-brand-orange/10 dark:bg-brand-mid-gray/10 dark:hover:bg-brand-orange/15"
-            >
-              <div className="flex items-center gap-2">
-                <Icon className="h-[18px] w-[18px] shrink-0 text-brand-orange" />
-                <span className="text-sm font-medium text-brand-dark dark:text-brand-cream">
-                  {label}
-                </span>
-              </div>
-              <ChevronRight className="h-[18px] w-[18px] shrink-0 text-brand-mid-gray transition-colors group-hover:text-brand-dark dark:group-hover:text-brand-cream" />
-            </button>
-          ))}
-        </div>
+        </>
       )}
     </div>
   );

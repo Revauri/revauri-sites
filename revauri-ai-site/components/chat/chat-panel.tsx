@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls, type UIMessage } from "ai";
@@ -12,7 +13,10 @@ import type { LeadToolOutput } from "@/components/chat/lead-confirmation-card";
 import { notifyNewChat } from "@/lib/chat/notify-new-chat";
 
 const PANEL_CARD_CLASS =
-  "rounded-none border border-brand-light-gray/60 bg-brand-white shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19] sm:rounded-[22px]";
+  "rounded-none border border-brand-dark/[0.06] bg-brand-white shadow-[0_24px_64px_-16px_rgba(20,20,19,0.28),0_0_0_1px_rgba(20,20,19,0.04)] dark:border-white/[0.08] dark:bg-[#1a1a19] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.75)] sm:rounded-[20px]";
+
+const ICON_BUTTON_CLASS =
+  "flex h-11 w-11 items-center justify-center rounded-full text-brand-dark/70 transition-colors hover:bg-brand-dark/[0.05] hover:text-brand-dark active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-white sm:h-8 sm:w-8 dark:text-brand-cream/70 dark:hover:bg-white/[0.06] dark:hover:text-brand-cream dark:focus-visible:ring-offset-[#1a1a19]";
 
 const TEXTAREA_MAX_HEIGHT = 120; // ~5 lines incl. padding; beyond this it scrolls internally
 const MESSAGES_STORAGE_KEY = "revauri-chat-messages";
@@ -366,56 +370,53 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
       tabIndex={-1}
       onClickCapture={handlePanelClickCapture}
       onKeyDown={handlePanelKeyDown}
-      className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[561px] sm:max-h-[calc(100dvh-3rem)] sm:w-[320px] md:w-[352px] ${PANEL_CARD_CLASS}`}
+      className={`flex h-full w-full flex-col overflow-hidden outline-none sm:h-[600px] sm:max-h-[calc(100dvh-3rem)] sm:w-[380px] ${PANEL_CARD_CLASS}`}
     >
       {/* Header — top safe-area on mobile fullscreen so status bar / notch clear */}
-      <div className="flex items-center justify-between border-b border-brand-light-gray/60 px-[18px] pt-[max(1.125rem,env(safe-area-inset-top))] pb-3.5 sm:pt-[18px] dark:border-brand-mid-gray/20">
-        <div className="flex items-center gap-2.5">
-          {/* Avatar tile echoes the launcher FAB; the R stands in for a logo
-              mark (both brand SVGs are full wordmarks). */}
+      <div className="flex items-center justify-between border-b border-brand-dark/[0.06] bg-brand-white/85 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-3 backdrop-blur-md sm:pt-4 dark:border-white/[0.08] dark:bg-[#1a1a19]/85">
+        <div className="flex items-center gap-3">
+          {/* Gradient orb is Rev's mark — echoes the launcher and the thinking
+              indicator (both brand SVGs are full wordmarks, so no logo glyph). */}
           <div
             aria-hidden="true"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-orange text-sm font-semibold text-white"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-cream shadow-[0_6px_16px_-4px_rgba(217,119,87,0.45)] ring-1 ring-brand-orange/50 ring-offset-2 ring-offset-brand-white dark:bg-brand-cream dark:ring-offset-[#1a1a19]"
           >
-            R
+            {/* Same mark as the site favicon (app/icon.png); the 180px apple-icon
+                is the crisp source at this size. */}
+            <Image src="/apple-icon.png" alt="" width={22} height={22} className="h-[22px] w-[22px]" />
           </div>
           <div>
-            <p className="text-sm font-semibold leading-tight text-brand-dark dark:text-brand-cream">
+            <p className="text-sm font-semibold leading-tight tracking-tight text-brand-dark dark:text-brand-cream">
               Rev
             </p>
-            <p className="mt-0.5 flex items-center gap-1.5 text-[10px] leading-tight text-brand-mid-gray">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <p className="mt-1 flex items-center gap-1.5 text-[11px] leading-none text-brand-dark/60 dark:text-brand-cream/60">
+              <span aria-hidden="true" className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60 motion-reduce:hidden" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              </span>
               Online · AI assistant
             </p>
           </div>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-1">
-          <button
-            onClick={handleReset}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 sm:h-[28px] sm:w-[28px] dark:text-brand-cream"
-            aria-label="Reset conversation"
-          >
-            <RotateCcw className="h-[18px] w-[18px]" />
+          <button onClick={handleReset} className={ICON_BUTTON_CLASS} aria-label="Reset conversation">
+            <RotateCcw className="h-4 w-4" />
           </button>
-          <button
-            onClick={onClose}
-            className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-dark transition-colors hover:bg-brand-light-gray/50 active:scale-[0.92] active:bg-brand-light-gray/70 sm:h-[28px] sm:w-[28px] dark:text-brand-cream"
-            aria-label="Close chat"
-          >
+          <button onClick={onClose} className={ICON_BUTTON_CLASS} aria-label="Close chat">
             <X className="h-[18px] w-[18px]" />
           </button>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="relative flex-1 overflow-hidden">
+      <div className="relative flex-1 overflow-hidden bg-brand-cream/70 dark:bg-[#161615]">
         <div
           ref={scrollRef}
           onScroll={handleScroll}
           role="log"
           aria-live="polite"
           aria-label="Conversation with Rev"
-          className="h-full space-y-3.5 overflow-y-auto overscroll-y-contain px-[18px] py-[18px] [-webkit-overflow-scrolling:touch]"
+          className="h-full space-y-3 overflow-y-auto overscroll-y-contain px-4 py-4 [-webkit-overflow-scrolling:touch]"
         >
           {messages.map((message, index) => (
             <ChatMessageBubble
@@ -439,12 +440,12 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
             // Breathing orb + status text instead of a bubble — this is a
             // status, not a message. Visible text doubles as the live-region
             // announcement (the scroll container is aria-live="polite").
-            <div className="flex items-center gap-2.5 py-1">
+            <div className="flex items-center gap-2.5 py-1 pl-1">
               <span
                 aria-hidden="true"
-                className="h-3 w-3 animate-orb-pulse rounded-full bg-[radial-gradient(circle_at_35%_35%,#E89B7E,#D97757_60%,#C65D3B)] motion-reduce:animate-none"
+                className="h-3 w-3 animate-orb-pulse rounded-full bg-[radial-gradient(circle_at_35%_35%,#E89B7E,#D97757_60%,#C65D3B)] shadow-[0_0_10px_rgba(217,119,87,0.5)] motion-reduce:animate-none"
               />
-              <span className="text-xs text-brand-mid-gray">Rev is thinking…</span>
+              <span className="text-xs text-brand-dark/60 dark:text-brand-cream/60">Rev is thinking…</span>
             </div>
           )}
 
@@ -462,7 +463,7 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
                   <button
                     type="button"
                     onClick={() => regenerate()}
-                    className="mt-2 block rounded-full bg-brand-orange px-3.5 py-1.5 text-xs font-semibold text-white transition-all hover:brightness-[1.04] active:scale-[0.95] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+                    className="mt-2.5 block rounded-xl bg-brand-orange px-3.5 py-2 text-xs font-semibold text-white shadow-[0_4px_12px_-4px_rgba(217,119,87,0.6)] transition-all hover:brightness-[1.05] active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2"
                   >
                     Retry
                   </button>
@@ -486,7 +487,7 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
               setShowJump(false);
               scrollToBottom();
             }}
-            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-brand-dark px-3.5 py-1.5 text-xs font-semibold text-brand-cream shadow-md transition-all hover:brightness-110 active:scale-[0.95] dark:bg-brand-cream dark:text-brand-dark"
+            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-brand-dark/[0.06] bg-brand-white/90 px-3.5 py-1.5 text-xs font-semibold text-brand-dark shadow-[0_8px_24px_-8px_rgba(20,20,19,0.35)] backdrop-blur transition-all hover:border-brand-orange/40 hover:text-brand-orange active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 dark:border-white/[0.1] dark:bg-[#1f1f1e]/90 dark:text-brand-cream"
           >
             <ArrowDown className="h-3.5 w-3.5" />
             Jump to latest
@@ -497,13 +498,13 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
       {/* Input — bottom safe-area on mobile fullscreen for home indicator */}
       <form
         onSubmit={handleSubmit}
-        className="border-t border-brand-light-gray/60 px-4 pt-3.5 pb-[max(0.875rem,env(safe-area-inset-bottom))] sm:pb-3.5 dark:border-brand-mid-gray/20"
+        className="border-t border-brand-dark/[0.06] bg-brand-white px-3.5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-3 dark:border-white/[0.08] dark:bg-[#1a1a19]"
       >
-        {/* rounded-[22px] (not rounded-full) so the corner curve stays constant as the
+        {/* rounded-2xl (not rounded-full) so the corner curve stays constant as the
             field grows — a fully-round radius on a multi-line field sweeps inward past
             the side padding and text appears outside the border. items-end keeps the
             send button anchored to the bottom row while the field grows beside it. */}
-        <div className="flex items-end gap-2 rounded-[22px] border border-transparent bg-brand-light-gray/40 px-3.5 py-1.5 transition-colors focus-within:border-brand-orange dark:bg-brand-light-gray/10">
+        <div className="flex items-end gap-2 rounded-2xl border border-brand-dark/[0.08] bg-brand-white py-1.5 pl-3.5 pr-1.5 shadow-sm transition-[border-color,box-shadow] duration-200 focus-within:border-brand-orange/50 focus-within:ring-4 focus-within:ring-brand-orange/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:focus-within:border-brand-orange/60">
           <textarea
             ref={textareaRef}
             value={draft}
@@ -516,29 +517,29 @@ export function ChatPanel({ onClose, isOpen }: { onClose: () => void; isOpen: bo
             aria-label="Message Rev"
             rows={1}
             style={{ maxHeight: TEXTAREA_MAX_HEIGHT }}
-            // py-1/sm:py-1.5 makes the single-line field exactly the send button's 32px
-            // height at both line heights (same alignment as before) and insets scrolled
-            // text from the pill edges.
+            // py-[5px]/sm:py-[7px] makes the single-line field exactly the send button's
+            // 34px height at both line heights (24px / 20px) and insets scrolled text
+            // from the field edges.
             // text-base at mobile widths — anything under 16px makes iOS zoom on focus
-            className="min-w-0 flex-1 resize-none overflow-y-auto bg-transparent py-1 text-base text-brand-dark placeholder:text-brand-mid-gray focus:outline-none sm:py-1.5 sm:text-sm dark:text-brand-cream"
+            className="min-w-0 flex-1 resize-none overflow-y-auto bg-transparent py-[5px] text-base text-brand-dark placeholder:text-brand-dark/45 focus:outline-none sm:py-[7px] sm:text-sm dark:text-brand-cream dark:placeholder:text-brand-cream/45"
           />
           {isStreaming ? (
             <button
               type="button"
               onClick={() => stop()}
               aria-label="Stop generating"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-xl bg-brand-dark text-brand-cream shadow-sm transition-all hover:brightness-110 active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 dark:bg-brand-cream dark:text-brand-dark"
             >
-              <Square className="h-3.5 w-3.5 fill-current" />
+              <Square className="h-3 w-3 fill-current" />
             </button>
           ) : (
             <button
               type="submit"
               aria-label="Send message"
               disabled={!draft.trim()}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white transition-all hover:shadow-[0_0_14px_rgba(217,119,87,0.65)] hover:brightness-[1.04] active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:shadow-none disabled:hover:brightness-100 disabled:active:scale-100"
+              className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-xl bg-brand-orange text-white shadow-[0_4px_12px_-4px_rgba(217,119,87,0.6)] transition-all hover:shadow-[0_6px_16px_-4px_rgba(217,119,87,0.7)] hover:brightness-[1.05] active:scale-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-brand-dark/[0.08] disabled:text-brand-dark/35 disabled:shadow-none disabled:hover:brightness-100 disabled:active:scale-100 dark:disabled:bg-white/[0.08] dark:disabled:text-brand-cream/35"
             >
-              <ArrowUp className="h-4 w-4" />
+              <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
             </button>
           )}
         </div>

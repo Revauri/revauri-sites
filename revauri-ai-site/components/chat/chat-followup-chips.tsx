@@ -28,17 +28,17 @@ export function FollowupChips({
   onSelect: (text: string) => void;
 }) {
   return (
-    <div aria-label="Suggested follow-ups" className="flex flex-wrap gap-1.5">
+    <div aria-label="Suggested follow-ups" className="flex flex-wrap gap-1.5 pt-0.5">
       {chips.map((label) => (
         <button
           key={label}
           type="button"
           onClick={() => onSelect(label)}
-          className="group inline-flex items-center gap-1 rounded-full border border-brand-light-gray/70 px-3 py-1.5 text-xs font-medium text-brand-dark transition-all hover:border-brand-orange/50 hover:bg-brand-orange/10 active:scale-[0.97] dark:border-brand-mid-gray/30 dark:text-brand-cream dark:hover:bg-brand-orange/15"
+          className="group inline-flex items-center gap-1 rounded-full border border-brand-dark/[0.08] bg-brand-white px-3 py-1.5 text-xs font-medium text-brand-dark shadow-sm transition-all duration-200 hover:border-brand-orange/50 hover:bg-brand-orange/[0.06] hover:text-brand-orange active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-brand-cream dark:hover:bg-brand-orange/10 dark:hover:text-brand-orange dark:focus-visible:ring-offset-[#161615]"
         >
           {label}
           <ChevronRight
-            className="h-3 w-3 text-brand-mid-gray transition-colors group-hover:text-brand-orange"
+            className="h-3 w-3 text-brand-dark/30 transition-all group-hover:translate-x-0.5 group-hover:text-brand-orange dark:text-brand-cream/30"
             aria-hidden="true"
           />
         </button>

@@ -24,12 +24,13 @@ export function ChatLauncherButton({
     <div
       className={`group fixed right-5 z-[70] flex items-center gap-2 transition-[bottom] duration-300 ${bottomClass}`}
     >
-      <span className="pointer-events-none translate-x-2 whitespace-nowrap rounded-full bg-brand-dark px-4 py-2 text-sm font-semibold text-white opacity-0 shadow-md transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 dark:bg-brand-cream dark:text-brand-dark">
+      {/* Hover label is desktop-only — hover never fires on touch devices. */}
+      <span className="pointer-events-none hidden translate-x-2 whitespace-nowrap rounded-full border border-white/10 bg-brand-dark/95 px-3.5 py-2 text-[13px] font-semibold text-brand-cream opacity-0 shadow-[0_8px_24px_-8px_rgba(20,20,19,0.45)] backdrop-blur transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 sm:inline-flex dark:border-brand-dark/10 dark:bg-brand-cream dark:text-brand-dark">
         Chat with us
       </span>
       <button
         ref={ref}
-        className={`flex h-14 w-14 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 active:scale-[0.92] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange ${
+        className={`flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,#E89B7E_0%,#D97757_55%,#C65D3B_100%)] text-white shadow-[0_12px_32px_-8px_rgba(217,119,87,0.55),inset_0_1px_1px_rgba(255,255,255,0.3)] ring-1 ring-brand-orange/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-8px_rgba(217,119,87,0.65),inset_0_1px_1px_rgba(255,255,255,0.3)] active:translate-y-0 active:scale-[0.94] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange/60 focus-visible:ring-offset-2 ${
           isOpen ? "" : "animate-pulse-glow"
         }`}
         onClick={onClick}
@@ -40,7 +41,11 @@ export function ChatLauncherButton({
         aria-expanded={isOpen}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+        {isOpen ? (
+          <X className="h-6 w-6" strokeWidth={2.25} />
+        ) : (
+          <MessageCircle className="h-6 w-6" strokeWidth={2.25} />
+        )}
       </button>
     </div>
   );
