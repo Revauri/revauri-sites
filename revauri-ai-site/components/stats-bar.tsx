@@ -54,8 +54,8 @@ export function StatsBar() {
             Powered by the leading AI models
           </p>
 
-          {/* Mobile: stacked. Tablet+: 2x2. Desktop row is the xl:flex below. */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 xl:hidden">
+          {/* Mobile / tablet: 2x2 grid */}
+          <div className="grid grid-cols-2 gap-8 xl:hidden">
             {TECH_STACK.map((tech) => (
               <div key={tech.name} className="flex flex-col">
                 <div className="mb-3 h-10 flex items-end">{tech.icon}</div>
