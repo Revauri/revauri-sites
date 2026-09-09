@@ -13,6 +13,8 @@ import {
   InboxMock,
   LeadFollowUpMock,
   MissedCallMock,
+  PayrollMock,
+  QuotesMock,
   RemindersMock,
   ReviewsMock,
   WinbackMock,
@@ -29,27 +31,35 @@ type Capability = {
 
 const CAPABILITIES: Capability[] = [
   {
-    category: "Revenue",
-    title: "Lead follow-up",
-    description:
-      "Follows up when a call, form, or quote goes silent, and sends the next nudge so estimates do not die.",
-    accent: "#D97757",
-    Illustration: LeadFollowUpMock,
-  },
-  {
     category: "Front desk",
-    title: "Missed-call text-back",
+    title: "The phone",
     description:
-      "Catches the after-hours and missed inquiry by text and starts the follow-up before they call the next name.",
-    accent: "#C9A24E",
+      "Missed calls are lost jobs. A voice hire picks up what currently goes to voicemail.",
+    accent: "#D97757",
     Illustration: MissedCallMock,
   },
   {
-    category: "Reputation",
-    title: "Reviews & check-ins",
+    category: "Revenue",
+    title: "Lead follow-up",
     description:
-      "Asks \u201CHow did we do?\u201D after a good job, requests the review, and replies to new ones.",
-    accent: "#5E9C76",
+      "Follows up when a call, form, or lead goes silent so they do not call the next name.",
+    accent: "#C9A24E",
+    Illustration: LeadFollowUpMock,
+  },
+  {
+    category: "Revenue",
+    title: "Quotes",
+    description:
+      "Sends the next nudge so estimates do not die. Nothing goes out until you approve the wording.",
+    accent: "#2F8F6B",
+    Illustration: QuotesMock,
+  },
+  {
+    category: "Reputation",
+    title: "Reviews",
+    description:
+      "Asks after a good job, requests the review, and replies to new ones.",
+    accent: "#3B6FD4",
     Illustration: ReviewsMock,
   },
   {
@@ -57,28 +67,36 @@ const CAPABILITIES: Capability[] = [
     title: "Reminders & no-shows",
     description:
       "Reminds them before the appointment and follows up if they miss it.",
-    accent: "#5B7BB5",
+    accent: "#9B59B6",
     Illustration: RemindersMock,
   },
   {
     category: "Admin",
-    title: "Inbox & admin",
+    title: "Inbox",
     description:
       "Handles the repetitive replies, confirmations, and reminders clogging the inbox.",
-    accent: "#8E6BB0",
+    accent: "#1A9BA8",
     Illustration: InboxMock,
   },
   {
+    category: "Admin",
+    title: "Payroll",
+    description:
+      "Prepares the weekly packet — hours, invoices, receipts — and sends it where you run payroll.",
+    accent: "#C45C6A",
+    Illustration: PayrollMock,
+  },
+  {
     category: "Retention",
-    title: "Win-back",
+    title: "Outreach",
     description:
       "Checks back with past customers who have gone quiet and brings them back on the books.",
-    accent: "#3E9C9C",
+    accent: "#3D6B8A",
     Illustration: WinbackMock,
   },
 ];
 
-const TILT_DEG = 12;
+const TILT_DEG = 7;
 const SPRING = { stiffness: 220, damping: 22, mass: 0.6 };
 
 const mix = (pct: number) => `color-mix(in srgb, var(--accent) ${pct}%, transparent)`;
@@ -124,7 +142,7 @@ function CapabilityCard({
       <motion.div
         className="group relative h-full rounded-xl"
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        whileHover={reducedMotion ? undefined : { y: -6 }}
+        whileHover={reducedMotion ? undefined : { y: -3.2 }}
         transition={{ type: "spring", ...SPRING }}
       >
         {/* glow */}
@@ -139,7 +157,7 @@ function CapabilityCard({
         <Link
           href="/book"
           aria-label={`Hire for ${title}`}
-          className="relative flex h-full min-h-[520px] flex-col overflow-hidden rounded-xl border bg-white/60 transition-[border-color,background-color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 dark:bg-white/[0.04] lg:min-h-[560px]"
+          className="relative flex h-full min-h-[440px] flex-col overflow-hidden rounded-xl border bg-white/60 transition-[border-color,background-color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 dark:bg-white/[0.04] lg:min-h-[480px]"
           style={{
             borderColor: mix(14),
             outlineColor: accent,
@@ -176,7 +194,7 @@ function CapabilityCard({
           <div aria-hidden className="h-px shrink-0" style={{ backgroundColor: mix(10) }} />
 
           {/* body */}
-          <div className="relative flex flex-1 flex-col gap-4 p-7">
+          <div className="relative flex flex-1 flex-col gap-4 px-7 pt-7 pb-3.5">
             <div className="flex items-center justify-between">
               <span
                 className="rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-widest"

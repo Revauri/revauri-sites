@@ -56,7 +56,7 @@ export default function AboutPage() {
         <div className="section-measure px-6">
           <div className="grid grid-cols-1 items-start justify-items-center gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:justify-items-stretch lg:gap-16">
             <FadeInWhenVisible direction="left" className="mx-auto w-fit lg:mx-0">
-              <div className="relative isolate mx-auto w-fit lg:mx-0">
+              <div className="relative isolate mx-auto w-fit pt-9 lg:mx-0">
                 <div
                   aria-hidden
                   className="dotted-grid absolute -top-6 -left-6 h-full w-full rounded-2xl opacity-70"
@@ -124,32 +124,41 @@ export default function AboutPage() {
             </h2>
           </FadeInWhenVisible>
 
-          <StaggerChildren className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {VALUES.map((value) => {
-              const Icon = value.icon;
-              return (
-                <div
-                  key={value.title}
-                  className="hairline-card hairline-card-hover h-full bg-white/90 p-6 dark:bg-[#1c1b19]/92"
-                >
-                  <span className="icon-tile">
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-4 text-base font-semibold text-brand-dark dark:text-brand-cream">
-                    {value.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                    {value.description}
-                  </p>
-                </div>
-              );
-            })}
-          </StaggerChildren>
+          <div className="relative mt-10">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 hidden sm:block"
+            >
+              <span className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-brand-orange/45" />
+              <span className="absolute right-0 left-0 top-1/2 h-px -translate-y-1/2 bg-brand-orange/45" />
+            </div>
+
+            <StaggerChildren className="grid grid-cols-1 divide-y divide-brand-orange/45 sm:grid-cols-2 sm:divide-y-0">
+              {VALUES.map((value) => {
+                const Icon = value.icon;
+                return (
+                  <div key={value.title} className="flex h-full items-start gap-3 p-6 sm:p-8">
+                    <span className="mt-0.5 inline-flex shrink-0 text-brand-orange">
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+                        {value.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                        {value.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </StaggerChildren>
+          </div>
         </div>
       </section>
 
       <PageCTA
-        heading="Tell me the job you hate."
+        heading="Tell us the job you hate."
         body="A short call is enough to name the two jobs worth handing off first."
       />
     </div>

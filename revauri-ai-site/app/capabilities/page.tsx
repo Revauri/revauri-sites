@@ -29,13 +29,38 @@ export default function CapabilitiesPage() {
     <div>
       <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
+      <section className="dotted-grid py-12 sm:py-16 lg:py-20">
+        <div className="section-measure px-6">
+          <FadeInWhenVisible>
+            <p className="section-eyebrow">The roster</p>
+            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
+              Jobs we hire for
+            </h2>
+            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60">
+              Pick the painful one. We build that workflow and run it. Do not
+              see yours? Name the mess and we will tell you if we can take it.
+            </p>
+          </FadeInWhenVisible>
+
+          <CapabilityCards />
+
+          <FadeInWhenVisible delay={0.1}>
+            <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+              A standard hire covers two of these, run weekly. No guessing at
+              prices, no medical, legal, or licensed advice — that still needs
+              your tech.
+            </p>
+          </FadeInWhenVisible>
+        </div>
+      </section>
+
       <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
         <div className="section-measure px-6">
           <FadeInWhenVisible>
             <div className="grid items-start gap-10 min-[1000px]:grid-cols-[minmax(300px,380px)_1fr] min-[1000px]:gap-14">
               <div className="flex flex-col">
                 <div className="flex items-center gap-3">
-                  <span className="icon-tile">
+                  <span className="inline-flex h-9 w-9 items-center justify-center text-brand-orange">
                     <Phone className="h-4 w-4" aria-hidden="true" />
                   </span>
                   <p className="section-eyebrow text-brand-orange!">Headline hire</p>
@@ -84,31 +109,6 @@ export default function CapabilitiesPage() {
                 <PhoneCallMock />
               </div>
             </div>
-          </FadeInWhenVisible>
-        </div>
-      </section>
-
-      <section className="dotted-grid py-12 sm:py-16 lg:py-20">
-        <div className="section-measure px-6">
-          <FadeInWhenVisible>
-            <p className="section-eyebrow">The roster</p>
-            <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
-              Jobs we hire for
-            </h2>
-            <p className="mt-4 max-w-xl text-[15px] text-brand-dark/60 dark:text-brand-cream/60">
-              Pick the painful one. We build that workflow and run it. Do not
-              see yours? Name the mess and we will tell you if we can take it.
-            </p>
-          </FadeInWhenVisible>
-
-          <CapabilityCards />
-
-          <FadeInWhenVisible delay={0.1}>
-            <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
-              A standard hire covers two of these, run weekly. No guessing at
-              prices, no medical, legal, or licensed advice — that still needs
-              your tech.
-            </p>
           </FadeInWhenVisible>
         </div>
       </section>

@@ -61,7 +61,7 @@ export default function FAQPage() {
                   href="mailto:joseph@revauri.com"
                   className="inline-flex w-full min-h-11 items-center justify-center rounded-lg border border-black/[0.08] px-6 py-3 text-sm font-medium text-brand-dark sm:w-auto dark:border-white/[0.08] dark:text-brand-cream"
                 >
-                  joseph@revauri.com
+                  Email Us
                 </a>
               </div>
             </div>

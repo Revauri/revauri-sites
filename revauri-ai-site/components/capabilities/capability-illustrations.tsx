@@ -1,5 +1,6 @@
 "use client";
 
+import { Phone } from "lucide-react";
 import { motion, type Transition } from "framer-motion";
 
 /**
@@ -105,74 +106,67 @@ export function LeadFollowUpMock({ animate }: IllustrationProps) {
   );
 }
 
-/* 02 — Missed-call text-back: missed call badge, outgoing text, clock */
+/* Incoming call — same Lucide Phone mark as the headline hire */
 export function MissedCallMock({ animate }: IllustrationProps) {
-  const cycle = 6;
   return (
     <svg {...SVG_PROPS}>
-      {/* phone */}
-      <rect x="66" y="12" width="104" height="176" rx="14" stroke={INK} strokeOpacity="0.18" strokeWidth="1.2" />
-      <rect x="66" y="12" width="104" height="176" rx="14" fill="currentColor" fillOpacity="0.03" />
-      <rect x="104" y="20" width="28" height="4" rx="2" fill={INK} fillOpacity="0.25" />
+      <rect x="92" y="6" width="96" height="188" rx="20" stroke={INK} strokeOpacity="0.22" strokeWidth="1.4" />
+      <rect x="92" y="6" width="96" height="188" rx="20" fill="currentColor" fillOpacity="0.04" />
+      <rect x="88" y="48" width="4" height="18" rx="1.5" fill={INK} fillOpacity="0.16" />
+      <rect x="88" y="74" width="4" height="28" rx="1.5" fill={INK} fillOpacity="0.16" />
+      <rect x="124" y="14" width="32" height="5" rx="2.5" fill={INK} fillOpacity="0.28" />
 
-      {/* missed call row */}
-      <motion.g
-        animate={animate ? { opacity: [1, 1, 0.45, 0.45, 1] } : undefined}
-        transition={loop(cycle)}
-      >
-        <rect x="76" y="40" width="84" height="30" rx="7" fill={INK} fillOpacity="0.1" />
+      {[26, 36, 46].map((r, i) => (
         <motion.circle
-          cx="90"
-          cy="55"
-          r="7"
-          fill="currentColor"
-          fillOpacity="0.9"
-          animate={animate ? { scale: [1, 1.15, 1] } : undefined}
-          transition={loop(1.4)}
+          key={r}
+          cx="140"
+          cy="86"
+          r={r}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+          animate={animate ? { opacity: [0.4, 0, 0.4], scale: [0.88, 1.06, 0.88] } : undefined}
+          transition={loop(2.2, i * 0.28)}
         />
-        <path d="M87 52 L93 58 M93 52 L87 58" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" />
-        <rect x="103" y="48" width="44" height="5" rx="2.5" fill={INK} fillOpacity="0.4" />
-        <rect x="103" y="57" width="30" height="4" rx="2" fill="currentColor" fillOpacity="0.6" />
-      </motion.g>
+      ))}
 
-      {/* outgoing text sliding in */}
-      <motion.g
-        animate={animate ? { opacity: [0, 0, 1, 1, 0], x: [14, 14, 0, 0, 0] } : undefined}
-        transition={loop(cycle)}
-      >
-        <rect x="88" y="86" width="72" height="34" rx="8" fill="currentColor" fillOpacity="0.85" />
-        <rect x="96" y="94" width="56" height="5" rx="2.5" fill="#fff" fillOpacity="0.85" />
-        <rect x="96" y="103" width="40" height="4" rx="2" fill="#fff" fillOpacity="0.6" />
-        <rect x="96" y="110" width="24" height="4" rx="2" fill="#fff" fillOpacity="0.4" />
-      </motion.g>
+      <motion.circle
+        cx="140"
+        cy="86"
+        r="22"
+        fill="currentColor"
+        fillOpacity="0.92"
+        animate={animate ? { scale: [1, 1.05, 1] } : undefined}
+        transition={loop(1.6)}
+      />
+      <Phone
+        x={128}
+        y={74}
+        width={24}
+        height={24}
+        color="#fff"
+        strokeWidth={2}
+        aria-hidden="true"
+      />
 
-      {/* incoming reply */}
-      <motion.g
-        animate={animate ? { opacity: [0, 0, 0, 1, 0], x: [-10, -10, -10, 0, 0] } : undefined}
-        transition={loop(cycle)}
-      >
-        <rect x="76" y="130" width="60" height="22" rx="8" fill={INK} fillOpacity="0.12" />
-        <rect x="84" y="138" width="44" height="5" rx="2.5" fill={INK} fillOpacity="0.4" />
-      </motion.g>
+      <rect x="116" y="118" width="48" height="5" rx="2.5" fill={INK} fillOpacity="0.45" />
+      <rect x="124" y="128" width="32" height="3.5" rx="1.75" fill="currentColor" fillOpacity="0.5" />
 
-      {/* home bar */}
-      <rect x="104" y="176" width="28" height="3" rx="1.5" fill={INK} fillOpacity="0.2" />
+      <circle cx="118" cy="162" r="11" fill={INK} fillOpacity="0.1" />
+      <circle cx="118" cy="162" r="11" stroke={INK} strokeOpacity="0.2" />
+      <path d="M114 162 h8" stroke={INK} strokeOpacity="0.55" strokeWidth="1.6" strokeLinecap="round" />
 
-      {/* clock */}
-      <circle cx="222" cy="52" r="22" stroke="currentColor" strokeOpacity="0.3" />
-      <circle cx="222" cy="52" r="22" fill="currentColor" fillOpacity="0.05" />
-      {/* invisible circle keeps the group's bbox centred on the pivot */}
-      <motion.g
-        animate={animate ? { rotate: 360 } : undefined}
-        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-      >
-        <circle cx="222" cy="52" r="15" fill="none" />
-        <line x1="222" y1="52" x2="222" y2="38" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </motion.g>
-      <line x1="222" y1="52" x2="231" y2="52" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.6" />
-      <circle cx="222" cy="52" r="1.8" fill="currentColor" />
-      <rect x="196" y="84" width="52" height="4" rx="2" fill={INK} fillOpacity="0.22" />
-      <rect x="204" y="92" width="36" height="3" rx="1.5" fill="currentColor" fillOpacity="0.5" />
+      <motion.circle
+        cx="162"
+        cy="162"
+        r="11"
+        fill="currentColor"
+        animate={animate ? { fillOpacity: [0.7, 1, 0.7] } : undefined}
+        transition={loop(1.4)}
+        fillOpacity="0.9"
+      />
+
+      <rect x="126" y="182" width="28" height="3" rx="1.5" fill={INK} fillOpacity="0.22" />
     </svg>
   );
 }
@@ -195,12 +189,12 @@ export function ReviewsMock({ animate }: IllustrationProps) {
       <rect x="80" y="79" width="62" height="5" rx="2.5" fill={INK} fillOpacity="0.45" />
       <rect x="80" y="89" width="38" height="4" rx="2" fill={INK} fillOpacity="0.22" />
 
-      {/* stars */}
+      {/* stars — own row under the name, inset from the card edge */}
       {[0, 1, 2, 3, 4].map((i) => (
         <g key={i}>
-          <polygon points={starPoints(174 + i * 15, 86, 6)} fill={INK} fillOpacity="0.1" />
+          <polygon points={starPoints(86 + i * 14, 108, 5)} fill={INK} fillOpacity="0.12" />
           <motion.polygon
-            points={starPoints(174 + i * 15, 86, 6)}
+            points={starPoints(86 + i * 14, 108, 5)}
             fill="currentColor"
             animate={animate ? { opacity: [0, 0, 1, 1, 1, 0] } : undefined}
             transition={{ ...loop(cycle), times: [0, 0.1 + i * 0.07, 0.18 + i * 0.07, 0.8, 0.9, 1] }}
@@ -208,9 +202,8 @@ export function ReviewsMock({ animate }: IllustrationProps) {
         </g>
       ))}
 
-      <rect x="56" y="110" width="168" height="5" rx="2.5" fill={INK} fillOpacity="0.3" />
-      <rect x="56" y="120" width="140" height="5" rx="2.5" fill={INK} fillOpacity="0.3" />
-      <rect x="56" y="130" width="96" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+      <rect x="56" y="120" width="168" height="5" rx="2.5" fill={INK} fillOpacity="0.3" />
+      <rect x="56" y="130" width="140" height="5" rx="2.5" fill={INK} fillOpacity="0.3" />
 
       {/* reply */}
       <motion.g
@@ -469,6 +462,108 @@ export function WinbackMock({ animate }: IllustrationProps) {
         fillOpacity="0.7"
       />
       <rect x="208" y="156.5" width="34" height="3" rx="1.5" fill="#fff" fillOpacity="0.85" />
+    </svg>
+  );
+}
+
+/* Quotes: estimate doc + follow-up nudge */
+export function QuotesMock({ animate }: IllustrationProps) {
+  const cycle = 6.5;
+  return (
+    <svg {...SVG_PROPS}>
+      <rect x="28" y="14" width="148" height="172" rx="10" stroke={INK} strokeOpacity="0.2" />
+      <rect x="28" y="14" width="148" height="28" rx="10" fill="currentColor" fillOpacity="0.07" />
+      <rect x="40" y="24" width="54" height="6" rx="3" fill={INK} fillOpacity="0.45" />
+      <rect x="136" y="24" width="28" height="8" rx="4" fill="currentColor" fillOpacity="0.55" />
+
+      {[0, 1, 2, 3].map((i) => (
+        <g key={i}>
+          <rect x="40" y={56 + i * 22} width={70 + (i % 2) * 18} height="5" rx="2.5" fill={INK} fillOpacity="0.32" />
+          <rect x="136" y={56 + i * 22} width="24" height="5" rx="2.5" fill={INK} fillOpacity="0.2" />
+        </g>
+      ))}
+
+      <line x1="40" y1="146" x2="164" y2="146" stroke={INK} strokeOpacity="0.12" />
+      <rect x="40" y="156" width="36" height="5" rx="2.5" fill={INK} fillOpacity="0.4" />
+      <motion.rect
+        x="128"
+        y="154"
+        width="36"
+        height="10"
+        rx="5"
+        fill="currentColor"
+        animate={animate ? { fillOpacity: [0.45, 0.9, 0.45] } : undefined}
+        transition={loop(2.4)}
+        fillOpacity="0.7"
+      />
+      <rect x="136" y="157.5" width="20" height="3" rx="1.5" fill="#fff" fillOpacity="0.85" />
+
+      <motion.g
+        animate={animate ? { opacity: [0, 1, 1, 1, 0], x: [12, 0, 0, 0, 0] } : undefined}
+        transition={loop(cycle)}
+      >
+        <rect x="188" y="48" width="76" height="88" rx="9" fill="currentColor" fillOpacity="0.1" />
+        <rect x="188" y="48" width="76" height="88" rx="9" stroke="currentColor" strokeOpacity="0.35" />
+        <rect x="200" y="60" width="52" height="5" rx="2.5" fill={INK} fillOpacity="0.45" />
+        <rect x="200" y="72" width="38" height="4" rx="2" fill={INK} fillOpacity="0.22" />
+        <rect x="200" y="92" width="52" height="22" rx="6" fill="currentColor" fillOpacity="0.85" />
+        <rect x="210" y="100" width="32" height="5" rx="2.5" fill="#fff" fillOpacity="0.85" />
+      </motion.g>
+    </svg>
+  );
+}
+
+/* Payroll: hours grid + packet sent */
+export function PayrollMock({ animate }: IllustrationProps) {
+  const cycle = 7;
+  return (
+    <svg {...SVG_PROPS}>
+      <rect x="22" y="16" width="168" height="168" rx="10" stroke={INK} strokeOpacity="0.2" />
+      <rect x="22" y="16" width="168" height="26" rx="10" fill="currentColor" fillOpacity="0.07" />
+      <rect x="34" y="25" width="48" height="6" rx="3" fill={INK} fillOpacity="0.45" />
+
+      {["M", "T", "W", "T", "F"].map((d, i) => (
+        <rect key={d + i} x={40 + i * 28} y="52" width="14" height="4" rx="2" fill={INK} fillOpacity="0.22" />
+      ))}
+
+      {[0, 1, 2, 3].map((r) =>
+        [0, 1, 2, 3, 4].map((c) => {
+          const filled = r < 3 || c < 3;
+          return (
+            <rect
+              key={`${r}-${c}`}
+              x={36 + c * 28}
+              y={66 + r * 22}
+              width="22"
+              height="12"
+              rx="3"
+              fill={filled ? "currentColor" : INK}
+              fillOpacity={filled ? 0.16 + (c % 3) * 0.06 : 0.05}
+            />
+          );
+        }),
+      )}
+
+      <motion.g
+        animate={animate ? { opacity: [0.4, 1, 1, 0.4], y: [6, 0, 0, 0] } : undefined}
+        transition={loop(cycle)}
+      >
+        <rect x="202" y="40" width="58" height="78" rx="7" fill={INK} fillOpacity="0.04" />
+        <rect x="202" y="40" width="58" height="78" rx="7" stroke="currentColor" strokeOpacity="0.35" />
+        <rect x="212" y="52" width="38" height="5" rx="2.5" fill={INK} fillOpacity="0.4" />
+        <rect x="212" y="64" width="28" height="4" rx="2" fill={INK} fillOpacity="0.2" />
+        <rect x="212" y="74" width="32" height="4" rx="2" fill={INK} fillOpacity="0.2" />
+        <rect x="212" y="96" width="38" height="10" rx="5" fill="currentColor" fillOpacity="0.85" />
+        <rect x="220" y="99.5" width="22" height="3" rx="1.5" fill="#fff" fillOpacity="0.9" />
+      </motion.g>
+
+      <motion.g
+        animate={animate ? { opacity: [0, 0, 1, 1, 0] } : undefined}
+        transition={loop(cycle)}
+      >
+        <circle cx="231" cy="148" r="14" fill="currentColor" fillOpacity="0.9" />
+        <path d="M225 148 l5 5 8 -9" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </motion.g>
     </svg>
   );
 }

@@ -35,7 +35,7 @@ export function PhoneCallMock() {
       <div className="product-frame relative overflow-hidden min-[900px]:w-[76%]">
         <div className="flex items-center justify-between border-b border-black/[0.06] px-4 py-3 dark:border-white/[0.06]">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-brand-orange/10 text-brand-orange shadow-[inset_0_0_0_1px_rgba(217,119,87,0.18)]">
+            <span className="flex h-7 w-7 items-center justify-center text-brand-orange">
               <Phone className="h-3.5 w-3.5" aria-hidden="true" />
             </span>
             <div>
