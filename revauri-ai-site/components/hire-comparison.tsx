@@ -129,7 +129,7 @@ export function HireComparison() {
                         : "border-transparent hover:bg-white/40 dark:hover:bg-white/[0.03]"
                     }`}
                   >
-                    <span className="icon-tile">
+                    <span className="inline-flex shrink-0 text-brand-orange">
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1">

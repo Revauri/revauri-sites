@@ -29,9 +29,9 @@ export default function CapabilitiesPage() {
     <div>
       <PageHero badge={HERO.badge} title={HERO.title} subtitle={HERO.subtitle} />
 
-      <section className="dotted-grid py-12 sm:py-16 lg:py-20">
+      <section className="py-12 sm:py-16 lg:py-20">
         <div className="section-measure px-6">
-          <FadeInWhenVisible>
+          <FadeInWhenVisible className="ml-auto flex max-w-2xl flex-col items-end text-right">
             <p className="section-eyebrow">The roster</p>
             <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
               Jobs we hire for

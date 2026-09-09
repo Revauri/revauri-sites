@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Check, Phone, Layers, Globe } from "lucide-react";
+import { Globe, Layers, Mail, PenLine, Phone, RefreshCw, Workflow } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { PageCTA } from "@/components/page-cta";
 import { HireComparison } from "@/components/hire-comparison";
@@ -15,20 +15,25 @@ export const metadata: Metadata = {
 
 const STANDARD_HIRE = [
   {
+    icon: PenLine,
     title: "Two workflows, named in writing",
     description: "Before anything gets built.",
   },
   {
-    title: "We build them around how your business already runs",
-    description: "The hire fits the way the job already runs.",
+    icon: Workflow,
+    title: "Built around how you already run",
+    description: "We build them around how your business already runs.",
   },
   {
+    icon: RefreshCw,
     title: "We run them every week",
     description: "After setup, you don't live in them.",
   },
   {
-    title: "A weekly note so you know what went out and what is waiting",
-    description: "During setup you approve so it learns your voice. Then it runs.",
+    icon: Mail,
+    title: "A weekly note",
+    description:
+      "So you know what went out and what is waiting. During setup you approve so it learns your voice. Then it runs.",
   },
 ];
 
@@ -77,12 +82,12 @@ export default function PricingPage() {
 
       <section className="pt-10 pb-12 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20">
         <div className="section-measure px-6">
-          <FadeInWhenVisible>
+          <FadeInWhenVisible className="ml-auto flex max-w-2xl flex-col items-end text-right">
             <p className="section-eyebrow">How pricing works</p>
             <h2 className="section-h2 mt-4 text-brand-dark dark:text-brand-cream">
-              Why there are no numbers on this page
+              We quote the job, not a plan
             </h2>
-            <div className="relative mt-8 max-w-2xl border-l-2 border-brand-orange pl-6 sm:pl-8">
+            <div className="relative mt-8 w-full border-r-2 border-brand-orange pr-6 sm:pr-8">
               <p className="text-lg leading-relaxed text-brand-dark/80 dark:text-brand-cream/80 md:text-xl">
                 A hire is priced on the job it takes over, not on a software
                 tier. On a short call we name the two jobs, look at how they work
@@ -118,21 +123,24 @@ export default function PricingPage() {
             </div>
 
             <StaggerChildren className="grid grid-cols-1 divide-y divide-brand-orange/45 sm:grid-cols-2 sm:divide-y-0">
-              {STANDARD_HIRE.map((item) => (
-                <div key={item.title} className="flex h-full items-start gap-3 p-6 sm:p-8">
-                  <span className="mt-0.5 inline-flex shrink-0 text-brand-orange">
-                    <Check className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
-                      {item.description}
-                    </p>
+              {STANDARD_HIRE.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="flex h-full items-start gap-3.5 p-6 sm:p-8">
+                    <span className="mt-1 inline-flex shrink-0 text-brand-orange">
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-brand-dark/55 dark:text-brand-cream/55">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </StaggerChildren>
           </div>
 
