@@ -57,7 +57,7 @@ test("final CTA, support, and footer blurb match the plan verbatim", () => {
     SUPPORT_COPY.channels.map((c) => [c.title, c.line, c.cta]),
     [
       ["Hire one", "The work you want off your plate", "Schedule now"],
-      ["Email us", "We reply within a few hours", "joseph@revauri.com"],
+      ["Email us", "We reply within a few hours", "Contact now"],
       ["Browse FAQ", "Answers to common questions", "View FAQ"],
     ],
   );

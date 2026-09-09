@@ -32,7 +32,7 @@ export const SUPPORT_COPY = {
     {
       title: "Email us",
       line: "We reply within a few hours",
-      cta: "joseph@revauri.com",
+      cta: "Contact now",
     },
     {
       title: "Browse FAQ",

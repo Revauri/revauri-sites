@@ -67,8 +67,8 @@ export function Footer() {
               <FooterGroupHeading>Get in Touch</FooterGroupHeading>
               <ul className="flex flex-col space-y-2">
                 <FooterLink>
-                  <a href="mailto:joseph@revauri.com" className="break-all">
-                    joseph@revauri.com
+                  <a href="mailto:joseph@revauri.com">
+                    Email us
                   </a>
                 </FooterLink>
                 <FooterLink>
