@@ -152,7 +152,7 @@ test("tools tab labels match the three plan claims", () => {
   assert.deepEqual(
     TOOLS_TABS.map((tab) => tab.label),
     [
-      "You stay in control — nothing sends without your approval",
+      "You stay in control — approve during setup, pause any time",
       "It runs several jobs at the same time",
       "Built around how you already work",
     ],

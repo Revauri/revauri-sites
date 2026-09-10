@@ -79,7 +79,7 @@ export const SCENARIOS: Scenario[] = [
     user: "Can you chase the quotes I sent out last week?",
     replyBefore:
       "On it. Sam's patio quote has been quiet for 11 days, so I'm drafting a friendly nudge, and I'm flagging the two that look closest to a yes. ",
-    replyBold: "Nothing sends until you approve the wording.",
+    replyBold: "You approved the wording during setup — I keep it running.",
     tasks: [
       {
         agent: "Quotes Agent",
