@@ -992,7 +992,7 @@ const FEATURE_BLURBS = [
   },
   {
     title: "You stay in control",
-    body: "Anything customer-facing waits for your approval before it sends.",
+    body: "You approve the voice during setup. Then it runs on its own, and you can pause it any time.",
   },
   {
     title: "Built for your trade",

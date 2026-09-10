@@ -14,7 +14,7 @@ export const TOOLS_INTRO = {
 export const TOOLS_TABS: ToolsTab[] = [
   {
     id: "approve",
-    label: "You stay in control — nothing sends without your approval",
+    label: "You stay in control — approve during setup, pause any time",
   },
   {
     id: "parallel",
