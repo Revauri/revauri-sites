@@ -85,10 +85,10 @@ export const PAGE_HEROES = {
       "Twenty minutes. We hear the mess, tell you if we can take it, and quote it against a person.",
   },
   blog: {
-    badge: "Blog",
-    title: "Notes",
+    badge: "BLOG",
+    title: "The Blog",
     subtitle:
-      "What we learn building and running AI employees for local service businesses.",
+      "Practical notes on hiring an AI employee for local service work — what it includes, what stays yours, and how to tell a real hire from a chatbot.",
   },
   privacy: {
     badge: "Legal",

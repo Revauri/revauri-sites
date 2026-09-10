@@ -90,7 +90,12 @@ test("PageHero table strings match the plan verbatim", () => {
   );
   assert.equal(PAGE_HEROES.book.title, "Name the job");
   assert.equal(PAGE_HEROES.book.muted, "you’d otherwise hire for");
-  assert.equal(PAGE_HEROES.blog.title, "Notes");
+  assert.equal(PAGE_HEROES.blog.badge, "BLOG");
+  assert.equal(PAGE_HEROES.blog.title, "The Blog");
+  assert.equal(
+    PAGE_HEROES.blog.subtitle,
+    "Practical notes on hiring an AI employee for local service work — what it includes, what stays yours, and how to tell a real hire from a chatbot.",
+  );
   assert.equal(PAGE_HEROES.privacy.title, "Privacy Policy");
   assert.equal(PAGE_HEROES.privacy.subtitle, "Last updated: August 13, 2026");
   assert.equal(PAGE_HEROES.terms.title, "Terms of Service");

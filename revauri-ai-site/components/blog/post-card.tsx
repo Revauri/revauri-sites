@@ -31,7 +31,7 @@ export function PostCard({ post }: { post: PostMeta }) {
       className="group block focus-visible:outline-none"
       aria-label={`Read post: ${post.title}`}
     >
-      <article className="flex h-full flex-col overflow-hidden rounded-[16px] border border-black/[0.08] bg-brand-white transition-colors duration-300 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-white/[0.08] dark:bg-[#1a1a19]">
+      <article className="overflow-hidden rounded-2xl border border-brand-light-gray/60 bg-brand-white transition-all duration-300 group-hover:border-brand-orange/30 group-focus-visible:ring-2 group-focus-visible:ring-brand-orange dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
         <div className="relative aspect-[16/9] bg-brand-light-gray/40 dark:bg-brand-mid-gray/10">
           {post.image ? (
             <Image
@@ -45,8 +45,8 @@ export function PostCard({ post }: { post: PostMeta }) {
             <PostImageFallback category={post.category} />
           )}
         </div>
-        <div className="flex flex-1 flex-col p-6">
-          <span className="section-eyebrow mb-2 inline-block">
+        <div className="p-6">
+          <span className="mb-2 inline-block rounded-full bg-brand-orange/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-orange">
             {post.category}
           </span>
           <h3 className="text-lg font-semibold text-brand-dark dark:text-brand-cream">
@@ -55,7 +55,7 @@ export function PostCard({ post }: { post: PostMeta }) {
           <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
             {post.description}
           </p>
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-4">
+          <div className="mt-4 flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 text-xs text-brand-mid-gray">
               <Clock className="h-3 w-3" />
               {post.readingTime}

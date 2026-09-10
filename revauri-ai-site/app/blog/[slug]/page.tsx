@@ -5,7 +5,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
-import { PageHero } from "@/components/page-hero";
+import { GradientText, PageHero } from "@/components/page-hero";
 import { FadeInWhenVisible } from "@/components/motion-wrappers";
 import { AuthorByline } from "@/components/blog/author-byline";
 import { RelatedPosts } from "@/components/blog/related-posts";
@@ -113,7 +113,7 @@ export default async function BlogPostPage(
       />
 
       {/* Section 1 — Back-to-blog strip */}
-      <div className="bg-brand-cream pt-6 dark:bg-brand-dark">
+      <div className="bg-brand-orange/5 pt-6 pb-6 dark:bg-brand-orange/[0.03]">
         <div className="mx-auto max-w-6xl px-6">
           <Link
             href="/blog"
@@ -179,8 +179,9 @@ export default async function BlogPostPage(
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              Ready to hand the work off?
+            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              Ready to hand the work{" "}
+              <GradientText>off?</GradientText>
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
@@ -191,7 +192,7 @@ export default async function BlogPostPage(
           <FadeInWhenVisible delay={0.16}>
             <Link
               href="/book"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
             >
               Hire one
               <ArrowRight className="h-4 w-4" />

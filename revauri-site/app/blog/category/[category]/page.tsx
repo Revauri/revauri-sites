@@ -43,7 +43,7 @@ export default async function BlogCategoryPage(
 
   return (
     <div>
-      <div className="bg-brand-orange/5 pt-6 dark:bg-brand-orange/[0.03]">
+      <div className="bg-brand-orange/5 pt-6 pb-6 dark:bg-brand-orange/[0.03]">
         <div className="mx-auto max-w-6xl px-6">
           <Link
             href="/blog"

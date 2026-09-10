@@ -107,12 +107,13 @@ test("getAllPosts excludes draft posts in production, includes them otherwise", 
 
 test("getRelatedPosts ranks by shared tags, then category, then recency", async () => {
   const files = ["current.mdx", "shared-tags.mdx", "same-category.mdx", "unrelated.mdx"];
+  const fixtureSlugs = new Set(["shared-tags", "same-category", "unrelated"]);
   writePost("current.mdx", {
     title: "Current",
     description: "desc",
     date: "2026-03-01",
-    category: "Legal",
-    tags: ["injury", "nj"],
+    category: "__fixture_legal",
+    tags: ["__fixture_injury", "__fixture_nj"],
     image: "/c.png",
     imageAlt: "c",
     featured: false,
@@ -122,8 +123,8 @@ test("getRelatedPosts ranks by shared tags, then category, then recency", async 
     title: "Shared Tags",
     description: "desc",
     date: "2025-01-01",
-    category: "Fintech",
-    tags: ["injury"],
+    category: "__fixture_fintech",
+    tags: ["__fixture_injury"],
     image: "/s.png",
     imageAlt: "s",
     featured: false,
@@ -133,7 +134,7 @@ test("getRelatedPosts ranks by shared tags, then category, then recency", async 
     title: "Same Category",
     description: "desc",
     date: "2026-02-01",
-    category: "Legal",
+    category: "__fixture_legal",
     tags: [],
     image: "/sc.png",
     imageAlt: "sc",
@@ -144,7 +145,7 @@ test("getRelatedPosts ranks by shared tags, then category, then recency", async 
     title: "Unrelated",
     description: "desc",
     date: "2026-02-15",
-    category: "Senior Care",
+    category: "__fixture_other",
     tags: [],
     image: "/u.png",
     imageAlt: "u",
@@ -153,11 +154,10 @@ test("getRelatedPosts ranks by shared tags, then category, then recency", async 
   });
 
   try {
-    const related = getRelatedPosts("current", 2);
-    assert.deepEqual(
-      related.map((p) => p.slug),
-      ["shared-tags", "same-category"],
-    );
+    const related = getRelatedPosts("current", 20)
+      .map((p) => p.slug)
+      .filter((slug) => fixtureSlugs.has(slug));
+    assert.deepEqual(related, ["shared-tags", "same-category", "unrelated"]);
   } finally {
     cleanup(files);
   }

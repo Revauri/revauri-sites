@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { PageHero } from "@/components/page-hero";
+import { GradientText, PageHero } from "@/components/page-hero";
 import { StaggerChildren, FadeInWhenVisible } from "@/components/motion-wrappers";
 import { PostCard } from "@/components/blog/post-card";
 import { getAllCategories, getPostsByCategory } from "@/lib/blog";
@@ -43,7 +43,7 @@ export default async function BlogCategoryPage(
 
   return (
     <div>
-      <div className="bg-brand-cream pt-6 dark:bg-brand-dark">
+      <div className="bg-brand-orange/5 pt-6 pb-6 dark:bg-brand-orange/[0.03]">
         <div className="mx-auto max-w-6xl px-6">
           <Link
             href="/blog"
@@ -56,7 +56,7 @@ export default async function BlogCategoryPage(
       </div>
 
       <PageHero
-        badge="Blog"
+        badge="CATEGORY"
         title={category}
         subtitle={`Posts filed under ${category}.`}
       />
@@ -74,8 +74,9 @@ export default async function BlogCategoryPage(
       <section className="py-16 lg:py-20">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeInWhenVisible>
-            <h2 className="section-h2 text-brand-dark dark:text-brand-cream">
-              Ready to hand the work off?
+            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              Ready to hand the work{" "}
+              <GradientText>off?</GradientText>
             </h2>
           </FadeInWhenVisible>
           <FadeInWhenVisible delay={0.08}>
@@ -86,7 +87,7 @@ export default async function BlogCategoryPage(
           <FadeInWhenVisible delay={0.16}>
             <Link
               href="/book"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange animate-pulse-glow"
             >
               Hire one
               <ArrowRight className="h-4 w-4" />
