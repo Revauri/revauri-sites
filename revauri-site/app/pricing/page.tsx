@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
+import { ClientReviews } from "@/components/client-reviews";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 import BlendedDemoFrame from "@/components/blended-demo-frame";
 
@@ -207,10 +208,13 @@ export default function PricingPage() {
             </StaggerChildren>
           </section>
         </FadeInWhenVisible>
+      </div>
 
-        {/* CTA */}
+      <ClientReviews />
+
+      <div className="mx-auto max-w-5xl px-6 pb-16 lg:pb-20">
         <FadeInWhenVisible delay={0.2}>
-          <section className="mt-16 text-center">
+          <section className="text-center">
             <h2 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream sm:text-3xl">
               Get your custom quote
             </h2>
