@@ -5,6 +5,7 @@ import { WhatItDoes } from "@/components/what-it-does/what-it-does";
 import { HowWeWork } from "@/components/how-we-work";
 import { ToolsDemo } from "@/components/tools-demo/tools-demo";
 import { TradesWordSearch } from "@/components/trades-word-search/trades-word-search";
+import { ClientReviews } from "@/components/client-reviews";
 import { FinalCTA } from "@/components/final-cta";
 import { SupportChannels } from "@/components/support-channels";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <HowWeWork />
       <ToolsDemo />
       <TradesWordSearch />
+      <ClientReviews />
       <FinalCTA />
       <SupportChannels />
     </>

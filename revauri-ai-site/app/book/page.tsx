@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Check } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { ClientReviews } from "@/components/client-reviews";
 import { PAGE_HEROES } from "@/lib/marketing-copy";
 import { Booking } from "@/components/booking";
 
@@ -45,6 +46,7 @@ export default function BookPage() {
         </div>
       </PageHero>
 
+      <ClientReviews variant="compact" />
       <Booking />
     </div>
   );

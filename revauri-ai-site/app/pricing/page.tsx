@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Globe, Layers, Mail, PenLine, Phone, RefreshCw, Workflow } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { ClientReviews } from "@/components/client-reviews";
 import { PageCTA } from "@/components/page-cta";
 import { HireComparison } from "@/components/hire-comparison";
 import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
@@ -173,6 +174,8 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
+
+      <ClientReviews />
 
       <PageCTA
         heading="How to start"
