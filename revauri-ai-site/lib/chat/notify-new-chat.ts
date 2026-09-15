@@ -6,8 +6,7 @@ export async function notifyNewChat(input: {
   pathname: string;
   conversationId: string;
 }): Promise<{ success: boolean }> {
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://revauri.ai";
-  const inboxUrl = `${origin}/inbox/${input.conversationId}`;
+  const inboxUrl = `https://www.revauri.com/inbox/${input.conversationId}`;
   const page = input.pathname || "/";
   const preview = input.preview.trim() || "(no preview)";
 

@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import { normalizeChatSource, type ChatSource } from "@/lib/chat/source";
 import {
   detectLeadSubmitted,
   firstUserPreview,
@@ -41,8 +42,13 @@ export async function ensureSchema(): Promise<void> {
           message_count integer NOT NULL DEFAULT 0,
           lead_submitted boolean NOT NULL DEFAULT false,
           notified_at timestamptz,
-          messages jsonb NOT NULL DEFAULT '[]'::jsonb
+          messages jsonb NOT NULL DEFAULT '[]'::jsonb,
+          source text NOT NULL DEFAULT 'revauri.com'
         )
+      `;
+      await sql`
+        ALTER TABLE chat_conversations
+        ADD COLUMN IF NOT EXISTS source text NOT NULL DEFAULT 'revauri.com'
       `;
       await sql`
         CREATE INDEX IF NOT EXISTS chat_conversations_updated_at_idx
@@ -63,6 +69,7 @@ export async function ensureSchema(): Promise<void> {
 export async function persistConversation(input: {
   conversationId: string;
   pathname?: string;
+  source: ChatSource;
   messages: TranscriptMessage[];
 }): Promise<void> {
   const stored = toStoredMessages(input.messages);
@@ -77,6 +84,7 @@ export async function persistConversation(input: {
   const preview = firstUserPreview(stored);
   const leadSubmitted = detectLeadSubmitted(input.messages);
   const payload = JSON.stringify(stored);
+  const source = normalizeChatSource(input.source);
 
   await sql.query(
     `INSERT INTO chat_conversations (
@@ -86,9 +94,10 @@ export async function persistConversation(input: {
       message_count,
       lead_submitted,
       notified_at,
-      messages
+      messages,
+      source
     )
-    VALUES ($1, $2, $3, $4, $5, now(), $6::jsonb)
+    VALUES ($1, $2, $3, $4, $5, now(), $6::jsonb, $7)
     ON CONFLICT (id) DO UPDATE SET
       last_pathname = EXCLUDED.last_pathname,
       preview = CASE
@@ -100,7 +109,7 @@ export async function persistConversation(input: {
       notified_at = COALESCE(chat_conversations.notified_at, EXCLUDED.notified_at),
       messages = EXCLUDED.messages,
       updated_at = now()`,
-    [input.conversationId, pathname, preview, stored.length, leadSubmitted, payload],
+    [input.conversationId, pathname, preview, stored.length, leadSubmitted, payload, source],
   );
 }
 
@@ -114,6 +123,7 @@ type ConversationRow = {
   lead_submitted: boolean;
   notified_at?: Date | string | null;
   messages?: unknown;
+  source?: string | null;
 };
 
 function toIso(value: Date | string): string {
@@ -129,6 +139,7 @@ function toListItem(row: ConversationRow): ChatConversationListItem {
     preview: row.preview,
     messageCount: Number(row.message_count),
     leadSubmitted: Boolean(row.lead_submitted),
+    source: normalizeChatSource(row.source),
   };
 }
 
@@ -150,7 +161,7 @@ export async function listConversations(): Promise<ChatConversationListItem[]> {
   await ensureSchema();
   await purgeOlderThan(365).catch(() => undefined);
   const rows = (await sql`
-    SELECT id, created_at, updated_at, last_pathname, preview, message_count, lead_submitted
+    SELECT id, created_at, updated_at, last_pathname, preview, message_count, lead_submitted, source
     FROM chat_conversations
     ORDER BY updated_at DESC
     LIMIT 200
@@ -165,7 +176,7 @@ export async function getConversation(id: string): Promise<ChatConversationDetai
   await ensureSchema();
   const rows = (await sql`
     SELECT id, created_at, updated_at, last_pathname, preview, message_count,
-           lead_submitted, notified_at, messages
+           lead_submitted, notified_at, messages, source
     FROM chat_conversations
     WHERE id = ${id}
     LIMIT 1

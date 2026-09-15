@@ -43,7 +43,7 @@ export default async function InboxConversationPage({
         {conversation.preview || "Conversation"}
       </h1>
       <p className="mt-2 text-sm text-brand-mid-gray">
-        {formatWhen(conversation.updatedAt)} · {conversation.lastPathname}
+        {formatWhen(conversation.updatedAt)} · {conversation.source} · {conversation.lastPathname}
         {conversation.leadSubmitted ? " · Lead sent" : ""}
       </p>
 

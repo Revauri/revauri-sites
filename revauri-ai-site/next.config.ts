@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         destination: "/capabilities",
         permanent: false,
       },
+      { source: "/inbox", destination: "https://www.revauri.com/inbox", permanent: false },
+      {
+        source: "/inbox/:path*",
+        destination: "https://www.revauri.com/inbox/:path*",
+        permanent: false,
+      },
     ];
   },
 };

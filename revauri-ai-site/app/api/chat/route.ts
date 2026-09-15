@@ -15,6 +15,7 @@ import { getPageContext } from "@/lib/chat/page-context";
 import { checkRateLimit } from "@/lib/chat/rate-limit";
 import { isSameOrigin } from "@/lib/chat/same-origin";
 import { persistConversation } from "@/lib/chat/db";
+import { CHAT_SOURCE } from "@/lib/chat/source";
 import type { TranscriptMessage } from "@/lib/chat/transcript";
 import { captureLead, getProjectHighlight, offerBooking, showPortfolio } from "@/lib/chat/tools";
 
@@ -113,6 +114,7 @@ export async function POST(req: Request) {
       await persistConversation({
         conversationId,
         pathname,
+        source: CHAT_SOURCE,
         messages: history,
       });
     } catch (error) {

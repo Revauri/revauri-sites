@@ -16,6 +16,7 @@ export type ChatConversationListItem = {
   preview: string;
   messageCount: number;
   leadSubmitted: boolean;
+  source: "revauri.com" | "revauri.ai";
 };
 
 export type ChatConversationDetail = ChatConversationListItem & {

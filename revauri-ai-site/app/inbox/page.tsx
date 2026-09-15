@@ -23,7 +23,7 @@ export default async function InboxPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-brand-dark dark:text-brand-cream">Chat inbox</h1>
-          <p className="mt-1 text-sm text-brand-mid-gray">Visitor conversations from the Revauri.com chatbot.</p>
+          <p className="mt-1 text-sm text-brand-mid-gray">Visitor conversations from revauri.com and revauri.ai.</p>
         </div>
         <LogoutButton />
       </div>
@@ -45,6 +45,8 @@ export default async function InboxPage() {
                     {conversation.preview || "(no preview)"}
                   </p>
                   <p className="mt-1 text-xs text-brand-mid-gray">
+                    <span className="font-medium text-brand-dark/70 dark:text-brand-cream/70">{conversation.source}</span>
+                    {" · "}
                     {conversation.lastPathname} · {conversation.messageCount}{" "}
                     {conversation.messageCount === 1 ? "message" : "messages"}
                     {conversation.leadSubmitted ? " · Lead sent" : ""}

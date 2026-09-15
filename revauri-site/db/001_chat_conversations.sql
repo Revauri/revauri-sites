@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS chat_conversations (
   message_count integer NOT NULL DEFAULT 0,
   lead_submitted boolean NOT NULL DEFAULT false,
   notified_at timestamptz,
-  messages jsonb NOT NULL DEFAULT '[]'::jsonb
+  messages jsonb NOT NULL DEFAULT '[]'::jsonb,
+  source text NOT NULL DEFAULT 'revauri.com'
 );
 
 CREATE INDEX IF NOT EXISTS chat_conversations_updated_at_idx
@@ -15,3 +16,6 @@ CREATE INDEX IF NOT EXISTS chat_conversations_updated_at_idx
 
 CREATE INDEX IF NOT EXISTS chat_conversations_created_at_idx
   ON chat_conversations (created_at);
+
+ALTER TABLE chat_conversations
+  ADD COLUMN IF NOT EXISTS source text NOT NULL DEFAULT 'revauri.com';
