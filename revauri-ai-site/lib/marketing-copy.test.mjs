@@ -152,14 +152,14 @@ test("tools tab labels match the three plan claims", () => {
   assert.deepEqual(
     TOOLS_TABS.map((tab) => tab.label),
     [
+      "Built around how you already work",
       "You stay in control — approve during setup, pause any time",
       "It runs several jobs at the same time",
-      "Built around how you already work",
     ],
   );
   assert.deepEqual(
     TOOLS_TABS.map((tab) => tab.id),
-    ["approve", "parallel", "scoped"],
+    ["scoped", "approve", "parallel"],
   );
 });
 

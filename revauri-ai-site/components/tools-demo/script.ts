@@ -13,16 +13,16 @@ export const TOOLS_INTRO = {
 
 export const TOOLS_TABS: ToolsTab[] = [
   {
+    id: "scoped",
+    label: "Built around how you already work",
+  },
+  {
     id: "approve",
     label: "You stay in control — approve during setup, pause any time",
   },
   {
     id: "parallel",
     label: "It runs several jobs at the same time",
-  },
-  {
-    id: "scoped",
-    label: "Built around how you already work",
   },
 ];
 

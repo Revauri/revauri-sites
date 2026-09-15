@@ -27,7 +27,7 @@ function ToolsPanel({ active }: { active: ToolsTabId }) {
 }
 
 export function ToolsDemo() {
-  const [active, setActive] = useState<ToolsTabId>("approve");
+  const [active, setActive] = useState<ToolsTabId>("scoped");
   const [hovered, setHovered] = useState(false);
   const [inView, setInView] = useState(false);
   // Bumped on any interaction inside the stage so the rotation timer restarts.

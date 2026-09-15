@@ -160,14 +160,18 @@ export function ParallelMock() {
   const activeLane =
     OPS_LANES.find((lane) => lane.id === laneId) ?? OPS_LANES[0];
   const ActiveIcon = laneIcon(laneId);
+  const visibleGroups = STATUS_GROUPS.map((group) => ({
+    group,
+    groupJobs: jobs.filter((job) => job.status === group.id),
+  })).filter((entry) => entry.groupJobs.length > 0);
 
   return (
     <div className="flex h-full min-h-[400px] flex-col px-3 pb-4 pt-4 min-[767px]:grid min-[767px]:min-h-0 min-[767px]:grid-cols-5 min-[767px]:grid-rows-[1fr_auto] min-[767px]:gap-x-2 min-[767px]:px-5 min-[767px]:pt-5">
       <div
-        className={`flex flex-1 flex-col items-center min-[767px]:row-start-1 ${cardColumnClass(laneId)}`}
+        className={`flex flex-1 flex-col items-center justify-start min-[767px]:row-start-1 ${cardColumnClass(laneId)}`}
       >
         <div
-          className={`demo-card relative z-10 w-full rounded-[12px] px-3.5 py-3 min-[767px]:w-[260px] ${cardAlignClass(laneId)}`}
+          className={`demo-card relative z-10 flex w-full flex-col justify-start rounded-[12px] px-3.5 pt-2.5 pb-3 min-[767px]:w-[260px] ${cardAlignClass(laneId)}`}
         >
           <div className="-mx-3.5 -mt-3 mb-3 flex items-center gap-2 border-b border-black/[0.06] px-3.5 py-2.5 dark:border-white/[0.06] min-[767px]:hidden">
             <span
@@ -181,42 +185,38 @@ export function ParallelMock() {
             </p>
             <CountsPill counts={laneCounts(activeLane)} />
           </div>
-          {STATUS_GROUPS.map((group, groupIndex) => {
-            const groupJobs = jobs.filter((job) => job.status === group.id);
-            if (groupJobs.length === 0) return null;
-            return (
-              <div
-                key={group.id}
-                className={
-                  groupIndex > 0
-                    ? "mt-2.5 border-t border-dashed border-black/[0.12] pt-2.5 dark:border-white/[0.12]"
-                    : undefined
-                }
+          {visibleGroups.map(({ group, groupJobs }, groupIndex) => (
+            <div
+              key={group.id}
+              className={`flex flex-col leading-none ${
+                groupIndex > 0
+                  ? "mt-2.5 border-t border-dashed border-black/[0.12] pt-2.5 dark:border-white/[0.12]"
+                  : ""
+              }`}
+            >
+              <span
+                className={`flex w-fit items-center gap-1 rounded-full px-2 py-[3px] font-mono text-[9.5px] leading-none font-medium tracking-[-0.01em] ${statusBadgeClass(group.id)}`}
               >
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full px-2 py-[3px] font-mono text-[9.5px] leading-none font-medium tracking-[-0.01em] ${statusBadgeClass(group.id)}`}
-                >
-                  <StatusIcon status={group.id} />
-                  {group.label}
-                </span>
-                <ul className="mt-2 space-y-1.5">
-                  {groupJobs.map((job) => (
-                    <li
-                      key={job.name}
-                      className="flex items-baseline justify-between gap-2"
-                    >
-                      <p className="text-[12px] leading-snug font-medium text-brand-dark/85 dark:text-brand-cream/85">
-                        {job.name}
-                      </p>
-                      <span className="shrink-0 text-[8px] font-medium tracking-[0.12em] text-brand-dark/35 uppercase dark:text-brand-cream/35">
-                        {job.tag}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
+                <StatusIcon status={group.id} />
+                {group.label}
+              </span>
+              <ul className="mt-2 space-y-1.5">
+                {groupJobs.map((job) => (
+                  <li
+                    key={job.name}
+                    className="flex items-center justify-between gap-2"
+                  >
+                    <p className="text-[12px] leading-snug font-medium text-brand-dark/85 dark:text-brand-cream/85">
+                      {job.name}
+                    </p>
+                    <span className="shrink-0 text-[8px] font-medium tracking-[0.12em] text-brand-dark/35 uppercase dark:text-brand-cream/35">
+                      {job.tag}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
         <Tracer
           direction="vertical"
