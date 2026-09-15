@@ -137,7 +137,7 @@ export const offerBooking = tool({
 
 export const showPortfolioInputSchema = z.object({
   slugs: z
-    .array(z.enum(["ultaura", "lion-law", "cryptrac"]))
+    .array(z.enum(["ultaura", "lion-law", "cryptrac", "southeast-exhibits"]))
     .min(1)
     .max(2)
     .describe("The one or two most relevant projects to show."),
@@ -150,7 +150,7 @@ export const showPortfolio = tool({
     "Show rich visual cards for Revauri portfolio projects. Call this instead of describing " +
     "projects in text whenever the visitor asks about past work, examples, or a specific project. " +
     "Pick the 1-2 most relevant: ultaura (AI / healthcare tech), lion-law (legal / professional " +
-    "services), cryptrac (fintech / SaaS).",
+    "services), cryptrac (fintech / SaaS), southeast-exhibits (exhibits / events booth library).",
   inputSchema: showPortfolioInputSchema,
   execute: async ({ slugs }) => ({
     projects: slugs.flatMap((slug) => {

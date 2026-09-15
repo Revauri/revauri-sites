@@ -25,7 +25,7 @@ export function Portfolio() {
           </p>
         </FadeInWhenVisible>
 
-        <StaggerChildren className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <StaggerChildren className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
           {projects.map((project) => (
             <Link
               key={project.slug}

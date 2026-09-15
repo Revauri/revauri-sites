@@ -16,7 +16,7 @@ export interface PortfolioTestimonial {
 }
 
 export interface PortfolioProject {
-  slug: "cryptrac" | "lion-law" | "ultaura";
+  slug: "cryptrac" | "lion-law" | "southeast-exhibits" | "ultaura";
   name: string;
   tagline: string;
   industry: string;
@@ -163,6 +163,54 @@ export const PROJECTS: readonly PortfolioProject[] = [
       "Full test matrix covering checkout, webhooks, and subscription flows",
     ],
     testimonial: null,
+  },
+  {
+    slug: "southeast-exhibits",
+    name: "Southeast Exhibits",
+    tagline: "Built to stand out.",
+    industry: "Exhibits / Events",
+    tag: "Client Work",
+    shortDescription:
+      "An internal booth library for Southeast Exhibits & Events. The sales team searches approved 3D renderings by code, size, or show, saves a shortlist, and presents them full screen to clients.",
+    liveUrl: "https://boothlibrary.southeastexhibit.com",
+    status: "Live",
+    hasRealImages: true,
+    heroImage: {
+      src: "/portfolio/southeast-exhibits/hero.png",
+      alt: "Sign-in page with Microsoft account access",
+      width: 2940,
+      height: 1480,
+    },
+    gallery: [
+      { src: "/portfolio/southeast-exhibits/gallery-1.png", alt: "Booth Library home with Built to stand out and the featured Whitewater rendering", width: 2940, height: 1480 },
+      { src: "/portfolio/southeast-exhibits/gallery-2.png", alt: "The Library grid with search, filters, and booth cards", width: 2940, height: 1480 },
+      { src: "/portfolio/southeast-exhibits/gallery-3.png", alt: "Whitewater booth detail with specifications and components", width: 2940, height: 1480 },
+      { src: "/portfolio/southeast-exhibits/gallery-4.png", alt: "Presentation mode showing a full-screen 3D booth rendering", width: 2940, height: 1480 },
+      { src: "/portfolio/southeast-exhibits/gallery-5.png", alt: "Portfolio of show-floor photography", width: 2940, height: 1480 },
+    ],
+    challenge:
+      "Southeast Exhibits sells from a large library of past booths. Those 3D renderings lived in folders that were hard to search, harder to present, and impossible to keep current for every salesperson. They needed a client-ready showcase — the booth as the hero — that only the team can open.",
+    approach: [
+      "Dark, cinematic catalog. Renderings sit on black with simple type so the booth does the talking — the same restraint as a well-lit show floor, not a file browser.",
+      "Microsoft sign-in for assigned Southeast accounts only. The catalog stays internal; approved people search, favorite, and present without another password to remember.",
+      "Search and filters that match how the team already talks — SEE code, floor size, layout, industry, show, and components — plus a presentation mode built for the meeting itself.",
+    ],
+    built: [
+      "Microsoft-account sign-in, limited to assigned Southeast users",
+      "Search by SEE code, booth title, or component",
+      "Filters for floor size, layout, industry, show, and components",
+      "Favorites shortlist and full-screen presentation mode",
+      "Show-floor photography portfolio",
+      "Admin console for booths, people and access, categories, and activity",
+      "113 live booths with 3D renderings",
+    ],
+    testimonial: {
+      quote:
+        "Beautiful showcase of exactly what our potential clients need to see. The animations, effects, and simplicity bring everything together so nicely.",
+      author: "Brandon Keena",
+      title: "Chief Operating Officer, Southeast Exhibits & Events",
+      avatar: "/portfolio/southeast-exhibits/testimonial-avatar.jpg",
+    },
   },
 ];
 
