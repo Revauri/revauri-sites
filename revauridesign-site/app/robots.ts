@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: "/inbox",
     },
-    sitemap: "https://revauridesign.com/sitemap.xml",
+    sitemap: "https://www.revauridesign.com/sitemap.xml",
   };
 }

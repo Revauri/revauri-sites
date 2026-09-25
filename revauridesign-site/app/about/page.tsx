@@ -1,166 +1,172 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Code, Smartphone, Zap, LifeBuoy } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Zap, Shield, Code, Users, Palette, BarChart3 } from "lucide-react";
+import { GradientText, PageHero } from "@/components/page-hero";
+import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 
 export const metadata: Metadata = {
-  title: "About — Revauri Design",
+  title: "About Revauri — Custom Websites for Small Businesses",
   description:
-    "Revauri Design is the web design practice of Revauri LLC, a New Jersey studio serving small and medium businesses across the US. Learn about our approach and the modern stack we build on.",
-  alternates: { canonical: "https://revauridesign.com/about" },
+    "Revauri was founded by Joseph Silvagnoli to build premium custom websites for businesses that want to stand out online and drive real growth. Learn about our approach, values, and story.",
+  alternates: { canonical: "/about" },
 };
 
-const pillars = [
-  {
-    icon: Code,
-    title: "Modern stack, no excuses",
-    body: "We build on Next.js, Tailwind CSS, and Vercel — a combination that produces genuinely fast, maintainable sites. No slow-loading page builders, no vendor lock-in spaghetti.",
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile-first, always",
-    body: "More than half your visitors are on a phone. We design for that reality first and work outward, so the experience is right at every size.",
-  },
+const VALUES = [
   {
     icon: Zap,
-    title: "Performance as a feature",
-    body: "A site that loads fast earns trust instantly. Core Web Vitals aren't a bonus — they're baked into how we build.",
+    title: "Speed Without Shortcuts",
+    description:
+      "We deliver fast because we've built the right systems — not because we cut corners. Every site is hand-crafted, not templated.",
   },
   {
-    icon: LifeBuoy,
-    title: "Ongoing, not one-and-done",
-    body: "We offer managed hosting and support so your site stays healthy after launch. No mystery bills, no waiting for a developer to return your calls.",
+    icon: Shield,
+    title: "No Surprises",
+    description:
+      "Transparent pricing. Clear timelines. A free preview before you commit. We never want you guessing what comes next.",
+  },
+  {
+    icon: Code,
+    title: "Modern Stack, Real Results",
+    description:
+      "We build on Next.js, Tailwind, and Vercel — the same tools behind the world's fastest websites.",
+  },
+  {
+    icon: Users,
+    title: "Built for Humans",
+    description:
+      "Clean layouts, clear CTAs, intuitive navigation. Every design decision is made to help your visitors become customers.",
+  },
+  {
+    icon: Palette,
+    title: "Design That Fits You",
+    description:
+      "No cookie-cutter templates. Your site reflects your business personality, your market, and your customers' expectations.",
+  },
+  {
+    icon: BarChart3,
+    title: "Conversion-Focused",
+    description:
+      "A pretty website isn't enough. We optimize for leads, calls, and sales — the metrics that actually grow your business.",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <>
-      {/* Page hero */}
-      <section className="border-b border-brand-light-gray bg-brand-cream px-6 py-20 lg:py-28">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="h-px w-8 bg-brand-orange" aria-hidden="true" />
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
-              About
-            </p>
-          </div>
-          <h1 className="font-serif text-5xl font-semibold leading-[1.1] tracking-tight text-brand-dark sm:text-6xl">
-            A small studio that takes its work seriously.
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-brand-dark/60">
-            Revauri Design is the web design practice of Revauri LLC — a New Jersey
-            company that works remotely with small and medium businesses across the
-            United States.
-          </p>
-        </div>
-      </section>
+    <div>
+      <PageHero
+        badge="ABOUT"
+        title="Built by a founder who gets it"
+        subtitle="Great businesses deserve websites that work as hard as they do."
+      />
 
-      {/* Studio description */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-            <div>
-              <h2 className="font-serif text-3xl font-semibold text-brand-dark">
-                What we do
-              </h2>
-              <div className="mt-6 space-y-5 text-brand-dark/60">
-                <p className="leading-relaxed">
-                  We design and develop custom websites for businesses that want an
-                  online presence they can be proud of. That means something
-                  fast, well-structured, and actually representative of the quality
-                  of what you offer.
-                </p>
-                <p className="leading-relaxed">
-                  Our work covers everything from initial concept and visual design
-                  through development, launch, and ongoing maintenance. We handle the
-                  technical side completely — you shouldn&apos;t need to know what a
-                  hosting provider is.
-                </p>
-                <p className="leading-relaxed">
-                  We&apos;re a small operation, which means you get direct communication
-                  and genuine attention to your project. No account managers, no
-                  handoffs, no surprises.
-                </p>
+      {/* Founder Story */}
+      <section className="py-16 lg:py-20">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="grid grid-cols-1 items-center justify-items-center gap-12 lg:grid-cols-[auto_1fr] lg:justify-items-stretch lg:gap-16">
+            <FadeInWhenVisible direction="left" className="mx-auto w-fit lg:mx-0">
+              <div className="relative isolate mx-auto w-fit lg:mx-0">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-brand-orange/12 blur-2xl"
+                />
+                <div className="relative rounded-[2rem] border border-brand-orange/15 bg-gradient-to-br from-brand-cream/15 via-transparent to-brand-orange/10 p-3 shadow-[0_24px_50px_-32px_rgba(217,119,87,0.42)] dark:from-brand-dark/50 dark:to-brand-orange/8">
+                  <Image
+                    src="/joseph-headshot.jpg"
+                    alt="Joseph Silvagnoli, founder of Revauri"
+                    width={224}
+                    height={224}
+                    className="block h-52 w-52 rounded-[1.5rem] object-cover object-top ring-1 ring-white/10 sm:h-56 sm:w-56"
+                  />
+                </div>
               </div>
-            </div>
+            </FadeInWhenVisible>
 
-            <div>
-              <h2 className="font-serif text-3xl font-semibold text-brand-dark">
-                Our philosophy
-              </h2>
-              <div className="mt-6 space-y-5 text-brand-dark/60">
-                <p className="leading-relaxed">
-                  Good websites are invisible in the best way — visitors find what
-                  they&apos;re looking for without friction, trust builds naturally, and
-                  the right action (a call, a form submission, a purchase) feels
-                  obvious. That&apos;s what we&apos;re aiming for.
+            <div className="w-full">
+              <FadeInWhenVisible>
+                <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-cream sm:text-3xl">
+                  Hi, I&apos;m Joseph.
+                </h2>
+              </FadeInWhenVisible>
+              <FadeInWhenVisible delay={0.08}>
+                <p className="mt-6 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  I started Revauri because I kept seeing the same thing: great
+                  businesses with websites that don&apos;t do them justice. Startups with
+                  cookie-cutter templates. Law firms with sites that look like they
+                  were built in 2008. Founders losing leads because their site
+                  doesn&apos;t match the quality of their work.
                 </p>
-                <p className="leading-relaxed">
-                  We believe in doing less, better. A focused site with clean
-                  structure will outperform a sprawling one with flashy effects. We
-                  push back when something would add complexity without adding value.
+              </FadeInWhenVisible>
+              <FadeInWhenVisible delay={0.14}>
+                <p className="mt-4 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  Your website should work as hard as you do — bringing in leads,
+                  building trust, and making it easy for customers to say yes. Every
+                  site we build is designed with that goal in mind.
                 </p>
-                <p className="leading-relaxed">
-                  We also believe websites should be honest. No inflated claims, no
-                  fake urgency — just a clear picture of what you do and why someone
-                  should choose you.
-                </p>
-              </div>
+              </FadeInWhenVisible>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pillars */}
-      <section className="bg-[#F5F2EC] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-2 flex items-center gap-3">
-            <div className="h-px w-8 bg-brand-orange" aria-hidden="true" />
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
-              How we build
+      {/* Values Grid */}
+      <section className="bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <FadeInWhenVisible>
+            <h2 className="text-center text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              What we <GradientText>believe in</GradientText>
+            </h2>
+          </FadeInWhenVisible>
+
+          <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {VALUES.map((value) => {
+              const Icon = value.icon;
+              return (
+                <div
+                  key={value.title}
+                  className="group rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+                >
+                  <div className="mb-4 inline-flex rounded-xl bg-brand-orange/10 p-3 transition-colors duration-200 group-hover:bg-brand-orange">
+                    <Icon className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                    {value.description}
+                  </p>
+                </div>
+              );
+            })}
+          </StaggerChildren>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 lg:py-20">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <FadeInWhenVisible>
+            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              Let&apos;s build something <GradientText>worth sharing</GradientText>
+            </h2>
+          </FadeInWhenVisible>
+          <FadeInWhenVisible delay={0.08}>
+            <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
+              Book a free call and see a custom redesign of your site — before you
+              spend a dime.
             </p>
-          </div>
-          <h2 className="mt-4 font-serif text-3xl font-semibold text-brand-dark sm:text-4xl">
-            Principles we don&apos;t compromise on.
-          </h2>
-
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {pillars.map((p) => (
-              <div
-                key={p.title}
-                className="rounded-2xl border border-brand-light-gray bg-brand-cream p-6 sm:p-8"
-              >
-                <p.icon className="h-5 w-5 text-brand-orange" strokeWidth={1.5} />
-                <h3 className="mt-4 text-base font-semibold text-brand-dark">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-mid-gray">
-                  {p.body}
-                </p>
-              </div>
-            ))}
-          </div>
+          </FadeInWhenVisible>
+          <FadeInWhenVisible delay={0.16}>
+            <Link
+              href="/book"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
+            >
+              Book a Free Strategy Call
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </FadeInWhenVisible>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-3xl font-semibold text-brand-dark">
-            Let&apos;s talk about your project.
-          </h2>
-          <p className="mt-5 text-brand-dark/60">
-            We&apos;d love to hear what you&apos;re working on and see if we&apos;re a good fit.
-          </p>
-          <Link
-            href="/contact"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-4 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-brand-orange/90 hover:shadow-lg"
-          >
-            Get in touch
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

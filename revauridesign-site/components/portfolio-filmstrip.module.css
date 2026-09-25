@@ -1,0 +1,175 @@
+.stage {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 1450px;
+  cursor: ew-resize;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.stage:focus-visible {
+  box-shadow: inset 0 0 0 2px #d97757;
+}
+
+.deck {
+  position: absolute;
+  inset: 36px 0;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.card {
+  --focus: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: clamp(240px, 30vw, 420px);
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(250, 249, 245, 0.18);
+  border-radius: 4px;
+  color: #faf9f5;
+  background: #2a2824;
+  box-shadow:
+    0 calc(10px + var(--focus) * 24px) calc(18px + var(--focus) * 36px)
+      rgba(0, 0, 0, calc(0.28 + var(--focus) * 0.28)),
+    inset 0 0 0 1px rgba(250, 249, 245, 0.12);
+  appearance: none;
+  outline: none;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+  cursor: pointer;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 3;
+  border: 1px solid rgba(250, 249, 245, calc(0.08 + var(--focus) * 0.14));
+  pointer-events: none;
+}
+
+.card:focus-visible {
+  box-shadow:
+    0 26px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 4px rgba(217, 119, 87, 0.4);
+}
+
+.portrait {
+  position: relative;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: #3a3732;
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: saturate(calc(0.78 + var(--focus) * 0.22));
+}
+
+.footer {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 12px;
+  color: #faf9f5;
+  background: #141413;
+}
+
+.index {
+  display: grid;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid #d97757;
+  border-radius: 50%;
+  color: #d97757;
+  font: 600 10px / 1 ui-monospace, "SFMono-Regular", monospace;
+}
+
+.meta {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
+  text-align: left;
+}
+
+.name,
+.role {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.name {
+  color: #faf9f5;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.role {
+  color: #d97757;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.hint {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #b0aea5;
+}
+
+@media (max-width: 650px) {
+  .stage {
+    min-height: 340px;
+    cursor: ns-resize;
+  }
+
+  .deck {
+    inset: 28px 0;
+  }
+
+  .card {
+    width: clamp(200px, 72vw, 320px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    will-change: auto;
+  }
+
+  .portrait img {
+    filter: none;
+  }
+}

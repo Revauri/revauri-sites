@@ -1,111 +1,182 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { PageHero } from "@/components/page-hero";
+import { FAQContent } from "./faq-content";
 
 export const metadata: Metadata = {
-  title: "FAQ — Revauri Design",
+  title: "FAQ — Revauri",
   description:
-    "Common questions about working with Revauri Design — what we do, who we work with, how engagements start, timelines, and the technology we build on.",
-  alternates: { canonical: "https://revauridesign.com/faq" },
+    "Answers to common questions about Revauri's web design services — timelines, pricing, process, technology, and more.",
+  alternates: { canonical: "/faq" },
 };
 
-const faqs = [
+const FAQ_DATA = [
   {
-    q: "What exactly do you do?",
-    a: "We design and develop custom websites for small and medium businesses. That includes the visual design, the code, the deployment, and ongoing hosting and support. We work on everything from brand-new sites to full rebuilds of existing ones.",
+    category: "Process",
+    items: [
+      {
+        question: "How long does it take?",
+        answer:
+          "Most projects ship in 4 to 6 weeks, sometimes sooner depending on complexity or job size. Timeline starts when your Project Brief is complete.",
+      },
+      {
+        question: "What's included in the free redesign preview?",
+        answer:
+          "We build a complete homepage mockup using your real business info — your name, your colors, your content. It's a live, working preview you can click through on any device. No stock templates.",
+      },
+      {
+        question: "What if I don't like the design?",
+        answer:
+          "Two rounds of revisions are included in every package. We work with you until you're happy.",
+      },
+    ],
   },
   {
-    q: "Who do you typically work with?",
-    a: "Small and medium businesses across the United States — service businesses, professional practices, local retailers, consultants, and similar. If your business has something real to offer and you need a website that communicates that clearly, we're probably a good fit.",
+    category: "Ownership & Billing",
+    items: [
+      {
+        question: "Do I own the website?",
+        answer:
+          "Yes. Once your upfront fee is paid, you own the design and content. If you ever cancel the retainer, you can request the full source code.",
+      },
+      {
+        question: "What happens if I cancel the retainer?",
+        answer:
+          "30-day notice, and we'll export your full site code. No lock-in, no penalties.",
+      },
+      {
+        question: "Why is a retainer required?",
+        answer:
+          "The retainer is your Website Care Plan — it covers hosting, SSL, unlimited minor updates, and ongoing support. You're paying for a living, maintained website — not a static file that gets handed off and forgotten.",
+      },
+    ],
   },
   {
-    q: "Do you use templates?",
-    a: "No. Every site is designed and built from scratch, specific to your business. We use a consistent technical stack (Next.js, Tailwind CSS, Vercel), but the design and content structure are custom every time.",
+    category: "Technical",
+    items: [
+      {
+        question: "Can I keep my current domain?",
+        answer:
+          "Absolutely. We handle the DNS transfer and make sure everything points to your new site with zero downtime.",
+      },
+      {
+        question: "What platform do you build on?",
+        answer:
+          "Every site is built with Next.js and Tailwind CSS, deployed on Vercel — the same infrastructure used by companies like Nike, Twitch, and The Washington Post. Fast, secure, and scalable.",
+      },
+      {
+        question: "Will my site be fast?",
+        answer:
+          "Yes. We optimize for Core Web Vitals and target 90+ Lighthouse scores. Our sites are built with server-side rendering, image optimization, and edge caching by default.",
+      },
+      {
+        question: "Do you offer SEO services?",
+        answer:
+          "Every project includes technical SEO fundamentals — semantic HTML, meta tags, sitemaps, structured data, and fast load times. Ongoing monthly SEO optimization is available as part of your Care Plan, scoped per project.",
+      },
+    ],
   },
   {
-    q: "What technology do you build on?",
-    a: "Next.js for the framework, Tailwind CSS for styling, and Vercel for hosting and deployment. This combination produces genuinely fast, maintainable sites with good defaults for performance and SEO.",
+    category: "Getting Started",
+    items: [
+      {
+        question: "How do I get started?",
+        answer:
+          "It's simple — book a free 15-minute strategy call or send us a message through the contact page. We'll learn about your business, review your current site, and build you a free preview redesign with no obligation.",
+      },
+      {
+        question: "Do I need to prepare anything before our call?",
+        answer:
+          "Not at all. Just have your current website URL handy if you have one. We'll handle the rest — reviewing your site, identifying opportunities, and building your free preview.",
+      },
+      {
+        question: "What if I don't have a website yet?",
+        answer:
+          "No problem. We build sites from scratch too. We'll work with you to define your goals, target audience, and brand identity, then build something custom that fits.",
+      },
+    ],
   },
   {
-    q: "How long does a project take?",
-    a: "It depends on the scope. A focused single-page or small multi-page site can move quickly; a larger redesign with more pages and content takes longer. We discuss timelines upfront so expectations are clear before anything starts.",
-  },
-  {
-    q: "How do engagements typically start?",
-    a: "With an email. Tell us about your business, what you have now (if anything), and what you're trying to achieve. We'll have a conversation, agree on scope, and go from there. No pressure, no commitment until you're ready.",
-  },
-  {
-    q: "Do you guarantee search engine rankings?",
-    a: "No. We build sites with solid technical SEO foundations — proper structure, meta tags, sitemaps, structured data — which gives your content the best chance of being indexed and ranked appropriately. But specific ranking outcomes depend on many factors outside any developer's control, including competition, content quality, and domain history.",
-  },
-  {
-    q: "What does ongoing support include?",
-    a: "Managed hosting on Vercel, routine maintenance, dependency updates, and the ability to request minor content changes. If something breaks, you have someone to contact. We keep things straightforward — no mystery fees.",
-  },
-  {
-    q: "How do I contact you?",
-    a: "Email is the best way. Reach us at david.mercer@revauridesign.com. We typically reply within a couple of business days.",
+    category: "Support & Maintenance",
+    items: [
+      {
+        question: "What kind of updates are included in the care plan?",
+        answer:
+          "Unlimited minor updates — text changes, image swaps, adding new sections, updating business hours, adding team members, etc. Anything that takes under 30 minutes is included at no extra cost.",
+      },
+      {
+        question: "How do I request changes to my site?",
+        answer:
+          "Just send an email to david.mercer@revauridesign.com with what you need. Most updates go live within 24 hours. For larger changes, we'll scope it and give you a timeline.",
+      },
+      {
+        question: "What happens if my site goes down?",
+        answer:
+          "Our sites are deployed on Vercel's global edge network with 99.99% uptime. In the rare event of an issue, we monitor proactively and resolve incidents quickly. Your care plan includes priority support.",
+      },
+    ],
   },
 ];
 
-export default function FaqPage() {
+export default function FAQPage() {
+  const allItems = FAQ_DATA.flatMap((cat) => cat.items);
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: allItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
   return (
-    <>
-      {/* Page hero */}
-      <section className="border-b border-brand-light-gray bg-brand-cream px-6 py-20 lg:py-28">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="h-px w-8 bg-brand-orange" aria-hidden="true" />
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
-              FAQ
-            </p>
-          </div>
-          <h1 className="font-serif text-5xl font-semibold leading-[1.1] tracking-tight text-brand-dark sm:text-6xl">
-            Common questions.
-          </h1>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-brand-dark/60">
-            Straight answers about working with us — no fluff.
-          </p>
-        </div>
-      </section>
+    <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
-      {/* FAQ list */}
-      <section className="px-6 py-20">
-        <div className="mx-auto max-w-3xl">
-          <dl className="divide-y divide-brand-light-gray">
-            {faqs.map(({ q, a }) => (
-              <div key={q} className="py-8">
-                <dt className="font-serif text-xl font-semibold text-brand-dark">
-                  {q}
-                </dt>
-                <dd className="mt-4 leading-relaxed text-brand-dark/60">
-                  {a}
-                </dd>
+      <PageHero
+        badge="FAQ"
+        title="Frequently Asked Questions"
+        subtitle="Everything you need to know about working with Revauri."
+      />
+
+      <FAQContent data={FAQ_DATA} />
+
+      {/* Still have questions? */}
+      <section className="pb-20">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="rounded-2xl border border-brand-light-gray/60 bg-brand-cream p-8 shadow-[var(--shadow-md)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]">
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-brand-dark dark:text-brand-cream">
+                  Still have questions?
+                </h3>
+                <p className="mt-2 text-sm text-brand-dark/60 dark:text-brand-cream/60">
+                  We're here to help. Reach out and we'll get back to you within a few hours.
+                </p>
               </div>
-            ))}
-          </dl>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30"
+                >
+                  Contact Us <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="mailto:david.mercer@revauridesign.com"
+                  className="inline-flex items-center justify-center rounded-lg border border-brand-orange/30 px-6 py-3 text-sm font-medium text-brand-orange transition-all duration-200 hover:bg-brand-orange/5"
+                >
+                  david.mercer@revauridesign.com
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="bg-[#F5F2EC] px-6 py-20">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-3xl font-semibold text-brand-dark">
-            Still have questions?
-          </h2>
-          <p className="mt-5 text-brand-dark/60">
-            Just email us. We&apos;re happy to answer anything before you commit to
-            anything.
-          </p>
-          <Link
-            href="/contact"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-4 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-brand-orange/90 hover:shadow-lg"
-          >
-            Get in touch
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }
