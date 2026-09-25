@@ -1,113 +1,172 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
-import { PageHero } from "@/components/page-hero";
+import { ArrowRight, Zap, Shield, Code, Users, Palette, BarChart3 } from "lucide-react";
+import { GradientText, PageHero } from "@/components/page-hero";
+import { FadeInWhenVisible, StaggerChildren } from "@/components/motion-wrappers";
 
 export const metadata: Metadata = {
-  title: "About — Revauri Designs",
+  title: "About Revauri — Custom Websites for Small Businesses",
   description:
-    "Revauri Designs is the web-design practice of Revauri LLC, a New Jersey studio building custom websites for US small and medium businesses.",
-  alternates: { canonical: "https://revauridesigns.com/about" },
+    "Revauri was founded by Joseph Silvagnoli to build premium custom websites for businesses that want to stand out online and drive real growth. Learn about our approach, values, and story.",
+  alternates: { canonical: "/about" },
 };
 
-const pillars = [
+const VALUES = [
   {
-    label: "Clear scope",
-    body: "Every project starts with a defined scope and shared understanding of what success looks like. No ambiguity, no scope creep by default.",
+    icon: Zap,
+    title: "Speed Without Shortcuts",
+    description:
+      "We deliver fast because we've built the right systems — not because we cut corners. Every site is hand-crafted, not templated.",
   },
   {
-    label: "Performance by default",
-    body: "The stack we use — Next.js, Tailwind, Vercel — is optimized for Core Web Vitals from first render. Good scores aren't retrofitted; they're built in.",
+    icon: Shield,
+    title: "No Surprises",
+    description:
+      "Transparent pricing. Clear timelines. A free preview before you commit. We never want you guessing what comes next.",
   },
   {
-    label: "Direct communication",
-    body: "You talk to the person doing the work. No account managers, no relay layers. Feedback loops are short because the chain is short.",
+    icon: Code,
+    title: "Modern Stack, Real Results",
+    description:
+      "We build on Next.js, Tailwind, and Vercel — the same tools behind the world's fastest websites.",
   },
   {
-    label: "Practical design",
-    body: "Design decisions are grounded in your audience's context, not visual trends. Clarity and usability come first.",
+    icon: Users,
+    title: "Built for Humans",
+    description:
+      "Clean layouts, clear CTAs, intuitive navigation. Every design decision is made to help your visitors become customers.",
+  },
+  {
+    icon: Palette,
+    title: "Design That Fits You",
+    description:
+      "No cookie-cutter templates. Your site reflects your business personality, your market, and your customers' expectations.",
+  },
+  {
+    icon: BarChart3,
+    title: "Conversion-Focused",
+    description:
+      "A pretty website isn't enough. We optimize for leads, calls, and sales — the metrics that actually grow your business.",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <>
+    <div>
       <PageHero
-        eyebrow="About"
-        title="A focused web studio for US businesses"
-        subtitle="Revauri Designs is the web-design practice of Revauri LLC — a New Jersey studio building custom websites for small and medium businesses across the United States."
+        badge="ABOUT"
+        title="Built by a founder who gets it"
+        subtitle="Great businesses deserve websites that work as hard as they do."
       />
 
-      {/* Main content */}
-      <section className="bg-[#0f172a] py-16 lg:py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-20">
-            {/* Left: prose */}
-            <div className="flex flex-col gap-8 text-base leading-relaxed text-[#94a3b8]">
-              <p>
-                We work with businesses that need a proper web presence — not a template that could belong to anyone, but a site built specifically for who they are and what they offer.
-              </p>
-              <p>
-                Our work is fully remote. Clients are located across the United States; we communicate over email and video, which keeps the process lean and responsive.
-              </p>
-              <p>
-                The technical stack is intentional: Next.js for rendering and routing, Tailwind CSS for design precision, and Vercel for hosting and deployment. These tools produce fast, maintainable sites that hold up well over time and don&apos;t require specialized maintenance to keep running.
-              </p>
-              <p>
-                We keep engagements focused. A clearly defined project with a clear outcome is better than a sprawling one with vague deliverables. If your goals evolve, scope can be extended — but we always start with clarity.
-              </p>
-            </div>
-
-            {/* Right: texture image + pillars */}
-            <div>
-              <div
-                className="relative mb-8 overflow-hidden rounded-sm"
-                style={{ aspectRatio: "3/2" }}
-              >
-                <Image
-                  src="/generated/texture.webp"
-                  alt="Cool slate geometry representing structured, modern design"
-                  fill
-                  className="object-cover"
-                />
+      {/* Founder Story */}
+      <section className="py-16 lg:py-20">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="grid grid-cols-1 items-center justify-items-center gap-12 lg:grid-cols-[auto_1fr] lg:justify-items-stretch lg:gap-16">
+            <FadeInWhenVisible direction="left" className="mx-auto w-fit lg:mx-0">
+              <div className="relative isolate mx-auto w-fit lg:mx-0">
                 <div
                   aria-hidden="true"
-                  style={{ boxShadow: "inset 0 0 0 1px rgba(45,212,191,0.15)" }}
-                  className="absolute inset-0"
+                  className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-brand-orange/12 blur-2xl"
                 />
-              </div>
-            </div>
-          </div>
-
-          {/* Approach pillars */}
-          <div
-            style={{ borderTop: "1px solid #334155" }}
-            className="mt-14 pt-14"
-          >
-            <p
-              style={{ fontFamily: "var(--font-space-grotesk)" }}
-              className="mb-8 text-xs font-semibold uppercase tracking-widest text-[#2dd4bf]"
-            >
-              How we approach the work
-            </p>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {pillars.map((p) => (
-                <div
-                  key={p.label}
-                  className="rounded-sm border border-[#334155] bg-[#1e293b] p-6"
-                >
-                  <h3
-                    style={{ fontFamily: "var(--font-space-grotesk)" }}
-                    className="mb-2 text-sm font-semibold text-[#f8fafc]"
-                  >
-                    {p.label}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-[#64748b]">{p.body}</p>
+                <div className="relative rounded-[2rem] border border-brand-orange/15 bg-gradient-to-br from-brand-cream/15 via-transparent to-brand-orange/10 p-3 shadow-[0_24px_50px_-32px_rgba(217,119,87,0.42)] dark:from-brand-dark/50 dark:to-brand-orange/8">
+                  <Image
+                    src="/joseph-headshot.jpg"
+                    alt="Joseph Silvagnoli, founder of Revauri"
+                    width={224}
+                    height={224}
+                    className="block h-52 w-52 rounded-[1.5rem] object-cover object-top ring-1 ring-white/10 sm:h-56 sm:w-56"
+                  />
                 </div>
-              ))}
+              </div>
+            </FadeInWhenVisible>
+
+            <div className="w-full">
+              <FadeInWhenVisible>
+                <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-cream sm:text-3xl">
+                  Hi, I&apos;m Joseph.
+                </h2>
+              </FadeInWhenVisible>
+              <FadeInWhenVisible delay={0.08}>
+                <p className="mt-6 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  I started Revauri because I kept seeing the same thing: great
+                  businesses with websites that don&apos;t do them justice. Startups with
+                  cookie-cutter templates. Law firms with sites that look like they
+                  were built in 2008. Founders losing leads because their site
+                  doesn&apos;t match the quality of their work.
+                </p>
+              </FadeInWhenVisible>
+              <FadeInWhenVisible delay={0.14}>
+                <p className="mt-4 text-lg leading-relaxed text-brand-dark/70 dark:text-brand-cream/70">
+                  Your website should work as hard as you do — bringing in leads,
+                  building trust, and making it easy for customers to say yes. Every
+                  site we build is designed with that goal in mind.
+                </p>
+              </FadeInWhenVisible>
             </div>
           </div>
         </div>
       </section>
-    </>
+
+      {/* Values Grid */}
+      <section className="bg-brand-orange/5 py-16 dark:bg-brand-orange/[0.03] lg:py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <FadeInWhenVisible>
+            <h2 className="text-center text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              What we <GradientText>believe in</GradientText>
+            </h2>
+          </FadeInWhenVisible>
+
+          <StaggerChildren className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {VALUES.map((value) => {
+              const Icon = value.icon;
+              return (
+                <div
+                  key={value.title}
+                  className="group rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]"
+                >
+                  <div className="mb-4 inline-flex rounded-xl bg-brand-orange/10 p-3 transition-colors duration-200 group-hover:bg-brand-orange">
+                    <Icon className="h-5 w-5 text-brand-orange transition-colors duration-200 group-hover:text-white" />
+                  </div>
+                  <h3 className="text-base font-semibold text-brand-dark dark:text-brand-cream">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+                    {value.description}
+                  </p>
+                </div>
+              );
+            })}
+          </StaggerChildren>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 lg:py-20">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <FadeInWhenVisible>
+            <h2 className="text-3xl font-bold tracking-tight text-brand-dark dark:text-brand-cream sm:text-4xl">
+              Let&apos;s build something <GradientText>worth sharing</GradientText>
+            </h2>
+          </FadeInWhenVisible>
+          <FadeInWhenVisible delay={0.08}>
+            <p className="mt-4 text-lg text-brand-dark/60 dark:text-brand-cream/60">
+              Book a free call and see a custom redesign of your site — before you
+              spend a dime.
+            </p>
+          </FadeInWhenVisible>
+          <FadeInWhenVisible delay={0.16}>
+            <Link
+              href="/book"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-brand-orange/30 animate-pulse-glow"
+            >
+              Book a Free Strategy Call
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </FadeInWhenVisible>
+        </div>
+      </section>
+    </div>
   );
 }

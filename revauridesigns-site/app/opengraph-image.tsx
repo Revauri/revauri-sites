@@ -1,10 +1,13 @@
 import { ImageResponse } from "next/og";
+import { loadOgInter, loadOgLogoSrc } from "@/lib/og-wordmark";
 
-export const alt = "Revauri Designs — Fast, Modern Websites for US Businesses";
+export const alt = "The website your business actually deserves";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
+  const [inter, logoSrc] = await Promise.all([loadOgInter(), loadOgLogoSrc()]);
+
   return new ImageResponse(
     (
       <div
@@ -13,115 +16,46 @@ export default function OGImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "flex-end",
-          background: "#0f172a",
-          padding: "64px 72px",
-          fontFamily: "sans-serif",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#FAF9F5",
+          fontFamily: "Inter",
         }}
       >
-        {/* Teal radial glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: 600,
-            height: 400,
-            background:
-              "radial-gradient(ellipse at 100% 0%, rgba(45,212,191,0.15) 0%, transparent 70%)",
-          }}
-        />
+        <img src={logoSrc} width={283} height={92} alt="" />
 
-        {/* Diamond mark */}
-        <div
+        <p
           style={{
-            position: "absolute",
-            top: 64,
-            right: 72,
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
+            fontSize: 28,
+            color: "#B0AEA5",
+            marginTop: 16,
+            fontWeight: 400,
           }}
         >
-          <div
-            style={{
-              width: 24,
-              height: 24,
-              background: "#2dd4bf",
-              transform: "rotate(45deg)",
-            }}
-          />
-          <span
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              color: "#f8fafc",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            Revauri <span style={{ color: "#2dd4bf" }}>Designs</span>
-          </span>
-        </div>
+          The website your business actually deserves
+        </p>
 
-        {/* Eyebrow */}
         <div
           style={{
-            display: "flex",
-            marginBottom: 20,
-          }}
-        >
-          <span
-            style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: "#2dd4bf",
-              letterSpacing: "3px",
-              textTransform: "uppercase",
-            }}
-          >
-            Web Design &amp; Development
-          </span>
-        </div>
-
-        {/* Headline */}
-        <span
-          style={{
-            fontSize: 64,
-            fontWeight: 700,
-            color: "#f8fafc",
-            letterSpacing: "-2px",
-            lineHeight: 1.05,
-            maxWidth: 900,
-          }}
-        >
-          Fast, modern websites that perform.
-        </span>
-
-        {/* Subline */}
-        <span
-          style={{
-            fontSize: 22,
-            color: "#64748b",
-            marginTop: 20,
-          }}
-        >
-          Custom builds for US small and medium businesses · revauridesigns.com
-        </span>
-
-        {/* Bottom rule */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
+            width: 60,
             height: 4,
-            background: "#2dd4bf",
+            borderRadius: 2,
+            background: "#D97757",
+            marginTop: 32,
           }}
         />
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      fonts: [
+        {
+          name: "Inter",
+          data: inter,
+          style: "normal",
+          weight: 600,
+        },
+      ],
+    },
   );
 }
