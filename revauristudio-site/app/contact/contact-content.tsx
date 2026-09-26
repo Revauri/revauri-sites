@@ -1,0 +1,333 @@
+"use client";
+
+import { useEffect, type FormEvent, type ReactNode } from "react";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2, ChevronDown, Mail, MapPin, Phone, BookOpen, RotateCcw } from "lucide-react";
+import { FadeInWhenVisible } from "@/components/motion-wrappers";
+import {
+  onConsentChanged,
+  resetContactFormLeadDedup,
+  trackContactFormLead,
+} from "@/lib/analytics";
+
+type ContactContentProps = {
+  isSubmitted?: boolean;
+};
+
+const FORM_CARD_CLASS =
+  "rounded-2xl border border-brand-light-gray/60 bg-brand-white p-6 shadow-[var(--shadow-md)] sm:p-8 dark:border-brand-mid-gray/20 dark:bg-[#1a1a19]";
+
+const FIELD_CLASS =
+  "w-full rounded-xl border border-brand-light-gray bg-brand-cream/50 px-3.5 py-2.5 text-sm text-brand-dark placeholder:text-brand-mid-gray outline-none transition-[border-color,box-shadow] focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15 dark:border-brand-mid-gray/20 dark:bg-brand-dark/50 dark:text-brand-cream";
+
+const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-brand-dark dark:text-brand-cream";
+
+const PRIMARY_BUTTON_CLASS =
+  "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-orange px-8 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-brand-orange/90 hover:shadow-brand-orange/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange";
+
+const ICON_SQUARE_CLASS =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-dark text-brand-cream transition-colors duration-200 group-hover:bg-brand-orange dark:bg-brand-cream dark:text-brand-dark dark:group-hover:bg-brand-orange dark:group-hover:text-white";
+
+const CONTACT_EMAIL = "leah.donovan@revauristudio.com";
+
+function openContactEmail(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const fields: Array<[string, string]> = [
+    ["Name", "name"],
+    ["Email", "email"],
+    ["Phone", "phone"],
+    ["Company", "company"],
+    ["Website", "website"],
+    ["How they heard about us", "referral"],
+    ["Message", "message"],
+  ];
+  const lines = fields.flatMap(([label, key]) => {
+    const value = data.get(key);
+    if (typeof value !== "string" || !value.trim()) return [];
+    return [`${label}: ${value.trim()}`];
+  });
+
+  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("New message from revauristudio.com")}&body=${encodeURIComponent(lines.join("\n\n"))}`;
+}
+
+export function ContactContent({ isSubmitted = false }: ContactContentProps) {
+  // Tracks the confirmed success view as a lead exactly once. If the
+  // visitor hasn't granted analytics consent yet, trackContactFormLead()
+  // no-ops; re-running it on every consent change catches the case where
+  // they accept while still on this success page (but never if declined).
+  useEffect(() => {
+    if (!isSubmitted) {
+      resetContactFormLeadDedup();
+      return;
+    }
+    trackContactFormLead();
+    return onConsentChanged(() => trackContactFormLead());
+  }, [isSubmitted]);
+
+  return (
+    <section className="py-16 lg:py-20">
+      <div className="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2 lg:gap-16">
+        <FadeInWhenVisible className="lg:sticky lg:top-28">
+          <h2 className="text-3xl font-semibold tracking-tight text-brand-dark dark:text-brand-cream">
+            Get in touch
+          </h2>
+          <p className="mt-3 text-brand-dark/60 dark:text-brand-cream/60">
+            We typically respond within a few hours.
+          </p>
+
+          <ul className="mt-8 space-y-4 text-sm">
+            <ContactMethod
+              href={`mailto:${CONTACT_EMAIL}`}
+              icon={<Mail className="h-4 w-4" aria-hidden="true" />}
+              label={CONTACT_EMAIL}
+            />
+            <ContactMethod
+              href="/book"
+              icon={<Phone className="h-4 w-4" aria-hidden="true" />}
+              label="Hire one"
+              internal
+            />
+            <ContactMethod
+              href="https://maps.google.com/?q=725+Joralemon+Street,+Unit+127,+Belleville,+NJ+07109"
+              icon={<MapPin className="h-4 w-4" aria-hidden="true" />}
+              label="725 Joralemon St, Unit 127, Belleville, NJ"
+              external
+            />
+          </ul>
+
+          <p className="mt-8 text-sm text-brand-dark/55 dark:text-brand-cream/55">
+            Looking for a quick answer?
+          </p>
+          <Link
+            href="/faq"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange transition-colors hover:text-brand-orange/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange"
+          >
+            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+            Browse the FAQ
+          </Link>
+        </FadeInWhenVisible>
+
+        <FadeInWhenVisible delay={0.08}>
+          {isSubmitted ? (
+            <div className={`${FORM_CARD_CLASS} relative overflow-hidden`}>
+              <div className="relative flex flex-col items-center text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange/12 ring-1 ring-brand-orange/20">
+                  <CheckCircle2 className="h-8 w-8 text-brand-orange" aria-hidden="true" />
+                </div>
+                <h3 className="mt-6 text-2xl font-semibold text-brand-dark dark:text-brand-cream">
+                  Message received
+                </h3>
+                <p className="mt-3 max-w-lg text-sm leading-6 text-brand-dark/65 dark:text-brand-cream/65">
+                  Thanks for reaching out. We&apos;ve got your note and someone from Revauri AI
+                  will follow up shortly, usually within a few hours.
+                </p>
+                <div className="mt-6 grid w-full gap-3 text-left sm:grid-cols-2">
+                  <div className="hairline-card p-4">
+                    <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
+                      What happens next
+                    </p>
+                    <p className="mt-2 text-xs leading-5 text-brand-dark/60 dark:text-brand-cream/60">
+                      We&apos;ll read what you sent, reply by email, and tell you whether we
+                      can take that job off you.
+                    </p>
+                  </div>
+                  <div className="hairline-card p-4">
+                    <p className="text-sm font-semibold text-brand-dark dark:text-brand-cream">
+                      Need to talk sooner?
+                    </p>
+                    <p className="mt-2 text-xs leading-5 text-brand-dark/60 dark:text-brand-cream/60">
+                      Pick a time instead if you&apos;d rather talk it through out
+                      loud. No obligation.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
+                  <Link
+                    href="/book"
+                    className={`${PRIMARY_BUTTON_CLASS} flex-1 sm:w-auto`}
+                  >
+                    Hire one
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-brand-light-gray bg-brand-white/70 px-6 py-3.5 text-base font-semibold text-brand-dark transition-colors duration-200 hover:border-brand-orange/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:border-brand-mid-gray/20 dark:bg-brand-dark/70 dark:text-brand-cream"
+                  >
+                    Send Another Message
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={openContactEmail} className={FORM_CARD_CLASS}>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="name" className={LABEL_CLASS}>
+                    Name <span className="text-brand-orange">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="Your name"
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className={LABEL_CLASS}>
+                    Email <span className="text-brand-orange">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="you@company.com"
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className={LABEL_CLASS}>
+                    Phone <span className="text-xs text-brand-mid-gray">(optional)</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="(555) 123-4567"
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="company" className={LABEL_CLASS}>
+                      Company Name <span className="text-xs text-brand-mid-gray">(optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      placeholder="Your business name"
+                      className={FIELD_CLASS}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="website" className={LABEL_CLASS}>
+                      Current Website <span className="text-xs text-brand-mid-gray">(optional)</span>
+                    </label>
+                    <input
+                      type="url"
+                      id="website"
+                      name="website"
+                      placeholder="https://yourbusiness.com"
+                      className={FIELD_CLASS}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="referral" className={LABEL_CLASS}>
+                    How did you hear about us? <span className="text-xs text-brand-mid-gray">(optional)</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="referral"
+                      name="referral"
+                      defaultValue=""
+                      className={`${FIELD_CLASS} appearance-none pr-10`}
+                    >
+                      <option value="" disabled className="text-brand-mid-gray">Select an option</option>
+                      <option value="Google">Google</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Social Media">Social Media</option>
+                      <option value="Cold Email">Cold Email</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <ChevronDown
+                      className="pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2 text-brand-dark/50 dark:text-brand-cream/50"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className={LABEL_CLASS}>
+                    Message <span className="text-brand-orange">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={4}
+                    placeholder="Tell us the job you'd otherwise put someone on payroll to do..."
+                    className={FIELD_CLASS}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className={PRIMARY_BUTTON_CLASS}
+                >
+                  Send Message
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+            </form>
+          )}
+        </FadeInWhenVisible>
+      </div>
+    </section>
+  );
+}
+
+function ContactMethod({
+  href,
+  icon,
+  label,
+  internal = false,
+  external = false,
+}: {
+  href: string;
+  icon: ReactNode;
+  label: string;
+  internal?: boolean;
+  external?: boolean;
+}) {
+  const className =
+    "group flex items-center gap-3 rounded-lg text-brand-dark/80 outline-none transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange dark:text-brand-cream/80 dark:hover:text-brand-cream";
+
+  const content = (
+    <>
+      <span className={ICON_SQUARE_CLASS}>{icon}</span>
+      <span>{label}</span>
+    </>
+  );
+
+  if (internal) {
+    return (
+      <li>
+        <Link href={href} className={className}>
+          {content}
+        </Link>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <a
+        href={href}
+        className={className}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        {content}
+      </a>
+    </li>
+  );
+}

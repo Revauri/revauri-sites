@@ -1,0 +1,55 @@
+"use client";
+
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { HERO_COPY } from "@/lib/marketing-copy";
+import { FadeInWhenVisible } from "./motion-wrappers";
+
+export function Hero() {
+  return (
+    <section className="hero-honeycomb relative overflow-hidden bg-brand-cream py-14 dark:bg-brand-dark sm:py-20 lg:py-28">
+      <div className="relative mx-auto max-w-6xl px-6">
+        <div className="flex max-w-2xl flex-col items-start space-y-6">
+          <FadeInWhenVisible delay={0.08}>
+            <h1 className="text-[2rem] font-bold leading-[1.12] tracking-tight text-brand-dark dark:text-brand-cream sm:text-5xl lg:text-6xl">
+              <span className="block leading-[1.1]">{HERO_COPY.h1Line1}</span>
+              <span className="block leading-[1.1] bg-gradient-to-r from-brand-orange to-amber-500 bg-clip-text text-transparent">
+                {HERO_COPY.h1Line2}
+              </span>
+            </h1>
+          </FadeInWhenVisible>
+
+          <FadeInWhenVisible delay={0.14}>
+            <p className="max-w-xl text-lg leading-relaxed text-brand-dark/60 dark:text-brand-cream/60">
+              {HERO_COPY.body}
+            </p>
+          </FadeInWhenVisible>
+
+          <FadeInWhenVisible delay={0.2}>
+            <div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <Link
+                href="/book"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-orange px-8 py-3.5 text-base font-semibold text-white shadow-lg transition-[box-shadow,filter] duration-200 hover:brightness-[1.04] hover:shadow-[0_10px_28px_-12px_rgba(217,119,87,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange sm:w-auto"
+              >
+                {HERO_COPY.primary}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+
+              <Link
+                href="/capabilities"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-brand-light-gray bg-brand-white/70 px-8 py-3.5 text-base font-semibold text-brand-dark transition-colors duration-200 hover:border-brand-orange/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange sm:w-auto dark:border-brand-mid-gray/20 dark:bg-brand-dark/70 dark:text-brand-cream"
+              >
+                {HERO_COPY.secondary}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </FadeInWhenVisible>
+
+          <FadeInWhenVisible delay={0.26}>
+            <p className="pt-2 text-xs text-brand-mid-gray">{HERO_COPY.micro}</p>
+          </FadeInWhenVisible>
+        </div>
+      </div>
+    </section>
+  );
+}

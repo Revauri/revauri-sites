@@ -1,39 +1,40 @@
-import type { Metadata } from "next";
-import { Newsreader, Source_Sans_3, Fraunces } from "next/font/google";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
+import Script from "next/script";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { ChatWidget } from "@/components/chat/chat-widget";
+import { CookieConsent } from "@/components/cookie-consent";
+import { SITE_TITLE } from "@/lib/marketing-copy";
 import "./globals.css";
 
-const newsreader = Newsreader({
+const inter = Inter({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-  variable: "--font-newsreader",
+  variable: "--font-inter",
   display: "swap",
 });
 
-const sourceSans = Source_Sans_3({
-  subsets: ["latin"],
-  variable: "--font-source-sans-3",
-  display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-const description =
-  "Revauri AI is an AI employee for the job you hate. Two workflows, designed around how your business already talks to customers. We run them. You stay the boss.";
+// viewport-fit=cover so env(safe-area-inset-*) works for the chat FAB/panel.
+// interactiveWidget resizes-content: when the soft keyboard opens, shrink the
+// layout viewport so fullscreen UI (chat) reflows with it — standard mobile
+// chat pattern on supporting browsers; iOS still uses visualViewport in JS.
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+};
 
 export const metadata: Metadata = {
-  title: "Revauri AI — Designed around your business.",
-  description,
+  title: SITE_TITLE,
+  description:
+    "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
   metadataBase: new URL("https://revauristudio.com"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Revauri AI — Designed around your business.",
-    description,
+    title: SITE_TITLE,
+    description:
+      "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
     url: "https://revauristudio.com",
     siteName: "Revauri AI",
     locale: "en_US",
@@ -41,41 +42,89 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
+const themeScript = `
+  (function() {
+    var d = document.documentElement;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function apply() {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && mq.matches)) {
+        d.classList.add('dark');
+      } else {
+        d.classList.remove('dark');
+      }
+    }
+    apply();
+    mq.addEventListener('change', apply);
+  })();
+`;
+
+const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
+  "@type": "Organization",
   name: "Revauri AI",
   legalName: "Revauri LLC",
   url: "https://revauristudio.com",
-  description,
+  email: "leah.donovan@revauristudio.com",
+  description:
+    "An AI employee for the work you'd otherwise put on payroll. We build it, we run it, and after setup it works without you. Less cost, less overhead, more of your time — and more of the money.",
   areaServed: "US",
-  email: "joseph@revauri.com",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "725 Joralemon Street, Unit 127",
-    addressLocality: "Belleville",
-    addressRegion: "NJ",
-    postalCode: "07109",
-    addressCountry: "US",
+  founder: {
+    "@type": "Person",
+    name: "Joseph Silvagnoli",
   },
+  parentOrganization: {
+    "@type": "Organization",
+    name: "Revauri",
+    url: "https://revauristudio.com",
+  },
+  logo: "https://revauristudio.com/logo.png",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Revauri AI",
+  url: "https://revauristudio.com",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${sourceSans.variable} ${fraunces.variable} antialiased`}
+      className={`${inter.variable} antialiased`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
       <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Revauri AI Blog"
+          href="/blog/rss.xml"
+        />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
-      <body className="bg-paper text-ink">
-        <SiteHeader />
+      <body>
+        <Script id="theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
+        <Header />
         <main>{children}</main>
-        <SiteFooter />
+        <Footer />
+        <ChatWidget />
+        <CookieConsent />
       </body>
     </html>
   );
